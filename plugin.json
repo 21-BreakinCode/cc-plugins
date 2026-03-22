@@ -1,8 +1,0 @@
-{
-  "name": "zettelkasten-capture",
-  "version": "1.0.0",
-  "description": "Transform Claude session output into structured Obsidian Zettelkasten draft notes",
-  "softDependencies": ["session-learner", "autoimprove-agents"],
-  "commands": ["commands/setup.md", "commands/finalize.md", "commands/push-to-kb.md"],
-  "hooks": "hooks/hooks.json"
-}
