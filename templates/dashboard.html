@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="refresh" content="5">
+  <title>autoresearch dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace; background: #0d1117; color: #c9d1d9; padding: 24px; }
+    .header { margin-bottom: 24px; }
+    .header h1 { font-size: 20px; color: #58a6ff; margin-bottom: 4px; }
+    .header .goal { font-size: 14px; color: #8b949e; }
+    .header .status { font-size: 14px; margin-top: 4px; }
+    .status-running { color: #f0883e; }
+    .status-complete { color: #3fb950; }
+    .status-paused { color: #d29922; }
+    .status-error { color: #f85149; }
+    .summary { display: flex; gap: 24px; margin-bottom: 24px; flex-wrap: wrap; }
+    .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 16px; min-width: 140px; }
+    .stat-card .label { font-size: 12px; color: #8b949e; text-transform: uppercase; }
+    .stat-card .value { font-size: 24px; font-weight: bold; margin-top: 4px; }
+    .stat-card .value.positive { color: #3fb950; }
+    .stat-card .value.negative { color: #f85149; }
+    .stat-card .value.neutral { color: #58a6ff; }
+    .chart-container { background: #161b22; border: 1px solid #30363d; border-radius: 6px; padding: 16px; margin-bottom: 24px; }
+    .chart-container h2 { font-size: 14px; color: #8b949e; margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; background: #161b22; border: 1px solid #30363d; border-radius: 6px; overflow: hidden; }
+    th { background: #1c2128; text-align: left; padding: 10px 12px; font-size: 12px; color: #8b949e; text-transform: uppercase; border-bottom: 1px solid #30363d; }
+    td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #21262d; }
+    tr:last-child td { border-bottom: none; }
+    tr.kept td { border-left: 3px solid #3fb950; }
+    tr.discarded td { border-left: 3px solid #f85149; }
+    tr.baseline td { border-left: 3px solid #58a6ff; }
+    tr.research td { border-left: 3px solid #d29922; background: #1c1c0e; }
+    .status-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .badge-kept { background: #0d2d0d; color: #3fb950; }
+    .badge-discarded { background: #2d0d0d; color: #f85149; }
+    .badge-baseline { background: #0d1d2d; color: #58a6ff; }
+    .badge-research { background: #2d2d0d; color: #d29922; }
+    .expandable { cursor: pointer; }
+    .expandable:hover { background: #1c2128; }
+    .detail-row { display: none; }
+    .detail-row.open { display: table-row; }
+    .detail-row td { padding: 12px 16px; background: #1c2128; font-size: 12px; white-space: pre-wrap; font-family: monospace; }
+    .delta-positive { color: #f85149; }
+    .delta-negative { color: #3fb950; }
+    .delta-zero { color: #8b949e; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>autoresearch dashboard</h1>
+    <div class="goal" id="goal"></div>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="summary" id="summary"></div>
+
+  <div class="chart-container">
+    <h2>Score Over Iterations</h2>
+    <canvas id="scoreChart" height="80"></canvas>
+  </div>
+
+  <table id="iterationTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Score</th>
+        <th>Delta</th>
+        <th>Status</th>
+        <th>What was tried</th>
+      </tr>
+    </thead>
+    <tbody id="iterationBody"></tbody>
+  </table>
+
+  <script>
+    const DATA = {{DATA_JSON}};
+
+    // Header
+    document.getElementById('goal').textContent = 'Goal: ' + DATA.goal;
+    const statusEl = document.getElementById('status');
+    const experiments = DATA.iterations.filter(i => i.type === 'experiment');
+    const maxIter = DATA.config.max_iterations;
+    const statusText = DATA.status === 'running'
+      ? `Running (iteration ${experiments.length}/${maxIter})`
+      : DATA.status.charAt(0).toUpperCase() + DATA.status.slice(1);
+    statusEl.textContent = 'Status: ' + statusText;
+    statusEl.className = 'status status-' + DATA.status;
+
+    // Stop auto-refresh if complete
+    if (DATA.status === 'complete' || DATA.status === 'error') {
+      const meta = document.querySelector('meta[http-equiv="refresh"]');
+      if (meta) meta.remove();
+    }
+
+    // Summary stats
+    const summaryEl = document.getElementById('summary');
+    const keptExperiments = experiments.filter(e => e.status === 'kept');
+    const discardedExperiments = experiments.filter(e => e.status === 'discarded');
+
+    // Find primary metric
+    const metricNames = DATA.config.metrics.length > 0
+      ? DATA.config.metrics.map(m => m.name)
+      : (DATA.baseline && DATA.baseline.scores ? Object.keys(DATA.baseline.scores) : []);
+    const primaryMetric = metricNames[0] || 'score';
+    const metricDirection = DATA.config.metrics.length > 0
+      ? DATA.config.metrics[0].direction
+      : 'lower_is_better';
+
+    const baselineScore = DATA.baseline && DATA.baseline.scores ? DATA.baseline.scores[primaryMetric] : null;
+    const bestExperiment = keptExperiments.length > 0
+      ? keptExperiments.reduce((best, e) => {
+          const s = e.scores[primaryMetric];
+          const b = best.scores[primaryMetric];
+          return metricDirection === 'lower_is_better' ? (s < b ? e : best) : (s > b ? e : best);
+        })
+      : null;
+    const bestScore = bestExperiment ? bestExperiment.scores[primaryMetric] : baselineScore;
+
+    const improvement = baselineScore && bestScore
+      ? ((baselineScore - bestScore) / baselineScore * 100).toFixed(1)
+      : 0;
+
+    const cards = [
+      { label: 'Baseline', value: baselineScore !== null ? baselineScore : '—', cls: 'neutral' },
+      { label: 'Best', value: bestScore !== null ? bestScore : '—', cls: 'positive' },
+      { label: 'Improvement', value: improvement + '%', cls: parseFloat(improvement) > 0 ? 'positive' : 'neutral' },
+      { label: 'Kept / Total', value: `${keptExperiments.length} / ${experiments.length}`, cls: 'neutral' },
+    ];
+    cards.forEach(c => {
+      summaryEl.innerHTML += `<div class="stat-card"><div class="label">${c.label}</div><div class="value ${c.cls}">${c.value}</div></div>`;
+    });
+
+    // Chart
+    const chartLabels = ['Baseline', ...experiments.map((_, i) => `#${i + 1}`)];
+    const chartData = [baselineScore, ...experiments.map(e => e.scores[primaryMetric])];
+    const chartColors = ['#58a6ff', ...experiments.map(e => e.status === 'kept' ? '#3fb950' : '#f85149')];
+    const pointStyles = ['circle', ...experiments.map(e => e.status === 'kept' ? 'circle' : 'crossRot')];
+
+    new Chart(document.getElementById('scoreChart'), {
+      type: 'line',
+      data: {
+        labels: chartLabels,
+        datasets: [{
+          label: primaryMetric,
+          data: chartData,
+          borderColor: '#30363d',
+          backgroundColor: 'transparent',
+          pointBackgroundColor: chartColors,
+          pointBorderColor: chartColors,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          pointStyle: pointStyles,
+          tension: 0.1,
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${primaryMetric}: ${ctx.raw}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: { color: '#21262d' }, ticks: { color: '#8b949e' } },
+          y: {
+            grid: { color: '#21262d' },
+            ticks: { color: '#8b949e' },
+            reverse: metricDirection === 'lower_is_better'
+          }
+        }
+      }
+    });
+
+    // Iteration table
+    const tbody = document.getElementById('iterationBody');
+
+    // Baseline row
+    if (DATA.baseline) {
+      tbody.innerHTML += `<tr class="baseline">
+        <td>0</td>
+        <td>${baselineScore !== null ? baselineScore : '—'}</td>
+        <td>—</td>
+        <td><span class="status-badge badge-baseline">baseline</span></td>
+        <td>Baseline measurement</td>
+      </tr>`;
+    }
+
+    // Iteration rows (reversed — newest first after baseline)
+    const allIterations = [...DATA.iterations].reverse();
+    allIterations.forEach((iter, idx) => {
+      if (iter.type === 'research') {
+        tbody.innerHTML += `<tr class="research expandable" onclick="toggleDetail('detail-${iter.id}')">
+          <td>R</td>
+          <td colspan="2">—</td>
+          <td><span class="status-badge badge-research">research</span></td>
+          <td>${iter.query}</td>
+        </tr>
+        <tr class="detail-row" id="detail-${iter.id}">
+          <td colspan="5">URLs: ${(iter.urls || []).join(', ')}\nLearned: ${iter.learned}</td>
+        </tr>`;
+      } else {
+        const score = iter.scores[primaryMetric];
+        const delta = iter.delta ? iter.delta[primaryMetric] : 0;
+        const deltaStr = delta > 0 ? `+${delta}` : `${delta}`;
+        const deltaCls = delta < 0 && metricDirection === 'lower_is_better' ? 'delta-negative'
+          : delta > 0 && metricDirection === 'higher_is_better' ? 'delta-negative'
+          : delta === 0 ? 'delta-zero' : 'delta-positive';
+        const statusBadge = iter.status === 'kept' ? 'badge-kept' : 'badge-discarded';
+        const statusLabel = iter.status === 'kept' ? 'kept' : 'discarded';
+        const rowCls = iter.status === 'kept' ? 'kept' : 'discarded';
+
+        tbody.innerHTML += `<tr class="${rowCls} expandable" onclick="toggleDetail('detail-${iter.id}')">
+          <td>${iter.id}</td>
+          <td>${score}</td>
+          <td class="${deltaCls}">${deltaStr}</td>
+          <td><span class="status-badge ${statusBadge}">${statusLabel}</span></td>
+          <td>${iter.hypothesis}</td>
+        </tr>
+        <tr class="detail-row" id="detail-${iter.id}">
+          <td colspan="5">Reasoning: ${iter.reasoning}\nDiff: ${iter.diff_summary}${iter.commit_sha ? '\nCommit: ' + iter.commit_sha : ''}</td>
+        </tr>`;
+      }
+    });
+
+    function toggleDetail(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('open');
+    }
+  </script>
+</body>
+</html>
