@@ -1,0 +1,8 @@
+{
+  "name": "remotion-maker",
+  "description": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
