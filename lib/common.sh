@@ -8,6 +8,7 @@ AR_AUTORESEARCH_DIR=".autoresearch"
 AR_EXPERIMENTS_FILE="${AR_AUTORESEARCH_DIR}/experiments.json"
 AR_DASHBOARD_FILE="${AR_AUTORESEARCH_DIR}/dashboard.html"
 AR_PROGRAM_FILE="${AR_AUTORESEARCH_DIR}/program.md"
+AR_HARNESS_FILE="${AR_AUTORESEARCH_DIR}/harness.json"
 
 # Plugin root (where templates live)
 AR_PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
