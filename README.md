@@ -23,6 +23,7 @@ Or via marketplace:
 - **Pre-compact capture** — Annotates session file before context compaction
 - **Stop reminder** — Suggests `/session-learner:take-away` when significant work is detected
 - `/session-learner:take-away` — Reflect on session learnings, corrections, and Zettelkasten card suggestions
+- `/session-learner:digest <path-or-url>` — Digest a file or URL into atomic Zettelkasten cards (terminal-only, with verification gate)
 
 ## Configuration
 
@@ -33,6 +34,7 @@ Set these environment variables (e.g., in `~/.zshrc`):
 | `CLAUDE_SESSION_LEARNER_GIT_MODE` | `full` | `full` = inject git diff summary on session start; `sha-only` = just warn about commit count |
 | `CLAUDE_SESSION_LEARNER_COMPACT_THRESHOLD` | `50` | Tool calls before suggesting `/compact` |
 | `CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS` | `7` | Days to keep session files in `~/.claude/sessions/` |
+| `CLAUDE_SESSION_LEARNER_ZK_PATH` | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/03-Resource/Zettelkasten/Permanent` | Path to vault `Permanent/` directory for grounding `/digest` tag and link suggestions |
 
 ## Optional Dependency
 
