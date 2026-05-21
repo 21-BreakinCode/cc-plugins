@@ -55,6 +55,7 @@ Harness Check Report — my-project/
 | Tests | Failures + coverage gaps | jest, vitest, pytest, cargo test, go test |
 | Runtime | Server starts, endpoints respond | npm dev/start/serve scripts |
 | Architecture | Oversized files, circular deps | file analysis, madge (JS/TS) |
+| Scriptability | Long/duplicated inline scripts in markdown — extract for consistency + token efficiency | static markdown scan |
 
 Flags: `--json` (raw output), `--probe <name>` (run single probe)
 

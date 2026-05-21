@@ -89,6 +89,7 @@ result = {
     'tests': tests,
     'runtime': runtime,
     'architecture': 'static',
+    'scriptability': 'static',
 }
 print(json.dumps(result))
 PYEOF
@@ -665,6 +666,138 @@ PYEOF
 }
 
 # ---------------------------------------------------------------------------
+# ar_probe_scriptability <tool>
+# Pure Python static analysis of markdown files (commands, agents, skills,
+# READMEs, CLAUDE.md, etc.) for inline code blocks that should be extracted
+# to reusable scripts/lib helpers — for consistency and token efficiency.
+#
+# Flags two patterns:
+#   1. Long inline bash/python blocks (> LONG_BLOCK_THRESHOLD lines)
+#   2. Identical code blocks duplicated across 2+ markdown files
+# ---------------------------------------------------------------------------
+ar_probe_scriptability() {
+  local tool="${1:-}"
+  # tool is always "static" for scriptability; we accept any value (or null)
+
+  python3 - <<'PYEOF'
+import hashlib
+import json
+import os
+import re
+
+cwd = os.getcwd()
+
+LONG_BLOCK_THRESHOLD = 15   # lines inside a single fenced block
+DUP_MIN_LINES = 3           # only consider blocks >=3 lines for dedup
+PENALTY = 5                 # per finding
+EXECUTABLE_LANGS = {
+    'bash', 'sh', 'shell', 'zsh',
+    'python', 'py', 'python3',
+}
+SKIP_DIRS = {
+    'node_modules', 'vendor', 'dist', 'build', '.git',
+    '__pycache__', '.autoresearch', '.next', '.venv', 'venv',
+}
+
+CODE_FENCE = re.compile(r'^([ \t]*)```([\w+-]*)\s*$')
+
+# --- Collect markdown files ---
+md_files = []
+for dirpath, dirnames, filenames in os.walk(cwd):
+    dirnames[:] = [
+        d for d in dirnames
+        if d not in SKIP_DIRS and not d.startswith('.')
+    ]
+    for fname in filenames:
+        if fname.lower().endswith('.md'):
+            md_files.append(os.path.join(dirpath, fname))
+
+findings = []
+fix_targets = []
+block_hashes = {}  # hash -> [(rel, start_line, line_count, lang)]
+
+for fpath in md_files:
+    try:
+        with open(fpath, 'r', errors='ignore') as f:
+            lines = f.readlines()
+    except Exception:
+        continue
+
+    rel = os.path.relpath(fpath, cwd)
+    in_block = False
+    fence_indent = ''
+    block_lang = ''
+    block_start = 0
+    block_content = []
+
+    for i, line in enumerate(lines, start=1):
+        m = CODE_FENCE.match(line.rstrip('\n'))
+        if m and (not in_block or m.group(1) == fence_indent):
+            if not in_block:
+                in_block = True
+                fence_indent = m.group(1)
+                block_lang = (m.group(2) or '').lower()
+                block_start = i
+                block_content = []
+            else:
+                line_count = len(block_content)
+                if block_lang in EXECUTABLE_LANGS:
+                    if line_count > LONG_BLOCK_THRESHOLD:
+                        findings.append(
+                            f'{rel}:{block_start}: long inline {block_lang} '
+                            f'block ({line_count} lines) — extract to script'
+                        )
+                        target = f'{rel}:{block_start}'
+                        if target not in fix_targets:
+                            fix_targets.append(target)
+                    if line_count >= DUP_MIN_LINES:
+                        content = ''.join(block_content).strip()
+                        if content:
+                            h = hashlib.md5(content.encode()).hexdigest()
+                            block_hashes.setdefault(h, []).append(
+                                (rel, block_start, line_count, block_lang)
+                            )
+                in_block = False
+                block_lang = ''
+                block_content = []
+                fence_indent = ''
+        elif in_block:
+            block_content.append(line)
+
+# --- Detect duplicates across files ---
+for h, locs in block_hashes.items():
+    files_set = {loc[0] for loc in locs}
+    if len(files_set) >= 2:
+        files_str = ', '.join(f'{f}:{l}' for f, l, _, _ in locs)
+        lc = locs[0][2]
+        lang = locs[0][3]
+        findings.append(
+            f'duplicate {lang} block ({lc} lines) in {files_str} '
+            f'— extract to shared lib/script'
+        )
+        for f, _, _, _ in locs:
+            if f not in fix_targets:
+                fix_targets.append(f)
+
+count = len(findings)
+score = max(0, min(100, 100 - count * PENALTY))
+estimated_iterations = max(0, (count + 2) // 3)
+
+result = {
+    'category': 'scriptability',
+    'score': score,
+    'max': 100,
+    'skipped': False,
+    'tool': 'static',
+    'findings': findings[:50],
+    'fix_targets': fix_targets[:50],
+    'estimated_iterations': estimated_iterations,
+}
+print(json.dumps(result))
+PYEOF
+}
+
+# ---------------------------------------------------------------------------
 # ar_probe_run_all
 # Orchestrates all probes and combines results into a single JSON object
 # keyed by category.
@@ -704,10 +837,14 @@ print(d.get('runtime') or 'null')
   local arch_json
   arch_json=$(ar_probe_architecture "static")
 
+  ar_log "Running scriptability probe..."
+  local script_json
+  script_json=$(ar_probe_scriptability "static")
+
   ar_log "Combining probe results..."
   local combine_tmpfile
   combine_tmpfile=$(mktemp)
-  printf '%s\n%s\n%s\n%s' "${lint_json}" "${tests_json}" "${runtime_json}" "${arch_json}" > "${combine_tmpfile}"
+  printf '%s\n%s\n%s\n%s\n%s' "${lint_json}" "${tests_json}" "${runtime_json}" "${arch_json}" "${script_json}" > "${combine_tmpfile}"
 
   python3 - "${combine_tmpfile}" <<'PYEOF'
 import json, sys
