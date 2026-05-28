@@ -1,0 +1,8 @@
+{
+  "name": "data-analysis",
+  "description": "Structured data analysis using DuckDB and Six Thinking Hats methodology with business-context playbooks",
+  "version": "0.2.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
