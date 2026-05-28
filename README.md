@@ -63,22 +63,10 @@ Session memory persistence, git-aware context injection, strategic compact sugge
 - Strategic `/compact` suggestions after configurable tool-call threshold
 - Pre-compact annotation of session files
 - `/session-learner:take-away` — reflect on session learnings and Zettelkasten card suggestions
+- `/session-learner:digest` — digest files/URLs into Zettelkasten cards
 
 Configuration: `CLAUDE_SESSION_LEARNER_GIT_MODE`, `CLAUDE_SESSION_LEARNER_COMPACT_THRESHOLD`, `CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS` in `~/.zshrc`.
 Optional dependency: `jq`.
-
-### data-analysis
-
-Structured data analysis using DuckDB and Six Thinking Hats with business-context playbooks and FACT/ASSUME methodology.
-
-```bash
-/plugin install data-analysis@cc-plugins
-```
-
-- Six Thinking Hats analysis methodology (Blue → White → Red → Black → Yellow → Green)
-- DuckDB-powered queries for CSV, Parquet, and JSON datasets
-- Business-context playbooks for domain-specific analysis
-- FACT/ASSUME structured output for clarity
 
 ### autoresearch
 
@@ -95,6 +83,19 @@ Iterative improvement loop with eval-driven keep/discard and live HTML dashboard
 - On-demand web research via defuddle
 - Configurable stopping conditions
 
+### remotion-maker
+
+Generate Remotion (React) videos with consistent style, automated media sourcing, staged preview, and multi-tier verification.
+
+```bash
+/plugin install remotion-maker@cc-plugins
+```
+
+- `/remotion-maker:create` — full pipeline: style → generate → preview → verify → render
+- `/remotion-maker:define-style` — create or manage style definitions
+- `/remotion-maker:find-media` — search free resources for media assets
+- `/remotion-maker:verify` — verify video against style definition
+
 ## Repository Structure
 
 ```
@@ -104,8 +105,8 @@ cc-plugins/
 ├── autoimprove-agents/
 ├── zettelkasten-capture/
 ├── session-learner/
-├── data-analysis/
 ├── autoresearch/
+├── remotion-maker/
 ├── docs/                       # Design notes and plans
 └── README.md
 ```

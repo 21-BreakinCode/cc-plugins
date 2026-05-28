@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -26,22 +26,22 @@
     {
       "name": "session-learner",
       "source": "./session-learner",
-      "description": "Session memory persistence, git-aware context injection, compact suggestions, and take-away reflections",
-      "version": "1.0.0",
-      "strict": true
-    },
-    {
-      "name": "data-analysis",
-      "source": "./data-analysis",
-      "description": "Structured data analysis using DuckDB and Six Thinking Hats with business-context playbooks and FACT/ASSUME methodology",
-      "version": "0.2.0",
+      "description": "Session memory persistence, git-aware context, compact suggestions, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
+      "version": "1.1.0",
       "strict": true
     },
     {
       "name": "autoresearch",
       "source": "./autoresearch",
       "description": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
-      "version": "1.0.0",
+      "version": "1.1.0",
+      "strict": true
+    },
+    {
+      "name": "remotion-maker",
+      "source": "./remotion-maker",
+      "description": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
+      "version": "0.1.0",
       "strict": true
     }
   ]
