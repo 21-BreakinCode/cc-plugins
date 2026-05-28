@@ -1,0 +1,48 @@
+{
+  "name": "cc-plugins",
+  "owner": {
+    "name": "21-BreakinCode",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Knowledge management and workflow automation plugins for Claude Code",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "autoimprove-agents",
+      "source": "./autoimprove-agents",
+      "description": "Modular CLAUDE.md + project/cross-project KB + self-improvement loop for agents",
+      "version": "1.0.0",
+      "strict": true
+    },
+    {
+      "name": "zettelkasten-capture",
+      "source": "./zettelkasten-capture",
+      "description": "Transform Claude session output into structured Obsidian Zettelkasten draft notes with excalidraw stubs",
+      "version": "1.0.0",
+      "strict": true
+    },
+    {
+      "name": "session-learner",
+      "source": "./session-learner",
+      "description": "Session memory persistence, git-aware context injection, compact suggestions, and take-away reflections",
+      "version": "1.0.0",
+      "strict": true
+    },
+    {
+      "name": "data-analysis",
+      "source": "./data-analysis",
+      "description": "Structured data analysis using DuckDB and Six Thinking Hats with business-context playbooks and FACT/ASSUME methodology",
+      "version": "0.2.0",
+      "strict": true
+    },
+    {
+      "name": "autoresearch",
+      "source": "./autoresearch",
+      "description": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
+      "version": "1.0.0",
+      "strict": true
+    }
+  ]
+}

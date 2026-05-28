@@ -1,0 +1,4 @@
+.playwright-mcp/
+.git.backup-pre-monorepo/
+.claude/settings.local.json
+.DS_Store
