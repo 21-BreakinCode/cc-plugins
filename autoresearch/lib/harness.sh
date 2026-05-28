@@ -43,6 +43,7 @@ with open(probes_file, 'r') as f:
 WEIGHTS = {
     'runtime': 1.5,
     'architecture': 1.2,
+    'scriptability': 1.1,
     'lint': 1.0,
     'tests': 1.0,
 }
@@ -194,6 +195,7 @@ LABELS = {
     'tests': 'Tests',
     'runtime': 'Runtime Health',
     'architecture': 'Architecture',
+    'scriptability': 'Scriptability',
 }
 
 BAR_WIDTH = 20
@@ -311,6 +313,7 @@ LABELS = {
     'tests': 'Tests',
     'runtime': 'Runtime Health',
     'architecture': 'Architecture',
+    'scriptability': 'Scriptability',
 }
 label = LABELS.get(category, category.title())
 
@@ -352,12 +355,26 @@ constraints = (
 # --- Metrics ---
 metrics = f"- score: higher_is_better (target >= {threshold})"
 
-# --- LLM criteria ---
+# --- LLM criteria (category-specific guidance) ---
+CATEGORY_GUIDANCE = {
+    'scriptability': (
+        "Extract long or duplicated inline shell/python blocks from markdown "
+        "files (commands/agents/skills/README) into shared scripts/ or lib/ "
+        "helpers. Replace the inline blocks with a single-line invocation of "
+        "the extracted helper. Preserve all behavior — the helper must do "
+        "exactly what the original inline block did. Prefer sourcing existing "
+        "lib functions over creating new scripts when an equivalent helper "
+        "already exists."
+    ),
+}
+extra = CATEGORY_GUIDANCE.get(category, '')
 llm_criteria = (
     f"The change improves {label} quality. "
     f"Score increases toward {threshold}/100. "
     "No regressions introduced."
 )
+if extra:
+    llm_criteria = f"{llm_criteria} {extra}"
 
 # --- Write program.md ---
 program_content = f"""# Experiment Program
