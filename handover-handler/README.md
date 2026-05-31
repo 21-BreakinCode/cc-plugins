@@ -19,7 +19,7 @@ LifeOS (Obsidian vault, iCloud-synced) is the source of truth for project handov
 
 | Variable | Default | Description |
 |---|---|---|
-| `CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP` | `0` | When `1`, after a session that ran `/hh:wrap-up`, the Stop hook reminds Claude to offer `/hh:new`. |
+| `CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP` | `0` | When `1`, after a session that ran `/hh:wrap-up`, the Stop hook reminds Claude to offer `/hh:new`. Also requires the cwd to have a working `./handover` symlink — otherwise the hook is a no-op. |
 
 ## Vault Layout
 

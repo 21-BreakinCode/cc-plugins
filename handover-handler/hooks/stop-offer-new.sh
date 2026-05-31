@@ -5,10 +5,16 @@
 # message asking Claude to offer /hh:new via AskUserQuestion.
 #
 # Disabled by default. Set CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP=1 in ~/.zshrc to enable.
+# Also gated on the per-repo convention: the cwd must have a working ./handover
+# symlink (created by /hh:init-service). Without it, /hh:new can't run anyway.
 
 set -euo pipefail
 
 [ "${CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP:-0}" = "1" ] || exit 0
+
+# Per-repo convention: ./handover must be a symlink that resolves into the vault.
+# Matches /hh:new's Phase 1 precondition — no point offering /hh:new otherwise.
+[ -L "./handover" ] && readlink -e "./handover" >/dev/null 2>&1 || exit 0
 
 payload="$(cat)"
 
