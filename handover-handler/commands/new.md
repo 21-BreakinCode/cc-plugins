@@ -96,10 +96,10 @@ tags:
 
 I'm continuing work on **$APP_NAME — $TOPIC**.
 
-- Working directory: `<cwd>`
-- Key files: `<path/one>`, `<path/two>`
-- Last action: <what was just done>
-- Next action: <what to do next>
+- Working directory: `{cwd}`
+- Key files: `{path/one}`, `{path/two}`
+- Last action: `{what was just done}`
+- Next action: `{what to do next}`
 
 Please read the files above, confirm you understand the state, then proceed with the next action. Ask before changing anything outside the listed files.
 ```
