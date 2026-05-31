@@ -1,0 +1,17 @@
+{
+  "description": "Offer /hh:new after a wrap-up session ends (opt-in via CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP=1)",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/stop-offer-new.sh'",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}
