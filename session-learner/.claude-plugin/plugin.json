@@ -1,7 +1,7 @@
 {
   "name": "session-learner",
   "description": "Session memory persistence, git-aware context injection, strategic compact suggestions, and /take-away reflections",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": {
     "name": "William Hung"
   }

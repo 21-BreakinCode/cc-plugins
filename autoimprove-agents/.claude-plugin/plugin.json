@@ -1,7 +1,7 @@
 {
   "name": "autoimprove-agents",
   "description": "Modular CLAUDE.md + project/cross-project KB + self-improvement loop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "William Hung"
   }

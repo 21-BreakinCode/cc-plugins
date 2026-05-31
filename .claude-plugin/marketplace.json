@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.1.0"
+    "version": "1.1.1"
   },
   "plugins": [
     {
       "name": "autoimprove-agents",
       "source": "./autoimprove-agents",
       "description": "Modular CLAUDE.md + project/cross-project KB + self-improvement loop for agents",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "strict": true
     },
     {
@@ -27,7 +27,7 @@
       "name": "session-learner",
       "source": "./session-learner",
       "description": "Session memory persistence, git-aware context, compact suggestions, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "strict": true
     },
     {
