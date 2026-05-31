@@ -120,7 +120,7 @@ Print:
 Created: $TARGET
   Resolved to LifeOS: $(readlink -e "$TARGET")
 
-Open it in Obsidian to refine TL;DR / What's next.
+Open it in Obsidian to refine TL;DR / To-Be.
 ```
 
 ## Non-negotiable rules
