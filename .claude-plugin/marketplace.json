@@ -6,23 +6,9 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.1.2"
+    "version": "1.2.0"
   },
   "plugins": [
-    {
-      "name": "autoimprove-agents",
-      "source": "./autoimprove-agents",
-      "description": "Modular CLAUDE.md + project/cross-project KB + self-improvement loop for agents",
-      "version": "1.0.1",
-      "strict": true
-    },
-    {
-      "name": "zettelkasten-capture",
-      "source": "./zettelkasten-capture",
-      "description": "Transform Claude session output into structured Obsidian Zettelkasten draft notes with excalidraw stubs",
-      "version": "1.0.0",
-      "strict": true
-    },
     {
       "name": "session-learner",
       "source": "./session-learner",

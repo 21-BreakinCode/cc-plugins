@@ -18,38 +18,6 @@ Then install any plugin:
 
 ## Available Plugins
 
-### autoimprove-agents
-
-Modular CLAUDE.md architecture + project/cross-project knowledge base + self-improvement loop for agents.
-
-```bash
-/plugin install autoimprove-agents@cc-plugins
-```
-
-- `/autoimprove-agents:setup` — interactive first-time configuration
-- `/autoimprove-agents:init` — set up modular CLAUDE.md in any project
-- `/autoimprove-agents:sync-kb` — capture session learnings to project KB
-- `/autoimprove-agents:review-kb` — review and archive stale KB entries
-- `/autoimprove-agents:self-improve` — review and apply agent instruction improvements
-- Cross-project knowledge agent for surfacing patterns across all projects
-- Optional NotebookLM integration for queryable knowledge stores
-
-### zettelkasten-capture
-
-Transform Claude session output into structured Obsidian Zettelkasten draft notes with excalidraw stubs.
-
-```bash
-/plugin install zettelkasten-capture@cc-plugins
-```
-
-- Automatic draft note generation in Obsidian inbox after each session
-- Excalidraw stub creation when architectural topics are detected
-- `/zettelkasten-capture:setup` — configure Obsidian vault path
-- `/zettelkasten-capture:finalize` — promote drafts to permanent notes
-- `/zettelkasten-capture:push-to-kb` — sync notes to project KB (requires autoimprove-agents)
-
-Soft dependencies: session-learner, autoimprove-agents (both optional).
-
 ### session-learner
 
 Session memory persistence, git-aware context injection, strategic compact suggestions, and `/take-away` reflections.
@@ -102,8 +70,6 @@ Generate Remotion (React) videos with consistent style, automated media sourcing
 cc-plugins/
 ├── .claude-plugin/
 │   └── marketplace.json       # Marketplace manifest (relative-path sources)
-├── autoimprove-agents/
-├── zettelkasten-capture/
 ├── session-learner/
 ├── autoresearch/
 ├── remotion-maker/

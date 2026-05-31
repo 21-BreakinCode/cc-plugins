@@ -1,8 +1,0 @@
-{
-  "name": "zettelkasten-capture",
-  "description": "Transform Claude session output into structured Obsidian Zettelkasten draft notes with excalidraw stubs",
-  "version": "1.0.0",
-  "author": {
-    "name": "William Hung"
-  }
-}
