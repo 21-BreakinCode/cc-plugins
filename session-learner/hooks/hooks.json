@@ -1,5 +1,5 @@
 {
-  "description": "Session memory persistence, git-aware context injection, compact suggestions, and take-away reminders",
+  "description": "Session memory persistence, git-aware context injection, and take-away reminders",
   "hooks": {
     "SessionStart": [
       {
@@ -21,18 +21,6 @@
             "type": "command",
             "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/session-end.sh'",
             "timeout": 15
-          }
-        ]
-      }
-    ],
-    "PreToolUse": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash '${CLAUDE_PLUGIN_ROOT}/hooks/suggest-compact.sh'",
-            "timeout": 5
           }
         ]
       }
