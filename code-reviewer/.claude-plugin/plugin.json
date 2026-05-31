@@ -1,0 +1,8 @@
+{
+  "name": "code-reviewer",
+  "description": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, sourcing distilled principles from LifeOS.",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
