@@ -1,0 +1,8 @@
+{
+  "name": "hh",
+  "description": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
