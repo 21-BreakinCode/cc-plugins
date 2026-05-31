@@ -139,6 +139,7 @@ Subagent prompt:
 >
 > Source: `<source-path>`
 > Destination: `${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/04-Archive/<new-filename>`
+> Filename to use (precomputed from Phase 2 analysis): `<new-filename>` — do NOT re-derive a slug or date.
 > Living wikilink references: `<list-of-paths>`
 > Historical wikilink references: `<list-of-paths>` (will be left broken intentionally)
 >

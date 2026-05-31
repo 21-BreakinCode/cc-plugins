@@ -18,7 +18,11 @@ LIFEOS="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
 ### Phase 1 — Resolve ORG
 
 ```bash
-ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || ORG=""
+ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || {
+    rc=$?
+    [ "$rc" -eq 3 ] && { echo "LifeOS not reachable — check iCloud sync and re-run."; exit 3; }
+    ORG=""
+}
 ```
 
 - If `$ORG` is empty: tell the user "Could not auto-detect ORG. Run /hh:init-org first if this is a new ORG, or use AskUserQuestion to pick from existing ORGs." Then `AskUserQuestion` listing existing ORG dirs under `$LIFEOS/01Project/`. If user picks one with no initiation.md, stop and instruct them to run `/hh:init-org $ORG` first.
