@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.2.0"
+    "version": "1.3.0"
   },
   "plugins": [
     {
@@ -27,6 +27,13 @@
       "name": "remotion-maker",
       "source": "./remotion-maker",
       "description": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
+      "version": "0.1.0",
+      "strict": true
+    },
+    {
+      "name": "handover-handler",
+      "source": "./handover-handler",
+      "description": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
       "version": "0.1.0",
       "strict": true
     }
