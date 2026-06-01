@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.4.0"
+    "version": "1.5.0"
   },
   "plugins": [
     {
@@ -42,6 +42,13 @@
       "source": "./code-reviewer",
       "description": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, sourcing distilled principles from LifeOS.",
       "version": "0.1.0",
+      "strict": true
+    },
+    {
+      "name": "uiux-optimizer",
+      "source": "./uiux-optimizer",
+      "description": "UI/UX design advisor — analyzes code against real-world patterns from refero.design, suggests improvements for visual design, layout, and component patterns",
+      "version": "1.0.0",
       "strict": true
     }
   ]

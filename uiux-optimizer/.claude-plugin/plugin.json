@@ -1,0 +1,8 @@
+{
+  "name": "uiux-optimizer",
+  "description": "UI/UX design advisor — analyzes code against real-world patterns from refero.design, suggests improvements for visual design, layout, and component patterns",
+  "version": "1.0.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
