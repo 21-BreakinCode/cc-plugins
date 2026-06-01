@@ -1,7 +1,7 @@
 {
   "name": "uiux-optimizer",
-  "description": "UI/UX design advisor — analyzes code against real-world patterns from refero.design, suggests improvements for visual design, layout, and component patterns",
-  "version": "1.0.0",
+  "description": "UI/UX design advisor — analyzes code against real-world patterns from refero.design, surfaces 2-3 named-brand design directions from the awesome-design-md catalogue (getdesign.md), and suggests improvements for visual design, layout, and component patterns",
+  "version": "1.1.0",
   "author": {
     "name": "William Hung"
   }
