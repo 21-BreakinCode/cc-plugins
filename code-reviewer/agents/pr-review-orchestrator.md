@@ -42,11 +42,12 @@ Use `AskUserQuestion`:
 
 > Question: `No principle directory found for <owner>/<repo>. <reason from stderr>`
 > Options (single-select):
-> 1. **Provide path** — I'll point you at a principle directory.
-> 2. **Skip principle layer (Recommended)** — continue with standard reviews only.
-> 3. **Abort** — cancel this review.
+> 1. **Provide path (one-off)** — I'll point you at a principle directory for this repo only.
+> 2. **Set up a global root** — Configure a reusable pattern (`<base>/<pattern>`) so future repos resolve automatically.
+> 3. **Skip principle layer (Recommended)** — continue with standard reviews only.
+> 4. **Abort** — cancel this review.
 
-**If user picks "Provide path":** follow up with a free-text `AskUserQuestion` (single "Continue" option) asking for the absolute path. Then:
+**If user picks "Provide path (one-off)":** follow up with a free-text `AskUserQuestion` (single "Continue" option) asking for the absolute path. Then:
 
 ```bash
 # Validate path
@@ -63,9 +64,43 @@ Then set `PRINCIPLE_DIR=<path>` and `PRINCIPLE_LAYER=on`.
 
 If the path is invalid, re-prompt (max 1 retry), then fall back to Skip.
 
+**If user picks "Set up a global root":** run the wizard below.
+
 **If user picks "Skip":** set `PRINCIPLE_LAYER=off`. Continue.
 
 **If user picks "Abort":** stop. Emit `Review cancelled.` and exit.
+
+### Global-root wizard (only when user picks option 2)
+
+Walk the user through three `AskUserQuestion` prompts in sequence. The goal is to capture a reusable `(base, pattern, org_resolver)` triple that, once stored in `~/.claude/code-reviewer/config.json`, will let this repo *and any future repo with the same layout* resolve silently.
+
+**Wizard prompt 1 — base directory** (free-text, single "Continue" option):
+
+> "Where do you keep your CodeReviewPrinciple directories? Provide a base directory. Supports `~`, `$HOME`, and `$LIFEOS` placeholders (expanded at resolve time). Example: `~/code-principles` or `$LIFEOS/01Project`."
+
+**Wizard prompt 2 — pattern** (single-select with 3 common shapes + a free-text "Other"):
+
+> "What's the layout under that base? `{org_dir}` and `{repo}` are substituted at resolve time."
+> 1. `{repo}` — flat: all repos directly under base
+> 2. `{org_dir}/{repo}` — grouped by org/owner
+> 3. `{org_dir}/CodeReviewPrinciple/{repo}` — Appier LifeOS layout
+> 4. Other (free text)
+
+**Wizard prompt 3 — org_resolver** (single-select, only ask if pattern includes `{org_dir}`; otherwise skip and use `""`):
+
+> "How should `{org_dir}` be resolved?"
+> 1. **Literal github owner (Recommended)** — `{org_dir}` = the GitHub owner from `git remote`. Good for `~/code-principles/<owner>/<repo>` layouts.
+> 2. **handover_handler** — scan `<base>/*/handover_handler__initiation.md` frontmatter for `github_orgs:` matching the owner, use the matching subdir name. Used by the Appier LifeOS layout.
+
+Then call:
+
+```bash
+bash ${CLAUDE_PLUGIN_ROOT}/lib/add-config-root.sh "<base>" "<pattern>" "<resolver_or_empty>"
+```
+
+- **Exit 0 (stdout = abs path)** → set `PRINCIPLE_DIR=<path>` and `PRINCIPLE_LAYER=on`. Echo: `Saved root to config. Using principle: <path>`.
+- **Exit 1 (validation failed)** → echo the stderr to the user, then offer a single `AskUserQuestion` with `Retry wizard / Skip principle layer / Abort`. Max 1 retry.
+- **Exit 2 (env problem)** → fall back to Skip with the error echoed.
 
 ## Phase 3: Run all reviews in parallel
 

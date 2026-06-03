@@ -40,8 +40,8 @@
     {
       "name": "code-reviewer",
       "source": "./code-reviewer",
-      "description": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, sourcing distilled principles from LifeOS.",
-      "version": "0.1.0",
+      "description": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, with configurable principle-directory roots.",
+      "version": "0.2.0",
       "strict": true
     },
     {
