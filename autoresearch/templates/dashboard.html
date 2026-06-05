@@ -106,11 +106,22 @@
       ? DATA.config.metrics.map(m => m.name)
       : (DATA.baseline && DATA.baseline.scores ? Object.keys(DATA.baseline.scores) : []);
     const primaryMetric = metricNames[0] || 'score';
+    const baselineScore = DATA.baseline && DATA.baseline.scores ? DATA.baseline.scores[primaryMetric] : null;
+
+    // Infer direction from kept iterations' trend vs baseline.
+    // If latest kept score > baseline → higher_is_better; if < → lower_is_better.
+    // Override with DATA.config.metrics[0].direction when populated.
+    function inferDirection() {
+      const kept = experiments.filter(e => e.status === 'kept');
+      if (kept.length === 0 || baselineScore == null) return 'higher_is_better';
+      const latest = kept[kept.length - 1].scores[primaryMetric];
+      if (latest == null || latest === baselineScore) return 'higher_is_better';
+      return latest > baselineScore ? 'higher_is_better' : 'lower_is_better';
+    }
     const metricDirection = DATA.config.metrics.length > 0
       ? DATA.config.metrics[0].direction
-      : 'lower_is_better';
+      : inferDirection();
 
-    const baselineScore = DATA.baseline && DATA.baseline.scores ? DATA.baseline.scores[primaryMetric] : null;
     const bestExperiment = keptExperiments.length > 0
       ? keptExperiments.reduce((best, e) => {
           const s = e.scores[primaryMetric];
@@ -121,7 +132,9 @@
     const bestScore = bestExperiment ? bestExperiment.scores[primaryMetric] : baselineScore;
 
     const improvement = baselineScore && bestScore
-      ? ((baselineScore - bestScore) / baselineScore * 100).toFixed(1)
+      ? (metricDirection === 'higher_is_better'
+          ? ((bestScore - baselineScore) / baselineScore * 100).toFixed(1)
+          : ((baselineScore - bestScore) / baselineScore * 100).toFixed(1))
       : 0;
 
     const cards = [
