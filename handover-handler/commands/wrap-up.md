@@ -15,6 +15,17 @@ VAULT="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
 
 The vault is iCloud-synced across macOS machines. Always reference via `${HOME}` so the command works on every machine.
 
+## Archive destination
+
+```bash
+ARCHIVE_ROOT="${HH_ARCHIVE_ROOT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/04Archive}"
+```
+
+- Override by setting `HH_ARCHIVE_ROOT` in `~/.zshrc`. Keep the value double-quoted because the default path contains `$HOME` and spaces.
+- Each handover archives under `"$ARCHIVE_ROOT/<ORG>/<new-filename>"`. Group-by-org is mandatory — never write directly under `$ARCHIVE_ROOT`.
+- `<ORG>` is derived from the source path: the segment immediately after `01Project/` (e.g. `…/LifeOS/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
+- If a handover is **not** under `…/LifeOS/01Project/<ORG>/…`, stop and ask the user which ORG subfolder to archive it under before proceeding. Do not invent one.
+
 ## What this command does
 
 1. Discover active handovers (tagged `handover`, not `archive`).
@@ -66,19 +77,20 @@ Subagent prompt template (substitute `<file>` and today's date):
 > Read the file and report under 150 words, structured as:
 >
 > 1. **Topic** — one-line summary.
-> 2. **Project prefix** — derive from path. Examples:
+> 2. **ORG** — the path segment immediately after `01Project/` (e.g. `…/01Project/Appier/Services/CsDomain/…` → `Appier`). If the file is not under `01Project/<ORG>/`, report `ORG: <unresolved>` so the caller can ask the user.
+> 3. **Project prefix** — derive from path. Examples:
 >    - `01Project/BustDice/Services/...` → `bust-dice`
 >    - filename references `CR-1660` → `CR-1660`
 >    - otherwise short topic slug, e.g. `cs-domain`
-> 3. **Visible state** — explicit `status:` field in frontmatter, plus checkbox completion ratio (`[x]` count / total).
-> 4. **Suggested action** — pick ONE and explain in <20 words:
+> 4. **Visible state** — explicit `status:` field in frontmatter, plus checkbox completion ratio (`[x]` count / total).
+> 5. **Suggested action** — pick ONE and explain in <20 words:
 >    - `done` — work is complete; status reads done/complete/live/shipped
 >    - `superseded` — newer handover replaces this one (name it if you can spot it)
 >    - `suspended` — work paused; explicit `status: suspended` or visible indicators of indefinite hold
 >    - `active` — still in progress, no fresh entry needed
 >    - `active-update` — still in progress AND visible state suggests fresh entry today
-> 5. **Suggested filename if archiving** — `<prefix>__<status>-<date>-<topic>.md`. Use today's date for `done`; original/inferred date for `superseded`.
-> 6. **Cross-references** — incoming wikilinks. Run `grep -rl "\[\[<basename-no-ext>\]\]" "$VAULT"` and classify each result:
+> 6. **Suggested filename if archiving** — `<prefix>__<status>-<date>-<topic>.md`. Use today's date for `done`; original/inferred date for `superseded`.
+> 7. **Cross-references** — incoming wikilinks. Run `grep -rl "\[\[<basename-no-ext>\]\]" "$VAULT"` and classify each result:
 >    - `living` — active reference doc (pitfall notes, current handovers, deploy guides)
 >    - `historical` — under `02-Area/Journal/`, or filename matches `^\d{4}-\d{2}-\d{2}` and lives in `handover/`/`meeting/`/etc.
 >
@@ -138,7 +150,7 @@ Subagent prompt:
 > Archive an Obsidian handover.
 >
 > Source: `<source-path>`
-> Destination: `${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/04-Archive/<new-filename>`
+> Destination: `<archive-root>/<ORG>/<new-filename>` — both `<archive-root>` and `<ORG>` are resolved by the caller and passed in verbatim. Do NOT re-resolve them. Create the `<ORG>` subdirectory with `mkdir -p` before writing.
 > Filename to use (precomputed from Phase 2 analysis): `<new-filename>` — do NOT re-derive a slug or date.
 > Living wikilink references: `<list-of-paths>`
 > Historical wikilink references: `<list-of-paths>` (will be left broken intentionally)
@@ -147,7 +159,7 @@ Subagent prompt:
 > 1. Read the source file.
 > 2. In the frontmatter `tags` list, append `- archive` (preserve other tags, no duplicates, preserve order).
 > 3. Set the frontmatter `status:` field to the archive status (`done` or `superseded`).
-> 4. Write the modified content to the destination path.
+> 4. Ensure the destination directory exists (`mkdir -p "<archive-root>/<ORG>"`), then write the modified content to the destination path.
 > 5. Delete the source file (`rm <source>`).
 > 6. For each living-reference doc, update wikilinks: `[[<old-basename>]]` → `[[<new-basename>]]`. Preserve display text after `|`. Use Edit with `replace_all: true`. Skip historical references entirely.
 > 7. Do NOT add aliases to the archived file.
@@ -222,7 +234,7 @@ After all subagents return, print exactly the phrase `Wrap-up complete` on the f
 Wrap-up complete (<YYYY-MM-DD>):
 
 Archived (<N>):
-- <old-basename> → 04-Archive/<new-basename>
+- <old-basename> → <archive-root>/<ORG>/<new-basename>
 - ...
 
 Updates appended (<M>):
@@ -244,6 +256,8 @@ Print archived paths in copy-pastable form.
 
 ## Non-negotiable rules
 
+- **Archive destination**: `"$ARCHIVE_ROOT/<ORG>/<filename>"`. Honor `HH_ARCHIVE_ROOT` env var; default is `"$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/04Archive"`. Always quote the path (it contains `$HOME` and spaces). Never write directly under `$ARCHIVE_ROOT` without an `<ORG>` subfolder.
+- **ORG resolution**: derive from the source path segment after `01Project/`. If the file is not under `01Project/<ORG>/`, stop and ask the user to pick an ORG — never guess.
 - **Naming convention**: `<prefix>__<status>-[date-]<topic>.md`, status ∈ {`done`, `superseded`}. Date is `YYYY-MM-DD`.
 - **Add `archive` tag**: append to existing tags list. Never replace, never reorder other tags.
 - **Don't edit historical records**: journals (`02-Area/Journal/**`), dated handovers (`^\d{4}-\d{2}-\d{2}-*.md` inside `handover/`/`meeting/`/etc.). Broken wikilinks in these files are an honest signal of a rename.
