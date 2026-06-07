@@ -6,8 +6,9 @@
 set -euo pipefail
 
 # Resolve harness templates dir regardless of where this is sourced from.
+# Uses `find -L` so symlinked plugin installs (common in dev) are followed.
 ar_harness_templates_dir() {
-  find ~/.claude/plugins -path '*/harness/templates/harness-components' -print -quit 2>/dev/null
+  find -L ~/.claude/plugins -path '*/harness/templates/harness-components' -print -quit 2>/dev/null
 }
 
 # Source common helpers (for ar_log).
