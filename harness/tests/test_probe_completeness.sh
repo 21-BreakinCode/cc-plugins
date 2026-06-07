@@ -60,7 +60,7 @@ cd "${TMP}"
 mkdir -p .claude/agents .claude/hooks .claude/sensors eval
 echo '{"name":"x"}' > .claude/hooks/x.json
 echo '#!/bin/sh' > eval/x.sh
-yes "filler line" | head -350 > .claude/agents/bloated.md
+{ yes "filler line" || true; } | head -350 > .claude/agents/bloated.md
 result=$(ar_probe_harness_completeness "static")
 findings=$(echo "${result}" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(any("bloated.md" in f for f in d["findings"]))')
 assert "oversized agent detected in findings" "[ '${findings}' = 'True' ]"
