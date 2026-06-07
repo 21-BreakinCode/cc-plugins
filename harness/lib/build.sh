@@ -51,3 +51,42 @@ PYEOF
 
   echo "$(pwd)/${out}"
 }
+
+# ---------------------------------------------------------------------------
+# ar_harness_build_eval_loop <name> <description> <scope> <criterion>
+# Generates eval/<name>.sh from the eval-loop template.
+# ---------------------------------------------------------------------------
+ar_harness_build_eval_loop() {
+  local name="$1"
+  local description="$2"
+  local scope="$3"
+  local criterion="$4"
+
+  local tmpl_dir
+  tmpl_dir=$(ar_harness_templates_dir)
+  if [ -z "${tmpl_dir}" ]; then
+    ar_log "ERROR: harness templates not found"
+    return 1
+  fi
+
+  mkdir -p eval
+  local out="eval/${name}.sh"
+
+  python3 - "${tmpl_dir}/eval-loop/eval.sh.tmpl" "${out}" \
+    "${name}" "${description}" "${scope}" "${criterion}" <<'PYEOF'
+import sys
+src, dst, name, description, scope, criterion = sys.argv[1:7]
+with open(src) as f:
+    content = f.read()
+content = (content
+  .replace('{{NAME}}', name)
+  .replace('{{DESCRIPTION}}', description)
+  .replace('{{SCOPE}}', scope)
+  .replace('{{CRITERION}}', criterion))
+with open(dst, 'w') as f:
+    f.write(content)
+PYEOF
+
+  chmod +x "${out}"
+  echo "$(pwd)/${out}"
+}
