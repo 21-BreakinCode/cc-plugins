@@ -1,0 +1,28 @@
+# Sensor: {{NAME}}
+
+**Tier 1 sensor.** Tier 2 → expand to multiple related rules. Tier 3 → custom linter plugin.
+
+## What it catches
+- Linter: `{{LINTER}}`
+- Rule: `{{RULE}}`
+
+## Agent-tuned fix message
+> {{MESSAGE}}
+
+## How it runs
+This sensor is a shell script at `.claude/sensors/{{NAME}}.sh`. It wraps the
+existing linter run, filters output to the chosen rule, and appends an
+`AGENT-FIX:` line after each finding with concrete action guidance the agent
+can act on without further inference.
+
+## How to invoke
+Add this to a hook, or run on demand:
+
+```bash
+.claude/sensors/{{NAME}}.sh
+```
+
+## When to escalate
+- The fix idiom now branches → split into two sensors (Tier 2 split).
+- Multiple rules share the fix idiom → group them in one sensor (Tier 2 grow).
+- The "fix message" needs to read the surrounding code → escalate to a subagent (Tier 3).
