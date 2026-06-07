@@ -44,6 +44,7 @@ WEIGHTS = {
     'runtime': 1.5,
     'architecture': 1.2,
     'scriptability': 1.1,
+    'harness': 1.0,
     'lint': 1.0,
     'tests': 1.0,
 }
@@ -196,6 +197,7 @@ LABELS = {
     'runtime': 'Runtime Health',
     'architecture': 'Architecture',
     'scriptability': 'Scriptability',
+    'harness': 'Harness Completeness',
 }
 
 BAR_WIDTH = 20
@@ -318,6 +320,7 @@ LABELS = {
     'runtime': 'Runtime Health',
     'architecture': 'Architecture',
     'scriptability': 'Scriptability',
+    'harness': 'Harness Completeness',
 }
 label = LABELS.get(category, category.title())
 
