@@ -1,0 +1,8 @@
+{
+  "name": "harness",
+  "description": "Dev-lifecycle harness builder. Scans for missing feedback loops, sensors, evals, and oversized agents, then scaffolds Tier-1 components into your project's .claude/.",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
