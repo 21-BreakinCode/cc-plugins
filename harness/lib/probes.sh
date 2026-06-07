@@ -798,7 +798,7 @@ PYEOF
 }
 
 # ---------------------------------------------------------------------------
-# ar_probe_harness_completeness <tool>
+# ar_probe_harness <tool>
 # Scans the user's project for missing harness components and emits the same
 # JSON shape as every other probe. Heuristics are simple, explainable, and
 # never call an LLM.
@@ -811,7 +811,7 @@ PYEOF
 #   - git log --since='6 weeks ago' --grep='fix\|review' --oneline count > 20
 #     → reactive-workflow booster (one-shot signal)
 # ---------------------------------------------------------------------------
-ar_probe_harness_completeness() {
+ar_probe_harness() {
   local tool="${1:-}"
 
   python3 - <<'PYEOF'
@@ -1001,7 +1001,7 @@ print(d.get('runtime') or 'null')
 
   ar_log "Running harness completeness probe..."
   local harness_json
-  harness_json=$(ar_probe_harness_completeness "static")
+  harness_json=$(ar_probe_harness "static")
 
   ar_log "Combining probe results..."
   local combine_tmpfile

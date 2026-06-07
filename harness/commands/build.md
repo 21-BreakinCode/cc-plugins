@@ -18,7 +18,7 @@ source "$(find -L ~/.claude/plugins -path '*/harness/lib/build.sh' -print -quit 
 ## Step 2: Run the harness-completeness probe silently
 
 ```bash
-advice_json=$(ar_probe_harness_completeness "static")
+advice_json=$(ar_probe_harness "static")
 recommended=$(echo "${advice_json}" | python3 -c "import json,sys; d=json.load(sys.stdin); print(','.join(d.get('recommended', [])))")
 echo "RECOMMENDED: ${recommended}"
 ```

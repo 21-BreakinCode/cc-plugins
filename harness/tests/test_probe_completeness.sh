@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Smoke tests for ar_probe_harness_completeness.
+# Smoke tests for ar_probe_harness.
 # Run with: bash harness/tests/test_probe_completeness.sh
 set -euo pipefail
 
@@ -31,7 +31,7 @@ ORIG_PWD=$(pwd)
 echo "Test 1: empty project"
 TMP=$(mktemp -d)
 cd "${TMP}"
-result=$(ar_probe_harness_completeness "static")
+result=$(ar_probe_harness "static")
 score=$(echo "${result}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["score"])')
 category=$(echo "${result}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["category"])')
 assert "category is 'harness'" "[ '${category}' = 'harness' ]"
@@ -47,7 +47,7 @@ cd "${TMP}"
 mkdir -p .claude/hooks .claude/sensors eval
 echo '{"name":"x"}' > .claude/hooks/x.json
 echo '#!/bin/sh' > eval/x.sh
-result=$(ar_probe_harness_completeness "static")
+result=$(ar_probe_harness "static")
 score=$(echo "${result}" | python3 -c 'import json,sys; print(json.load(sys.stdin)["score"])')
 assert "harnessed project scores >= 80" "[ '${score}' -ge 80 ]"
 cd "${ORIG_PWD}"
@@ -61,7 +61,7 @@ mkdir -p .claude/agents .claude/hooks .claude/sensors eval
 echo '{"name":"x"}' > .claude/hooks/x.json
 echo '#!/bin/sh' > eval/x.sh
 { yes "filler line" || true; } | head -350 > .claude/agents/bloated.md
-result=$(ar_probe_harness_completeness "static")
+result=$(ar_probe_harness "static")
 findings=$(echo "${result}" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(any("bloated.md" in f for f in d["findings"]))')
 assert "oversized agent detected in findings" "[ '${findings}' = 'True' ]"
 cd "${ORIG_PWD}"
