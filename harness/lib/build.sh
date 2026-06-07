@@ -146,3 +146,79 @@ PYEOF
   echo "$(pwd)/${script_out}"
   echo "$(pwd)/${doc_out}"
 }
+
+# ---------------------------------------------------------------------------
+# ar_harness_build_context_report
+# Walks .claude/agents and .claude/skills for agent/skill files exceeding
+# 300 lines and writes a Markdown advisory report at
+# .claude/harness-report-YYYY-MM-DD.md. Never auto-edits agent files.
+# ---------------------------------------------------------------------------
+ar_harness_build_context_report() {
+  mkdir -p .claude
+  local out=".claude/harness-report-$(ar_date).md"
+
+  python3 - "${out}" <<'PYEOF'
+import os
+import re
+import sys
+
+out_path = sys.argv[1]
+cwd = os.getcwd()
+OVERSIZED_LINES = 300
+
+oversized = []
+for sub in ('.claude/agents', '.claude/skills'):
+    abs_sub = os.path.join(cwd, sub)
+    if not os.path.isdir(abs_sub):
+        continue
+    for dirpath, _, filenames in os.walk(abs_sub):
+        for fname in filenames:
+            if not fname.endswith('.md'):
+                continue
+            fpath = os.path.join(dirpath, fname)
+            try:
+                with open(fpath, 'r', errors='ignore') as f:
+                    lines = f.readlines()
+                if len(lines) > OVERSIZED_LINES:
+                    # Heuristic: count top-level (## or #) headings as "responsibilities"
+                    headings = [
+                        l.strip() for l in lines
+                        if re.match(r'^#{1,2}\s+\S', l) and 'frontmatter' not in l.lower()
+                    ]
+                    oversized.append({
+                        'path': os.path.relpath(fpath, cwd),
+                        'lines': len(lines),
+                        'headings': headings[:8],
+                    })
+            except Exception:
+                pass
+
+with open(out_path, 'w') as f:
+    f.write('# Harness Context-Mgmt Report\n\n')
+    if not oversized:
+        f.write('No agent/skill files exceed 300 lines. Nothing to recommend.\n')
+    else:
+        f.write(f'{len(oversized)} file(s) exceed 300 lines. Suggested splits below.\n\n')
+        for item in oversized:
+            f.write(f"## `{item['path']}` ({item['lines']} lines)\n\n")
+            if item['headings']:
+                f.write('**Top-level sections in this file:**\n\n')
+                for h in item['headings']:
+                    f.write(f'- {h}\n')
+                f.write('\n')
+                f.write(
+                    '**Suggested split:** group sections that share a noun '
+                    '(e.g. all sections about "input" → one file; all about '
+                    '"output" → another). Aim for each split to stay below '
+                    '300 lines and own one responsibility.\n\n'
+                )
+            else:
+                f.write(
+                    '**Suggested split:** no clear section structure found. '
+                    'Add `## Section` headings to expose responsibilities, '
+                    'then split.\n\n'
+                )
+
+print(out_path)
+PYEOF
+}
