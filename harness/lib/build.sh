@@ -90,3 +90,59 @@ PYEOF
   chmod +x "${out}"
   echo "$(pwd)/${out}"
 }
+
+# ---------------------------------------------------------------------------
+# ar_harness_build_sensor <name> <linter> <rule> <message>
+# Generates .claude/sensors/<name>.sh + .claude/sensors/<name>.SENSOR.md.
+# ---------------------------------------------------------------------------
+ar_harness_build_sensor() {
+  local name="$1"
+  local linter="$2"
+  local rule="$3"
+  local message="$4"
+
+  local tmpl_dir
+  tmpl_dir=$(ar_harness_templates_dir)
+  if [ -z "${tmpl_dir}" ]; then
+    ar_log "ERROR: harness templates not found"
+    return 1
+  fi
+
+  mkdir -p .claude/sensors
+  local script_out=".claude/sensors/${name}.sh"
+  local doc_out=".claude/sensors/${name}.SENSOR.md"
+
+  python3 - "${tmpl_dir}/sensor/sensor.sh.tmpl" "${script_out}" \
+    "${name}" "${linter}" "${rule}" "${message}" <<'PYEOF'
+import sys
+src, dst, name, linter, rule, message = sys.argv[1:7]
+with open(src) as f:
+    content = f.read()
+content = (content
+  .replace('{{NAME}}', name)
+  .replace('{{LINTER}}', linter)
+  .replace('{{RULE}}', rule)
+  .replace('{{MESSAGE}}', message))
+with open(dst, 'w') as f:
+    f.write(content)
+PYEOF
+  chmod +x "${script_out}"
+
+  python3 - "${tmpl_dir}/sensor/SENSOR.md.tmpl" "${doc_out}" \
+    "${name}" "${linter}" "${rule}" "${message}" <<'PYEOF'
+import sys
+src, dst, name, linter, rule, message = sys.argv[1:7]
+with open(src) as f:
+    content = f.read()
+content = (content
+  .replace('{{NAME}}', name)
+  .replace('{{LINTER}}', linter)
+  .replace('{{RULE}}', rule)
+  .replace('{{MESSAGE}}', message))
+with open(dst, 'w') as f:
+    f.write(content)
+PYEOF
+
+  echo "$(pwd)/${script_out}"
+  echo "$(pwd)/${doc_out}"
+}
