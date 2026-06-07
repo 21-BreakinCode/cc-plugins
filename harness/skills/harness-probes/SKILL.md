@@ -1,6 +1,6 @@
 ---
 name: harness-probes
-description: "Guide for adding custom probes to the autoresearch harness-check system."
+description: "Guide for adding custom probes to the harness check system."
 ---
 
 # Harness Probes
