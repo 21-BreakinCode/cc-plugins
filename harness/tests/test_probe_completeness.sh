@@ -3,7 +3,7 @@
 # Run with: bash harness/tests/test_probe_completeness.sh
 set -euo pipefail
 
-PROBES_LIB="$(find ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null)"
+PROBES_LIB="$(find -L ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null)"
 if [ -z "${PROBES_LIB}" ]; then
   PROBES_LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/probes.sh"
 fi

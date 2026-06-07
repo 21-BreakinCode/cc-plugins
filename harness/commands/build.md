@@ -102,7 +102,12 @@ Read each output path printed by the builder. Print to the user:
 > - <one-line description of the artifact>
 >
 > Tier-1 scaffold complete. The upgrade ladder is documented inline in the file.
-> Reload Claude Code (or restart your session) to pick up new .claude/ entries.
+
+**Per-type next steps:**
+- **Feedback loop:** the generated `.claude/hooks/<name>.json` is a snippet, not an auto-loaded hook. Tell the user to copy the value of its top-level `"hooks"` key into their `.claude/settings.json` under that file's `"hooks"` key, then restart Claude Code. The generated file's `_install` field repeats this.
+- **Eval loop:** the script at `eval/<name>.sh` is the eval. Tell the user they can invoke it directly, or pass it to `/autoresearch:improve` as the `eval_command`.
+- **Sensor:** the script at `.claude/sensors/<name>.sh` is invocable on demand. Tell the user to optionally wire it into a hook for automatic firing.
+- **Context-mgmt:** the report at `.claude/harness-report-<date>.md` is advisory. Tell the user to read it and act manually — the build command never edits agent files directly.
 
 ## Important notes
 

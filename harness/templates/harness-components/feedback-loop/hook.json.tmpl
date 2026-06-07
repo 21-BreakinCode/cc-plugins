@@ -1,15 +1,18 @@
 {
   "_tier": "Tier 1 — a single hook that posts the principle as a reminder. Tier 2 → split into <name>-detect + <name>-respond when the principle branches. Tier 3 → extract to a subagent when invocation becomes multi-step.",
   "_principle": "{{PRINCIPLE}}",
-  "{{EVENT}}": [
-    {
-      "matcher": "{{MATCHER}}",
-      "hooks": [
-        {
-          "type": "command",
-          "command": "echo 'REMINDER: {{PRINCIPLE}}' >&2"
-        }
-      ]
-    }
-  ]
+  "_install": "Merge the value of the 'hooks' key below into .claude/settings.json (under its top-level 'hooks' key). Claude Code does not auto-load standalone .claude/hooks/*.json files.",
+  "hooks": {
+    "{{EVENT}}": [
+      {
+        "matcher": "{{MATCHER}}",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'REMINDER: {{PRINCIPLE}}' >&2"
+          }
+        ]
+      }
+    ]
+  }
 }
