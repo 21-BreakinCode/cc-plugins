@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 
 # ---------------------------------------------------------------------------
 # ar_probe_detect_tooling
@@ -798,6 +798,164 @@ PYEOF
 }
 
 # ---------------------------------------------------------------------------
+# ar_probe_harness <tool>
+# Scans the user's project for missing harness components and emits the same
+# JSON shape as every other probe. Heuristics are simple, explainable, and
+# never call an LLM.
+#
+# Heuristics:
+#   - .claude/hooks/ missing or empty                    → feedback-loop signal
+#   - No eval/ dir or no *.sh under eval/                → eval-loop signal
+#   - Linter detected but no .claude/sensors/            → sensor signal
+#   - .claude/agents/*.md or .claude/skills/*/SKILL.md > 300 lines → context-mgmt
+#   - git log --since='6 weeks ago' --grep='fix\|review' --oneline count > 20
+#     → reactive-workflow booster (one-shot signal)
+# ---------------------------------------------------------------------------
+ar_probe_harness() {
+  local tool="${1:-}"
+
+  python3 - <<'PYEOF'
+import json
+import os
+import subprocess
+
+cwd = os.getcwd()
+
+PENALTY_FEEDBACK = 15
+PENALTY_EVAL = 15
+PENALTY_SENSOR = 10
+PENALTY_CONTEXT_PER_FILE = 15
+CONTEXT_CAP = 3
+PENALTY_REACTIVE = 5
+OVERSIZED_LINES = 300
+
+findings = []
+fix_targets = []
+
+# --- 1. Feedback loops: any hook configs? ---
+hooks_dir = os.path.join(cwd, '.claude', 'hooks')
+has_hooks = (
+    os.path.isdir(hooks_dir) and
+    any(f for f in os.listdir(hooks_dir) if not f.startswith('.'))
+) if os.path.isdir(hooks_dir) else False
+if not has_hooks:
+    findings.append('No .claude/hooks/ — no feedback loops registered')
+    fix_targets.append('.claude/hooks/')
+
+# --- 2. Eval loops: any eval scripts? ---
+eval_dir = os.path.join(cwd, 'eval')
+has_evals = (
+    os.path.isdir(eval_dir) and
+    any(f.endswith('.sh') for f in os.listdir(eval_dir))
+) if os.path.isdir(eval_dir) else False
+if not has_evals:
+    findings.append('No eval/*.sh scripts — no script-based eval loops')
+    fix_targets.append('eval/')
+
+# --- 3. Sensors: linter detected but no .claude/sensors/? ---
+# Cheap detection — config files for common linters
+linter_present = any(
+    os.path.exists(os.path.join(cwd, p))
+    for p in (
+        '.eslintrc', '.eslintrc.js', '.eslintrc.json',
+        'eslint.config.js', 'eslint.config.mjs',
+        '.flake8', 'pyproject.toml', '.golangci.yml',
+    )
+)
+sensors_dir = os.path.join(cwd, '.claude', 'sensors')
+has_sensors = (
+    os.path.isdir(sensors_dir) and
+    any(f for f in os.listdir(sensors_dir) if not f.startswith('.'))
+) if os.path.isdir(sensors_dir) else False
+if linter_present and not has_sensors:
+    findings.append('Linter present but no .claude/sensors/ — agent gets raw lint messages')
+    fix_targets.append('.claude/sensors/')
+
+# --- 4. Context-mgmt: oversized agent/skill files ---
+oversized = []
+for sub in ('.claude/agents', '.claude/skills'):
+    abs_sub = os.path.join(cwd, sub)
+    if not os.path.isdir(abs_sub):
+        continue
+    for dirpath, _, filenames in os.walk(abs_sub):
+        for fname in filenames:
+            if not fname.endswith('.md'):
+                continue
+            fpath = os.path.join(dirpath, fname)
+            try:
+                with open(fpath, 'r', errors='ignore') as f:
+                    line_count = sum(1 for _ in f)
+                if line_count > OVERSIZED_LINES:
+                    rel = os.path.relpath(fpath, cwd)
+                    oversized.append((rel, line_count))
+            except Exception:
+                pass
+
+oversized = oversized[:CONTEXT_CAP]
+for rel, line_count in oversized:
+    findings.append(f'{rel}: {line_count} lines (>{OVERSIZED_LINES}) — consider splitting')
+    fix_targets.append(rel)
+
+# --- 5. Reactive workflow booster ---
+reactive_signal = False
+try:
+    result = subprocess.run(
+        ['git', 'log', '--since=6 weeks ago', '--grep=fix\\|review', '--oneline'],
+        capture_output=True, text=True, timeout=10, cwd=cwd,
+    )
+    if result.returncode == 0:
+        count = len([l for l in result.stdout.splitlines() if l.strip()])
+        if count > 20:
+            findings.append(
+                f'{count} fix/review commits in 6 weeks — high reactive load, '
+                f'consider a feedback loop'
+            )
+            reactive_signal = True
+except Exception:
+    pass
+
+# --- Score ---
+score = 100
+if not has_hooks:
+    score -= PENALTY_FEEDBACK
+if not has_evals:
+    score -= PENALTY_EVAL
+if linter_present and not has_sensors:
+    score -= PENALTY_SENSOR
+score -= PENALTY_CONTEXT_PER_FILE * len(oversized)
+if reactive_signal:
+    score -= PENALTY_REACTIVE
+score = max(0, min(100, score))
+
+# --- Recommended types (for /harness:build menu annotation later) ---
+recommended = []
+if not has_hooks:
+    recommended.append('feedback')
+if not has_evals:
+    recommended.append('eval')
+if linter_present and not has_sensors:
+    recommended.append('sensor')
+if oversized:
+    recommended.append('context-mgmt')
+
+estimated_iterations = max(1, len(recommended))
+
+result = {
+    'category': 'harness',
+    'score': score,
+    'max': 100,
+    'skipped': False,
+    'tool': 'static',
+    'findings': findings,
+    'fix_targets': fix_targets,
+    'estimated_iterations': estimated_iterations,
+    'recommended': recommended,
+}
+print(json.dumps(result))
+PYEOF
+}
+
+# ---------------------------------------------------------------------------
 # ar_probe_run_all
 # Orchestrates all probes and combines results into a single JSON object
 # keyed by category.
@@ -841,10 +999,14 @@ print(d.get('runtime') or 'null')
   local script_json
   script_json=$(ar_probe_scriptability "static")
 
+  ar_log "Running harness completeness probe..."
+  local harness_json
+  harness_json=$(ar_probe_harness "static")
+
   ar_log "Combining probe results..."
   local combine_tmpfile
   combine_tmpfile=$(mktemp)
-  printf '%s\n%s\n%s\n%s\n%s' "${lint_json}" "${tests_json}" "${runtime_json}" "${arch_json}" "${script_json}" > "${combine_tmpfile}"
+  printf '%s\n%s\n%s\n%s\n%s\n%s' "${lint_json}" "${tests_json}" "${runtime_json}" "${arch_json}" "${script_json}" "${harness_json}" > "${combine_tmpfile}"
 
   python3 - "${combine_tmpfile}" <<'PYEOF'
 import json, sys

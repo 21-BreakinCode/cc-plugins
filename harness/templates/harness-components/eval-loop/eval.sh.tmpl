@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Tier 1 — a single eval that prints one JSON line.
+# Tier 2 → break into multiple sub-checks aggregated into the JSON.
+# Tier 3 → extract a subagent if eval needs multi-step reasoning.
+#
+# What this evaluates: {{DESCRIPTION}}
+# Scope: {{SCOPE}}
+# Pass criterion: {{CRITERION}}
+#
+# Output contract (one JSON line on stdout):
+#   {"pass": true|false, "metric": <number>, "reason": "<short string>"}
+#
+# Usage as the eval_command in /autoresearch:improve:
+#   /autoresearch:improve "<goal>"
+#   eval/{{NAME}}.sh
+
+set -euo pipefail
+
+# --- Replace this block with the actual check ---
+# Example stub: always passes with metric=1.
+pass=true
+metric=1
+reason="stub — replace with real check for: {{CRITERION}}"
+
+printf '{"pass": %s, "metric": %s, "reason": "%s"}\n' "${pass}" "${metric}" "${reason}"

@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Tier 1 — a single sensor wrapping one linter rule with an agent-tuned fix message.
+# Tier 2 → wrap multiple related rules in one sensor when they share a fix idiom.
+# Tier 3 → extract into a custom plugin/extension for the linter.
+#
+# Linter:  {{LINTER}}
+# Rule:    {{RULE}}
+# Agent-tuned fix message: {{MESSAGE}}
+#
+# Behavior: runs the linter, filters to {{RULE}}, rewrites each finding line
+# with the agent-tuned message. Output is plain text (one finding per line).
+
+set -euo pipefail
+
+LINTER="{{LINTER}}"
+RULE="{{RULE}}"
+FIX_MESSAGE="{{MESSAGE}}"
+
+case "${LINTER}" in
+  eslint)
+    npx eslint --format compact . 2>&1 \
+      | grep -F "${RULE}" \
+      | awk -v msg="${FIX_MESSAGE}" '{printf "%s\n  AGENT-FIX: %s\n", $0, msg}'
+    ;;
+  ruff)
+    ruff check --select "${RULE}" . 2>&1 \
+      | awk -v msg="${FIX_MESSAGE}" '/^[^[:space:]]/ {print; printf "  AGENT-FIX: %s\n", msg}'
+    ;;
+  *)
+    echo "SENSOR ERROR: linter '${LINTER}' not supported by this Tier-1 template" >&2
+    exit 1
+    ;;
+esac
