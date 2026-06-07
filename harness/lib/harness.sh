@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(find ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 
 # ---------------------------------------------------------------------------
 # ar_harness_init <probe_results_json>
@@ -253,9 +253,9 @@ if improvements:
 
 # Usage hints
 print()
-print("  Run: /autoresearch:harness-improvement           (starts #1)")
+print("  Run: /harness:improvement           (starts #1)")
 if len(improvements) >= 2:
-    print("  Run: /autoresearch:harness-improvement --rank 2  (starts #2)")
+    print("  Run: /harness:improvement --rank 2  (starts #2)")
 PYEOF
 }
 
@@ -273,7 +273,11 @@ ar_harness_to_program() {
   fi
 
   local probes_lib
-  probes_lib="$(dirname "${BASH_SOURCE[0]}")/probes.sh"
+  probes_lib="$(find ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '')"
+  if [ -z "${probes_lib}" ]; then
+    ar_log "ERROR: harness/lib/probes.sh not found in any installed plugin"
+    return 1
+  fi
 
   python3 - "${AR_HARNESS_FILE}" "${rank}" "${AR_PROGRAM_FILE}" "${probes_lib}" <<'PYEOF'
 import json
