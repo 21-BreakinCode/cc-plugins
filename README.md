@@ -51,6 +51,25 @@ Iterative improvement loop with eval-driven keep/discard and live HTML dashboard
 - On-demand web research via defuddle
 - Configurable stopping conditions
 
+> The previous `/autoresearch:harness-check` and `/autoresearch:harness-improvement` commands have moved to the `harness` plugin below (deprecated aliases remain for one minor version).
+
+### harness
+
+Dev-lifecycle harness builder. Inspired by [OpenAI — Harness Engineering](https://openai.com/index/harness-engineering/). Depends on `autoresearch`.
+
+```bash
+/plugin install harness@cc-plugins
+```
+
+- `/harness:check` — score project health across 6 categories (5 base + new `Harness Completeness`)
+- `/harness:build` — menu-driven scaffolder for four Tier-1 component types:
+  - **Feedback loop** — Claude Code hook posting a domain principle on an event
+  - **Eval loop** — shell script returning `{pass, metric, reason}`
+  - **Sensor** — linter wrapper emitting agent-tuned fix messages
+  - **Context-mgmt** — advisory report on oversized agent/skill files
+- `/harness:improvement` — auto-fix the top-ranked issue (delegates the loop to `autoresearch:experimenter`)
+- Every scaffolded artifact opens at the simplest viable shape with an inline Tier 1 → 2 → 3 upgrade ladder
+
 ### remotion-maker
 
 Generate Remotion (React) videos with consistent style, automated media sourcing, staged preview, and multi-tier verification.
@@ -72,7 +91,11 @@ cc-plugins/
 │   └── marketplace.json       # Marketplace manifest (relative-path sources)
 ├── session-learner/
 ├── autoresearch/
+├── harness/                    # Depends on autoresearch
 ├── remotion-maker/
+├── handover-handler/           # Plugin name: hh
+├── code-reviewer/
+├── uiux-optimizer/
 ├── docs/                       # Design notes and plans
 └── README.md
 ```
