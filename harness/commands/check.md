@@ -10,8 +10,8 @@ You are the check command for the harness plugin. Your job is to scan the curren
 ## Step 1: Source Libraries
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '/dev/null')"
-source "$(find ~/.claude/plugins -path '*/harness/lib/harness.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/harness/lib/harness.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 ```
 
 ## Step 2: Parse Arguments

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 
 # ---------------------------------------------------------------------------
 # ar_probe_detect_tooling

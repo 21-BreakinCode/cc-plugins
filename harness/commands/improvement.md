@@ -10,11 +10,11 @@ You are the improvement command for the harness plugin. Your job is to read the 
 ## Step 1: Source Libraries
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/harness/lib/harness.sh' -print -quit 2>/dev/null || echo '/dev/null')"
-source "$(find ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '/dev/null')"
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/experiment-log.sh' -print -quit 2>/dev/null || echo '/dev/null')"
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/eval.sh' -print -quit 2>/dev/null || echo '/dev/null')"
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/dashboard.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/harness/lib/harness.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/experiment-log.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/eval.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/dashboard.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 ```
 
 ## Step 2: Validate Harness Exists

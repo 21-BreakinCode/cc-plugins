@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 
 # ---------------------------------------------------------------------------
 # ar_harness_init <probe_results_json>
@@ -275,7 +275,7 @@ ar_harness_to_program() {
   fi
 
   local probes_lib
-  probes_lib="$(find ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '')"
+  probes_lib="$(find -L ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '')"
   if [ -z "${probes_lib}" ]; then
     ar_log "ERROR: harness/lib/probes.sh not found in any installed plugin"
     return 1

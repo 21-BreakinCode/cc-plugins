@@ -12,7 +12,7 @@ ar_harness_templates_dir() {
 }
 
 # Source common helpers (for ar_log).
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
 
 # ---------------------------------------------------------------------------
 # ar_harness_build_feedback_loop <name> <event> <matcher> <principle>
