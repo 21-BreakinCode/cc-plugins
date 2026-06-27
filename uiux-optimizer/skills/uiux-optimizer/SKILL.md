@@ -1,6 +1,6 @@
 ---
 name: uiux-optimizer
-description: UI/UX design advisor for improving visual design, layout, and component patterns AND for project-start design discovery. Use when the user seeks to improve UI/UX ("improve the design", "optimize this UI", "how should this look", "make this look better", "this looks off", "feels clunky", "not polished", "spacing is weird", "review this component", "what would you change about this UI", "design feedback", "needs visual work", "layout feels wrong"), wants project-start direction ("I want to build a [task management / fintech / dev tool / AI chat / e-commerce / etc.] app", "what should this kind of app look like?", "show me design references for [domain]", "I need inspiration for a [product type]"), or wants to match a known brand's design language ("make it look like Linear", "I want a Stripe-style payment page", "match Notion's typography"). Pulls live references from the awesome-design-md catalogue (getdesign.md) and styles.refero.design.
+description: UI/UX design advisor for improving visual design, layout, and component patterns AND for project-start design discovery. Use when the user seeks to improve UI/UX ("improve the design", "optimize this UI", "how should this look", "make this look better", "this looks off", "feels clunky", "not polished", "spacing is weird", "review this component", "what would you change about this UI", "design feedback", "needs visual work", "layout feels wrong"), wants project-start direction ("I want to build a [task management / fintech / dev tool / AI chat / e-commerce / etc.] app", "what should this kind of app look like?", "show me design references for [domain]", "I need inspiration for a [product type]"), or wants to match a known brand's design language ("make it look like Linear", "I want a Stripe-style payment page", "match Notion's typography"). Pulls live references from the awesome-design-md catalogue (getdesign.md) and styles.refero.design. Also orchestrates the optional taste-skill (anti-slop discipline) and motion-design-skill (motion choreography), and offers a gated "ship" pipeline (direction → static → motion).
 ---
 
 # UI/UX Optimizer
@@ -37,11 +37,24 @@ When triggered, follow this sequence:
    - Non-standard component behavior
    - Weak visual grouping
 
-4. **Dispatch the design-advisor agent** — Use the Agent tool to spawn `design-advisor` with:
-   - The identified domain(s) and product category (if any)
-   - The relevant file path(s) and line ranges, or the user's project description
-   - The operating mode: `audit` (reviewing existing), `build` (creating/modifying), or `explore` (seeking inspiration / project-start discovery / brand-match)
-   - Any specific user concern (e.g., "spacing feels off" → focus on spacing) or named brand (e.g., "make it look like Linear")
+4. **Conduct the layers** — You (the main loop) are the conductor. Sequence the
+   available layers around the `design-advisor` agent:
+   - **Before** dispatching design-advisor, invoke `taste-skill` (when installed)
+     via the Skill tool for brief-inference and anti-slop guardrails.
+   - **Dispatch the design-advisor agent** — Use the Agent tool to spawn
+     `design-advisor` with:
+     - The identified domain(s) and product category (if any)
+     - The relevant file path(s) and line ranges, or the user's project description
+     - The operating mode: `audit` (reviewing existing), `build` (creating/modifying), `explore` (seeking inspiration / project-start discovery / brand-match), or `ship` (the gated direction → static → motion pipeline)
+     - Any specific user concern (e.g., "spacing feels off" → focus on spacing) or named brand (e.g., "make it look like Linear")
+   - **After** design-advisor in `build`/`ship`, invoke `motion-design-skill`
+     (when installed) via the Skill tool to layer motion onto the solid static UI.
+
+   In `explore` and the pipeline's direction step, present taste's system pick and
+   design-advisor's brand directions **in parallel** — the user reconciles.
+
+   See `references/orchestration.md` for the per-mode wiring, the ship pipeline
+   steps and gates, and graceful-degradation rules.
 
 ## Design Philosophy (Refero Mindset)
 
@@ -71,4 +84,13 @@ Abstract principles without examples are weak. Always back up with "here's how X
 - Don't suggest framework switches
 - Don't optimize aesthetics at cost of accessibility
 - Match the user's existing framework in code examples (Tailwind, plain CSS, styled-components, etc.)
-- Secondary domains (motion, interaction design, accessibility) — note briefly when relevant, don't lead with them
+- Motion is a dedicated, gated layer owned by `motion-design-skill` in `build`/`ship` (added after the static UI is solid) — no longer a passing footnote. Accessibility remains a cross-cutting concern that constrains every layer.
+
+## External Skills (Optional)
+
+This skill orchestrates two external skills when they are installed, and degrades gracefully when they are not:
+
+- Anti-slop / taste discipline: `npx skills add Leonxlnx/taste-skill`
+- Motion choreography: `npx skills add LottieFiles/motion-design-skill`
+
+Without them, uiux-optimizer falls back to its own Refero-mindset discipline and brief motion notes. See `references/orchestration.md`.
