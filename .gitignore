@@ -5,5 +5,8 @@
 .autoresearch/
 handover
 
-# Vendored agent skills installed via `npx skills add` (tooling, not marketplace content)
+# Tooling installed via `npx skills add` (not marketplace content)
 .agents/
+.claude/skills/
+skills-lock.json
+.vscode/
