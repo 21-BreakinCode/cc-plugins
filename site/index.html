@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>cc-plugins — knowledge & workflow plugins for Claude Code</title>
+    <meta
+      name="description"
+      content="A marketplace of focused Claude Code plugins — session memory, eval-driven improvement, PR review, UI/UX design, handover docs, and video generation. Install all with one command."
+    />
+    <meta property="og:title" content="cc-plugins — plugins for Claude Code" />
+    <meta
+      property="og:description"
+      content="Install a marketplace of developer-tooling plugins for Claude Code with a single command."
+    />
+    <meta property="og:type" content="website" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%235e6ad2'/%3E%3Ctext x='16' y='22' font-family='monospace' font-size='14' fill='white' text-anchor='middle'%3Ecc%3C/text%3E%3C/svg%3E"
+    />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="assets/styles.css" />
+  </head>
+  <body data-page="home">
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="index.html">
+          <span class="brand-mark">cc</span>
+          cc-plugins
+        </a>
+        <nav class="header-links">
+          <a class="hide-sm" href="#plugins">Plugins</a>
+          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md">Catalog</a>
+          <a href="https://github.com/21-BreakinCode/cc-plugins">GitHub ↗</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <span class="hero-eyebrow">marketplace · <span id="count-eyebrow">7</span> plugins</span>
+          <h1>
+            Install <span id="count-head">7</span> developer tools for Claude Code in
+            <span class="accent">one command</span>.
+          </h1>
+          <p class="hero-sub">
+            cc-plugins is a marketplace of focused plugins — memory, evals, PR review,
+            design, handover, and video — that wire straight into Claude Code.
+          </p>
+
+          <div class="hero-terminal">
+            <div class="terminal" data-reveal>
+              <div class="terminal-chrome">
+                <span class="dots"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i></span>
+                <div class="tab-bar" role="tablist" aria-label="Install method">
+                  <button class="tab" role="tab" data-tab="cli" aria-selected="true">CLI</button>
+                  <button class="tab" role="tab" data-tab="settings" aria-selected="false">settings.json</button>
+                </div>
+              </div>
+              <div class="terminal-body">
+                <button class="copy-btn" id="hero-copy" type="button" aria-label="Copy install command">Copy</button>
+                <div class="tab-panel" id="panel-cli" role="tabpanel"><pre>loading…</pre></div>
+                <div class="tab-panel" id="panel-settings" role="tabpanel" hidden><pre></pre></div>
+              </div>
+            </div>
+            <p class="hero-hint">
+              The <code>settings.json</code> tab is for team setups — paste into
+              <code>~/.claude/settings.json</code> and restart Claude Code. Prefer to pick and
+              choose? Each plugin has its own one-line install below.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="plugins">
+        <div class="container">
+          <div class="section-head" data-reveal>
+            <h2>The plugins</h2>
+            <p>
+              Each card installs on its own line — copy what you need. Open a plugin for its
+              commands, configuration, and dependencies.
+            </p>
+          </div>
+          <div id="plugin-sections"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <span>MIT · cc-plugins marketplace</span>
+        <span>
+          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md">Catalog</a>
+          &nbsp;·&nbsp;
+          <a href="https://github.com/21-BreakinCode/cc-plugins">GitHub</a>
+        </span>
+      </div>
+    </footer>
+
+    <script src="assets/app.js"></script>
+  </body>
+</html>
