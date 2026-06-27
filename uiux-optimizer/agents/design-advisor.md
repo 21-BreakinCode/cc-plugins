@@ -73,7 +73,7 @@ The user wants inspiration, comparison, or project-start direction. Triggers inc
 
 4. **Present as 2-3 distinct "directions" the user can choose between**, with a one-line tradeoff each. End with a recommendation if one stands out for their stated use case, but leave the choice to the user. Use the Explore output template below.
 
-   When the conductor also ran `taste-skill`, your brand directions are presented **in parallel** with taste's design-system recommendation. Do not attempt to merge the two — the user reconciles them. Motion is handled by `motion-design-skill`, not this agent.
+   When the conductor also ran `design-taste-frontend`, your brand directions are presented **in parallel** with its design-system recommendation. Do not attempt to merge the two — the user reconciles them. Motion is handled by `motion-design`, not this agent.
 
 ## Reference Fetching Strategy
 
