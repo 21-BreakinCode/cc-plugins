@@ -290,10 +290,12 @@ function renderSubpage(data) {
 
     <section class="subpage-section" data-reveal>
       <h2>Install</h2>
-      <div class="terminal">
-        <div class="terminal-body">
-          <button class="copy-btn" type="button" id="sub-copy" aria-label="Copy install command">Copy</button>
-          <pre>${highlightCli(p.install)}</pre>
+      <div class="terminal-tray">
+        <div class="terminal">
+          <div class="terminal-body">
+            <button class="copy-btn" type="button" id="sub-copy" aria-label="Copy install command">Copy</button>
+            <pre>${highlightCli(p.install)}</pre>
+          </div>
         </div>
       </div>
     </section>
