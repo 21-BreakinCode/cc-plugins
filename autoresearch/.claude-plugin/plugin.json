@@ -1,7 +1,7 @@
 {
   "name": "autoresearch",
   "description": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": {
     "name": "William Hung"
   }
