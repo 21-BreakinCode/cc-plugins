@@ -1,7 +1,7 @@
 {
   "name": "uiux-optimizer",
   "description": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": {
     "name": "William Hung"
   }
