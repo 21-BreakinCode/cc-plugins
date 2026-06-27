@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # Regenerate CATALOG.md, per-plugin READMEs, and site data, then stage them so a
 # commit can never drift from marketplace.json + content/plugins.content.json.
-# Enable with: ./scripts/cicd.sh hooks
+# Enable with: ./scripts/cicd.sh HOOKS
 set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
-"$ROOT/scripts/cicd.sh" gen
+"$ROOT/scripts/cicd.sh" GEN
 git add "$ROOT/CATALOG.md" "$ROOT"/site/data/plugins.json "$ROOT"/*/README.md

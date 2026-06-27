@@ -69,13 +69,15 @@ from `.claude-plugin/marketplace.json` + `content/plugins.content.json` + each p
 command/skill frontmatter. Do not edit them by hand. Everything routes through one script:
 
 ```bash
-./scripts/cicd.sh gen       # regenerate CATALOG.md, plugin READMEs, site data
-./scripts/cicd.sh verify    # unit tests + drift check (exactly what CI runs)
-./scripts/cicd.sh serve     # preview the site locally
-./scripts/cicd.sh hooks     # one-time: auto-regenerate + stage on every commit
+./scripts/cicd.sh GEN       # regenerate CATALOG.md, plugin READMEs, site data
+./scripts/cicd.sh VERIFY    # unit tests + drift check (exactly what CI runs)
+./scripts/cicd.sh SERVE     # preview the site locally
+./scripts/cicd.sh HOOKS     # one-time: auto-regenerate + stage on every commit
 ```
 
-CI runs `./scripts/cicd.sh verify` on every PR (`.github/workflows/docs-check.yml`) and
+> Commands are case-insensitive — `GEN` and `gen` both work; the upper-snake form is canonical.
+
+CI runs `./scripts/cicd.sh VERIFY` on every PR (`.github/workflows/docs-check.yml`) and
 deploys the site to GitHub Pages on push to `main` (`.github/workflows/deploy-pages.yml`).
 
 ## License

@@ -1,5 +1,5 @@
 {
-  "_comment": "Authored prose source of truth for plugin docs. Keys under `plugins` MUST match the published plugin name in .claude-plugin/marketplace.json. Commands/skills are harvested automatically from each plugin folder — do not list them here. Site icons are derived from `category` (see CAT_ICON in site/assets/app.js). Run `./scripts/cicd.sh gen` after editing.",
+  "_comment": "Authored prose source of truth for plugin docs. Keys under `plugins` MUST match the published plugin name in .claude-plugin/marketplace.json. Commands/skills are harvested automatically from each plugin folder — do not list them here. Site icons are derived from `category` (see CAT_ICON in site/assets/app.js). Run `./scripts/cicd.sh GEN` after editing.",
   "categories": [
     { "id": "memory", "label": "Memory & Knowledge" },
     { "id": "improve", "label": "Measure & Improve" },

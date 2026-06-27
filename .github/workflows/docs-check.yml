@@ -17,4 +17,4 @@ jobs:
         with:
           node-version: "20"
       - name: Verify (test + drift check)
-        run: ./scripts/cicd.sh verify
+        run: ./scripts/cicd.sh VERIFY

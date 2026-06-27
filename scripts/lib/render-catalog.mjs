@@ -35,7 +35,7 @@ export function renderCatalog(model) {
     '# Plugin Catalog',
     '',
     '> Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.',
-    '> Do not edit by hand — run `./scripts/cicd.sh gen`.',
+    '> Do not edit by hand — run `./scripts/cicd.sh GEN`.',
     '>',
     `> **${name}** v${version} · ${model.plugins.length} plugins · [\`${repo}\`](https://github.com/${repo})`,
     '',

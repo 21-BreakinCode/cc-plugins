@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Generates CATALOG.md, per-plugin README.md, and site/data/plugins.json from
 // the single source of truth (marketplace.json + content/plugins.content.json +
-// command/skill frontmatter). Run via ./scripts/cicd.sh gen|check.
+// command/skill frontmatter). Run via ./scripts/cicd.sh GEN|CHECK.
 //
 //   node scripts/generate-docs.mjs            # write outputs
 //   node scripts/generate-docs.mjs --check    # exit 1 if any output is stale
@@ -91,7 +91,7 @@ function main() {
   if (check) {
     const stale = outputs.filter(isStale).map((o) => o.path);
     if (stale.length) {
-      console.error('✖ Out of sync — run `./scripts/cicd.sh gen`:');
+      console.error('✖ Out of sync — run `./scripts/cicd.sh GEN`:');
       for (const p of stale) console.error(`  - ${p}`);
       process.exit(1);
     }
