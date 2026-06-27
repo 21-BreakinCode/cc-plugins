@@ -92,11 +92,8 @@ function initReveal() {
 /* ---------------------------------- Hero ---------------------------------- */
 function initHeroEntrance() {
   const sequence = [
-    [".hero-eyebrow", 0],
-    [".hero h1", 80],
-    [".hero-sub", 160],
-    [".hero-terminal", 280],
-    [".hero-hint", 420],
+    [".hero h1", 0],
+    [".hero-terminal", 120],
   ];
   const reduced = reduceMotion();
   sequence.forEach(([selector, delay]) => {
@@ -132,26 +129,34 @@ function typeReveal(el, html) {
 function initHero(data) {
   const cli = data.installAll.cli;
   const settings = JSON.stringify(data.installAll.settings, null, 2);
+  const update = data.installAll.update;
 
-  const panelCli = document.getElementById("panel-cli");
-  const panelSettings = document.getElementById("panel-settings");
-  panelCli.dataset.raw = cli;
-  panelSettings.dataset.raw = settings;
-  panelSettings.querySelector("pre").innerHTML = highlightJson(settings);
-  typeReveal(panelCli.querySelector("pre"), highlightCli(cli));
+  // Map each tab key to its panel; the Copy button always copies the visible one.
+  const panels = {
+    cli: document.getElementById("panel-cli"),
+    settings: document.getElementById("panel-settings"),
+    update: document.getElementById("panel-update"),
+  };
+  panels.cli.dataset.raw = cli;
+  panels.settings.dataset.raw = settings;
+  panels.update.dataset.raw = update;
+  panels.settings.querySelector("pre").innerHTML = highlightJson(settings);
+  panels.update.querySelector("pre").innerHTML = highlightCli(update);
+  typeReveal(panels.cli.querySelector("pre"), highlightCli(cli));
 
   const tabs = document.querySelectorAll(".tab[data-tab]");
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
-      panelCli.hidden = tab.dataset.tab !== "cli";
-      panelSettings.hidden = tab.dataset.tab !== "settings";
+      Object.entries(panels).forEach(([key, panel]) => {
+        panel.hidden = tab.dataset.tab !== key;
+      });
     });
   });
 
   const copyBtn = document.getElementById("hero-copy");
   copyBtn.addEventListener("click", () => {
-    const active = panelCli.hidden ? panelSettings : panelCli;
+    const active = Object.values(panels).find((p) => !p.hidden) || panels.cli;
     copyText(active.dataset.raw, copyBtn);
   });
 }
@@ -208,11 +213,8 @@ function renderGrid(data) {
 }
 
 function setCounts(data) {
-  const n = String(data.plugins.length);
-  ["count-eyebrow", "count-head"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = n;
-  });
+  const el = document.getElementById("count-head");
+  if (el) el.textContent = String(data.plugins.length);
 }
 
 /* -------------------------------- Subpage --------------------------------- */

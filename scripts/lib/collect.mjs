@@ -1,4 +1,4 @@
-import { installOne, cliOneLiner, settingsSnippet } from './install.mjs';
+import { installOne, cliOneLiner, settingsSnippet, updateAllCli } from './install.mjs';
 
 export function commandName(pluginName, fileBase) {
   return `/${pluginName}:${fileBase}`;
@@ -59,6 +59,6 @@ export function buildModel({ marketplace, content, readPlugin }) {
   }));
 
   const model = { marketplace: { name, repo, version }, categories, plugins };
-  model.installAll = { cli: cliOneLiner(model), settings: settingsSnippet(model) };
+  model.installAll = { cli: cliOneLiner(model), settings: settingsSnippet(model), update: updateAllCli(model) };
   return model;
 }

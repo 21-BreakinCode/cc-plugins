@@ -45,6 +45,15 @@ export function renderCatalog(model) {
     model.installAll.cli,
     '```',
     '',
+    '## Update everything',
+    '',
+    'Third-party marketplaces don\'t auto-update by default — refresh the catalog, then',
+    'update each installed plugin:',
+    '',
+    '```bash',
+    model.installAll.update,
+    '```',
+    '',
   ];
 
   const byName = new Map(model.plugins.map((p) => [p.name, p]));

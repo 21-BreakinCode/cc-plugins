@@ -24,7 +24,8 @@
         "code-reviewer@21-breakincode": true,
         "uiux-optimizer@21-breakincode": true
       }
-    }
+    },
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update harness@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode"
   },
   "categories": [
     {

@@ -18,6 +18,22 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install uiux-optimizer@21-breakincode
 ```
 
+## Update everything
+
+Third-party marketplaces don't auto-update by default — refresh the catalog, then
+update each installed plugin:
+
+```bash
+claude plugin marketplace update 21-breakincode && \
+  claude plugin update session-learner@21-breakincode && \
+  claude plugin update autoresearch@21-breakincode && \
+  claude plugin update harness@21-breakincode && \
+  claude plugin update remotion-maker@21-breakincode && \
+  claude plugin update hh@21-breakincode && \
+  claude plugin update code-reviewer@21-breakincode && \
+  claude plugin update uiux-optimizer@21-breakincode
+```
+
 ## Memory & Knowledge
 
 ### [session-learner](./session-learner/README.md) · `v1.1.2`

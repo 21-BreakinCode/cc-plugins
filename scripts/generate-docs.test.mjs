@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 import { parseFrontmatter } from './lib/frontmatter.mjs';
 import { buildModel, commandName, isDeprecated, firstSentence } from './lib/collect.mjs';
-import { cliOneLiner, settingsSnippet, installOne } from './lib/install.mjs';
+import { cliOneLiner, settingsSnippet, installOne, updateAllCli } from './lib/install.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
 
@@ -113,6 +113,14 @@ test('installOne builds a single install command', () => {
   assert.equal(installOne('alpha', 'cc-plugins'), 'claude plugin install alpha@cc-plugins');
 });
 
+test('updateAllCli refreshes the catalog by name then updates every plugin', () => {
+  const out = updateAllCli(model());
+  assert.match(out, /claude plugin marketplace update cc-plugins/);
+  assert.match(out, /claude plugin update alpha@cc-plugins/);
+  assert.match(out, /claude plugin update hh@cc-plugins/);
+  assert.doesNotMatch(out, /marketplace add/);
+});
+
 // --- render-readme ---
 test('renderReadme shows Commands for a command plugin', () => {
   const alpha = model().plugins.find((p) => p.name === 'alpha');
@@ -156,4 +164,6 @@ test('renderCatalog lists every plugin, version and the install-all block', () =
   assert.match(md, /hh/);
   assert.match(md, /1\.7\.4/);
   assert.match(md, /claude plugin marketplace add 21-BreakinCode\/cc-plugins/);
+  assert.match(md, /## Update everything/);
+  assert.match(md, /claude plugin marketplace update cc-plugins/);
 });

@@ -24,6 +24,20 @@ To install **all** plugins in one shot, copy the CLI one-liner (or the `settings
 snippet) from the [site](https://21-breakincode.github.io/cc-plugins/) or
 [CATALOG.md](./CATALOG.md).
 
+## Updating
+
+Third-party marketplaces don't auto-update by default — refresh the catalog, then update
+each plugin you've installed:
+
+```bash
+/plugin marketplace update 21-breakincode     # pull the latest catalog from GitHub
+/plugin update <plugin-name>@21-breakincode   # upgrade one plugin to its latest version
+/reload-plugins                               # apply the changes without restarting
+```
+
+There's no bulk "update all" command — update each plugin individually, or turn on
+auto-update for the marketplace in the `/plugin` → **Marketplaces** tab.
+
 ## Plugins
 
 Seven focused plugins across memory, evals, review, workflow, and media. The full,
