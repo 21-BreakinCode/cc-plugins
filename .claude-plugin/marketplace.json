@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.6.0"
+    "version": "1.7.0"
   },
   "plugins": [
     {
@@ -54,8 +54,8 @@
     {
       "name": "uiux-optimizer",
       "source": "./uiux-optimizer",
-      "description": "UI/UX design advisor — analyzes code against real-world patterns from refero.design, surfaces 2-3 named-brand design directions from the awesome-design-md catalogue (getdesign.md), and suggests improvements for visual design, layout, and component patterns",
-      "version": "1.1.0",
+      "description": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
+      "version": "1.2.0",
       "strict": true
     }
   ]
