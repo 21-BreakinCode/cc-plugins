@@ -6,4 +6,5 @@ set -euo pipefail
 
 ROOT="$(git rev-parse --show-toplevel)"
 "$ROOT/scripts/cicd.sh" GEN
-git add "$ROOT/CATALOG.md" "$ROOT"/site/data/plugins.json "$ROOT"/*/README.md
+git add "$ROOT/CATALOG.md" "$ROOT"/site/data/plugins.json "$ROOT"/*/README.md \
+  "$ROOT"/site/index.html "$ROOT"/site/plugin.html

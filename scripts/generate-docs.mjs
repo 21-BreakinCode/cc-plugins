@@ -15,6 +15,7 @@ import { buildModel, commandName, isDeprecated, firstSentence } from './lib/coll
 import { renderCatalog } from './lib/render-catalog.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { buildSiteData } from './lib/site-data.mjs';
+import { stampAssets } from './lib/stamp.mjs';
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -70,6 +71,12 @@ function buildOutputs() {
   for (const plugin of model.plugins) {
     outputs.push({ path: join(plugin.source, 'README.md'), body: renderReadme(plugin, model) });
   }
+  // Re-stamp the static site pages with the current version so each release busts
+  // the asset cache. Only the `?v=` query is rewritten; the rest is hand-authored.
+  for (const page of ['site/index.html', 'site/plugin.html']) {
+    const current = readFileSync(join(REPO_ROOT, page), 'utf8');
+    outputs.push({ path: page, body: stampAssets(current, model.marketplace.version) });
+  }
   return outputs;
 }
 
@@ -100,7 +107,7 @@ function main() {
   }
 
   outputs.forEach(writeOutput);
-  console.log(`✓ wrote ${outputs.length} files (CATALOG.md, ${outputs.length - 2} READMEs, site data)`);
+  console.log(`✓ wrote ${outputs.length} files (CATALOG.md, per-plugin READMEs, site data + stamped HTML)`);
 }
 
 main();

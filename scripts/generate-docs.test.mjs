@@ -6,6 +6,7 @@ import { buildModel, commandName, isDeprecated, firstSentence } from './lib/coll
 import { cliOneLiner, settingsSnippet, installOne, updateAllCli } from './lib/install.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
+import { stampAssets } from './lib/stamp.mjs';
 
 const marketplace = {
   name: 'cc-plugins',
@@ -166,4 +167,18 @@ test('renderCatalog lists every plugin, version and the install-all block', () =
   assert.match(md, /claude plugin marketplace add 21-BreakinCode\/cc-plugins/);
   assert.match(md, /## Update everything/);
   assert.match(md, /claude plugin marketplace update cc-plugins/);
+});
+
+// --- stamp ---
+test('stampAssets adds, replaces, and is idempotent on the version query', () => {
+  const fresh = '<link href="assets/styles.css" /><script src="assets/app.js"></script>';
+  const once = stampAssets(fresh, '1.7.4');
+  assert.match(once, /href="assets\/styles\.css\?v=1\.7\.4"/);
+  assert.match(once, /src="assets\/app\.js\?v=1\.7\.4"/);
+  // Re-stamping with a new version replaces the old query, not appends.
+  const bumped = stampAssets(once, '1.7.5');
+  assert.match(bumped, /assets\/app\.js\?v=1\.7\.5"/);
+  assert.doesNotMatch(bumped, /1\.7\.4/);
+  // Same version twice is a no-op.
+  assert.equal(stampAssets(once, '1.7.4'), once);
 });
