@@ -1,43 +1,28 @@
 # session-learner
 
-Session memory persistence, git-aware context injection, and `/take-away` reflections for Claude Code.
+> Give Claude a memory across sessions
 
-## Installation
+Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.
 
-```bash
-/plugin install session-learner@workflow-plugins-marketplace
-```
-
-Or via marketplace:
+## Install
 
 ```bash
-/plugin marketplace add 21-BreakinCode/workflow-plugins-marketplace
-/plugin install session-learner@workflow-plugins-marketplace
+claude plugin install session-learner@cc-plugins
 ```
 
-## What You Get
+## Commands
 
-- **Session memory** — Automatically saves session context (tasks, files modified, tools used) to `~/.claude/sessions/`
-- **Git-aware context** — Detects codebase changes between sessions and warns about stale references
-- **Pre-compact capture** — Annotates session file before context compaction
-- **Stop reminder** — Suggests `/session-learner:take-away` when significant work is detected
-- `/session-learner:take-away` — Reflect on session learnings, corrections, and Zettelkasten card suggestions
-- `/session-learner:digest <path-or-url>` — Digest a file or URL into atomic Zettelkasten cards (terminal-only, with verification gate)
+- **`/session-learner:digest`** — Digest a markdown note, file, or URL — break it down into atomic Zettelkasten cards
+- **`/session-learner:take-away`** — Reflect on this session — learnings, corrections, and Zettelkasten card suggestions
 
 ## Configuration
 
-Set these environment variables (e.g., in `~/.zshrc`):
-
 | Variable | Default | Description |
 |---|---|---|
-| `CLAUDE_SESSION_LEARNER_GIT_MODE` | `full` | `full` = inject git diff summary on session start; `sha-only` = just warn about commit count |
-| `CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS` | `7` | Days to keep session files in `~/.claude/sessions/` |
-| `CLAUDE_SESSION_LEARNER_ZK_PATH` | `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/03-Resource/Zettelkasten/Permanent` | Path to vault `Permanent/` directory for grounding `/digest` tag and link suggestions |
+| `CLAUDE_SESSION_LEARNER_GIT_MODE` | `full` | `full` injects a git-diff summary on session start; `sha-only` just warns about commit count. |
+| `CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS` | `7` | Days to keep session files in `~/.claude/sessions/`. |
+| `CLAUDE_SESSION_LEARNER_ZK_PATH` | `~/…/LifeOS/03-Resource/Zettelkasten/Permanent` | Vault `Permanent/` dir used to ground `/digest` tag and link suggestions. |
 
-## Optional Dependency
+---
 
-- `jq` (`brew install jq`) — Needed for transcript parsing. Without it, session summaries are minimal.
-
-## License
-
-MIT License
+Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
