@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.7.3"
+    "version": "1.7.4"
   },
   "plugins": [
     {
@@ -20,7 +20,7 @@
       "name": "autoresearch",
       "source": "./autoresearch",
       "description": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
-      "version": "1.2.1",
+      "version": "1.2.2",
       "strict": true
     },
     {
