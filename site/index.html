@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      document.documentElement.classList.add("js");
+    </script>
     <title>cc-plugins — knowledge & workflow plugins for Claude Code</title>
     <meta
       name="description"
@@ -51,12 +54,12 @@
             <span class="accent">one command</span>.
           </h1>
           <p class="hero-sub">
-            cc-plugins is a marketplace of focused plugins — memory, evals, PR review,
-            design, handover, and video — that wire straight into Claude Code.
+            <span class="kicker">Memory · Evals · PR review · Design · Handover · Video</span>
+            Wired into Claude Code, installed in a single command.
           </p>
 
           <div class="hero-terminal">
-            <div class="terminal" data-reveal>
+            <div class="terminal">
               <div class="terminal-chrome">
                 <span class="dots"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i></span>
                 <div class="tab-bar" role="tablist" aria-label="Install method">
@@ -83,10 +86,6 @@
         <div class="container">
           <div class="section-head" data-reveal>
             <h2>The plugins</h2>
-            <p>
-              Each card installs on its own line — copy what you need. Open a plugin for its
-              commands, configuration, and dependencies.
-            </p>
           </div>
           <div id="plugin-sections"></div>
         </div>

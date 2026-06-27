@@ -42,7 +42,6 @@ export function buildModel({ marketplace, content, readPlugin }) {
       tagline: c.tagline ?? '',
       summary: c.summary ?? '',
       category: c.category ?? '',
-      icon: c.icon ?? '📦',
       dependsOn: c.dependsOn ?? [],
       config: c.config ?? [],
       install: installOne(entry.name, name),

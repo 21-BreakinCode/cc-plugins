@@ -72,7 +72,6 @@
       "tagline": "Give Claude a memory across sessions",
       "summary": "Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.",
       "category": "memory",
-      "icon": "🧠",
       "install": "claude plugin install session-learner@cc-plugins",
       "oneLiner": "Session memory persistence, git-aware context, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
       "commands": [
@@ -111,7 +110,6 @@
       "tagline": "Eval-driven, autonomous code improvement",
       "summary": "Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.",
       "category": "improve",
-      "icon": "🔬",
       "install": "claude plugin install autoresearch@cc-plugins",
       "oneLiner": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
       "commands": [
@@ -135,7 +133,6 @@
       "tagline": "Build the feedback machinery around your agent",
       "summary": "Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.",
       "category": "improve",
-      "icon": "🔧",
       "install": "claude plugin install harness@cc-plugins",
       "oneLiner": "Dev-lifecycle harness builder. Scans for missing feedback loops, sensors, evals, and oversized agents, then scaffolds Tier-1 components into your project's .claude/. Depends on autoresearch.",
       "commands": [
@@ -169,7 +166,6 @@
       "tagline": "Generate styled Remotion videos, end to end",
       "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
       "category": "media",
-      "icon": "🎬",
       "install": "claude plugin install remotion-maker@cc-plugins",
       "oneLiner": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
       "commands": [
@@ -205,7 +201,6 @@
       "tagline": "Cross-context handover docs, LifeOS as the source of truth",
       "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine.",
       "category": "workflow",
-      "icon": "🤝",
       "install": "claude plugin install hh@cc-plugins",
       "oneLiner": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
       "commands": [
@@ -247,7 +242,6 @@
       "tagline": "Principle-aware PR review",
       "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists.",
       "category": "review",
-      "icon": "🔎",
       "install": "claude plugin install code-reviewer@cc-plugins",
       "oneLiner": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, with configurable principle-directory roots.",
       "commands": [
@@ -285,7 +279,6 @@
       "tagline": "Reference-driven UI/UX design advisor",
       "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
       "category": "review",
-      "icon": "🎨",
       "install": "claude plugin install uiux-optimizer@cc-plugins",
       "oneLiner": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
       "commands": [],

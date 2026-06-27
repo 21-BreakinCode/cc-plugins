@@ -12,7 +12,6 @@ export function buildSiteData(model) {
       tagline: p.tagline,
       summary: p.summary,
       category: p.category,
-      icon: p.icon,
       install: p.install,
       oneLiner: p.oneLiner,
       commands: p.commands,

@@ -17,7 +17,7 @@ function surfaceLine(plugin) {
 
 function pluginBlock(plugin) {
   return [
-    `### ${plugin.icon} [${plugin.name}](./${sourceBasename(plugin.source)}/README.md) · \`v${plugin.version}\``,
+    `### [${plugin.name}](./${sourceBasename(plugin.source)}/README.md) · \`v${plugin.version}\``,
     '',
     `*${plugin.tagline}*`,
     '',

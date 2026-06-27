@@ -1,5 +1,5 @@
-// cc-plugins site — fetches generated plugins.json and renders the landing
-// grid + per-plugin subpage. No framework, no build step.
+// cc-plugins site — fetches generated plugins.json and renders the landing grid +
+// per-plugin subpage with a choreographed entrance. No framework, no build step.
 
 const CAT_COLOR = {
   memory: "var(--cat-memory)",
@@ -8,6 +8,18 @@ const CAT_COLOR = {
   workflow: "var(--cat-workflow)",
   media: "var(--cat-media)",
 };
+
+// Crafted 1.5px-stroke glyphs (Lucide-style), one per category — no emoji.
+const CAT_ICON = {
+  memory: `<svg viewBox="0 0 16 16"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><line x1="6" y1="8" x2="10" y2="4.8"/><line x1="6" y1="8" x2="10" y2="11.2"/></svg>`,
+  improve: `<svg viewBox="0 0 16 16"><line x1="3" y1="13" x2="3" y2="9"/><line x1="7" y1="13" x2="7" y2="6"/><line x1="11" y1="13" x2="11" y2="3"/><polyline points="1,5 4,2 7,4 11,1 15,3" opacity="0.5"/></svg>`,
+  review: `<svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="3.5"/><line x1="9.5" y1="9.5" x2="13" y2="13"/><line x1="4" y1="6.5" x2="9" y2="6.5" opacity="0.5"/></svg>`,
+  workflow: `<svg viewBox="0 0 16 16"><rect x="1" y="5.5" width="4" height="5" rx="1"/><rect x="6" y="5.5" width="4" height="5" rx="1"/><rect x="11" y="5.5" width="4" height="5" rx="1"/><line x1="5" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="11" y2="8"/></svg>`,
+  media: `<svg viewBox="0 0 16 16"><rect x="1" y="4" width="14" height="10" rx="1.5"/><line x1="1" y1="7" x2="15" y2="7"/><line x1="5" y1="4" x2="3" y2="7"/><line x1="9" y1="4" x2="7" y2="7"/><line x1="13" y1="4" x2="11" y2="7"/><polyline points="6.5,9.5 10,11 6.5,12.5" fill="currentColor" stroke="none" opacity="0.7"/></svg>`,
+};
+
+const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const icon = (cat) => CAT_ICON[cat] || CAT_ICON.workflow;
 
 function escapeHtml(s) {
   return String(s)
@@ -46,17 +58,21 @@ async function copyText(text, btn) {
   if (!btn) return;
   const original = btn.textContent;
   btn.classList.add("is-copied");
-  btn.textContent = "Copied ✓";
+  btn.textContent = "Copied";
   setTimeout(() => {
     btn.classList.remove("is-copied");
     btn.textContent = original;
   }, 1600);
 }
 
+function revealAll() {
+  document.querySelectorAll("[data-reveal]").forEach((el) => el.classList.add("is-visible"));
+}
+
 function initReveal() {
   const els = document.querySelectorAll("[data-reveal]");
   if (!("IntersectionObserver" in window)) {
-    els.forEach((el) => el.classList.add("is-visible"));
+    revealAll();
     return;
   }
   const io = new IntersectionObserver(
@@ -74,16 +90,55 @@ function initReveal() {
 }
 
 /* ---------------------------------- Hero ---------------------------------- */
+function initHeroEntrance() {
+  const sequence = [
+    [".hero-eyebrow", 0],
+    [".hero h1", 80],
+    [".hero-sub", 160],
+    [".hero-terminal", 280],
+    [".hero-hint", 420],
+  ];
+  const reduced = reduceMotion();
+  sequence.forEach(([selector, delay]) => {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    if (reduced) el.classList.add("is-visible");
+    else setTimeout(() => el.classList.add("is-visible"), delay);
+  });
+}
+
+function typeReveal(el, html) {
+  const lines = html.split("\n");
+  if (reduceMotion() || lines.length <= 1) {
+    el.innerHTML = html;
+    return;
+  }
+  const cursor = document.createElement("span");
+  cursor.className = "terminal-cursor";
+  let current = 0;
+  const tick = () => {
+    el.innerHTML = lines.slice(0, current + 1).join("\n");
+    el.appendChild(cursor);
+    current += 1;
+    if (current < lines.length) {
+      setTimeout(tick, 42);
+    } else {
+      setTimeout(() => cursor.remove(), 600);
+    }
+  };
+  setTimeout(tick, 360);
+}
+
 function initHero(data) {
   const cli = data.installAll.cli;
-  const settings = `${JSON.stringify(data.installAll.settings, null, 2)}`;
+  const settings = JSON.stringify(data.installAll.settings, null, 2);
 
   const panelCli = document.getElementById("panel-cli");
   const panelSettings = document.getElementById("panel-settings");
-  panelCli.querySelector("pre").innerHTML = highlightCli(cli);
   panelCli.dataset.raw = cli;
-  panelSettings.querySelector("pre").innerHTML = highlightJson(settings);
   panelSettings.dataset.raw = settings;
+  panelSettings.querySelector("pre").innerHTML = highlightJson(settings);
+  typeReveal(panelCli.querySelector("pre"), highlightCli(cli));
 
   const tabs = document.querySelectorAll(".tab[data-tab]");
   tabs.forEach((tab) => {
@@ -107,7 +162,7 @@ function cardHtml(p, delay) {
   <article class="plugin-card" data-reveal style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}; --delay:${delay}ms">
     <a class="card-link" href="plugin.html?name=${encodeURIComponent(p.name)}" aria-label="${escapeHtml(p.name)} — ${escapeHtml(p.tagline)}"></a>
     <div class="card-top">
-      <div class="plugin-icon">${p.icon || "📦"}</div>
+      <div class="plugin-icon">${icon(p.category)}</div>
       <div class="card-name-row">
         <span class="plugin-name">${escapeHtml(p.name)}</span>
         <span class="version">v${escapeHtml(p.version)}</span>
@@ -125,15 +180,14 @@ function cardHtml(p, delay) {
 function renderGrid(data) {
   const root = document.getElementById("plugin-sections");
   const byName = new Map(data.plugins.map((p) => [p.name, p]));
-  let delay = 0;
   const sections = data.categories
     .filter((c) => c.plugins.length)
     .map((c) => {
       const cards = c.plugins
-        .map((name) => {
-          const html = cardHtml(byName.get(name), (delay % 4) * 60);
-          delay += 1;
-          return html;
+        .map((name, idx) => {
+          const col = idx % 3;
+          const row = Math.floor(idx / 3);
+          return cardHtml(byName.get(name), col * 50 + row * 80);
         })
         .join("");
       return `
@@ -162,23 +216,24 @@ function setCounts(data) {
 }
 
 /* -------------------------------- Subpage --------------------------------- */
-function surfaceHtml(p) {
-  const items = (list, isSkill) =>
-    list
-      .map(
-        (x) => `
+function listHtml(list) {
+  return list
+    .map(
+      (x) => `
       <li class="cmd-item">
-        <span class="cmd-name">${isSkill ? "" : ""}${escapeHtml(x.name)}</span>
+        <span class="cmd-name">${escapeHtml(x.name)}</span>
         <span class="cmd-desc">${escapeHtml(x.description)}</span>
       </li>`,
-      )
-      .join("");
+    )
+    .join("");
+}
 
+function surfaceHtml(p) {
   if (p.commands.length) {
-    return `<section class="subpage-section" data-reveal><h2>Commands</h2><ul class="cmd-list">${items(p.commands, false)}</ul></section>`;
+    return `<section class="subpage-section" data-reveal><h2>Commands</h2><ul class="cmd-list">${listHtml(p.commands)}</ul></section>`;
   }
   if (p.skills.length) {
-    return `<section class="subpage-section" data-reveal><h2>Skills</h2><p style="color:var(--text-muted);margin-bottom:var(--space-4)">Activates automatically — no slash commands.</p><ul class="cmd-list">${items(p.skills, true)}</ul></section>`;
+    return `<section class="subpage-section" data-reveal><h2>Skills</h2><p style="color:var(--text-muted);margin-bottom:var(--space-4)">Activates automatically — no slash commands.</p><ul class="cmd-list">${listHtml(p.skills)}</ul></section>`;
   }
   return "";
 }
@@ -204,8 +259,7 @@ function depsHtml(p, byName) {
   if (!p.dependsOn.length) return "";
   const chips = p.dependsOn
     .map((d) => {
-      const target = byName.get(d);
-      if (target) {
+      if (byName.has(d)) {
         return `<li><a class="dep-chip" href="plugin.html?name=${encodeURIComponent(d)}">${escapeHtml(d)}</a></li>`;
       }
       return `<li class="dep-chip external">${escapeHtml(d)} · external</li>`;
@@ -228,10 +282,8 @@ function renderSubpage(data) {
   document.title = `${p.name} — cc-plugins`;
   root.innerHTML = `
     <div class="subpage-head" data-reveal style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}">
-      <div class="plugin-icon">${p.icon || "📦"}</div>
-      <div>
-        <h1>${escapeHtml(p.name)} <span class="version">v${escapeHtml(p.version)}</span></h1>
-      </div>
+      <div class="plugin-icon">${icon(p.category)}</div>
+      <div><h1>${escapeHtml(p.name)} <span class="version">v${escapeHtml(p.version)}</span></h1></div>
     </div>
     <p class="subpage-tagline" data-reveal>${escapeHtml(p.tagline)}</p>
     <p class="subpage-summary" data-reveal>${escapeHtml(p.summary)}</p>
@@ -257,20 +309,24 @@ function renderSubpage(data) {
 
 /* --------------------------------- Boot ----------------------------------- */
 async function main() {
+  const isHome = document.body.dataset.page === "home";
+  if (isHome) initHeroEntrance();
+
   let data;
   try {
     const res = await fetch("data/plugins.json", { cache: "no-cache" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     data = await res.json();
   } catch (err) {
+    revealAll();
     const target = document.getElementById("plugin-sections") || document.getElementById("plugin-detail");
     if (target) {
-      target.innerHTML = `<p style="color:var(--color-error)">Could not load plugin data (${escapeHtml(err.message)}). Serve the site over HTTP — try <code>./scripts/cicd.sh serve</code>.</p>`;
+      target.innerHTML = `<p style="color:var(--color-error)">Could not load plugin data (${escapeHtml(err.message)}). Serve over HTTP — try <code>./scripts/cicd.sh serve</code>.</p>`;
     }
     return;
   }
 
-  if (document.body.dataset.page === "home") {
+  if (isHome) {
     setCounts(data);
     initHero(data);
     renderGrid(data);

@@ -1,5 +1,5 @@
 {
-  "_comment": "Authored prose source of truth for plugin docs. Keys under `plugins` MUST match the published plugin name in .claude-plugin/marketplace.json. Commands/skills are harvested automatically from each plugin folder — do not list them here. Run `node scripts/generate-docs.mjs` after editing.",
+  "_comment": "Authored prose source of truth for plugin docs. Keys under `plugins` MUST match the published plugin name in .claude-plugin/marketplace.json. Commands/skills are harvested automatically from each plugin folder — do not list them here. Site icons are derived from `category` (see CAT_ICON in site/assets/app.js). Run `./scripts/cicd.sh gen` after editing.",
   "categories": [
     { "id": "memory", "label": "Memory & Knowledge" },
     { "id": "improve", "label": "Measure & Improve" },
@@ -12,7 +12,6 @@
       "tagline": "Give Claude a memory across sessions",
       "summary": "Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.",
       "category": "memory",
-      "icon": "🧠",
       "dependsOn": [],
       "config": [
         { "name": "CLAUDE_SESSION_LEARNER_GIT_MODE", "default": "full", "description": "`full` injects a git-diff summary on session start; `sha-only` just warns about commit count." },
@@ -24,7 +23,6 @@
       "tagline": "Eval-driven, autonomous code improvement",
       "summary": "Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.",
       "category": "improve",
-      "icon": "🔬",
       "dependsOn": [],
       "config": []
     },
@@ -32,7 +30,6 @@
       "tagline": "Build the feedback machinery around your agent",
       "summary": "Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.",
       "category": "improve",
-      "icon": "🔧",
       "dependsOn": ["autoresearch"],
       "config": []
     },
@@ -40,7 +37,6 @@
       "tagline": "Principle-aware PR review",
       "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists.",
       "category": "review",
-      "icon": "🔎",
       "dependsOn": ["pr-review-toolkit", "hh"],
       "config": [
         { "name": "CODE_REVIEWER_PRINCIPLE_DIR", "default": "—", "description": "Hard override; skip the resolution chain and use this principle directory." },
@@ -52,7 +48,6 @@
       "tagline": "Reference-driven UI/UX design advisor",
       "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
       "category": "review",
-      "icon": "🎨",
       "dependsOn": [],
       "config": []
     },
@@ -60,7 +55,6 @@
       "tagline": "Cross-context handover docs, LifeOS as the source of truth",
       "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine.",
       "category": "workflow",
-      "icon": "🤝",
       "dependsOn": [],
       "config": [
         { "name": "CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP", "default": "0", "description": "When `1`, the Stop hook offers `/hh:new` after a wrap-up session (requires a working `./handover` symlink)." },
@@ -71,7 +65,6 @@
       "tagline": "Generate styled Remotion videos, end to end",
       "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
       "category": "media",
-      "icon": "🎬",
       "dependsOn": [],
       "config": []
     }

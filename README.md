@@ -2,7 +2,7 @@
 
 Knowledge management and workflow automation plugins for Claude Code, distributed as a single monorepo marketplace.
 
-**🌐 [Browse plugins & one-shot install →](https://21-breakincode.github.io/cc-plugins/)** · **📖 [CATALOG.md](./CATALOG.md)**
+**[Browse plugins & one-shot install →](https://21-breakincode.github.io/cc-plugins/)** · **[CATALOG.md](./CATALOG.md)**
 
 ## Install
 

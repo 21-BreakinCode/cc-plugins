@@ -20,7 +20,7 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
 
 ## Memory & Knowledge
 
-### 🧠 [session-learner](./session-learner/README.md) · `v1.1.2`
+### [session-learner](./session-learner/README.md) · `v1.1.2`
 
 *Give Claude a memory across sessions*
 
@@ -32,7 +32,7 @@ Persists each session's context to disk and injects git-aware context on startup
 
 ## Measure & Improve
 
-### 🔬 [autoresearch](./autoresearch/README.md) · `v1.2.2`
+### [autoresearch](./autoresearch/README.md) · `v1.2.2`
 
 *Eval-driven, autonomous code improvement*
 
@@ -42,7 +42,7 @@ Runs an edit → eval → keep/discard loop on any artifact — code, prompts, o
 
 **Commands** · `/autoresearch:improve`
 
-### 🔧 [harness](./harness/README.md) · `v1.0.1`
+### [harness](./harness/README.md) · `v1.0.1`
 
 *Build the feedback machinery around your agent*
 
@@ -54,7 +54,7 @@ Scores project health across six categories, then scaffolds the Tier-1 harness c
 
 ## Review & Design
 
-### 🔎 [code-reviewer](./code-reviewer/README.md) · `v0.2.0`
+### [code-reviewer](./code-reviewer/README.md) · `v0.2.0`
 
 *Principle-aware PR review*
 
@@ -64,7 +64,7 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 
 **Commands** · `/code-reviewer:review-pr`
 
-### 🎨 [uiux-optimizer](./uiux-optimizer/README.md) · `v1.2.2`
+### [uiux-optimizer](./uiux-optimizer/README.md) · `v1.2.2`
 
 *Reference-driven UI/UX design advisor*
 
@@ -76,7 +76,7 @@ Orchestrates live design references (refero.design + the getdesign.md catalogue)
 
 ## Workflow & Handover
 
-### 🤝 [hh](./handover-handler/README.md) · `v0.1.5`
+### [hh](./handover-handler/README.md) · `v0.1.5`
 
 *Cross-context handover docs, LifeOS as the source of truth*
 
@@ -88,7 +88,7 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 
 ## Media
 
-### 🎬 [remotion-maker](./remotion-maker/README.md) · `v0.1.0`
+### [remotion-maker](./remotion-maker/README.md) · `v0.1.0`
 
 *Generate styled Remotion videos, end to end*
 

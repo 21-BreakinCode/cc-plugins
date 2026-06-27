@@ -1,31 +1,28 @@
 /* cc-plugins marketplace site — "Linear Precision" direction.
-   Near-black canvas, single lavender accent, hairline borders, no marketing shadows. */
+   Near-black canvas, single lavender accent, hairline borders, crafted SVG glyphs,
+   choreographed motion. Initial-hidden states are scoped to html.js so the page
+   stays readable if scripting is disabled. */
 
 /* ============================== Tokens ============================== */
 :root {
-  /* Surfaces */
   --bg-canvas: #010102;
   --bg-surface-1: #0f1011;
   --bg-surface-2: #141516;
   --bg-surface-3: #18191a;
 
-  /* Text */
   --text-primary: #f7f8f8;
   --text-secondary: #d0d6e0;
   --text-muted: #8a8f98;
   --text-disabled: #62666d;
 
-  /* Accent */
   --accent: #5e6ad2;
   --accent-hover: #828fff;
   --accent-glow: rgba(94, 106, 210, 0.15);
 
-  /* Borders */
   --border-hairline: #23252a;
   --border-strong: #34343a;
   --border-subtle: rgba(255, 255, 255, 0.04);
 
-  /* Terminal / syntax */
   --syn-bg: #0a0b0d;
   --syn-prompt: #828fff;
   --syn-command: #f7f8f8;
@@ -34,22 +31,18 @@
   --syn-comment: #62666d;
   --syn-key: #828fff;
 
-  /* Semantic */
   --color-success: #27a644;
   --color-error: #e5484d;
 
-  /* Category accents */
   --cat-memory: #6e8bff;
   --cat-improve: #27a644;
   --cat-review: #f5a623;
   --cat-workflow: #8ec3e6;
   --cat-media: #e6538c;
 
-  /* Fonts */
   --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
 
-  /* Type scale */
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
   --text-base: 1rem;
@@ -60,7 +53,6 @@
   --text-4xl: 3rem;
   --text-5xl: 4rem;
 
-  /* Spacing */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -74,21 +66,18 @@
   --space-20: 80px;
   --space-24: 96px;
 
-  /* Radii */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-pill: 9999px;
 
-  /* Elevation (border-led) */
-  --shadow-card: 0 0 0 1px var(--border-hairline);
-  --shadow-card-hover: 0 0 0 1px var(--border-strong), 0 0 24px 0 var(--accent-glow);
   --shadow-terminal: 0 0 0 1px var(--border-hairline), 0 8px 32px rgba(0, 0, 0, 0.5);
   --shadow-focus: 0 0 0 2px var(--accent);
 
-  /* Motion */
-  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  /* Motion — expo-out for entrances, smooth-in-out for state, spring for nudge */
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --maxw: 1080px;
@@ -176,10 +165,14 @@ a {
   width: 22px;
   height: 22px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   display: grid;
   place-items: center;
-  font-size: 13px;
 }
 
 .header-links {
@@ -203,7 +196,7 @@ a {
   position: relative;
   padding-top: var(--space-24);
   padding-bottom: var(--space-16);
-  text-align: center;
+  text-align: left;
   overflow: hidden;
 }
 
@@ -211,7 +204,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse 70% 55% at 50% -5%, var(--accent-glow), transparent 70%);
+  background: radial-gradient(ellipse 60% 50% at 25% -5%, var(--accent-glow), transparent 70%);
   pointer-events: none;
 }
 
@@ -231,8 +224,7 @@ a {
 
 .hero h1 {
   font-size: clamp(2.25rem, 6vw, var(--text-5xl));
-  max-width: 16ch;
-  margin-inline: auto;
+  max-width: 18ch;
 }
 
 .hero h1 .accent {
@@ -240,22 +232,31 @@ a {
 }
 
 .hero-sub {
-  margin: var(--space-6) auto 0;
-  max-width: 52ch;
+  margin-top: var(--space-6);
+  max-width: 46ch;
   color: var(--text-secondary);
   font-size: var(--text-lg);
 }
 
+.hero-sub .kicker {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
 .hero-terminal {
-  margin: var(--space-10) auto 0;
+  margin-top: var(--space-10);
   max-width: 760px;
-  text-align: left;
 }
 
 .hero-hint {
   margin-top: var(--space-4);
   font-size: var(--text-sm);
   color: var(--text-muted);
+  max-width: 60ch;
 }
 
 .hero-hint code {
@@ -334,8 +335,18 @@ a {
   color: var(--syn-command);
 }
 
-.terminal-body .tab-panel[hidden] {
+.tab-panel[hidden] {
   display: none;
+}
+
+/* incoming panel fades up; outgoing hides instantly (in-flow height adjusts) */
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: none; }
+}
+
+.tab-panel:not([hidden]) {
+  animation: panel-in 220ms var(--ease-out);
 }
 
 .prompt { color: var(--syn-prompt); }
@@ -344,10 +355,27 @@ a {
 .str { color: var(--syn-string); }
 .key { color: var(--syn-key); }
 
+/* blinking cursor for the type-on reveal */
+.terminal-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  background: var(--syn-prompt);
+  vertical-align: text-bottom;
+  animation: cursor-blink 900ms cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  margin-left: 2px;
+}
+
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .copy-btn {
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
+  z-index: 2;
   font: var(--text-xs) / 1 var(--font-body);
   font-weight: 500;
   color: var(--text-muted);
@@ -356,10 +384,8 @@ a {
   border-radius: var(--radius-sm);
   padding: var(--space-2) var(--space-3);
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  transition: color 120ms var(--ease-out), border-color 120ms var(--ease-out);
+  transition: color 120ms var(--ease-out), border-color 120ms var(--ease-out),
+    background 120ms var(--ease-out);
 }
 
 .copy-btn:hover {
@@ -367,9 +393,18 @@ a {
   border-color: var(--border-strong);
 }
 
-.copy-btn.is-copied {
+.copy-btn.is-copied,
+.mini-copy.is-copied {
   color: var(--color-success);
   border-color: var(--color-success);
+  animation: copy-confirm 280ms var(--ease-spring) both;
+}
+
+@keyframes copy-confirm {
+  0% { transform: scale(1); }
+  40% { transform: scale(0.94); }
+  70% { transform: scale(1.04); }
+  100% { transform: scale(1); }
 }
 
 /* ============================== Sections ============================== */
@@ -383,12 +418,6 @@ a {
 
 .section-head h2 {
   font-size: var(--text-3xl);
-}
-
-.section-head p {
-  margin-top: var(--space-3);
-  color: var(--text-muted);
-  max-width: 56ch;
 }
 
 .category {
@@ -432,30 +461,34 @@ a {
   flex-direction: column;
   gap: var(--space-3);
   transition: border-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out),
-    transform 200ms var(--ease-spring);
+    transform 240ms var(--ease-spring);
 }
 
-.plugin-card:hover {
-  border-color: var(--border-strong);
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
-}
-
+/* accent strip — wipes in from the top on hover */
 .plugin-card::before {
   content: "";
   position: absolute;
   left: 0;
-  top: var(--space-4);
-  bottom: var(--space-4);
-  width: 3px;
-  border-radius: 0 2px 2px 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
   background: var(--cat-color, var(--accent));
-  opacity: 0;
-  transition: opacity 200ms var(--ease-out);
+  transform: scaleY(0);
+  transform-origin: top center;
+  transition: transform 240ms var(--ease-expo);
+}
+
+.plugin-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--cat-color, var(--accent)) 55%, var(--border-strong));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--cat-color, var(--accent)) 35%, transparent),
+    0 4px 24px -4px color-mix(in srgb, var(--cat-color, var(--accent)) 22%, transparent),
+    0 2px 8px -2px rgba(0, 0, 0, 0.4);
 }
 
 .plugin-card:hover::before {
-  opacity: 1;
+  transform: scaleY(1);
 }
 
 .card-top {
@@ -473,7 +506,23 @@ a {
   border: 1px solid var(--border-hairline);
   display: grid;
   place-items: center;
-  font-size: 20px;
+  color: var(--cat-color, var(--accent));
+  transition: transform 200ms var(--ease-spring), border-color 160ms var(--ease-out);
+}
+
+.plugin-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.plugin-card:hover .plugin-icon {
+  transform: translateX(2px);
+  border-color: var(--cat-color, var(--accent));
 }
 
 .card-name-row {
@@ -487,21 +536,6 @@ a {
   font-size: var(--text-lg);
   font-weight: 600;
   color: var(--text-primary);
-}
-
-.plugin-name::after {
-  content: "→";
-  margin-left: var(--space-2);
-  color: var(--text-disabled);
-  opacity: 0;
-  transition: opacity 160ms var(--ease-out), transform 160ms var(--ease-out);
-  display: inline-block;
-}
-
-.plugin-card:hover .plugin-name::after {
-  opacity: 1;
-  transform: translateX(2px);
-  color: var(--accent-hover);
 }
 
 .version {
@@ -528,6 +562,11 @@ a {
   font-size: var(--text-xs);
   color: var(--text-secondary);
   overflow: hidden;
+  transition: border-color 160ms var(--ease-out);
+}
+
+.plugin-card:hover .card-install {
+  border-color: var(--border-strong);
 }
 
 .card-install code {
@@ -557,10 +596,6 @@ a {
   color: var(--text-primary);
 }
 
-.mini-copy.is-copied {
-  color: var(--color-success);
-}
-
 .card-link {
   position: absolute;
   inset: 0;
@@ -585,11 +620,12 @@ a {
   color: var(--text-muted);
   font-size: var(--text-sm);
   margin-bottom: var(--space-8);
-  transition: color 120ms var(--ease-out);
+  transition: color 120ms var(--ease-out), gap 160ms var(--ease-out);
 }
 
 .back-link:hover {
   color: var(--text-primary);
+  gap: var(--space-3);
 }
 
 .subpage-head {
@@ -602,7 +638,11 @@ a {
 .subpage-head .plugin-icon {
   width: 56px;
   height: 56px;
-  font-size: 28px;
+}
+
+.subpage-head .plugin-icon svg {
+  width: 26px;
+  height: 26px;
 }
 
 .subpage-head h1 {
@@ -648,6 +688,11 @@ a {
   background: var(--bg-surface-1);
   border: 1px solid var(--border-hairline);
   border-radius: var(--radius-md);
+  transition: border-color 160ms var(--ease-out);
+}
+
+.cmd-item:hover {
+  border-color: var(--border-strong);
 }
 
 .cmd-name {
@@ -718,6 +763,12 @@ a {
   border: 1px solid var(--border-hairline);
   background: var(--bg-surface-1);
   color: var(--text-secondary);
+  transition: border-color 160ms var(--ease-out), color 160ms var(--ease-out);
+}
+
+a.dep-chip:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
 }
 
 .dep-chip.external {
@@ -749,36 +800,85 @@ a {
 }
 
 /* ============================== Motion ============================== */
-[data-reveal] {
+/* Scroll reveal — only hidden when JS is on to drive it. */
+html.js [data-reveal] {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 450ms var(--ease-out), transform 450ms var(--ease-out);
+  transform: translateY(12px);
+  transition: opacity 420ms var(--ease-expo), transform 420ms var(--ease-expo);
   transition-delay: var(--delay, 0ms);
 }
 
-[data-reveal].is-visible {
+html.js [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
+/* Hero entrance — sequenced in JS via initHeroEntrance(). */
+html.js .hero-eyebrow,
+html.js .hero h1,
+html.js .hero-sub,
+html.js .hero-terminal,
+html.js .hero-hint {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+html.js .hero-eyebrow {
+  transform: translateY(-6px);
+  transition: opacity 320ms var(--ease-expo), transform 320ms var(--ease-expo);
+}
+
+html.js .hero h1 {
+  transform: translateY(10px);
+  filter: blur(4px);
+  transition: opacity 480ms var(--ease-expo), transform 480ms var(--ease-expo),
+    filter 480ms var(--ease-expo);
+}
+
+html.js .hero-sub {
+  transform: translateY(8px);
+  transition: opacity 400ms var(--ease-expo), transform 400ms var(--ease-expo);
+}
+
+html.js .hero-terminal {
+  transform: translateY(20px);
+  transition: opacity 560ms var(--ease-expo), transform 560ms var(--ease-expo);
+}
+
+html.js .hero-hint {
+  transform: translateY(6px);
+  transition: opacity 280ms var(--ease-expo), transform 280ms var(--ease-expo);
+}
+
+html.js .hero-eyebrow.is-visible,
+html.js .hero h1.is-visible,
+html.js .hero-sub.is-visible,
+html.js .hero-terminal.is-visible,
+html.js .hero-hint.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Page transitions — exits 20% faster than entrances. */
 @view-transition {
   navigation: auto;
 }
 
 ::view-transition-old(root) {
-  animation: 180ms var(--ease-out) both vt-out;
+  animation: 200ms cubic-bezier(0.4, 0, 1, 1) both vt-shrink-out;
 }
 
 ::view-transition-new(root) {
-  animation: 280ms var(--ease-out) both vt-in;
+  animation: 320ms var(--ease-expo) both vt-rise-in;
 }
 
-@keyframes vt-out {
-  to { opacity: 0; transform: translateY(-8px); }
+@keyframes vt-shrink-out {
+  to { opacity: 0; transform: translateY(-6px) scale(0.99); }
 }
 
-@keyframes vt-in {
-  from { opacity: 0; transform: translateY(8px); }
+@keyframes vt-rise-in {
+  from { opacity: 0; transform: translateY(12px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -786,12 +886,22 @@ a {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
-  [data-reveal] {
+  html.js [data-reveal],
+  html.js .hero-eyebrow,
+  html.js .hero h1,
+  html.js .hero-sub,
+  html.js .hero-terminal,
+  html.js .hero-hint {
     opacity: 1;
     transform: none;
+    filter: none;
+  }
+  .terminal-cursor {
+    animation: none;
   }
   ::view-transition-old(root),
   ::view-transition-new(root) {
