@@ -48,13 +48,16 @@ one is solid.
 
 ## Graceful degradation
 
-The conductor must complete with whatever layers are available:
+The conductor checks its available-skills list and completes with whatever layers
+are available. When a layer is missing, surface a single concise install hint to
+the user (one line per missing skill, at most once per response — inform, don't
+nag):
 
 - **taste-skill missing** → fall back to uiux-optimizer's own Refero-mindset
-  discipline (hierarchy-first, constraint-driven, pattern-first). Note the
-  install command: `npx skills add Leonxlnx/taste-skill`.
+  discipline (hierarchy-first, constraint-driven, pattern-first). Hint the user:
+  `npx skills add Leonxlnx/taste-skill`.
 - **motion-design-skill missing** → fall back to brief, principle-level motion
-  notes only. Note the install command:
+  notes only. Hint the user:
   `npx skills add LottieFiles/motion-design-skill`.
 - The ship pipeline still runs end-to-end; absent layers are skipped, not fatal.
 

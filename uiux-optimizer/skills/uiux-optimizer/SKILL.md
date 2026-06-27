@@ -53,6 +53,13 @@ When triggered, follow this sequence:
    In `explore` and the pipeline's direction step, present taste's system pick and
    design-advisor's brand directions **in parallel** — the user reconciles.
 
+   **Availability check & install hint** — Before conducting, check your
+   available-skills list for `taste-skill` and `motion-design-skill`. For any that
+   is missing, after delivering your output add one concise line naming the gap and
+   its install command — e.g. "Motion is limited without motion-design-skill —
+   `npx skills add LottieFiles/motion-design-skill`". One line per missing skill,
+   at most once per response: inform, don't nag.
+
    See `references/orchestration.md` for the per-mode wiring, the ship pipeline
    steps and gates, and graceful-degradation rules.
 
