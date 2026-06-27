@@ -4,3 +4,6 @@
 .DS_Store
 .autoresearch/
 handover
+
+# Vendored agent skills installed via `npx skills add` (tooling, not marketplace content)
+.agents/

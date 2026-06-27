@@ -1,0 +1,295 @@
+{
+  "marketplace": {
+    "name": "21-breakincode",
+    "repo": "21-BreakinCode/cc-plugins",
+    "version": "1.7.4"
+  },
+  "installAll": {
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install harness@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode",
+    "settings": {
+      "extraKnownMarketplaces": {
+        "21-breakincode": {
+          "source": {
+            "source": "github",
+            "repo": "21-BreakinCode/cc-plugins"
+          }
+        }
+      },
+      "enabledPlugins": {
+        "session-learner@21-breakincode": true,
+        "autoresearch@21-breakincode": true,
+        "harness@21-breakincode": true,
+        "remotion-maker@21-breakincode": true,
+        "hh@21-breakincode": true,
+        "code-reviewer@21-breakincode": true,
+        "uiux-optimizer@21-breakincode": true
+      }
+    }
+  },
+  "categories": [
+    {
+      "id": "memory",
+      "label": "Memory & Knowledge",
+      "plugins": [
+        "session-learner"
+      ]
+    },
+    {
+      "id": "improve",
+      "label": "Measure & Improve",
+      "plugins": [
+        "autoresearch",
+        "harness"
+      ]
+    },
+    {
+      "id": "review",
+      "label": "Review & Design",
+      "plugins": [
+        "code-reviewer",
+        "uiux-optimizer"
+      ]
+    },
+    {
+      "id": "workflow",
+      "label": "Workflow & Handover",
+      "plugins": [
+        "hh"
+      ]
+    },
+    {
+      "id": "media",
+      "label": "Media",
+      "plugins": [
+        "remotion-maker"
+      ]
+    }
+  ],
+  "plugins": [
+    {
+      "name": "session-learner",
+      "version": "1.1.2",
+      "tagline": "Give Claude a memory across sessions",
+      "summary": "Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.",
+      "category": "memory",
+      "install": "claude plugin install session-learner@21-breakincode",
+      "oneLiner": "Session memory persistence, git-aware context, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
+      "commands": [
+        {
+          "name": "/session-learner:digest",
+          "description": "Digest a markdown note, file, or URL — break it down into atomic Zettelkasten cards"
+        },
+        {
+          "name": "/session-learner:take-away",
+          "description": "Reflect on this session — learnings, corrections, and Zettelkasten card suggestions"
+        }
+      ],
+      "skills": [],
+      "dependsOn": [],
+      "config": [
+        {
+          "name": "CLAUDE_SESSION_LEARNER_GIT_MODE",
+          "default": "full",
+          "description": "`full` injects a git-diff summary on session start; `sha-only` just warns about commit count."
+        },
+        {
+          "name": "CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS",
+          "default": "7",
+          "description": "Days to keep session files in `~/.claude/sessions/`."
+        },
+        {
+          "name": "CLAUDE_SESSION_LEARNER_ZK_PATH",
+          "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent",
+          "description": "Vault `Permanent/` dir used to ground `/digest` tag and link suggestions."
+        }
+      ]
+    },
+    {
+      "name": "autoresearch",
+      "version": "1.2.2",
+      "tagline": "Eval-driven, autonomous code improvement",
+      "summary": "Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.",
+      "category": "improve",
+      "install": "claude plugin install autoresearch@21-breakincode",
+      "oneLiner": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
+      "commands": [
+        {
+          "name": "/autoresearch:improve",
+          "description": "Iteratively improve any artifact using an edit-eval-keep/discard loop with live dashboard"
+        }
+      ],
+      "skills": [
+        {
+          "name": "experiment-loop",
+          "description": "Core iteration logic for autoresearch: edit target, run eval, keep or discard, update dashboard, repeat."
+        }
+      ],
+      "dependsOn": [],
+      "config": []
+    },
+    {
+      "name": "harness",
+      "version": "1.0.1",
+      "tagline": "Build the feedback machinery around your agent",
+      "summary": "Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.",
+      "category": "improve",
+      "install": "claude plugin install harness@21-breakincode",
+      "oneLiner": "Dev-lifecycle harness builder. Scans for missing feedback loops, sensors, evals, and oversized agents, then scaffolds Tier-1 components into your project's .claude/. Depends on autoresearch.",
+      "commands": [
+        {
+          "name": "/harness:build",
+          "description": "Menu-driven scaffolder for harness components — feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
+        },
+        {
+          "name": "/harness:check",
+          "description": "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness — produces a scored harness report with impact-ranked improvements"
+        },
+        {
+          "name": "/harness:improvement",
+          "description": "Execute improvement loop on the top-ranked harness issue — auto-generates eval from probes and spawns the autoresearch:experimenter agent"
+        }
+      ],
+      "skills": [
+        {
+          "name": "harness-probes",
+          "description": "Guide for adding custom probes to the harness check system."
+        }
+      ],
+      "dependsOn": [
+        "autoresearch"
+      ],
+      "config": []
+    },
+    {
+      "name": "remotion-maker",
+      "version": "0.1.0",
+      "tagline": "Generate styled Remotion videos, end to end",
+      "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
+      "category": "media",
+      "install": "claude plugin install remotion-maker@21-breakincode",
+      "oneLiner": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
+      "commands": [
+        {
+          "name": "/remotion-maker:create",
+          "description": "Full video creation pipeline: style -> generate -> preview -> verify -> render"
+        },
+        {
+          "name": "/remotion-maker:define-style",
+          "description": "Create or manage video style definitions for consistent series look and feel"
+        },
+        {
+          "name": "/remotion-maker:find-media",
+          "description": "Search free resources for media assets (images, videos, audio) for video scenes"
+        },
+        {
+          "name": "/remotion-maker:verify",
+          "description": "Verify generated Remotion video against style definition (3-tier: static, frame sampling, Playwright)"
+        }
+      ],
+      "skills": [
+        {
+          "name": "remotion-best-practices",
+          "description": "Best practices for Remotion - Video creation in React"
+        }
+      ],
+      "dependsOn": [],
+      "config": []
+    },
+    {
+      "name": "hh",
+      "version": "0.1.5",
+      "tagline": "Cross-context handover docs, LifeOS as the source of truth",
+      "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine.",
+      "category": "workflow",
+      "install": "claude plugin install hh@21-breakincode",
+      "oneLiner": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
+      "commands": [
+        {
+          "name": "/hh:init-org",
+          "description": "Scaffold handover_handler__initiation.md for the current ORG in $LifeOS/01Project/$ORG/. One-time per ORG."
+        },
+        {
+          "name": "/hh:init-service",
+          "description": "Per-repo setup. Adds the current repo to the service mapping table and creates the ./handover symlink into LifeOS."
+        },
+        {
+          "name": "/hh:new",
+          "description": "Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context."
+        },
+        {
+          "name": "/hh:wrap-up",
+          "description": "Vault-wide daily wrap-up. Discovers active handovers, batches user decisions, executes archives/updates/suspensions in parallel. Replaces /op:wrap-up-today."
+        }
+      ],
+      "skills": [],
+      "dependsOn": [],
+      "config": [
+        {
+          "name": "CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP",
+          "default": "0",
+          "description": "When `1`, the Stop hook offers `/hh:new` after a wrap-up session (requires a working `./handover` symlink)."
+        },
+        {
+          "name": "HH_ARCHIVE_ROOT",
+          "default": "$HOME/…/LifeOS/04Archive",
+          "description": "Where `/hh:wrap-up` writes archived handovers. Quote the value — it contains `$HOME` and spaces."
+        }
+      ]
+    },
+    {
+      "name": "code-reviewer",
+      "version": "0.2.0",
+      "tagline": "Principle-aware PR review",
+      "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists.",
+      "category": "review",
+      "install": "claude plugin install code-reviewer@21-breakincode",
+      "oneLiner": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, with configurable principle-directory roots.",
+      "commands": [
+        {
+          "name": "/code-reviewer:review-pr",
+          "description": "Principle-aware PR review — layers a repo-specific review mindset on top of the standard 4+6 multi-agent review"
+        }
+      ],
+      "skills": [],
+      "dependsOn": [
+        "pr-review-toolkit",
+        "hh"
+      ],
+      "config": [
+        {
+          "name": "CODE_REVIEWER_PRINCIPLE_DIR",
+          "default": "—",
+          "description": "Hard override; skip the resolution chain and use this principle directory."
+        },
+        {
+          "name": "CODE_REVIEWER_CONFIG_FILE",
+          "default": "~/.claude/code-reviewer/config.json",
+          "description": "Override the config file that lists principle-directory roots."
+        },
+        {
+          "name": "CODE_REVIEWER_CACHE_FILE",
+          "default": "~/.claude/code-reviewer/principle-map.json",
+          "description": "Override the per-repo principle-path cache."
+        }
+      ]
+    },
+    {
+      "name": "uiux-optimizer",
+      "version": "1.2.2",
+      "tagline": "Reference-driven UI/UX design advisor",
+      "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
+      "category": "review",
+      "install": "claude plugin install uiux-optimizer@21-breakincode",
+      "oneLiner": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
+      "commands": [],
+      "skills": [
+        {
+          "name": "uiux-optimizer",
+          "description": "UI/UX design advisor for improving visual design, layout, and component patterns AND for project-start design discovery."
+        }
+      ],
+      "dependsOn": [],
+      "config": []
+    }
+  ]
+}
