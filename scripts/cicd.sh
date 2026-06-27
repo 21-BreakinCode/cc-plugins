@@ -18,6 +18,7 @@ case "$cmd" in
   test)                 run_test ;;
   verify)               run_test; run_check ;;       # full CI gate
   serve)                cd "$ROOT/site" && python3 -m http.server "${2:-8000}" ;;
+  hooks)                git -C "$ROOT" config core.hooksPath .githooks && echo "✓ pre-commit hook enabled (core.hooksPath=.githooks)" ;;
   help|-h|--help)
     cat <<'EOF'
 usage: ./scripts/cicd.sh <command>
@@ -27,6 +28,7 @@ usage: ./scripts/cicd.sh <command>
   test            Run the generator unit tests
   verify          test + check — the full CI gate
   serve [port]    Preview the site locally (default port 8000)
+  hooks           Enable the repo's pre-commit hook (git config core.hooksPath .githooks)
 EOF
     ;;
   *) echo "unknown command: '$cmd' (try: ./scripts/cicd.sh help)" >&2; exit 2 ;;

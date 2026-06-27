@@ -1,0 +1,20 @@
+name: Docs check
+
+# Verifies the generator's unit tests pass and that CATALOG.md, the per-plugin
+# READMEs, and site/data/plugins.json are in sync with the source of truth.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Verify (test + drift check)
+        run: ./scripts/cicd.sh verify
