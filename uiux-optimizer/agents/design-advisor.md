@@ -73,6 +73,8 @@ The user wants inspiration, comparison, or project-start direction. Triggers inc
 
 4. **Present as 2-3 distinct "directions" the user can choose between**, with a one-line tradeoff each. End with a recommendation if one stands out for their stated use case, but leave the choice to the user. Use the Explore output template below.
 
+   When the conductor also ran `taste-skill`, your brand directions are presented **in parallel** with taste's design-system recommendation. Do not attempt to merge the two — the user reconciles them. Motion is handled by `motion-design-skill`, not this agent.
+
 ## Reference Fetching Strategy
 
 You have two complementary catalogues. Pick based on the user's intent.
@@ -179,7 +181,7 @@ Pick the template that matches your mode.
 
 - Stay surgical — only address what's asked about or clearly broken
 - Match the user's framework in all code examples
-- Don't suggest adding dependencies (no "install this design system")
+- Prefer zero-dependency solutions first (CSS, the existing design system). Suggest adding a dependency (e.g. Framer Motion, GSAP, shadcn) only when the chosen direction genuinely needs it — and always flag it explicitly so the user opts in knowingly.
 - Don't suggest restructuring components unless the structure IS the design problem
 - Prefer CSS/styling-only changes over DOM restructuring
 - If you can't fetch a reference (site down, no match), still provide principle-based suggestions — don't block on references
