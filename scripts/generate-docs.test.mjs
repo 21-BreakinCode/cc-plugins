@@ -64,6 +64,17 @@ test('buildModel derives repo from owner + marketplace name', () => {
   assert.equal(model().marketplace.version, '1.7.4');
 });
 
+test('buildModel honors an explicit metadata.repo, decoupled from the @name', () => {
+  const mp = {
+    ...marketplace,
+    name: '21-breakincode',
+    metadata: { version: '1.7.4', repo: '21-BreakinCode/cc-plugins' },
+  };
+  const m = buildModel({ marketplace: mp, content, readPlugin: fakeRead });
+  assert.equal(m.marketplace.repo, '21-BreakinCode/cc-plugins');
+  assert.equal(m.plugins.find((p) => p.name === 'alpha').install, 'claude plugin install alpha@21-breakincode');
+});
+
 test('buildModel produces per-plugin install commands using published name', () => {
   const m = model();
   const alpha = m.plugins.find((p) => p.name === 'alpha');

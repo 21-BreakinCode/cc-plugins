@@ -7,7 +7,7 @@ Runs an edit → eval → keep/discard loop on any artifact — code, prompts, o
 ## Install
 
 ```bash
-claude plugin install autoresearch@cc-plugins
+claude plugin install autoresearch@21-breakincode
 ```
 
 ## Commands
@@ -16,4 +16,4 @@ claude plugin install autoresearch@cc-plugins
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

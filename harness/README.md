@@ -7,7 +7,7 @@ Scores project health across six categories, then scaffolds the Tier-1 harness c
 ## Install
 
 ```bash
-claude plugin install harness@cc-plugins
+claude plugin install harness@21-breakincode
 ```
 
 ## Commands
@@ -22,4 +22,4 @@ claude plugin install harness@cc-plugins
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

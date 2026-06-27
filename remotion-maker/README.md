@@ -7,7 +7,7 @@ A full pipeline for Remotion (React) videos: define a consistent style, generate
 ## Install
 
 ```bash
-claude plugin install remotion-maker@cc-plugins
+claude plugin install remotion-maker@21-breakincode
 ```
 
 ## Commands
@@ -19,4 +19,4 @@ claude plugin install remotion-maker@cc-plugins
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

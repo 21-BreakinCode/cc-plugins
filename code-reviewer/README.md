@@ -7,7 +7,7 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 ## Install
 
 ```bash
-claude plugin install code-reviewer@cc-plugins
+claude plugin install code-reviewer@21-breakincode
 ```
 
 ## Commands
@@ -29,4 +29,4 @@ claude plugin install code-reviewer@cc-plugins
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

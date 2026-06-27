@@ -1,14 +1,14 @@
 {
   "marketplace": {
-    "name": "cc-plugins",
+    "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
     "version": "1.7.4"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@cc-plugins && \\\n  claude plugin install autoresearch@cc-plugins && \\\n  claude plugin install harness@cc-plugins && \\\n  claude plugin install remotion-maker@cc-plugins && \\\n  claude plugin install hh@cc-plugins && \\\n  claude plugin install code-reviewer@cc-plugins && \\\n  claude plugin install uiux-optimizer@cc-plugins",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install harness@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
-        "cc-plugins": {
+        "21-breakincode": {
           "source": {
             "source": "github",
             "repo": "21-BreakinCode/cc-plugins"
@@ -16,13 +16,13 @@
         }
       },
       "enabledPlugins": {
-        "session-learner@cc-plugins": true,
-        "autoresearch@cc-plugins": true,
-        "harness@cc-plugins": true,
-        "remotion-maker@cc-plugins": true,
-        "hh@cc-plugins": true,
-        "code-reviewer@cc-plugins": true,
-        "uiux-optimizer@cc-plugins": true
+        "session-learner@21-breakincode": true,
+        "autoresearch@21-breakincode": true,
+        "harness@21-breakincode": true,
+        "remotion-maker@21-breakincode": true,
+        "hh@21-breakincode": true,
+        "code-reviewer@21-breakincode": true,
+        "uiux-optimizer@21-breakincode": true
       }
     }
   },
@@ -72,7 +72,7 @@
       "tagline": "Give Claude a memory across sessions",
       "summary": "Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.",
       "category": "memory",
-      "install": "claude plugin install session-learner@cc-plugins",
+      "install": "claude plugin install session-learner@21-breakincode",
       "oneLiner": "Session memory persistence, git-aware context, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
       "commands": [
         {
@@ -110,7 +110,7 @@
       "tagline": "Eval-driven, autonomous code improvement",
       "summary": "Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.",
       "category": "improve",
-      "install": "claude plugin install autoresearch@cc-plugins",
+      "install": "claude plugin install autoresearch@21-breakincode",
       "oneLiner": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
       "commands": [
         {
@@ -133,7 +133,7 @@
       "tagline": "Build the feedback machinery around your agent",
       "summary": "Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.",
       "category": "improve",
-      "install": "claude plugin install harness@cc-plugins",
+      "install": "claude plugin install harness@21-breakincode",
       "oneLiner": "Dev-lifecycle harness builder. Scans for missing feedback loops, sensors, evals, and oversized agents, then scaffolds Tier-1 components into your project's .claude/. Depends on autoresearch.",
       "commands": [
         {
@@ -166,7 +166,7 @@
       "tagline": "Generate styled Remotion videos, end to end",
       "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
       "category": "media",
-      "install": "claude plugin install remotion-maker@cc-plugins",
+      "install": "claude plugin install remotion-maker@21-breakincode",
       "oneLiner": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
       "commands": [
         {
@@ -201,7 +201,7 @@
       "tagline": "Cross-context handover docs, LifeOS as the source of truth",
       "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine.",
       "category": "workflow",
-      "install": "claude plugin install hh@cc-plugins",
+      "install": "claude plugin install hh@21-breakincode",
       "oneLiner": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
       "commands": [
         {
@@ -242,7 +242,7 @@
       "tagline": "Principle-aware PR review",
       "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists.",
       "category": "review",
-      "install": "claude plugin install code-reviewer@cc-plugins",
+      "install": "claude plugin install code-reviewer@21-breakincode",
       "oneLiner": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, with configurable principle-directory roots.",
       "commands": [
         {
@@ -279,7 +279,7 @@
       "tagline": "Reference-driven UI/UX design advisor",
       "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
       "category": "review",
-      "install": "claude plugin install uiux-optimizer@cc-plugins",
+      "install": "claude plugin install uiux-optimizer@21-breakincode",
       "oneLiner": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
       "commands": [],
       "skills": [

@@ -7,7 +7,7 @@ Orchestrates live design references (refero.design + the getdesign.md catalogue)
 ## Install
 
 ```bash
-claude plugin install uiux-optimizer@cc-plugins
+claude plugin install uiux-optimizer@21-breakincode
 ```
 
 ## Skills
@@ -18,4 +18,4 @@ This plugin activates automatically — no slash commands.
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

@@ -7,7 +7,7 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 ## Install
 
 ```bash
-claude plugin install hh@cc-plugins
+claude plugin install hh@21-breakincode
 ```
 
 ## Commands
@@ -26,4 +26,4 @@ claude plugin install hh@cc-plugins
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

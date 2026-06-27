@@ -1,12 +1,13 @@
 {
-  "name": "cc-plugins",
+  "name": "21-breakincode",
   "owner": {
     "name": "21-BreakinCode",
     "email": ""
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.7.4"
+    "version": "1.7.4",
+    "repo": "21-BreakinCode/cc-plugins"
   },
   "plugins": [
     {

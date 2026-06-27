@@ -23,7 +23,9 @@ export function buildModel({ marketplace, content, readPlugin }) {
   if (!content?.plugins) throw new Error('content file has no `plugins` map');
 
   const name = marketplace.name;
-  const repo = `${marketplace.owner.name}/${name}`;
+  // The marketplace name (the @suffix) is decoupled from the GitHub repo: an explicit
+  // metadata.repo wins, else fall back to owner/name (when they happen to match).
+  const repo = marketplace.metadata?.repo ?? `${marketplace.owner.name}/${name}`;
   const version = marketplace.metadata?.version ?? '0.0.0';
 
   const plugins = marketplace.plugins.map((entry) => {

@@ -7,7 +7,7 @@ Persists each session's context to disk and injects git-aware context on startup
 ## Install
 
 ```bash
-claude plugin install session-learner@cc-plugins
+claude plugin install session-learner@21-breakincode
 ```
 
 ## Commands
@@ -25,4 +25,4 @@ claude plugin install session-learner@cc-plugins
 
 ---
 
-Part of the [cc-plugins](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.
+Part of the [21-breakincode](../README.md) marketplace. Generated from `content/plugins.content.json` + command frontmatter — do not edit by hand.

@@ -1,4 +1,4 @@
-# cc-plugins
+# 21-breakincode
 
 Knowledge management and workflow automation plugins for Claude Code, distributed as a single monorepo marketplace.
 
@@ -12,10 +12,12 @@ Add the marketplace:
 /plugin marketplace add 21-BreakinCode/cc-plugins
 ```
 
+> The GitHub repo is `cc-plugins`; the marketplace it publishes is named **`21-breakincode`** — that's the `@suffix` you install with.
+
 Then install any plugin:
 
 ```bash
-/plugin install <plugin-name>@cc-plugins
+/plugin install <plugin-name>@21-breakincode
 ```
 
 To install **all** plugins in one shot, copy the CLI one-liner (or the `settings.json`

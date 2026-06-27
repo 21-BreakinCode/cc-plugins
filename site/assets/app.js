@@ -279,7 +279,7 @@ function renderSubpage(data) {
     return;
   }
 
-  document.title = `${p.name} — cc-plugins`;
+  document.title = `${p.name} — 21-breakincode`;
   root.innerHTML = `
     <div class="subpage-head" data-reveal style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}">
       <div class="plugin-icon">${icon(p.category)}</div>
