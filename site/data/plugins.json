@@ -2,10 +2,10 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.7.4"
+    "version": "1.8.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install harness@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -18,14 +18,13 @@
       "enabledPlugins": {
         "session-learner@21-breakincode": true,
         "autoresearch@21-breakincode": true,
-        "harness@21-breakincode": true,
         "remotion-maker@21-breakincode": true,
         "hh@21-breakincode": true,
         "code-reviewer@21-breakincode": true,
         "uiux-optimizer@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update harness@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode"
   },
   "categories": [
     {
@@ -39,8 +38,7 @@
       "id": "improve",
       "label": "Measure & Improve",
       "plugins": [
-        "autoresearch",
-        "harness"
+        "autoresearch"
       ]
     },
     {
@@ -101,13 +99,25 @@
     },
     {
       "name": "autoresearch",
-      "version": "1.2.2",
-      "tagline": "Eval-driven, autonomous code improvement",
-      "summary": "Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.",
+      "version": "2.0.0",
+      "tagline": "Eval-driven improvement, plus the harness to drive it",
+      "summary": "Two halves of one loop. An edit → eval → keep/discard engine improves any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both, and showing progress on a live auto-refreshing dashboard. A harness builder scores project health across six categories, scaffolds the Tier-1 components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue through the same loop.",
       "category": "improve",
       "install": "claude plugin install autoresearch@21-breakincode",
-      "oneLiner": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
+      "oneLiner": "Eval-driven improvement loop (keep/discard with a live HTML dashboard) plus a dev-lifecycle harness builder that scores project health and scaffolds feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
       "commands": [
+        {
+          "name": "/autoresearch:harness-build",
+          "description": "Menu-driven scaffolder for harness components — feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
+        },
+        {
+          "name": "/autoresearch:harness-check",
+          "description": "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness — produces a scored harness report with impact-ranked improvements"
+        },
+        {
+          "name": "/autoresearch:harness-improvement",
+          "description": "Execute improvement loop on the top-ranked harness issue — auto-generates eval from probes and spawns the autoresearch:experimenter agent"
+        },
         {
           "name": "/autoresearch:improve",
           "description": "Iteratively improve any artifact using an edit-eval-keep/discard loop with live dashboard"
@@ -117,42 +127,13 @@
         {
           "name": "experiment-loop",
           "description": "Core iteration logic for autoresearch: edit target, run eval, keep or discard, update dashboard, repeat."
-        }
-      ],
-      "dependsOn": [],
-      "config": []
-    },
-    {
-      "name": "harness",
-      "version": "1.0.1",
-      "tagline": "Build the feedback machinery around your agent",
-      "summary": "Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.",
-      "category": "improve",
-      "install": "claude plugin install harness@21-breakincode",
-      "oneLiner": "Dev-lifecycle harness builder. Scans for missing feedback loops, sensors, evals, and oversized agents, then scaffolds Tier-1 components into your project's .claude/. Depends on autoresearch.",
-      "commands": [
-        {
-          "name": "/harness:build",
-          "description": "Menu-driven scaffolder for harness components — feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
         },
-        {
-          "name": "/harness:check",
-          "description": "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness — produces a scored harness report with impact-ranked improvements"
-        },
-        {
-          "name": "/harness:improvement",
-          "description": "Execute improvement loop on the top-ranked harness issue — auto-generates eval from probes and spawns the autoresearch:experimenter agent"
-        }
-      ],
-      "skills": [
         {
           "name": "harness-probes",
           "description": "Guide for adding custom probes to the harness check system."
         }
       ],
-      "dependsOn": [
-        "autoresearch"
-      ],
+      "dependsOn": [],
       "config": []
     },
     {

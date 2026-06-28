@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
-# Tier-1 scaffolders for /harness:build.
+# Tier-1 scaffolders for /autoresearch:harness-build.
 # Each ar_harness_build_<type> writes one (or two) files into the CWD's .claude/
 # (or eval/) and prints the absolute paths of the created files on stdout.
 
 set -euo pipefail
 
-# Resolve harness templates dir regardless of where this is sourced from.
-# Uses `find -L` so symlinked plugin installs (common in dev) are followed.
+# Resolve the templates dir relative to this lib's own location.
 ar_harness_templates_dir() {
-  find -L ~/.claude/plugins -path '*/harness/templates/harness-components' -print -quit 2>/dev/null
+  ( cd "$(dirname "${BASH_SOURCE[0]}")/../templates/harness-components" 2>/dev/null && pwd )
 }
 
 # Source common helpers (for ar_log).
-source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 # ---------------------------------------------------------------------------
 # ar_harness_build_feedback_loop <name> <event> <matcher> <principle>

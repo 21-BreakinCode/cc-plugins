@@ -3,7 +3,7 @@ description: "Menu-driven scaffolder for harness components — feedback loop, e
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "AskUserQuestion"]
 ---
 
-# /harness:build
+# /autoresearch:harness-build
 
 You are the build command for the harness plugin. Your job is to help the user
 scaffold one harness component at the simplest possible Tier-1 shape.
@@ -11,8 +11,8 @@ scaffold one harness component at the simplest possible Tier-1 shape.
 ## Step 1: Source libraries
 
 ```bash
-source "$(find -L ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null || echo '/dev/null')"
-source "$(find -L ~/.claude/plugins -path '*/harness/lib/build.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/probes.sh"
+source "${CLAUDE_PLUGIN_ROOT}/lib/build.sh"
 ```
 
 ## Step 2: Run the harness-completeness probe silently

@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(find -L ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 # ---------------------------------------------------------------------------
 # ar_probe_detect_tooling
@@ -927,7 +927,7 @@ if reactive_signal:
     score -= PENALTY_REACTIVE
 score = max(0, min(100, score))
 
-# --- Recommended types (for /harness:build menu annotation later) ---
+# --- Recommended types (for /autoresearch:harness-build menu annotation later) ---
 recommended = []
 if not has_hooks:
     recommended.append('feedback')

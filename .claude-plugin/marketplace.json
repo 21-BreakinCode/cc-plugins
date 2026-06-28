@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.7.4",
+    "version": "1.8.0",
     "repo": "21-BreakinCode/cc-plugins"
   },
   "plugins": [
@@ -20,15 +20,8 @@
     {
       "name": "autoresearch",
       "source": "./autoresearch",
-      "description": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
-      "version": "1.2.2",
-      "strict": true
-    },
-    {
-      "name": "harness",
-      "source": "./harness",
-      "description": "Dev-lifecycle harness builder. Scans for missing feedback loops, sensors, evals, and oversized agents, then scaffolds Tier-1 components into your project's .claude/. Depends on autoresearch.",
-      "version": "1.0.1",
+      "description": "Eval-driven improvement loop (keep/discard with a live HTML dashboard) plus a dev-lifecycle harness builder that scores project health and scaffolds feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
+      "version": "2.0.0",
       "strict": true
     },
     {

@@ -1,7 +1,7 @@
 {
   "name": "autoresearch",
-  "description": "Iterative improvement loop with eval-driven keep/discard and live HTML dashboard, inspired by karpathy/autoresearch",
-  "version": "1.2.2",
+  "description": "Eval-driven improvement loop (keep/discard with a live HTML dashboard) plus a dev-lifecycle harness builder that scores project health and scaffolds feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
+  "version": "2.0.0",
   "author": {
     "name": "William Hung"
   }
