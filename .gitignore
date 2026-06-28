@@ -1,6 +1,7 @@
 .playwright-mcp/
 .git.backup-pre-monorepo/
 .claude/settings.local.json
+.claude/worktrees/
 .DS_Store
 .autoresearch/
 handover
