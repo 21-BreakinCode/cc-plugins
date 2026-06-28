@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 # Smoke tests for ar_probe_harness.
-# Run with: bash harness/tests/test_probe_completeness.sh
+# Run with: bash autoresearch/tests/test_probe_completeness.sh
 set -euo pipefail
 
-PROBES_LIB="$(find -L ~/.claude/plugins -path '*/harness/lib/probes.sh' -print -quit 2>/dev/null)"
-if [ -z "${PROBES_LIB}" ]; then
-  PROBES_LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/probes.sh"
-fi
+PROBES_LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/probes.sh"
 # shellcheck disable=SC1090
 source "${PROBES_LIB}"
 

@@ -18,17 +18,10 @@
       ]
     },
     "autoresearch": {
-      "tagline": "Eval-driven, autonomous code improvement",
-      "summary": "Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.",
+      "tagline": "Eval-driven improvement, plus the harness to drive it",
+      "summary": "Two halves of one loop. An edit → eval → keep/discard engine improves any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both, and showing progress on a live auto-refreshing dashboard. A harness builder scores project health across six categories, scaffolds the Tier-1 components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue through the same loop.",
       "category": "improve",
       "dependsOn": [],
-      "config": []
-    },
-    "harness": {
-      "tagline": "Build the feedback machinery around your agent",
-      "summary": "Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.",
-      "category": "improve",
-      "dependsOn": ["autoresearch"],
       "config": []
     },
     "code-reviewer": {

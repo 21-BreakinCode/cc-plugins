@@ -19,7 +19,7 @@ Spawns the **style-definer** agent which guides you through creating a style def
 ## Execution
 1. Ensure project data directory exists:
    ```bash
-   source "$(find ~/.claude/plugins -path '*/remotion-maker/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+   source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
    rm_ensure_dirs .
    ```
 2. If a style name was provided as argument, check if it exists. If exists: read and display, ask what to change. If not: start creation with that name pre-filled.

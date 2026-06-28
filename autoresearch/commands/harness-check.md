@@ -1,34 +1,69 @@
 ---
-description: "[DEPRECATED] Moved to /harness:check. This alias forwards or instructs install."
-allowed-tools: ["Read", "Bash"]
+description: "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness — produces a scored harness report with impact-ranked improvements"
+allowed-tools: ["Read", "Bash", "Glob", "Grep"]
 ---
 
-# /autoresearch:harness-check (deprecated alias)
+# /autoresearch:harness-check
 
-This command has moved to the `harness` plugin.
+You are the check command for the harness plugin. Your job is to scan the current project, run probes, and present a health scorecard with ranked improvement recommendations.
 
-## Step 1: Check whether `harness` is installed
+## Step 1: Source Libraries
 
 ```bash
-harness_check=$(find -L ~/.claude/plugins -path '*/harness/commands/check.md' -print -quit 2>/dev/null)
-if [ -z "${harness_check}" ]; then
-  install_status="missing"
-else
-  install_status="installed"
-fi
-echo "STATUS: ${install_status}"
+source "${CLAUDE_PLUGIN_ROOT}/lib/probes.sh"
+source "${CLAUDE_PLUGIN_ROOT}/lib/harness.sh"
 ```
 
-## Step 2: Tell the user
+## Step 2: Parse Arguments
 
-If `STATUS: installed`, print:
+Check if the user passed any flags:
+- `--json` — output raw harness.json instead of formatted scorecard
+- `--probe <name>` — run only a specific probe (lint, tests, runtime, architecture)
 
-> ⚠️  `/autoresearch:harness-check` has moved to `/harness:check`. This alias will be removed in autoresearch 2.0. Forwarding now...
+## Step 3: Detect Tooling
 
-Then dispatch the new command in your next response (do **not** try to source the harness libs directly from here — just instruct the user to run `/harness:check` and stop).
+```bash
+tooling=$(ar_probe_detect_tooling)
+```
 
-If `STATUS: missing`, print:
+Print what was detected:
+> 🔍 Scanning project...
+>   Detected: <list of tools found>
 
-> ⚠️  `/autoresearch:harness-check` has moved to a new plugin called `harness`. Install it from the PersonalPlugins repo (sibling of autoresearch) and then run `/harness:check`. This alias will be removed in autoresearch 2.0.
+If nothing was detected (all probes would be skipped), tell the user:
+> Could not detect any tooling in this project. Make sure you're in a project root with config files (package.json, pyproject.toml, Cargo.toml, etc).
 
-Stop.
+## Step 4: Run Probes
+
+If `--probe <name>` was specified, run only that probe. Otherwise run all:
+
+```bash
+results=$(ar_probe_run_all)
+```
+
+## Step 5: Generate Harness Report
+
+```bash
+ar_harness_init "${results}"
+```
+
+## Step 6: Display Results
+
+If `--json` was specified:
+```bash
+ar_harness_read
+```
+
+Otherwise print the formatted scorecard:
+```bash
+ar_harness_print_scorecard
+```
+
+## Step 7: Suggest Next Steps
+
+After the scorecard, tell the user:
+> Run `/autoresearch:harness-improvement` to start fixing the top-ranked issue.
+
+If all scores are ≥95:
+> ✅ Project health looks great! All categories at 95+.
+```

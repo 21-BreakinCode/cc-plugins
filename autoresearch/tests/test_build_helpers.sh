@@ -2,10 +2,7 @@
 # Smoke tests for all four ar_harness_build_* functions.
 set -euo pipefail
 
-BUILD_LIB="$(find -L ~/.claude/plugins -path '*/harness/lib/build.sh' -print -quit 2>/dev/null)"
-if [ -z "${BUILD_LIB}" ]; then
-  BUILD_LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/build.sh"
-fi
+BUILD_LIB="$(cd "$(dirname "$0")/.." && pwd)/lib/build.sh"
 # shellcheck disable=SC1090
 source "${BUILD_LIB}"
 

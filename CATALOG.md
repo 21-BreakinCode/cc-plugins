@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.7.4 · 7 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.8.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -11,7 +11,6 @@
 claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install session-learner@21-breakincode && \
   claude plugin install autoresearch@21-breakincode && \
-  claude plugin install harness@21-breakincode && \
   claude plugin install remotion-maker@21-breakincode && \
   claude plugin install hh@21-breakincode && \
   claude plugin install code-reviewer@21-breakincode && \
@@ -27,7 +26,6 @@ update each installed plugin:
 claude plugin marketplace update 21-breakincode && \
   claude plugin update session-learner@21-breakincode && \
   claude plugin update autoresearch@21-breakincode && \
-  claude plugin update harness@21-breakincode && \
   claude plugin update remotion-maker@21-breakincode && \
   claude plugin update hh@21-breakincode && \
   claude plugin update code-reviewer@21-breakincode && \
@@ -48,25 +46,15 @@ A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session 
 
 ## Measure & Improve
 
-### [autoresearch](./autoresearch/README.md) · `v1.2.2`
+### [autoresearch](./autoresearch/README.md) · `v2.0.0`
 
-*Eval-driven, autonomous code improvement*
+*Eval-driven improvement, plus the harness to drive it*
 
-Runs an edit → eval → keep/discard loop on any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both. Keeps what passes, reverts what doesn't, and shows progress on a live auto-refreshing dashboard.
+Two halves of one loop. An edit → eval → keep/discard engine improves any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both, and showing progress on a live auto-refreshing dashboard. A harness builder scores project health across six categories, scaffolds the Tier-1 components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue through the same loop.
 
 **Install** · `claude plugin install autoresearch@21-breakincode`
 
-**Commands** · `/autoresearch:improve`
-
-### [harness](./harness/README.md) · `v1.0.1`
-
-*Build the feedback machinery around your agent*
-
-Scores project health across six categories, then scaffolds the Tier-1 harness components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue by delegating to autoresearch.
-
-**Install** · `claude plugin install harness@21-breakincode`
-
-**Commands** · `/harness:build` · `/harness:check` · `/harness:improvement`
+**Commands** · `/autoresearch:harness-build` · `/autoresearch:harness-check` · `/autoresearch:harness-improvement` · `/autoresearch:improve`
 
 ## Review & Design
 
@@ -104,7 +92,7 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 
 ## Media
 
-### [remotion-maker](./remotion-maker/README.md) · `v0.1.0`
+### [remotion-maker](./remotion-maker/README.md) · `v0.1.1`
 
 *Generate styled Remotion videos, end to end*
 

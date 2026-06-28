@@ -9,8 +9,8 @@ tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "AskUserQuestion"]
 You create and manage style definitions for video series consistency.
 
 ## Before You Start
-1. Read the style-system extension: `find ~/.claude/plugins -path '*/remotion-maker/skills/remotion/extensions/style-system.md'`
-2. Source shell library: `source "$(find ~/.claude/plugins -path '*/remotion-maker/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"`
+1. Read the style-system extension: `${CLAUDE_PLUGIN_ROOT}/skills/remotion/extensions/style-system.md`
+2. Source shell library: `source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"`
 
 ## Workflow
 
