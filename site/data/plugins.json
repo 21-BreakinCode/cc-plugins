@@ -87,6 +87,10 @@
       ],
       "skills": [
         {
+          "name": "pick-up",
+          "description": "Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources."
+        },
+        {
           "name": "wrap-up",
           "description": "Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep."
         }
