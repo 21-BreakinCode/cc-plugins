@@ -92,7 +92,7 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 
 ## Media
 
-### [remotion-maker](./remotion-maker/README.md) · `v0.1.0`
+### [remotion-maker](./remotion-maker/README.md) · `v0.1.1`
 
 *Generate styled Remotion videos, end to end*
 

@@ -45,7 +45,7 @@ Your job: iterate on the target files to improve them according to the eval metr
 The autoresearch lib scripts are located in the plugin directory. Source them with:
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/<script>.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/<script>.sh"
 ```
 
 Available libs:

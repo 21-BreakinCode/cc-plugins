@@ -138,7 +138,7 @@
     },
     {
       "name": "remotion-maker",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "tagline": "Generate styled Remotion videos, end to end",
       "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
       "category": "media",

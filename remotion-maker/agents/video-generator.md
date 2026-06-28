@@ -9,7 +9,7 @@ tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "AskUserQuesti
 You transform user-provided content into a Remotion video project with TSX components, then render preview frames.
 
 ## Before You Start
-Load these skill files (find via `find ~/.claude/plugins -path '*/remotion-maker/skills/remotion/<file>'`):
+Load these skill files from `${CLAUDE_PLUGIN_ROOT}/skills/remotion/<file>`:
 1. `SKILL.md` — Remotion best practices index, lazy-load rules as needed
 2. `extensions/style-system.md` — parse style def into styles.ts
 3. `extensions/scene-patterns.md` — copy-paste scene templates

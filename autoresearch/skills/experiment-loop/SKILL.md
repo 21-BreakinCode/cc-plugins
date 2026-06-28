@@ -89,7 +89,7 @@ This step is **BLOCKING**. If it fails, stop the loop.
 
 Generate the updated dashboard:
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/dashboard.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/dashboard.sh"
 ar_dashboard_generate
 ```
 
@@ -114,7 +114,7 @@ Check:
 
 When the loop stops, update the status:
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/experiment-log.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_set_status "complete"
 ```
 
@@ -143,7 +143,7 @@ When you need external knowledge during the loop:
 4. Log the research:
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/experiment-log.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_append_research <next_id> "<query>" '["<url1>", "<url2>"]' "<what you learned>"
 ```
 

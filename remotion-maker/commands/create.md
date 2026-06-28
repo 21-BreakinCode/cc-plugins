@@ -53,6 +53,6 @@ End-to-end video creation pipeline with user gates at preview and approval.
 - Use existing style if available
 - Source lib for directory setup:
   ```bash
-  source "$(find ~/.claude/plugins -path '*/remotion-maker/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+  source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
   rm_ensure_dirs .
   ```
