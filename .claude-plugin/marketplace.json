@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.8.0",
+    "version": "1.9.0",
     "repo": "21-BreakinCode/cc-plugins"
   },
   "plugins": [

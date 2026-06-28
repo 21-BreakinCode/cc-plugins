@@ -2,7 +2,7 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.8.0"
+    "version": "1.9.0"
   },
   "installAll": {
     "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode",

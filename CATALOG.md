@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.8.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.9.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 

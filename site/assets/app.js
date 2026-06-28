@@ -164,7 +164,7 @@ function initHero(data) {
 /* --------------------------------- Grid ----------------------------------- */
 function cardHtml(p, delay) {
   return `
-  <article class="plugin-card" data-reveal style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}; --delay:${delay}ms">
+  <article class="plugin-card" data-reveal data-category="${escapeHtml(p.category)}" style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}; --delay:${delay}ms">
     <a class="card-link" href="plugin.html?name=${encodeURIComponent(p.name)}" aria-label="${escapeHtml(p.name)} — ${escapeHtml(p.tagline)}"></a>
     <div class="card-top">
       <div class="plugin-icon">${icon(p.category)}</div>
@@ -182,28 +182,37 @@ function cardHtml(p, delay) {
   </article>`;
 }
 
+// Short, capitalized chip label derived from the category id — no static headers.
+function chipLabel(id) {
+  return id.charAt(0).toUpperCase() + id.slice(1);
+}
+
 function renderGrid(data) {
   const root = document.getElementById("plugin-sections");
   const byName = new Map(data.plugins.map((p) => [p.name, p]));
-  const sections = data.categories
-    .filter((c) => c.plugins.length)
-    .map((c) => {
-      const cards = c.plugins
-        .map((name, idx) => {
-          const col = idx % 3;
-          const row = Math.floor(idx / 3);
-          return cardHtml(byName.get(name), col * 50 + row * 80);
-        })
-        .join("");
-      return `
-      <div class="category" style="--cat-color:${CAT_COLOR[c.id] || "var(--accent)"}">
-        <div class="category-label" data-reveal>${escapeHtml(c.label)}</div>
-        <div class="plugin-grid">${cards}</div>
-      </div>`;
-    })
-    .join("");
-  root.innerHTML = sections;
+  const active = data.categories.filter((c) => c.plugins.length);
 
+  const chips = [
+    `<button class="chip active" type="button" data-filter="all" aria-pressed="true">All</button>`,
+    ...active.map(
+      (c) =>
+        `<button class="chip" type="button" data-filter="${escapeHtml(c.id)}" aria-pressed="false">${escapeHtml(chipLabel(c.id))}</button>`,
+    ),
+  ].join("");
+
+  // Flatten plugins in category order so the single grid stays coherent when filtered.
+  const ordered = active.flatMap((c) => c.plugins.map((name) => byName.get(name)).filter(Boolean));
+  const cards = ordered.map((p, idx) => cardHtml(p, idx * 45)).join("");
+
+  root.innerHTML = `
+    <div class="chips" data-reveal role="group" aria-label="Filter plugins by category">${chips}</div>
+    <div class="plugin-grid">${cards}</div>`;
+
+  bindCopy(root);
+  bindFilters(root);
+}
+
+function bindCopy(root) {
   root.querySelectorAll(".mini-copy").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -212,9 +221,41 @@ function renderGrid(data) {
   });
 }
 
+function bindFilters(root) {
+  const chips = [...root.querySelectorAll(".chip")];
+  const cards = [...root.querySelectorAll(".plugin-card")];
+  chips.forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const filter = chip.dataset.filter;
+      chips.forEach((c) => {
+        const on = c === chip;
+        c.classList.toggle("active", on);
+        c.setAttribute("aria-pressed", String(on));
+      });
+      cards.forEach((card) => {
+        const match = filter === "all" || card.dataset.category === filter;
+        if (match) {
+          card.style.display = "";
+          requestAnimationFrame(() => {
+            card.style.opacity = "";
+          });
+        } else {
+          card.style.opacity = "0";
+          setTimeout(() => {
+            if (card.style.opacity === "0") card.style.display = "none";
+          }, 200);
+        }
+      });
+    });
+  });
+}
+
 function setCounts(data) {
-  const el = document.getElementById("count-head");
-  if (el) el.textContent = String(data.plugins.length);
+  const n = String(data.plugins.length);
+  for (const id of ["count-head", "count-cta"]) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = n;
+  }
 }
 
 /* -------------------------------- Subpage --------------------------------- */
