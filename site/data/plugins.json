@@ -69,39 +69,33 @@
   "plugins": [
     {
       "name": "session-learner",
-      "version": "1.1.2",
-      "tagline": "Give Claude a memory across sessions",
-      "summary": "Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.",
+      "version": "2.0.0",
+      "tagline": "Turn a session into atomic Zettelkasten knowledge",
+      "summary": "A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.",
       "category": "memory",
       "install": "claude plugin install session-learner@21-breakincode",
-      "oneLiner": "Session memory persistence, git-aware context, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
-      "commands": [
+      "oneLiner": "Turn a working session into atomic Zettelkasten knowledge via a wrap-up → pick-up → recommend reflection funnel",
+      "commands": [],
+      "skills": [
         {
-          "name": "/session-learner:digest",
-          "description": "Digest a markdown note, file, or URL — break it down into atomic Zettelkasten cards"
+          "name": "pick-up",
+          "description": "Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources."
         },
         {
-          "name": "/session-learner:take-away",
-          "description": "Reflect on this session — learnings, corrections, and Zettelkasten card suggestions"
+          "name": "recommend",
+          "description": "Use after wrap-up when unsure which take-away topic matters most — picks exactly one topic to keep, with reasoning."
+        },
+        {
+          "name": "wrap-up",
+          "description": "Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep."
         }
       ],
-      "skills": [],
       "dependsOn": [],
       "config": [
         {
-          "name": "CLAUDE_SESSION_LEARNER_GIT_MODE",
-          "default": "full",
-          "description": "`full` injects a git-diff summary on session start; `sha-only` just warns about commit count."
-        },
-        {
-          "name": "CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS",
-          "default": "7",
-          "description": "Days to keep session files in `~/.claude/sessions/`."
-        },
-        {
           "name": "CLAUDE_SESSION_LEARNER_ZK_PATH",
           "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent",
-          "description": "Vault `Permanent/` dir used to ground `/digest` tag and link suggestions."
+          "description": "Vault `Permanent/` dir used to ground `pick-up` card links and tags."
         }
       ]
     },

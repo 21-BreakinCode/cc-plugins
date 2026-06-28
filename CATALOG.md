@@ -36,15 +36,15 @@ claude plugin marketplace update 21-breakincode && \
 
 ## Memory & Knowledge
 
-### [session-learner](./session-learner/README.md) · `v1.1.2`
+### [session-learner](./session-learner/README.md) · `v2.0.0`
 
-*Give Claude a memory across sessions*
+*Turn a session into atomic Zettelkasten knowledge*
 
-Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.
+A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.
 
 **Install** · `claude plugin install session-learner@21-breakincode`
 
-**Commands** · `/session-learner:digest` · `/session-learner:take-away`
+**Skills** · `pick-up` · `recommend` · `wrap-up`
 
 ## Measure & Improve
 

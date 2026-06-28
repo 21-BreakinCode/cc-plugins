@@ -1,8 +1,8 @@
 # session-learner
 
-> Give Claude a memory across sessions
+> Turn a session into atomic Zettelkasten knowledge
 
-Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.
+A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.
 
 ## Install
 
@@ -10,18 +10,19 @@ Persists each session's context to disk and injects git-aware context on startup
 claude plugin install session-learner@21-breakincode
 ```
 
-## Commands
+## Skills
 
-- **`/session-learner:digest`** — Digest a markdown note, file, or URL — break it down into atomic Zettelkasten cards
-- **`/session-learner:take-away`** — Reflect on this session — learnings, corrections, and Zettelkasten card suggestions
+This plugin activates automatically — no slash commands.
+
+- **`pick-up`** — Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources.
+- **`recommend`** — Use after wrap-up when unsure which take-away topic matters most — picks exactly one topic to keep, with reasoning.
+- **`wrap-up`** — Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep.
 
 ## Configuration
 
 | Variable | Default | Description |
 |---|---|---|
-| `CLAUDE_SESSION_LEARNER_GIT_MODE` | `full` | `full` injects a git-diff summary on session start; `sha-only` just warns about commit count. |
-| `CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS` | `7` | Days to keep session files in `~/.claude/sessions/`. |
-| `CLAUDE_SESSION_LEARNER_ZK_PATH` | `~/…/LifeOS/03-Resource/Zettelkasten/Permanent` | Vault `Permanent/` dir used to ground `/digest` tag and link suggestions. |
+| `CLAUDE_SESSION_LEARNER_ZK_PATH` | `~/…/LifeOS/03-Resource/Zettelkasten/Permanent` | Vault `Permanent/` dir used to ground `pick-up` card links and tags. |
 
 ---
 
