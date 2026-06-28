@@ -20,6 +20,7 @@
 - Only `CLAUDE_SESSION_LEARNER_ZK_PATH` survives in config; `GIT_MODE` and `MAX_AGE_DAYS` are removed everywhere.
 - Spec of record: `docs/superpowers/specs/2026-06-28-session-learner-2.0-design.md`.
 - Work happens on branch `feat/session-learner-2.0` (already created).
+- **Renderer note:** `scripts/lib/render-readme.mjs:18` early-returns the `## Commands` section whenever a plugin has any command, so the new skills do NOT appear in the generated README/CATALOG until the v1 commands are deleted (Task 4). Therefore the per-skill checks in Tasks 1–3 verify only frontmatter validity + file placement; the README/CATALOG listing of all three skills is verified in Task 4 Step 6.
 
 ---
 
