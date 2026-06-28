@@ -12,7 +12,7 @@ claude plugin install session-learner@21-breakincode
 
 ## Skills
 
-This plugin activates automatically — no slash commands.
+Invoke one directly as `/session-learner:<skill>`, or let it activate automatically when relevant.
 
 - **`pick-up`** — Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources.
 - **`recommend`** — Use after wrap-up when unsure which take-away topic matters most — picks exactly one topic to keep, with reasoning.
