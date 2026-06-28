@@ -21,7 +21,7 @@ function surface(plugin) {
   }
   if (plugin.skills.length) {
     const items = plugin.skills.map((s) => `- **\`${s.name}\`** — ${s.description}`);
-    return `## Skills\n\nThis plugin activates automatically — no slash commands.\n\n${items.join('\n')}`;
+    return `## Skills\n\nInvoke one directly as \`/${plugin.name}:<skill>\`, or let it activate automatically when relevant.\n\n${items.join('\n')}`;
   }
   return '## Commands\n\n_This plugin activates automatically — no slash commands._';
 }

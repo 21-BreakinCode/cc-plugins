@@ -12,7 +12,7 @@ claude plugin install uiux-optimizer@21-breakincode
 
 ## Skills
 
-This plugin activates automatically — no slash commands.
+Invoke one directly as `/uiux-optimizer:<skill>`, or let it activate automatically when relevant.
 
 - **`uiux-optimizer`** — UI/UX design advisor for improving visual design, layout, and component patterns AND for project-start design discovery.
 
