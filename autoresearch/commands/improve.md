@@ -67,7 +67,7 @@ Once all information is gathered, create the `.autoresearch/` directory and gene
 1. Run this to initialize the directory and gitignore:
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/common.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
 ar_ensure_dir
 ar_ensure_gitignore
 ```
@@ -77,7 +77,7 @@ ar_ensure_gitignore
 3. Initialize the experiment log:
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/experiment-log.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_init "<goal>" "<eval_method>" "<eval_command>" "<llm_criteria>" "<max_iterations>" "<consec_limit>"
 ```
 
@@ -87,7 +87,7 @@ Before starting the loop, run the eval on the current (unmodified) target to est
 
 For shell evals:
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/eval.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/eval.sh"
 ar_eval_run "<eval_command>"
 ```
 
@@ -101,7 +101,7 @@ For LLM-as-judge evals: read the target file and score it against the criteria. 
 ## Step 6: Generate Initial Dashboard and Open It
 
 ```bash
-source "$(find ~/.claude/plugins -path '*/autoresearch/lib/dashboard.sh' -print -quit 2>/dev/null || echo '/dev/null')"
+source "${CLAUDE_PLUGIN_ROOT}/lib/dashboard.sh"
 ar_dashboard_generate
 ar_dashboard_open
 ```
