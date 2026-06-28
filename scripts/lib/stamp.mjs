@@ -9,3 +9,14 @@ const ASSET_RE = /(href|src)="(assets\/(?:app\.js|styles\.css))(?:\?v=[^"]*)?"/g
 export function stampAssets(html, version) {
   return html.replace(ASSET_RE, (_match, attr, path) => `${attr}="${path}?v=${version}"`);
 }
+
+// Stamp the live plugin count into the hero's `#count-head` / `#count-cta` spans
+// so the static markup matches the marketplace — no-JS visitors, crawlers, and
+// link-preview scrapers see the real number instead of a hand-typed one. app.js
+// sets the same spans from the data at runtime; this keeps the pre-JS HTML correct.
+// Idempotent: any existing digits are replaced.
+const COUNT_RE = /(<span id="count-(?:head|cta)"[^>]*>)\d*(<\/span>)/g;
+
+export function stampCounts(html, count) {
+  return html.replace(COUNT_RE, (_match, open, close) => `${open}${count}${close}`);
+}

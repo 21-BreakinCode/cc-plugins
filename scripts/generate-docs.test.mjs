@@ -6,7 +6,7 @@ import { buildModel, commandName, isDeprecated, firstSentence } from './lib/coll
 import { cliOneLiner, settingsSnippet, installOne, updateAllCli } from './lib/install.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
-import { stampAssets } from './lib/stamp.mjs';
+import { stampAssets, stampCounts } from './lib/stamp.mjs';
 
 const marketplace = {
   name: 'cc-plugins',
@@ -181,4 +181,14 @@ test('stampAssets adds, replaces, and is idempotent on the version query', () =>
   assert.doesNotMatch(bumped, /1\.7\.4/);
   // Same version twice is a no-op.
   assert.equal(stampAssets(once, '1.7.4'), once);
+});
+
+test('stampCounts injects the live plugin count into both hero spans', () => {
+  const html = 'Install <span id="count-head">99</span> tools, <span id="count-cta">99</span> plugins';
+  const out = stampCounts(html, 6);
+  assert.match(out, /<span id="count-head">6<\/span>/);
+  assert.match(out, /<span id="count-cta">6<\/span>/);
+  assert.doesNotMatch(out, /99/);
+  // Spans that aren't the count spans are left untouched.
+  assert.equal(stampCounts('<span id="other">1</span>', 6), '<span id="other">1</span>');
 });
