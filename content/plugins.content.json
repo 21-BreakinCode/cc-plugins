@@ -9,14 +9,12 @@
   ],
   "plugins": {
     "session-learner": {
-      "tagline": "Give Claude a memory across sessions",
-      "summary": "Persists each session's context to disk and injects git-aware context on startup, so a new session knows what changed in the repo and what you did last time. Harvests learnings into Zettelkasten notes via /take-away and /digest.",
+      "tagline": "Turn a session into atomic Zettelkasten knowledge",
+      "summary": "A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.",
       "category": "memory",
       "dependsOn": [],
       "config": [
-        { "name": "CLAUDE_SESSION_LEARNER_GIT_MODE", "default": "full", "description": "`full` injects a git-diff summary on session start; `sha-only` just warns about commit count." },
-        { "name": "CLAUDE_SESSION_LEARNER_MAX_AGE_DAYS", "default": "7", "description": "Days to keep session files in `~/.claude/sessions/`." },
-        { "name": "CLAUDE_SESSION_LEARNER_ZK_PATH", "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent", "description": "Vault `Permanent/` dir used to ground `/digest` tag and link suggestions." }
+        { "name": "CLAUDE_SESSION_LEARNER_ZK_PATH", "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent", "description": "Vault `Permanent/` dir used to ground `pick-up` card links and tags." }
       ]
     },
     "autoresearch": {

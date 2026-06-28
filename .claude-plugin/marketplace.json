@@ -13,8 +13,8 @@
     {
       "name": "session-learner",
       "source": "./session-learner",
-      "description": "Session memory persistence, git-aware context, take-away reflections, and /digest for files/URLs → Zettelkasten cards",
-      "version": "1.1.2",
+      "description": "Turn a working session into atomic Zettelkasten knowledge via a wrap-up → pick-up → recommend reflection funnel",
+      "version": "2.0.0",
       "strict": true
     },
     {
