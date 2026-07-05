@@ -16,3 +16,8 @@ with its own `CLAUDE.md`.
 `CATALOG.md`, per-plugin `README.md`, and `site/*` are generated from
 `.claude-plugin/marketplace.json` + `content/plugins.content.json`. Run
 `./scripts/cicd.sh GEN` (or rely on the pre-commit hook) — never hand-edit them.
+
+Edit/Write on `CATALOG.md`, `*/README.md`, and `site/data/plugins.json` is
+mechanically denied (`.claude/settings.json`). `site/*.html` IS hand-editable —
+but GEN owns its `?v=` asset stamps and the plugin count. Repo harness notes:
+`.claude/docs/diagnosis-plugins-2026-07-05.md`.
