@@ -1,12 +1,12 @@
 ---
 name: rewrite
-description: Use to humanize / de-AI existing text — PR review comments, posts, emails, docs — in Traditional Chinese (zh-TW) or English, preserving meaning. Triggers on "humanize this", "make this sound less like AI / ChatGPT", "去AI味", "rewrite my PR comment to sound human", or "check my draft for AI-tells" (flag-only).
+description: Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning. Triggers on "humanize this", "make this sound less like AI / ChatGPT", "去AI味", "rewrite my PR comment to sound human", or "check my draft for AI-tells" (flag-only).
 ---
 
 # Rewrite (humanize existing text)
 
 Reshape existing text so it reads like a person wrote it, without changing what
-it says. This does NOT generate new content — it only rewrites material you give it.
+it says. This does NOT generate new content, it only rewrites material you give it.
 
 ## Before anything, obey the safety rails
 Read `${CLAUDE_PLUGIN_ROOT}/references/safety-rails.md` and apply it in order.
@@ -24,8 +24,9 @@ clean only formatting, and say why.
 
 ## 2. Resolve tone
 Preset name given? Resolve `$HUMANIZE_TONE_DIR/<name>.md` first, else
-`${CLAUDE_PLUGIN_ROOT}/presets/<name>.md`. No name, or no match → fall back to
-the built-in default for the detected language and say which preset you used.
+`${CLAUDE_PLUGIN_ROOT}/presets/<name>.md`. No name, or no match → proceed with
+no preset: apply the language reference and safety rails only, and say you
+used no tone preset.
 
 ## 3. Mode
 - **Default (transform):** rewrite to remove the clustered AI-tells from the

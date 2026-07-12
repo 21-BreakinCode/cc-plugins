@@ -291,7 +291,7 @@
         },
         {
           "name": "rewrite",
-          "description": "Use to humanize / de-AI existing text — PR review comments, posts, emails, docs — in Traditional Chinese (zh-TW) or English, preserving mea…"
+          "description": "Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning."
         }
       ],
       "dependsOn": [],

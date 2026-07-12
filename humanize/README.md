@@ -15,7 +15,7 @@ claude plugin install humanize@21-breakincode
 Invoke one directly as `/humanize:<skill>`, or let it activate automatically when relevant.
 
 - **`distill`** — Use to capture a writing voice into a reusable tone preset from samples or referenced materials.
-- **`rewrite`** — Use to humanize / de-AI existing text — PR review comments, posts, emails, docs — in Traditional Chinese (zh-TW) or English, preserving mea…
+- **`rewrite`** — Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning.
 
 ## Configuration
 
