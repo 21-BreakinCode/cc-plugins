@@ -51,6 +51,13 @@
       "description": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
       "version": "1.2.2",
       "strict": true
+    },
+    {
+      "name": "humanize",
+      "source": "./humanize",
+      "description": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
+      "version": "0.1.0",
+      "strict": true
     }
   ]
 }

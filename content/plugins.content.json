@@ -5,7 +5,8 @@
     { "id": "improve", "label": "Measure & Improve" },
     { "id": "review", "label": "Review & Design" },
     { "id": "workflow", "label": "Workflow & Handover" },
-    { "id": "media", "label": "Media" }
+    { "id": "media", "label": "Media" },
+    { "id": "content", "label": "Writing & Content" }
   ],
   "plugins": {
     "session-learner": {
@@ -58,6 +59,15 @@
       "category": "media",
       "dependsOn": [],
       "config": []
+    },
+    "humanize": {
+      "tagline": "Sound like a person, in zh-TW or English",
+      "summary": "Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.",
+      "category": "content",
+      "dependsOn": [],
+      "config": [
+        { "name": "HUMANIZE_TONE_DIR", "default": "—", "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets." }
+      ]
     }
   }
 }

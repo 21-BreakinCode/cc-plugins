@@ -7,6 +7,7 @@ const CAT_COLOR = {
   review: "var(--cat-review)",
   workflow: "var(--cat-workflow)",
   media: "var(--cat-media)",
+  content: "var(--cat-content)",
 };
 
 // Crafted 1.5px-stroke glyphs (Lucide-style), one per category — no emoji.
@@ -16,6 +17,7 @@ const CAT_ICON = {
   review: `<svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="3.5"/><line x1="9.5" y1="9.5" x2="13" y2="13"/><line x1="4" y1="6.5" x2="9" y2="6.5" opacity="0.5"/></svg>`,
   workflow: `<svg viewBox="0 0 16 16"><rect x="1" y="5.5" width="4" height="5" rx="1"/><rect x="6" y="5.5" width="4" height="5" rx="1"/><rect x="11" y="5.5" width="4" height="5" rx="1"/><line x1="5" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="11" y2="8"/></svg>`,
   media: `<svg viewBox="0 0 16 16"><rect x="1" y="4" width="14" height="10" rx="1.5"/><line x1="1" y1="7" x2="15" y2="7"/><line x1="5" y1="4" x2="3" y2="7"/><line x1="9" y1="4" x2="7" y2="7"/><line x1="13" y1="4" x2="11" y2="7"/><polyline points="6.5,9.5 10,11 6.5,12.5" fill="currentColor" stroke="none" opacity="0.7"/></svg>`,
+  content: `<svg viewBox="0 0 16 16"><path d="M10.5 2.5l3 3-7.5 7.5-3.5 1 1-3.5z"/><line x1="8.5" y1="4.5" x2="11.5" y2="7.5"/></svg>`,
 };
 
 const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;

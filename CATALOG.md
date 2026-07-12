@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.9.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.9.0 · 7 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -14,7 +14,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install remotion-maker@21-breakincode && \
   claude plugin install hh@21-breakincode && \
   claude plugin install code-reviewer@21-breakincode && \
-  claude plugin install uiux-optimizer@21-breakincode
+  claude plugin install uiux-optimizer@21-breakincode && \
+  claude plugin install humanize@21-breakincode
 ```
 
 ## Update everything
@@ -29,7 +30,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update remotion-maker@21-breakincode && \
   claude plugin update hh@21-breakincode && \
   claude plugin update code-reviewer@21-breakincode && \
-  claude plugin update uiux-optimizer@21-breakincode
+  claude plugin update uiux-optimizer@21-breakincode && \
+  claude plugin update humanize@21-breakincode
 ```
 
 ## Memory & Knowledge
@@ -101,3 +103,15 @@ A full pipeline for Remotion (React) videos: define a consistent style, generate
 **Install** · `claude plugin install remotion-maker@21-breakincode`
 
 **Commands** · `/remotion-maker:create` · `/remotion-maker:define-style` · `/remotion-maker:find-media` · `/remotion-maker:verify`
+
+## Writing & Content
+
+### [humanize](./humanize/README.md) · `v0.1.0`
+
+*Sound like a person, in zh-TW or English*
+
+Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.
+
+**Install** · `claude plugin install humanize@21-breakincode`
+
+**Skills** · `distill` · `rewrite`

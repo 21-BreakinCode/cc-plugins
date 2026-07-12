@@ -5,7 +5,7 @@
     "version": "1.9.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -21,10 +21,11 @@
         "remotion-maker@21-breakincode": true,
         "hh@21-breakincode": true,
         "code-reviewer@21-breakincode": true,
-        "uiux-optimizer@21-breakincode": true
+        "uiux-optimizer@21-breakincode": true,
+        "humanize@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode"
   },
   "categories": [
     {
@@ -61,6 +62,13 @@
       "label": "Media",
       "plugins": [
         "remotion-maker"
+      ]
+    },
+    {
+      "id": "content",
+      "label": "Writing & Content",
+      "plugins": [
+        "humanize"
       ]
     }
   ],
@@ -266,6 +274,34 @@
       ],
       "dependsOn": [],
       "config": []
+    },
+    {
+      "name": "humanize",
+      "version": "0.1.0",
+      "tagline": "Sound like a person, in zh-TW or English",
+      "summary": "Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.",
+      "category": "content",
+      "install": "claude plugin install humanize@21-breakincode",
+      "oneLiner": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
+      "commands": [],
+      "skills": [
+        {
+          "name": "distill",
+          "description": "Use to capture a writing voice into a reusable tone preset from samples or referenced materials."
+        },
+        {
+          "name": "rewrite",
+          "description": "Use to humanize / de-AI existing text — PR review comments, posts, emails, docs — in Traditional Chinese (zh-TW) or English, preserving mea…"
+        }
+      ],
+      "dependsOn": [],
+      "config": [
+        {
+          "name": "HUMANIZE_TONE_DIR",
+          "default": "—",
+          "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets."
+        }
+      ]
     }
   ]
 }
