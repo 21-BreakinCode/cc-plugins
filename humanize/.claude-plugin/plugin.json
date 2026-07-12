@@ -1,0 +1,8 @@
+{
+  "name": "humanize",
+  "description": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
