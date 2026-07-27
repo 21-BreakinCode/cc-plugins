@@ -34,9 +34,10 @@ Active on **every** reply until the user says "stop adhd mode" / "normal mode".
 
 ## Layer 2 — Review-Ready wrap-up
 
-Apply **only on the final turn of substantial, multi-step work** — a handoff where the
-user must decide or act next. This is Layer 1 applied to a summary: outcome-first, terse,
-blockers before FYI. Use these buckets, in this order, and **drop any that are empty**:
+Apply **only when both hold: the work is substantial and multi-step, AND this is its final
+turn** — a handoff where the user must decide or act next. This is Layer 1 applied to a
+summary: outcome-first, terse, blockers before FYI. Use these buckets, in this order, and
+**drop any that are empty**:
 
 1. **✅ Done** — what shipped and is verified. Past tense, outcome-first. No process
    narration.
