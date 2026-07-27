@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.9.0",
+    "version": "1.10.0",
     "repo": "21-BreakinCode/cc-plugins"
   },
   "plugins": [
@@ -56,6 +56,13 @@
       "name": "humanize",
       "source": "./humanize",
       "description": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
+      "version": "0.1.0",
+      "strict": true
+    },
+    {
+      "name": "adhd-review",
+      "source": "./adhd-review",
+      "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
       "version": "0.1.0",
       "strict": true
     }

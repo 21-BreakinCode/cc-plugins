@@ -1,0 +1,17 @@
+{
+  "description": "Always-on mode: inject the adhd-review output style into the main session when the opt-in flag ~/.claude/.adhd-review-always exists. Inert otherwise.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh\"",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

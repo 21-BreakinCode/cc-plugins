@@ -68,6 +68,15 @@
       "config": [
         { "name": "HUMANIZE_TONE_DIR", "default": "—", "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets." }
       ]
+    },
+    "adhd-review": {
+      "tagline": "Action-first replies, blockers before FYI",
+      "summary": "One output style, two layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. Applies to the human-facing thread only: the output-style mechanism and an opt-in SessionStart hook both target the main session, so subagent returns stay full-detail. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
+      "category": "workflow",
+      "dependsOn": [],
+      "config": [
+        { "name": "~/.claude/.adhd-review-always", "default": "absent", "description": "Opt-in flag FILE (not an env var) for always-on mode. `touch` it to auto-apply the style to every new session; `rm` to stop. Honors `$CLAUDE_CONFIG_DIR`. Absent = installing the plugin changes nothing." }
+      ]
     }
   }
 }

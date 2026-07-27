@@ -2,10 +2,10 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.9.0"
+    "version": "1.10.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -22,10 +22,11 @@
         "hh@21-breakincode": true,
         "code-reviewer@21-breakincode": true,
         "uiux-optimizer@21-breakincode": true,
-        "humanize@21-breakincode": true
+        "humanize@21-breakincode": true,
+        "adhd-review@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode"
   },
   "categories": [
     {
@@ -54,7 +55,8 @@
       "id": "workflow",
       "label": "Workflow & Handover",
       "plugins": [
-        "hh"
+        "hh",
+        "adhd-review"
       ]
     },
     {
@@ -300,6 +302,30 @@
           "name": "HUMANIZE_TONE_DIR",
           "default": "—",
           "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets."
+        }
+      ]
+    },
+    {
+      "name": "adhd-review",
+      "version": "0.1.0",
+      "tagline": "Action-first replies, blockers before FYI",
+      "summary": "One output style, two layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. Applies to the human-facing thread only: the output-style mechanism and an opt-in SessionStart hook both target the main session, so subagent returns stay full-detail. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
+      "category": "workflow",
+      "install": "claude plugin install adhd-review@21-breakincode",
+      "oneLiner": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
+      "commands": [],
+      "skills": [
+        {
+          "name": "adhd-review-mode",
+          "description": "Use to toggle the adhd-review output style for the current session — turn ADHD-friendly, action-first, blocker-before-FYI reply shaping on…"
+        }
+      ],
+      "dependsOn": [],
+      "config": [
+        {
+          "name": "~/.claude/.adhd-review-always",
+          "default": "absent",
+          "description": "Opt-in flag FILE (not an env var) for always-on mode. `touch` it to auto-apply the style to every new session; `rm` to stop. Honors `$CLAUDE_CONFIG_DIR`. Absent = installing the plugin changes nothing."
         }
       ]
     }

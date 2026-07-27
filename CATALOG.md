@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.9.0 · 7 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.10.0 · 8 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -15,7 +15,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install hh@21-breakincode && \
   claude plugin install code-reviewer@21-breakincode && \
   claude plugin install uiux-optimizer@21-breakincode && \
-  claude plugin install humanize@21-breakincode
+  claude plugin install humanize@21-breakincode && \
+  claude plugin install adhd-review@21-breakincode
 ```
 
 ## Update everything
@@ -31,7 +32,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update hh@21-breakincode && \
   claude plugin update code-reviewer@21-breakincode && \
   claude plugin update uiux-optimizer@21-breakincode && \
-  claude plugin update humanize@21-breakincode
+  claude plugin update humanize@21-breakincode && \
+  claude plugin update adhd-review@21-breakincode
 ```
 
 ## Memory & Knowledge
@@ -91,6 +93,16 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 **Install** · `claude plugin install hh@21-breakincode`
 
 **Commands** · `/hh:init-org` · `/hh:init-service` · `/hh:new` · `/hh:wrap-up`
+
+### [adhd-review](./adhd-review/README.md) · `v0.1.0`
+
+*Action-first replies, blockers before FYI*
+
+One output style, two layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. Applies to the human-facing thread only: the output-style mechanism and an opt-in SessionStart hook both target the main session, so subagent returns stay full-detail. Toggle per session with /adhd-review-mode or /output-style adhd-review.
+
+**Install** · `claude plugin install adhd-review@21-breakincode`
+
+**Skills** · `adhd-review-mode`
 
 ## Media
 
