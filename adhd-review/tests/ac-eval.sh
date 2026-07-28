@@ -82,6 +82,12 @@ t "L2: blockers before FYI (✅<⚠️<🙋<🤖 order)" '
   [ "$a" -lt "$b" ] && [ "$b" -lt "$c" ] && [ "$c" -lt "$d" ]'
 t "L2: has 'when NOT to apply' clause"  "grep -qi 'When NOT to' '$STYLE'"
 
+echo "── AC  Visual Layer [proxy] ──────────────────────────────────"
+t "VL: section present"                  "grep -qi 'Visual Layer' '$STYLE'"
+t "VL: triggers on flow-shaped concepts" "grep -qi 'flow-shaped' '$STYLE'"
+t "VL: fence-the-diagram rule"           "grep -qi 'fence' '$STYLE'"
+t "VL: anti-noise (no diagram for linear/trivial)" "grep -qi 'diagram the linear or the trivial' '$STYLE'"
+
 echo "── AC #7  subagent stand-down guard [proxy] ──────────────────"
 t "guard: human-facing-thread-only scope"      "grep -qi 'human-facing thread only' '$STYLE'"
 t "guard: tells subagent to ignore it"         "grep -qi 'you are a subagent' '$STYLE' && grep -qi 'ignore' '$STYLE'"

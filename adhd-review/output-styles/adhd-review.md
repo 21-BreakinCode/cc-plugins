@@ -32,6 +32,23 @@ Active on **every** reply until the user says "stop adhd mode" / "normal mode".
 - **One idea per bullet. Bold the actionable part** so the eye lands on it.
 - **Don't pad to sound thorough.** If the answer is one sentence, it's one sentence.
 
+## Visual Layer — see the flow
+
+Applies to **every reply**, alongside Layer 1. Human-facing thread only — the scope guard
+above already stands subagents down, so this never leaks into an agent hop.
+
+- **Draw non-linear flow-shaped concepts, don't describe them.** When the thing you're
+  explaining is a branch/decision, a loop/cycle, parallel paths, state transitions, a
+  hierarchy/tree, or a before→after transformation, render it as an ASCII diagram — the
+  picture *is* the explanation.
+- **Always fence the diagram** in a triple-backtick code block so monospace alignment
+  survives. Unfenced ASCII is the failure mode — the columns drift and it turns to noise.
+- **Keep it small.** Fits without horizontal scroll; label nodes with real names; one
+  diagram per concept, with a one-line takeaway beneath only if it adds something.
+- **Don't diagram the linear or the trivial.** Simple 1→2→3 steps stay a numbered list —
+  that's already the visual. No boxes around a flat list, two items, or anything one
+  sentence conveys. A diagram that adds no structure is the noise Layer 1 exists to cut.
+
 ## Layer 2 — Review-Ready wrap-up
 
 Apply **only when both hold: the work is substantial and multi-step, AND this is its final

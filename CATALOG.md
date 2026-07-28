@@ -106,11 +106,11 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 
 **Commands** · `/hh:init-org` · `/hh:init-service` · `/hh:new` · `/hh:wrap-up`
 
-### [adhd-review](./adhd-review/README.md) · `v0.2.0`
+### [adhd-review](./adhd-review/README.md) · `v0.3.0`
 
 *Action-first replies, blockers before FYI*
 
-One output style, two layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. Applies to the human-facing thread only: the output-style mechanism and a default-on SessionStart hook both target the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode or /output-style adhd-review.
+One output style, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: the output-style mechanism and a default-on SessionStart hook both target the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode or /output-style adhd-review.
 
 **Install** · `claude plugin install adhd-review@21-breakincode`
 
