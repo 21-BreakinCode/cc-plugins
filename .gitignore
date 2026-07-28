@@ -6,6 +6,10 @@
 .autoresearch/
 handover
 
+# Python bytecode
+__pycache__/
+*.pyc
+
 # Tooling installed via `npx skills add` (not marketplace content)
 .agents/
 .claude/skills/

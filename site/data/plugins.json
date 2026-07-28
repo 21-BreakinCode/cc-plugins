@@ -2,10 +2,10 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.10.0"
+    "version": "1.11.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -23,10 +23,11 @@
         "code-reviewer@21-breakincode": true,
         "uiux-optimizer@21-breakincode": true,
         "humanize@21-breakincode": true,
-        "adhd-review@21-breakincode": true
+        "adhd-review@21-breakincode": true,
+        "receipts@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode"
   },
   "categories": [
     {
@@ -48,7 +49,8 @@
       "label": "Review & Design",
       "plugins": [
         "code-reviewer",
-        "uiux-optimizer"
+        "uiux-optimizer",
+        "receipts"
       ]
     },
     {
@@ -326,6 +328,40 @@
           "name": "~/.claude/.adhd-review-always",
           "default": "absent",
           "description": "Opt-in flag FILE (not an env var) for always-on mode. `touch` it to auto-apply the style to every new session; `rm` to stop. Honors `$CLAUDE_CONFIG_DIR`. Absent = installing the plugin changes nothing."
+        }
+      ]
+    },
+    {
+      "name": "receipts",
+      "version": "0.1.0",
+      "tagline": "No claim without a receipt",
+      "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims hard-gate the turn — Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. Opt-in and fail-open; /receipts prints the session's audit ledger.",
+      "category": "review",
+      "install": "claude plugin install receipts@21-breakincode",
+      "oneLiner": "Stop-hook claim auditor — every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is blocked until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. Opt-in, fail-open.",
+      "commands": [
+        {
+          "name": "/receipts:receipts",
+          "description": "Show this session's receipts audit ledger — which FACT/completion claims were backed vs flagged unbacked."
+        }
+      ],
+      "skills": [],
+      "dependsOn": [],
+      "config": [
+        {
+          "name": "CLAUDE_RECEIPTS",
+          "default": "unset",
+          "description": "Master switch. Set to `1` to enable the auditor. Off by default — a blocking hook must be opt-in, so installing the plugin changes nothing until this is set."
+        },
+        {
+          "name": "CLAUDE_RECEIPTS_MODE",
+          "default": "block",
+          "description": "`block` = hard-gate unbacked claims until proven/downgraded; `warn` = allow but inject a ⚠ note listing them; `report` = silent audit log only. Dial down without uninstalling."
+        },
+        {
+          "name": "CLAUDE_RECEIPTS_MODEL",
+          "default": "claude-haiku-4-5",
+          "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle."
         }
       ]
     }

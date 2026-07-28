@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.10.0 · 8 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.11.0 · 9 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -16,7 +16,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install code-reviewer@21-breakincode && \
   claude plugin install uiux-optimizer@21-breakincode && \
   claude plugin install humanize@21-breakincode && \
-  claude plugin install adhd-review@21-breakincode
+  claude plugin install adhd-review@21-breakincode && \
+  claude plugin install receipts@21-breakincode
 ```
 
 ## Update everything
@@ -33,7 +34,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update code-reviewer@21-breakincode && \
   claude plugin update uiux-optimizer@21-breakincode && \
   claude plugin update humanize@21-breakincode && \
-  claude plugin update adhd-review@21-breakincode
+  claude plugin update adhd-review@21-breakincode && \
+  claude plugin update receipts@21-breakincode
 ```
 
 ## Memory & Knowledge
@@ -81,6 +83,16 @@ Orchestrates live design references (refero.design + the getdesign.md catalogue)
 **Install** · `claude plugin install uiux-optimizer@21-breakincode`
 
 **Skills** · `uiux-optimizer`
+
+### [receipts](./receipts/README.md) · `v0.1.0`
+
+*No claim without a receipt*
+
+A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims hard-gate the turn — Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. Opt-in and fail-open; /receipts prints the session's audit ledger.
+
+**Install** · `claude plugin install receipts@21-breakincode`
+
+**Commands** · `/receipts:receipts`
 
 ## Workflow & Handover
 
