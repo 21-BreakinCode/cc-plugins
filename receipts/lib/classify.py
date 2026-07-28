@@ -25,6 +25,14 @@ _WORK_KEYWORDS = (
     "compile", "typecheck", "coverage",
 )
 
+# Verbs asserting an observed outcome. With no tools this turn, such a claim is
+# a bluff (cheating); a purely analytical claim carrying none of these is not
+# observable and should escalate to the judge instead of being blocked.
+_COMPLETION_VERBS = (
+    "verified", "verify", "confirmed", "confirm", "returns", "returned",
+    "passes", "passed", "compiles", "compiled", "works", "succeeded", "ran",
+)
+
 _FILE_REF = re.compile(r"[\w./\\-]+\.\w+(?::\d+)?")
 _BACKTICKED = re.compile(r"`([^`]+)`")
 _QUOTED = re.compile(r"[\"']([^\"']{3,})[\"']")
@@ -100,9 +108,19 @@ def _work_success_contradicted(claim, blob):
     return bool(_FAIL_SIGNAL.search(blob))
 
 
+def _has_observable_signal(claim):
+    """The claim asserts something a tool could have observed this turn."""
+    low = claim.lower()
+    if any(re.search(rf"\b{k}\b", low) for k in _WORK_KEYWORDS):
+        return True
+    if _FILE_REF.search(claim):
+        return True
+    return any(re.search(rf"\b{v}\b", low) for v in _COMPLETION_VERBS)
+
+
 def classify(claim, tools):
     if not tools:
-        return CHEATING
+        return CHEATING if _has_observable_signal(claim) else ESCALATE
     anchors = _anchors(claim)
     if not anchors:
         return ESCALATE
