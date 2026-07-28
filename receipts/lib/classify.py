@@ -57,6 +57,21 @@ def _anchors(claim):
     return {a for a in found if len(a) >= _MIN_ANCHOR}
 
 
+def _anchor_variants(anchor):
+    """Path-tolerant forms of an anchor: as-is, without a leading './', basename.
+
+    Lets a claim citing `./src/App.tsx` match a tool that used `src/App.tsx`,
+    and a full path match a tool that referenced only the file name.
+    """
+    variants = {anchor}
+    if anchor.startswith("./"):
+        variants.add(anchor[2:])
+    base = re.split(r"[\\/]", anchor)[-1]
+    if len(base) >= _MIN_ANCHOR:
+        variants.add(base)
+    return variants
+
+
 def classify(claim, tools):
     if not tools:
         return CHEATING
@@ -65,7 +80,7 @@ def classify(claim, tools):
         return ESCALATE
     blob = _tool_blob(tools)
     for anchor in anchors:
-        if anchor.lower() in blob:
+        if any(v.lower() in blob for v in _anchor_variants(anchor)):
             return BACKED
     return CHEATING
 
