@@ -1,5 +1,5 @@
 {
-  "description": "Always-on mode: inject the adhd-review output style into the main session when the opt-in flag ~/.claude/.adhd-review-always exists. Inert otherwise.",
+  "description": "Inject the adhd-review output style into the main session. On by default; set CLAUDE_ADHD_REVIEW=0 to disable it for a session.",
   "hooks": {
     "SessionStart": [
       {

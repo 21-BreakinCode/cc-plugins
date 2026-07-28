@@ -23,16 +23,15 @@ Built-in equivalent: the user can run `/output-style adhd-review` instead of thi
 
 On "stop adhd mode" / "normal mode": drop the style and reply `Back to normal.` in one line.
 
-## Always-on (opt-in, survives across new sessions)
+## Always-on (default; disable per session)
 
-The style is per-session by default. To auto-apply it to **every new session**, flip a flag
-file that a `SessionStart` hook watches:
+A `SessionStart` hook injects this style into **every new session** by default — installing the
+plugin shapes the main thread out of the box. To silence it for a session, set an env var:
 
-- Enable:  `touch "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.adhd-review-always"`
-- Disable: `rm "${CLAUDE_CONFIG_DIR:-$HOME/.claude}/.adhd-review-always"`
+- Disable: `export CLAUDE_ADHD_REVIEW=0` (before launching, or in that session's shell)
+- Re-enable: unset it (or `export CLAUDE_ADHD_REVIEW=1`)
 
-Without the flag, installing the plugin changes nothing. The hook injects the style into the
-**main session only**.
+The hook injects the style into the **main session only**.
 
 ## Why this is human-facing only (the load-bearing design)
 
@@ -65,8 +64,7 @@ hard mechanism.
    subagent's **return** should be full, unshaped findings — NOT the ✅/⚠️/🙋 buckets. Only the
    orchestrator's final message to you carries the buckets. Confirm via the subagent transcript
    (`/tasks`, or `~/.claude/projects/{project}/{sessionId}/subagents/agent-{id}.jsonl`).
-3. **Always-on is opt-in.** With no flag file, a fresh session is not auto-shaped. After
-   `touch ~/.claude/.adhd-review-always`, a new session starts shaped; after `rm`, it stops.
-   Honors `$CLAUDE_CONFIG_DIR`.
-4. **Hook is inert without the flag.** `scripts/session-start.sh` exits 0 and emits nothing when
-   the flag is absent; emits the frontmatter-stripped style body when it's present.
+3. **Always-on by default.** A fresh session is auto-shaped out of the box. With
+   `CLAUDE_ADHD_REVIEW=0` set, a new session is not shaped; unset it and shaping returns.
+4. **Disable is a clean no-op.** With `CLAUDE_ADHD_REVIEW=0`, `scripts/session-start.sh` exits 0
+   and emits nothing; by default it emits the frontmatter-stripped style body.

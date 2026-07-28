@@ -71,21 +71,21 @@
     },
     "adhd-review": {
       "tagline": "Action-first replies, blockers before FYI",
-      "summary": "One output style, two layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. Applies to the human-facing thread only: the output-style mechanism and an opt-in SessionStart hook both target the main session, so subagent returns stay full-detail. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
+      "summary": "One output style, two layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. Applies to the human-facing thread only: the output-style mechanism and a default-on SessionStart hook both target the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
       "category": "workflow",
       "dependsOn": [],
       "config": [
-        { "name": "~/.claude/.adhd-review-always", "default": "absent", "description": "Opt-in flag FILE (not an env var) for always-on mode. `touch` it to auto-apply the style to every new session; `rm` to stop. Honors `$CLAUDE_CONFIG_DIR`. Absent = installing the plugin changes nothing." }
+        { "name": "CLAUDE_ADHD_REVIEW", "default": "unset → on", "description": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to `0` to disable it for that session; unset (or `1`) re-enables. The style targets the main thread only; subagents never inherit it." }
       ]
     },
     "receipts": {
       "tagline": "No claim without a receipt",
-      "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims hard-gate the turn — Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. Opt-in and fail-open; /receipts prints the session's audit ledger.",
+      "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
       "dependsOn": [],
       "config": [
-        { "name": "CLAUDE_RECEIPTS", "default": "unset", "description": "Master switch. Set to `1` to enable the auditor. Off by default — a blocking hook must be opt-in, so installing the plugin changes nothing until this is set." },
-        { "name": "CLAUDE_RECEIPTS_MODE", "default": "block", "description": "`block` = hard-gate unbacked claims until proven/downgraded; `warn` = allow but inject a ⚠ note listing them; `report` = silent audit log only. Dial down without uninstalling." },
+        { "name": "CLAUDE_RECEIPTS", "default": "unset → on", "description": "Master switch. On by default — installing the plugin activates the auditor. Set to `0` to disable it for a session (`1` also works, redundantly)." },
+        { "name": "CLAUDE_RECEIPTS_MODE", "default": "warn", "description": "`warn` (default) = allow the turn but inject a ⚠ note listing unbacked claims; `block` = hard-gate them until proven/downgraded; `report` = silent audit log only. Change per session with `/receipts block|warn|report` (persists until `/receipts default`); the /receipts override file takes precedence over this env var." },
         { "name": "CLAUDE_RECEIPTS_MODEL", "default": "claude-haiku-4-5", "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle." }
       ]
     }

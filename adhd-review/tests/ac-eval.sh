@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Acceptance-criteria conformance harness for the adhd-review plugin.
 #
-# Simulates each AC situation (fresh install, opt-in flag, custom config dir,
+# Simulates each AC situation (fresh install default-on, per-session disable,
 # subagent-context guard, doc sync) and emits a machine-readable score line
 # `ac_pass_rate: NN.N` that autoresearch's eval runner extracts, plus a
 # per-check PASS/FAIL log for humans.
@@ -40,9 +40,9 @@ t() { # t "description" 'shell expression'
 # Run the hook with a given config dir, writing stdout to <outfile>.
 # Returns the hook's exit code (a command-substitution subshell would swallow
 # a global, so we write to a file and let `return` carry the code up).
-run_hook() {
-  local cfg="$1" outfile="$2"
-  CLAUDE_PLUGIN_ROOT="$PLUGIN_DIR" CLAUDE_CONFIG_DIR="$cfg" bash "$HOOK_SH" >"$outfile" 2>/dev/null
+run_hook() { # cfg outfile [extra VAR=val env assignments...]
+  local cfg="$1" outfile="$2"; shift 2
+  env CLAUDE_PLUGIN_ROOT="$PLUGIN_DIR" CLAUDE_CONFIG_DIR="$cfg" "$@" bash "$HOOK_SH" >"$outfile" 2>/dev/null
   return $?
 }
 
@@ -89,26 +89,25 @@ t "guard: demands complete/full-detail return" "grep -Eqi 'complete, full-detail
 
 echo "── AC #6/#8  hook situations (dynamic) ───────────────────────"
 TMP="$(mktemp -d)"
-mkdir -p "$TMP/no-flag" "$TMP/with-flag"
-: > "$TMP/with-flag/.adhd-review-always"
+mkdir -p "$TMP/cfg"
 
-run_hook "$TMP/no-flag"   "$TMP/noflag.out"; rc_noflag=$?
-run_hook "$TMP/with-flag" "$TMP/flag.out";   rc_flag=$?
+# Default (no disable var): on → emits the style body.
+run_hook "$TMP/cfg" "$TMP/default.out"; rc_default=$?
+# Disabled for the session: CLAUDE_ADHD_REVIEW=0 → silent no-op.
+run_hook "$TMP/cfg" "$TMP/off.out" CLAUDE_ADHD_REVIEW=0; rc_off=$?
 
-t "fresh install (no flag): silent"          "[ ! -s '$TMP/noflag.out' ]"
-t "fresh install (no flag): exit 0"          "[ '$rc_noflag' = 0 ]"
-t "opt-in (flag present): emits body"        "[ -s '$TMP/flag.out' ]"
-t "opt-in (flag present): exit 0"            "[ '$rc_flag' = 0 ]"
-t "honors \$CLAUDE_CONFIG_DIR (flag dir triggers, empty dir stays silent)" \
-  "[ -s '$TMP/flag.out' ] && [ ! -s '$TMP/noflag.out' ]"
+t "default (no var): emits body"                 "[ -s '$TMP/default.out' ]"
+t "default (no var): exit 0"                      "[ '$rc_default' = 0 ]"
+t "disabled (CLAUDE_ADHD_REVIEW=0): silent"       "[ ! -s '$TMP/off.out' ]"
+t "disabled (CLAUDE_ADHD_REVIEW=0): exit 0"       "[ '$rc_off' = 0 ]"
 # Frontmatter stripped: injected context must not carry the YAML meta lines.
 t "frontmatter stripped from injected body" \
-  "! head -1 '$TMP/flag.out' | grep -qE '^(---|name:|description:)' && grep -q 'human-facing thread only' '$TMP/flag.out'"
-# Robustness: even with the flag on, an unset CLAUDE_PLUGIN_ROOT must stay a
+  "! head -1 '$TMP/default.out' | grep -qE '^(---|name:|description:)' && grep -q 'human-facing thread only' '$TMP/default.out'"
+# Robustness: even active-by-default, an unset CLAUDE_PLUGIN_ROOT must stay a
 # clean silent no-op — never a `set -u` abort. (Regression for the guard fix.)
-env -u CLAUDE_PLUGIN_ROOT CLAUDE_CONFIG_DIR="$TMP/with-flag" bash "$HOOK_SH" >"$TMP/noroot.out" 2>/dev/null
+env -u CLAUDE_PLUGIN_ROOT CLAUDE_CONFIG_DIR="$TMP/cfg" bash "$HOOK_SH" >"$TMP/noroot.out" 2>/dev/null
 rc_noroot=$?
-t "flag on but CLAUDE_PLUGIN_ROOT unset: silent + exit 0" \
+t "active but CLAUDE_PLUGIN_ROOT unset: silent + exit 0" \
   "[ ! -s '$TMP/noroot.out' ] && [ '$rc_noroot' = 0 ]"
 
 echo "── plugin-rules compliance ───────────────────────────────────"

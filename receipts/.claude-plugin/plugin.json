@@ -1,7 +1,7 @@
 {
   "name": "receipts",
-  "description": "Stop-hook claim auditor: every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is blocked until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. Opt-in, fail-open.",
-  "version": "0.1.0",
+  "description": "Stop-hook claim auditor: every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
+  "version": "0.2.0",
   "author": {
     "name": "William Hung"
   }

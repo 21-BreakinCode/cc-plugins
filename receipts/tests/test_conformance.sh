@@ -15,11 +15,12 @@ mkdir -p "${CLAUDE_CONFIG_DIR}"
 pass=0
 fail=0
 
-run_case() { # name expected_decision transcript_path session_id [stop_hook_active]
-  local name="$1" expect="$2" tp="$3" sid="$4" stop="${5:-false}"
+run_case() { # name expected_decision transcript_path session_id [stop_hook_active] [mode_env]
+  # mode_env: extra env assignment for the check (default block); pass "" for none.
+  local name="$1" expect="$2" tp="$3" sid="$4" stop="${5:-false}" mode_env="${6-CLAUDE_RECEIPTS_MODE=block}"
   local out got="approve"
   out=$(printf '{"transcript_path":"%s","session_id":"%s","stop_hook_active":%s}' "${tp}" "${sid}" "${stop}" \
-        | CLAUDE_RECEIPTS=1 python3 "${root}/lib/check.py" 2>/dev/null || true)
+        | env CLAUDE_RECEIPTS=1 ${mode_env} python3 "${root}/lib/check.py" 2>/dev/null || true)
   echo "${out}" | grep -q '"decision": *"block"' && got="block"
   if [ "${got}" = "${expect}" ]; then
     echo "ok   - ${name} (${got})"
@@ -55,6 +56,15 @@ run_case "no-claim -> approve" approve "${tmp}/noclaim.jsonl" s3
 
 # 4. Same bluff, fresh session, but stop_hook_active=true (loop backstop) -> approve, not block
 run_case "loop-backstop -> approve" approve "${tmp}/cheat.jsonl" s4 true
+
+# 5. Default mode is `warn` (no MODE env, no override file): bluff flagged, not blocked.
+run_case "default-warn -> approve" approve "${tmp}/cheat.jsonl" s5 false ""
+
+# 6. A /receipts mode override file wins over the env var: file=block beats env=warn.
+mkdir -p "${CLAUDE_CONFIG_DIR}/receipts"
+printf 'block\n' > "${CLAUDE_CONFIG_DIR}/receipts/mode"
+run_case "mode-file beats env -> block" block "${tmp}/cheat.jsonl" s6 false "CLAUDE_RECEIPTS_MODE=warn"
+rm -f "${CLAUDE_CONFIG_DIR}/receipts/mode"
 
 echo "---"
 echo "pass=${pass} fail=${fail}"

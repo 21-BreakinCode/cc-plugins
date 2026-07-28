@@ -8,8 +8,8 @@ set -euo pipefail
 # Don't recurse into our own headless judge call (judge.sh sets RECEIPTS_NESTED=1).
 [ "${RECEIPTS_NESTED:-0}" = "1" ] && exit 0
 
-# Opt-in: a blocking hook must be off by default.
-[ "${CLAUDE_RECEIPTS:-0}" = "1" ] || exit 0
+# On by default; an explicit CLAUDE_RECEIPTS=0 disables it for the session.
+[ "${CLAUDE_RECEIPTS:-1}" = "0" ] && exit 0
 
 lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/../lib" && pwd)"
 

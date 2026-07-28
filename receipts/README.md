@@ -2,7 +2,7 @@
 
 > No claim without a receipt
 
-A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims hard-gate the turn — Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. Opt-in and fail-open; /receipts prints the session's audit ledger.
+A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.
 
 ## Install
 
@@ -12,14 +12,14 @@ claude plugin install receipts@21-breakincode
 
 ## Commands
 
-- **`/receipts:receipts`** — Show this session's receipts audit ledger — which FACT/completion claims were backed vs flagged unbacked.
+- **`/receipts:receipts`** — Show this session's receipts audit ledger, or set the audit mode: /receipts [block|warn|report|default].
 
 ## Configuration
 
 | Variable | Default | Description |
 |---|---|---|
-| `CLAUDE_RECEIPTS` | `unset` | Master switch. Set to `1` to enable the auditor. Off by default — a blocking hook must be opt-in, so installing the plugin changes nothing until this is set. |
-| `CLAUDE_RECEIPTS_MODE` | `block` | `block` = hard-gate unbacked claims until proven/downgraded; `warn` = allow but inject a ⚠ note listing them; `report` = silent audit log only. Dial down without uninstalling. |
+| `CLAUDE_RECEIPTS` | `unset → on` | Master switch. On by default — installing the plugin activates the auditor. Set to `0` to disable it for a session (`1` also works, redundantly). |
+| `CLAUDE_RECEIPTS_MODE` | `warn` | `warn` (default) = allow the turn but inject a ⚠ note listing unbacked claims; `block` = hard-gate them until proven/downgraded; `report` = silent audit log only. Change per session with `/receipts block|warn|report` (persists until `/receipts default`); the /receipts override file takes precedence over this env var. |
 | `CLAUDE_RECEIPTS_MODEL` | `claude-haiku-4-5` | Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle. |
 
 ---

@@ -1,5 +1,5 @@
 {
-  "description": "On Stop, audit the just-finished turn's FACT/completion claims against the transcript's real tool calls; block until unbacked claims are proven or downgraded. Off unless CLAUDE_RECEIPTS=1.",
+  "description": "On Stop, audit the just-finished turn's FACT/completion claims against the transcript's real tool calls. On by default (mode: warn — flags unbacked claims; CLAUDE_RECEIPTS_MODE=block or /receipts block hard-gates them). Set CLAUDE_RECEIPTS=0 to disable.",
   "hooks": {
     "Stop": [
       {

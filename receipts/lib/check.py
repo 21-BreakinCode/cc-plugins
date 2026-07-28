@@ -55,6 +55,18 @@ def _config_dir():
     return os.path.join(base, "receipts")
 
 
+def _resolve_mode():
+    """Mode precedence: /receipts override file > CLAUDE_RECEIPTS_MODE env > warn."""
+    try:
+        with open(os.path.join(_config_dir(), "mode"), encoding="utf-8") as handle:
+            override = handle.read().strip().lower()
+        if override in ("block", "warn", "report"):
+            return override
+    except OSError:
+        pass
+    return os.environ.get("CLAUDE_RECEIPTS_MODE", "warn").lower()
+
+
 def _claim_hash(claim):
     return hashlib.sha1(claim.encode("utf-8")).hexdigest()[:16]
 
@@ -147,7 +159,7 @@ def main():
     transcript = payload.get("transcript_path")
     session_id = payload.get("session_id") or payload.get("sessionId") or "unknown"
     stop_active = bool(payload.get("stop_hook_active"))
-    mode = os.environ.get("CLAUDE_RECEIPTS_MODE", "block").lower()
+    mode = _resolve_mode()
 
     if not transcript or not os.path.exists(transcript):
         approve()

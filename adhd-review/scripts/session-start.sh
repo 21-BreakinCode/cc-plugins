@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# SessionStart hook — always-on mode for the adhd-review output style.
+# SessionStart hook — injects the adhd-review output style into the main session.
 #
-# Opt-in via a flag file; completely inert without it, so installing the plugin
-# alone changes nothing. Fires for the MAIN session only — subagents do not run
-# SessionStart hooks, so agent-to-agent hops stay full-detail by construction.
+# On by default; set CLAUDE_ADHD_REVIEW=0 to disable it for a session. Fires for
+# the MAIN session only — subagents do not run SessionStart hooks, so
+# agent-to-agent hops stay full-detail by construction.
 set -euo pipefail
 
-config_dir="${CLAUDE_CONFIG_DIR:-$HOME/.claude}"
-[ -f "$config_dir/.adhd-review-always" ] || exit 0   # no flag → do nothing, silently
+# On by default; an explicit CLAUDE_ADHD_REVIEW=0 disables it for the session.
+[ "${CLAUDE_ADHD_REVIEW:-1}" = "0" ] && exit 0
 
 # Only proceed inside plugin execution, where Claude Code injects the root.
 # Keeps the silent-no-op contract total: never abort under `set -u`.
