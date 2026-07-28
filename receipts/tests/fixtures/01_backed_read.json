@@ -1,0 +1,10 @@
+{
+  "_note": "FACT claims about a file that was Read this turn — clearly backed.",
+  "tools": [
+    {"name": "Read", "input": {"file_path": "src/app.py"}, "output": "import os\nimport sys\n# src/app.py"}
+  ],
+  "claims": [
+    {"text": "src/app.py imports os", "gold": "backed"},
+    {"text": "the file contains `import sys`", "gold": "backed"}
+  ]
+}

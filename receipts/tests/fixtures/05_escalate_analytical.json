@@ -1,0 +1,9 @@
+{
+  "_note": "Analytical claim over content already read — no concrete anchor. A tool ran, but the claim reasons over it. Judge should decide; prefilter should escalate.",
+  "tools": [
+    {"name": "Read", "input": {"file_path": "src/order.py"}, "output": "def validate(): ...\ndef charge(): ...\ndef notify(): ..."}
+  ],
+  "claims": [
+    {"text": "this module handles three separate concerns", "gold": "escalate"}
+  ]
+}

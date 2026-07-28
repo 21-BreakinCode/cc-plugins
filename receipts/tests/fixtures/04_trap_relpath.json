@@ -1,0 +1,9 @@
+{
+  "_note": "TRAP: claim cites `./src/App.tsx`; the Read used 'src/App.tsx' (no ./). Same file — really backed. Naive substring match misses the ./ form and wrongly says cheating.",
+  "tools": [
+    {"name": "Read", "input": {"file_path": "src/App.tsx"}, "output": "export function Button(){ return null }"}
+  ],
+  "claims": [
+    {"text": "`./src/App.tsx` renders a Button", "gold": "backed"}
+  ]
+}

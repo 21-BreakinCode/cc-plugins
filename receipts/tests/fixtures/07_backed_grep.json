@@ -1,0 +1,9 @@
+{
+  "_note": "Claim about call sites, backed by a Grep whose output shows them.",
+  "tools": [
+    {"name": "Grep", "input": {"pattern": "parse_order"}, "output": "src/order.py:12:def parse_order(o)\nsrc/api.py:44:    parse_order(x)"}
+  ],
+  "claims": [
+    {"text": "`parse_order` has two call sites", "gold": "backed"}
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "description": "On Stop, audit the just-finished turn's FACT/completion claims against the transcript's real tool calls; block until unbacked claims are proven or downgraded. Off unless CLAUDE_RECEIPTS=1.",
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/receipts-check.sh\"",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
