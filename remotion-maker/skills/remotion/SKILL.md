@@ -1,13 +1,13 @@
 ---
 name: remotion-best-practices
-description: Best practices for Remotion - Video creation in React
+description: Domain knowledge for Remotion (video creation in React). Use when writing or editing Remotion compositions, animations, captions, audio, FFmpeg, or renders.
 metadata:
   tags: remotion, video, react, animation, composition
 ---
 
 ## When to use
 
-Use this skills whenever you are dealing with Remotion code to obtain the domain-specific knowledge.
+Use this skill whenever you are dealing with Remotion code to obtain domain-specific knowledge.
 
 ## New project setup
 
@@ -21,7 +21,7 @@ Replace `my-video` with a suitable project name.
 
 ## Starting preview
 
-Stsrt the Remotion Studio to preview a video:
+Start the Remotion Studio to preview a video:
 
 ```bash
 npx remotion studio
@@ -91,7 +91,6 @@ Read individual rule files for detailed explanations and code examples:
 - [rules/videos.md](rules/videos.md) - Embedding videos in Remotion - trimming, volume, speed, looping, pitch
 - [rules/parameters.md](rules/parameters.md) - Make a video parametrizable by adding a Zod schema
 - [rules/maps.md](rules/maps.md) - Add a map using Mapbox and animate it
-- [rules/silence-detection.md](rules/silence-detection.md) - Adaptive silence detection using FFmpeg loudnorm and silencedetect
 - [rules/voiceover.md](rules/voiceover.md) - Adding AI-generated voiceover to Remotion compositions using ElevenLabs TTS
 
 ## Remotion-Maker Extensions
