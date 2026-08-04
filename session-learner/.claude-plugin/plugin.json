@@ -1,7 +1,7 @@
 {
   "name": "session-learner",
   "description": "Turn a working session into atomic Zettelkasten knowledge via a wrap-up → pick-up → recommend reflection funnel",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": {
     "name": "William Hung"
   }

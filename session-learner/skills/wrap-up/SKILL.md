@@ -23,7 +23,7 @@ Review the full conversation in this session, then produce exactly the two secti
 
 ### Candidate take-away topics
 
-2–6 atomic, reusable topics drawn from the session. NUMBER them. Each is one line: a concise title plus why it is worth keeping. Favor knowledge that is reusable across projects and conceptual over one-off fixes.
+2–6 atomic, reusable topics drawn from the session. **Number them** so `pick-up` and `recommend` can reference them by index. Each is one line: a concise title plus why it is worth keeping. Favor knowledge that is reusable across projects and conceptual over one-off fixes.
 
 ## Output format
 
@@ -54,9 +54,3 @@ If nothing substantial happened (no real work, debugging, or decisions), output 
 ```
 Not much to wrap up yet — no substantial work this session.
 ```
-
-## Constraints
-
-- DO NOT write any files. Terminal output only.
-- Topics MUST be numbered so pick-up and recommend can reference them by index.
-- Watch-outs MUST reference real session moments, not generic best practices.

@@ -5,7 +5,7 @@ description: Use after wrap-up when unsure which take-away topic matters most �
 
 # Recommend
 
-From the candidate topics in the last `wrap-up`, *converge*: pick exactly ONE to keep and justify it. Display everything in the terminal — DO NOT write any files.
+From the candidate topics in the last `wrap-up`, *converge*: pick exactly ONE to keep and justify it — don't produce cards, that's `pick-up`'s job. Display everything in the terminal — DO NOT write any files.
 
 ## Argument
 
@@ -44,8 +44,3 @@ Why this one:
 ---
 Deepen it →  /session-learner:pick-up <n>
 ```
-
-## Constraints
-
-- DO NOT write any files. Terminal output only.
-- Pick exactly ONE topic. Do not produce cards — that is pick-up's job.
