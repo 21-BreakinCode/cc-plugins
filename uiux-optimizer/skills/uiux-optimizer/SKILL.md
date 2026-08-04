@@ -1,6 +1,6 @@
 ---
 name: uiux-optimizer
-description: UI/UX design advisor for improving visual design, layout, and component patterns AND for project-start design discovery. Use when the user seeks to improve UI/UX ("improve the design", "optimize this UI", "how should this look", "make this look better", "this looks off", "feels clunky", "not polished", "spacing is weird", "review this component", "what would you change about this UI", "design feedback", "needs visual work", "layout feels wrong"), wants project-start direction ("I want to build a [task management / fintech / dev tool / AI chat / e-commerce / etc.] app", "what should this kind of app look like?", "show me design references for [domain]", "I need inspiration for a [product type]"), or wants to match a known brand's design language ("make it look like Linear", "I want a Stripe-style payment page", "match Notion's typography"). Pulls live references from the awesome-design-md catalogue (getdesign.md) and styles.refero.design. Also orchestrates two optional installed skills — design-taste-frontend (anti-slop taste discipline) and motion-design (motion choreography) — and offers a gated "ship" pipeline (direction → static → motion).
+description: UI/UX design advisor for improving visual design, layout, and component patterns, and for project-start design direction. Use when the user wants to improve or critique an existing UI ("improve the design", "make this look better", "this feels clunky", "review this component"), wants direction for a new app ("what should a fintech / dev-tool / AI-chat app look like?", "design references for [domain]"), or wants to match a named brand ("make it look like Linear", "a Stripe-style payment page", "match Notion's typography").
 ---
 
 # UI/UX Optimizer
@@ -9,13 +9,7 @@ Analyze UI code against real-world design patterns and provide concrete improvem
 
 ## When This Skill Activates
 
-- Direct requests: "improve the design", "optimize this UI", "how should this look", "make this look better", "design feedback"
-- Design dissatisfaction: "this looks off", "feels clunky", "not polished", "spacing is weird", "needs visual work"
-- Review mode: "review this component", "what would you change about this UI"
-- **Project-start discovery:** "I want to build a [task management / fintech dashboard / dev tool / AI chat / e-commerce / etc.] app", "what should this kind of app look like?", "show me design references for [domain]", "I need inspiration for a [product type]"
-- **Brand-match intent:** "make it look like Linear", "I want a Stripe-style payment page", "match Notion's typography"
-
-Do NOT auto-trigger on all UI code. Only when the user's language signals design intent.
+Trigger only when the user's language signals design intent — not on the mere presence of UI code. The three intents (improve/critique an existing UI · project-start direction for a new app · match a named brand) live in the description; the Decision Framework below routes whichever fired.
 
 ## Decision Framework
 
