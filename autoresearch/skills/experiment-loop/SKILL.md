@@ -31,7 +31,7 @@ Write a one-line hypothesis: what you're going to change and why you expect it t
 
 ### 2. Edit
 
-Make the edit to the target file(s). **One hypothesis per iteration.** Keep changes focused and minimal. Do not combine multiple unrelated changes.
+Make the edit to the target file(s). **One hypothesis per iteration** — keep changes focused and minimal, one idea at a time.
 
 ### 3. Eval
 
@@ -74,14 +74,14 @@ git add <target_files>
 git commit -m "autoresearch: iteration <N> — <metric_name> <old>→<new> (kept)"
 ```
 
-Log the iteration to experiments.json with `status: "kept"` and the commit SHA.
+Log the iteration to experiments.json with `status: "kept"`, the commit SHA, and your one-line reasoning.
 
 **If not improved (discard):**
 ```bash
 git checkout -- <target_files>
 ```
 
-Log the iteration to experiments.json with `status: "discarded"`. Include the diff that was attempted in `diff_summary` so the dashboard can show what was tried.
+Log the iteration to experiments.json with `status: "discarded"`, your reasoning, and the attempted change in `diff_summary` — the dashboard shows your thinking, not just scores.
 
 ### 6. Update Dashboard
 
@@ -151,12 +151,3 @@ ar_log_append_research <next_id> "<query>" '["<url1>", "<url2>"]' "<what you lea
 6. Proceed to the next iteration with the new knowledge
 
 Research does NOT count toward the iteration limit or consecutive non-improvement count.
-
-## Rules
-
-- **One hypothesis per iteration.** Never combine unrelated changes.
-- **Never skip eval.** Every edit must be evaluated before deciding keep/discard.
-- **Never skip dashboard update.** The user must be able to see progress.
-- **Always log reasoning.** The dashboard shows your thought process, not just scores.
-- **Revert completely on discard.** `git checkout -- <files>` must leave the working tree identical to before the edit.
-- **Compare against running best, not baseline.** The bar rises with each kept iteration.
