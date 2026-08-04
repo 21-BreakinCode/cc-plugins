@@ -72,6 +72,13 @@
       "description": "Stop-hook claim auditor — every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
       "version": "0.2.0",
       "strict": true
+    },
+    {
+      "name": "woop",
+      "source": "./woop",
+      "description": "A WOOP critical-thinking commit-lens for the dev lifecycle — turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
+      "version": "0.1.0",
+      "strict": true
     }
   ]
 }

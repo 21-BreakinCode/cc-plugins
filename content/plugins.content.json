@@ -88,6 +88,13 @@
         { "name": "CLAUDE_RECEIPTS_MODE", "default": "warn", "description": "`warn` (default) = allow the turn but inject a ⚠ note listing unbacked claims; `block` = hard-gate them until proven/downgraded; `report` = silent audit log only. Change per session with `/receipts block|warn|report` (persists until `/receipts default`); the /receipts override file takes precedence over this env var." },
         { "name": "CLAUDE_RECEIPTS_MODEL", "default": "claude-haiku-4-5", "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle." }
       ]
+    },
+    "woop": {
+      "tagline": "Turn a conclusion into an obstacle-aware if-then plan",
+      "summary": "A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it caps work you've already done and turns a conclusion into an obstacle-aware, if-then plan before you act, never redoing the analysis. One engine, four temporal modes: prevent (pre-mortem before you build), decide (pressure-test a conclusion before you commit), firefight (triage a live incident under hard constraints), and retro (convert a post-mortem into if-then commitments that stick). Every run reframes the surface wish into the essence-wish, then dispatches an adversarial read-only obstacle-hunter subagent that red-teams the plan and returns ranked obstacles with actionability plus if-then trigger seeds; only obstacles you can attach a trigger to become commitments, the rest stay visible flagged 'no if-then'. Output is a terminal WOOP INSIGHT (FACT/ASSUME/INSIGHT/SUGGEST) you check, with an optional ask-per-run record saved to docs/woop/ so if-then plans accumulate into a decision journal. Experimental. Self-contained — no hooks, no cross-plugin deps.",
+      "category": "review",
+      "dependsOn": [],
+      "config": []
     }
   }
 }

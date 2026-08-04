@@ -5,7 +5,7 @@
     "version": "1.11.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install woop@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -24,10 +24,11 @@
         "uiux-optimizer@21-breakincode": true,
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
-        "receipts@21-breakincode": true
+        "receipts@21-breakincode": true,
+        "woop@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update woop@21-breakincode"
   },
   "categories": [
     {
@@ -50,7 +51,8 @@
       "plugins": [
         "code-reviewer",
         "uiux-optimizer",
-        "receipts"
+        "receipts",
+        "woop"
       ]
     },
     {
@@ -364,6 +366,29 @@
           "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle."
         }
       ]
+    },
+    {
+      "name": "woop",
+      "version": "0.1.0",
+      "tagline": "Turn a conclusion into an obstacle-aware if-then plan",
+      "summary": "A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it caps work you've already done and turns a conclusion into an obstacle-aware, if-then plan before you act, never redoing the analysis. One engine, four temporal modes: prevent (pre-mortem before you build), decide (pressure-test a conclusion before you commit), firefight (triage a live incident under hard constraints), and retro (convert a post-mortem into if-then commitments that stick). Every run reframes the surface wish into the essence-wish, then dispatches an adversarial read-only obstacle-hunter subagent that red-teams the plan and returns ranked obstacles with actionability plus if-then trigger seeds; only obstacles you can attach a trigger to become commitments, the rest stay visible flagged 'no if-then'. Output is a terminal WOOP INSIGHT (FACT/ASSUME/INSIGHT/SUGGEST) you check, with an optional ask-per-run record saved to docs/woop/ so if-then plans accumulate into a decision journal. Experimental. Self-contained — no hooks, no cross-plugin deps.",
+      "category": "review",
+      "install": "claude plugin install woop@21-breakincode",
+      "oneLiner": "A WOOP critical-thinking commit-lens for the dev lifecycle — turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
+      "commands": [
+        {
+          "name": "/woop:woop",
+          "description": "Pressure-test a decision with WOOP — pick a mode (prevent/decide/firefight/retro) or type one directly."
+        }
+      ],
+      "skills": [
+        {
+          "name": "woop",
+          "description": "Use to pressure-test a decision with WOOP (Wish·Outcome·Obstacle·Plan) before you commit."
+        }
+      ],
+      "dependsOn": [],
+      "config": []
     }
   ]
 }

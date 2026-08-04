@@ -1,0 +1,8 @@
+{
+  "name": "woop",
+  "description": "A WOOP critical-thinking commit-lens for the dev lifecycle — turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}

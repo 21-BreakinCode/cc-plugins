@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.11.0 · 9 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.11.0 · 10 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -17,7 +17,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install uiux-optimizer@21-breakincode && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
-  claude plugin install receipts@21-breakincode
+  claude plugin install receipts@21-breakincode && \
+  claude plugin install woop@21-breakincode
 ```
 
 ## Update everything
@@ -35,7 +36,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update uiux-optimizer@21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
-  claude plugin update receipts@21-breakincode
+  claude plugin update receipts@21-breakincode && \
+  claude plugin update woop@21-breakincode
 ```
 
 ## Memory & Knowledge
@@ -93,6 +95,16 @@ A Stop hook that enforces provable claims. When the finished turn asserts a **FA
 **Install** · `claude plugin install receipts@21-breakincode`
 
 **Commands** · `/receipts:receipts`
+
+### [woop](./woop/README.md) · `v0.1.0`
+
+*Turn a conclusion into an obstacle-aware if-then plan*
+
+A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it caps work you've already done and turns a conclusion into an obstacle-aware, if-then plan before you act, never redoing the analysis. One engine, four temporal modes: prevent (pre-mortem before you build), decide (pressure-test a conclusion before you commit), firefight (triage a live incident under hard constraints), and retro (convert a post-mortem into if-then commitments that stick). Every run reframes the surface wish into the essence-wish, then dispatches an adversarial read-only obstacle-hunter subagent that red-teams the plan and returns ranked obstacles with actionability plus if-then trigger seeds; only obstacles you can attach a trigger to become commitments, the rest stay visible flagged 'no if-then'. Output is a terminal WOOP INSIGHT (FACT/ASSUME/INSIGHT/SUGGEST) you check, with an optional ask-per-run record saved to docs/woop/ so if-then plans accumulate into a decision journal. Experimental. Self-contained — no hooks, no cross-plugin deps.
+
+**Install** · `claude plugin install woop@21-breakincode`
+
+**Commands** · `/woop:woop`
 
 ## Workflow & Handover
 
