@@ -8,8 +8,10 @@ with its own `CLAUDE.md`.
 
 - General: `~/.claude/rules/dev-principles.md`, `~/.claude/rules/coding-style.md`, `~/.claude/rules/git-workflow.md`
 - Plugin development (sourcing, cross-plugin boundaries, generated docs, versioning) — **follow for any plugin change:**
+- Skill authoring (invocation, information hierarchy, leading words, failure modes) — **follow for any skill change:**
 
 @.claude/rules/plugin-rules.md
+@.claude/rules/writing-great-skills.md
 
 ## Docs are generated
 
