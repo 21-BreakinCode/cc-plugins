@@ -40,7 +40,7 @@ claude plugin marketplace update 21-breakincode && \
 
 ## Memory & Knowledge
 
-### [session-learner](./session-learner/README.md) · `v2.0.0`
+### [session-learner](./session-learner/README.md) · `v2.1.0`
 
 *Turn a session into atomic Zettelkasten knowledge*
 
@@ -52,7 +52,7 @@ A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session 
 
 ## Measure & Improve
 
-### [autoresearch](./autoresearch/README.md) · `v2.0.0`
+### [autoresearch](./autoresearch/README.md) · `v2.1.0`
 
 *Eval-driven improvement, plus the harness to drive it*
 
@@ -74,7 +74,7 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 
 **Commands** · `/code-reviewer:review-pr`
 
-### [uiux-optimizer](./uiux-optimizer/README.md) · `v1.2.2`
+### [uiux-optimizer](./uiux-optimizer/README.md) · `v1.3.0`
 
 *Reference-driven UI/UX design advisor*
 
@@ -118,7 +118,7 @@ One output style, three layers. Layer 1 shapes every reply — lead with the act
 
 ## Media
 
-### [remotion-maker](./remotion-maker/README.md) · `v0.1.1`
+### [remotion-maker](./remotion-maker/README.md) · `v0.2.0`
 
 *Generate styled Remotion videos, end to end*
 

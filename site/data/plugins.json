@@ -79,7 +79,7 @@
   "plugins": [
     {
       "name": "session-learner",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "tagline": "Turn a session into atomic Zettelkasten knowledge",
       "summary": "A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.",
       "category": "memory",
@@ -111,7 +111,7 @@
     },
     {
       "name": "autoresearch",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "tagline": "Eval-driven improvement, plus the harness to drive it",
       "summary": "Two halves of one loop. An edit → eval → keep/discard engine improves any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both, and showing progress on a live auto-refreshing dashboard. A harness builder scores project health across six categories, scaffolds the Tier-1 components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue through the same loop.",
       "category": "improve",
@@ -150,7 +150,7 @@
     },
     {
       "name": "remotion-maker",
-      "version": "0.1.1",
+      "version": "0.2.0",
       "tagline": "Generate styled Remotion videos, end to end",
       "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
       "category": "media",
@@ -177,7 +177,7 @@
       "skills": [
         {
           "name": "remotion-best-practices",
-          "description": "Best practices for Remotion - Video creation in React"
+          "description": "Domain knowledge for Remotion (video creation in React)."
         }
       ],
       "dependsOn": [],
@@ -263,7 +263,7 @@
     },
     {
       "name": "uiux-optimizer",
-      "version": "1.2.2",
+      "version": "1.3.0",
       "tagline": "Reference-driven UI/UX design advisor",
       "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
       "category": "review",
@@ -273,7 +273,7 @@
       "skills": [
         {
           "name": "uiux-optimizer",
-          "description": "UI/UX design advisor for improving visual design, layout, and component patterns AND for project-start design discovery."
+          "description": "UI/UX design advisor for improving visual design, layout, and component patterns, and for project-start design direction."
         }
       ],
       "dependsOn": [],
