@@ -45,6 +45,15 @@ sources:
 **What:** should be skipped.
 EOF
 
+cat > "$B/pitfalls/no-src.md" <<'EOF'
+---
+type: Pitfall
+title: no source pitfall
+status: stable
+---
+**What:** should be skipped for missing sources.
+EOF
+
 cat > "$B/index.md" <<'EOF'
 ---
 okf_version: "0.2"
@@ -73,6 +82,10 @@ assert "curated note present" 'printf "%s" "$OUT" | grep -q "Curated note lives 
 
 echo "Test: footer reports skipped-deprecated"
 assert "footer notes deprecated" 'printf "%s" "$OUT" | grep -qi "deprecated"'
+
+echo "Test: no-sources entry skipped and labeled distinctly"
+assert "no-src body not emitted" '! printf "%s" "$OUT" | grep -q "skipped for missing sources"'
+assert "footer notes skipped-no-sources, not deprecated" 'printf "%s" "$OUT" | grep -q "Skipped (no sources)" && ! printf "%s" "$OUT" | grep "Skipped deprecated" | grep -q "no-src.md"'
 
 rm -rf "$B"
 finish

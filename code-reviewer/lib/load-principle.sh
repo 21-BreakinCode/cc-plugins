@@ -19,7 +19,7 @@ cap="${2:-30000}"
 today="$(date +%F)"
 role_dirs=(red-flags pitfalls hotspots domain-traps review-patterns conventions)
 
-included=(); stale_list=(); truncated=(); skipped_dep=(); total=0
+included=(); stale_list=(); truncated=(); skipped_dep=(); skipped_malformed=(); total=0
 
 _fm() {  # extract frontmatter block of <file>
   awk 'NR==1&&/^---/{f=1;next} f&&/^---/{exit} f{print}' "$1"
@@ -31,7 +31,7 @@ _emit() {  # <file> ; returns 1 if skipped/truncated
   status="$(printf '%s\n' "$fm" | sed -n 's/^status:[[:space:]]*//p' | head -1)"
   status="${status:-stable}"
   [[ "$status" == "deprecated" ]] && { skipped_dep+=("$(basename "$f")"); return 1; }
-  printf '%s\n' "$fm" | grep -qE 'resource:[[:space:]]*[^[:space:]]' || { skipped_dep+=("$(basename "$f")"); return 1; }
+  printf '%s\n' "$fm" | grep -qE 'resource:[[:space:]]*[^[:space:]]' || { skipped_malformed+=("$(basename "$f")"); return 1; }
   stale="$(printf '%s\n' "$fm" | sed -n 's/^stale_after:[[:space:]]*//p' | head -1)"
   title="$(printf '%s\n' "$fm" | sed -n 's/^title:[[:space:]]*//p' | head -1)"
   type="$(printf '%s\n' "$fm" | sed -n 's/^type:[[:space:]]*//p' | head -1)"
@@ -50,6 +50,7 @@ for rd in "${role_dirs[@]}"; do
   [[ -d "$dir/$rd" ]] || continue
   for f in "$dir/$rd"/*.md; do
     [[ -e "$f" ]] || continue
+    [[ -r "$f" ]] || { printf 'warn: unreadable %s\n' "$f" >&2; continue; }
     _emit "$f" || true
   done
 done
@@ -73,5 +74,6 @@ printf 'Source dir: %s\n' "$dir"
 printf 'Included (%d): %s\n' "${#included[@]}" "${included[*]:-none}"
 (( ${#stale_list[@]} > 0 )) && printf 'Stale-flagged (%d): %s\n' "${#stale_list[@]}" "${stale_list[*]}"
 (( ${#skipped_dep[@]} > 0 )) && printf 'Skipped deprecated (%d): %s\n' "${#skipped_dep[@]}" "${skipped_dep[*]}"
+(( ${#skipped_malformed[@]} > 0 )) && printf 'Skipped (no sources) (%d): %s\n' "${#skipped_malformed[@]}" "${skipped_malformed[*]}"
 (( ${#truncated[@]} > 0 )) && printf 'Truncated for context budget (%d): %s\n' "${#truncated[@]}" "${truncated[*]}"
 printf 'Total chars: %d / cap %d\n' "$total" "$cap"
