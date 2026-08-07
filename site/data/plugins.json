@@ -228,7 +228,7 @@
     },
     {
       "name": "code-reviewer",
-      "version": "0.3.1",
+      "version": "1.0.0",
       "tagline": "Principle-aware PR review",
       "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists. Includes `refresh-principles`, which learns the repo's own principle files from merged git + PR history.",
       "category": "review",

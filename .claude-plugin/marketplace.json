@@ -42,7 +42,7 @@
       "name": "code-reviewer",
       "source": "./code-reviewer",
       "description": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, with configurable principle-directory roots.",
-      "version": "0.3.1",
+      "version": "1.0.0",
       "strict": true
     },
     {

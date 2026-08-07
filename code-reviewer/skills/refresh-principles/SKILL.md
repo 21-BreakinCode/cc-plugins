@@ -8,7 +8,9 @@ allowed-tools: ["Bash", "Read", "Edit", "Write", "AskUserQuestion"]
 # Refresh principles
 
 Mine this repo's **merged** history since the last watermark and distill
-evidence-anchored entries into the `01–07` principle files. Never invent — a
+evidence-anchored entries into OKF concept files — one concept per entry,
+written into its role subdir (`red-flags/`, `pitfalls/`, `hotspots/`,
+`domain-traps/`, `review-patterns/`, `conventions/`). Never invent — a
 finding without a citation is dropped. Never write without approval.
 
 ## Step 1 — Resolve (and if needed bootstrap) the principle dir
@@ -18,7 +20,19 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-principle-dir.sh"
 ```
 - Exit 0 → `PRINCIPLE_DIR=<stdout>`.
 - Exit 1/2 → tell the user no principle dir resolved; ask (AskUserQuestion) for an
-  absolute path to create. Create it and seed empty `01`–`07` `.md` files.
+  absolute path to create. Create it and seed the OKF skeleton: an `index.md`
+  with
+
+  ```
+  ---
+  okf_version: "0.2"
+  ---
+  # Overview — <repo>
+  ```
+
+  Role subdirs (`red-flags/`, `pitfalls/`, `hotspots/`, `domain-traps/`,
+  `review-patterns/`, `conventions/`) are not pre-created — they're created
+  lazily as concepts are written (Step 6).
 
 ## Step 2 — Determine the range
 
@@ -42,23 +56,28 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/mine-pr-signals.sh" "$BASE" "$SINCE"
 ## Step 4 — Distill (precision-first)
 
 Read `references/principle-file-format.md`. Turn ONLY high-signal, corroborated
-items into entries; prefer comments that went **outdated** after being posted —
-i.e. the flagged code was subsequently changed (`caused_change:true`) — plus
-reverts, hotfixes, and clusters recurring across ≥N PRs (N default 2). Every
-entry gets an `Evidence:` line. Route entries to files per the format table.
-Drop anything you cannot cite.
+items into concepts; prefer comments that went **outdated** after being posted
+(`caused_change:true`), plus reverts, hotfixes, and clusters recurring across
+≥N PRs (N default 2). Each item becomes ONE concept `.md` in its role subdir
+(role→type→dir map in the reference), filename = kebab-slug of the title, with
+a `sources:` list built from the cited PR#/SHA/comment URLs. Drop anything you
+cannot cite.
 
 ## Step 5 — Propose (approval gate)
 
-Show a unified diff of the proposed additions/updates to the principle files.
-Use AskUserQuestion: Approve / Edit / Skip. Do not proceed without approval.
+Show a unified diff of the proposed concept files. Use AskUserQuestion:
+Approve / Edit / Skip. On **Approve**, stamp each written concept with
+`generated: { by: refresh-principles/<model>, at: <now> }` and
+`verified: [ { by: human:<id>, at: <today> } ]` — approval doubles as human
+sign-off (→ trust tier human-reviewed). Do not proceed without approval.
 
 ## Step 6 — Write
 
-On approval, merge entries into the files (append new; update in place; dedupe by
-title+citation — never duplicate an existing PR#/SHA-cited entry). Regenerate
-`01-overview.md` (repo, window, counts). Writes are plain file writes; do NOT
-`git commit` the principle dir.
+On approval, write each concept `.md` into its role subdir; **dedupe by
+`sources[].resource`** (never write a concept whose resource already appears in
+the bundle). Regenerate `index.md` (okf_version + grouped listing, preserving
+any curated prose). Prepend a dated entry to `log.md`. Writes are plain file
+writes; do NOT `git commit` the principle dir.
 
 ## Step 7 — Advance the watermark (only after a successful write)
 

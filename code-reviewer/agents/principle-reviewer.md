@@ -30,7 +30,7 @@ Run:
 bash ${CLAUDE_PLUGIN_ROOT}/lib/load-principle.sh "<principle-dir>"
 ```
 
-This emits principle files in priority order (07-red-flags first, then 02-pitfalls, 05-hotspots, 04-domain-traps, 03-review-patterns, 06-conventions, 01-overview), capped at ~30K chars. The output includes a coverage footer.
+This emits concept bundles in priority order (red-flags first, then pitfalls, hotspots, domain-traps, review-patterns, conventions), capped at ~30K chars. Each concept is marked with a trust tier (`[human-reviewed]` or `[machine-confirmed]`) and staleness (`[STALE]` if applicable). Each concept's header also prints its bundle-relative path in parentheses, e.g. `=== RedFlag: some title [human-reviewed] (red-flags/some-slug.md) ===` — use that exact path verbatim when citing; do not reconstruct a slug from the title. The output includes a coverage footer.
 
 Read the emitted content carefully. These principles cite specific PRs, commits, and file:line locations — they are evidence, not opinion.
 
@@ -38,11 +38,16 @@ Read the emitted content carefully. These principles cite specific PRs, commits,
 
 For each substantive finding, classify and cite:
 
-- **`[red-flag-hit]`** — diff matches a pattern documented in `07-red-flags.md`. Highest priority. Often blocking.
-- **`[pitfall-repeat]`** — diff repeats a bug cluster documented in `02-pitfalls.md`.
-- **`[hotspot-touch]`** — diff modifies a file flagged in `05-hotspots.md` (high-bug-density). Not a finding by itself; raise scrutiny on the change.
-- **`[domain-trap]`** — diff trips a domain-knowledge gotcha from `04-domain-traps.md`.
-- **`[convention-deviation]`** — diff breaks an implicit team convention from `06-conventions.md`.
+- **`[red-flag-hit]`** — diff matches a pattern documented in `red-flags/<slug>.md`. Highest priority. Often blocking.
+- **`[pitfall-repeat]`** — diff repeats a bug cluster documented in `pitfalls/<slug>.md`.
+- **`[hotspot-touch]`** — diff modifies a file flagged in `hotspots/<slug>.md` (high-bug-density). Not a finding by itself; raise scrutiny on the change.
+- **`[domain-trap]`** — diff trips a domain-knowledge gotcha from `domain-traps/<slug>.md`.
+- **`[convention-deviation]`** — diff breaks an implicit team convention from `conventions/<slug>.md`.
+
+**Confidence weighting.** The loader marks each concept with a trust tier and staleness:
+- `[human-reviewed]` + not stale → full weight; a red-flag hit here is blocking.
+- `[machine-confirmed]` (no human `verified`) or `[STALE]` → lower confidence. Surface as
+  "verify still live" rather than blocking; note the staleness in your finding.
 
 Each finding **must** cite:
 - The diff location (`<file>:<line>`)
@@ -60,29 +65,28 @@ Output exactly this structure (the orchestrator's aggregator depends on it):
 #### Critical (red-flags / live-HEAD bug repeats)
 - [red-flag-hit] <one-line summary>
   - Diff: <file>:<line>
-  - Principle: 07-red-flags.md — <section header or L<n>>
+  - Principle: red-flags/<slug>.md — <section header or L<n>>
   - Why blocking: <one sentence>
 
 #### Important (pitfall repeats)
 - [pitfall-repeat] <summary>
   - Diff: <file>:<line>
-  - Principle: 02-pitfalls.md — <section / L<n>>
+  - Principle: pitfalls/<slug>.md — <section / L<n>>
   - Prior incident: <PR# or commit SHA from principle, if cited>
 
 #### Scrutiny (hotspot touches, domain traps)
 - [hotspot-touch] PR touches <file> — flagged as <N>/<M> PR hotspot
-  - Principle: 05-hotspots.md — <section>
+  - Principle: hotspots/<slug>.md — <section>
   - What to verify: <one sentence>
 
 #### Convention notes
 - [convention-deviation] <summary>
   - Diff: <file>:<line>
-  - Principle: 06-conventions.md — <section>
+  - Principle: conventions/<slug>.md — <section>
 
 ### Principle Coverage
 
-Reviewed against: <list of principle files actually loaded>
-(<N>/7 menu files present; <M> truncated for context budget)
+Reviewed against: <role dirs present and concept counts, from the loader footer>
 Principle source: <abs path>
 ```
 
@@ -99,4 +103,4 @@ No principle violations detected in this diff. Reviewed against: <files>.
 - **Do not** repeat findings already covered by the orchestrator's other agents (generic code quality, error handling, tests). Your unique value is **citing the repo's own history** — stick to that.
 - **Do not** invent principles. If a finding isn't backed by something you can quote from the principle files, don't emit it.
 - **Stay concise.** Each finding is ≤ 4 lines. The orchestrator already aggregates verbose perspectives; your job is sharp, citation-anchored signals.
-- If the principle is thin (e.g. only `01-overview.md` exists), emit `No principle violations detected` and note the thin coverage. Do not pad.
+- If the principle is thin (sparse concept coverage), emit `No principle violations detected` and note the thin coverage. Do not pad.
