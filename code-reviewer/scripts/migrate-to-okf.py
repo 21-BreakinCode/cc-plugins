@@ -48,6 +48,21 @@ def split_entries(body):  # -> list of (title, block_text)
         out.append((cur_title, "\n".join(cur)))
     return out
 
+_SEED_SENT = "Evidence-anchored entries mined from merged git+PR history."
+
+def preamble_before_blocks(body):  # prose before the first '### ' heading, or whole body if none
+    if body.startswith("### "):
+        return ""
+    i = body.find("\n### ")
+    return (body if i == -1 else body[:i]).strip()
+
+def is_meaningful(text):  # True unless text is blank, headings-only, or pure seed boilerplate
+    for ln in text.splitlines():
+        s = ln.strip()
+        if s and not s.startswith("#") and s != _SEED_SENT:
+            return True
+    return False
+
 def parse_sources(block):  # -> list of resource strings
     m = re.search(r"^-\s*\*\*Evidence:\*\*(.*)$", block, re.MULTILINE)
     if not m:
@@ -69,17 +84,26 @@ def field(block, label):  # extract '- **Label:** value', capturing wrapped cont
     if not m: return ""
     return " ".join(ln.strip() for ln in m.group(1).splitlines()).strip()
 
+_KNOWN_BULLETS = re.compile(
+    r"(?ms)^-\s*\*\*(?:What|Evidence|Why it matters):\*\*.*?(?=\n-\s*\*\*|\n\s*\n|\Z)")
+
+def block_notes(block):  # remaining bullets after What/Evidence/Why it matters are stripped
+    leftover = _KNOWN_BULLETS.sub("", block)
+    return "\n".join(ln for ln in leftover.splitlines() if ln.strip()).strip()
+
 def yaml_str(s):  # quote only when the raw scalar would be YAML-hostile
     if re.search(r'''[:#\[\]{}&*!|>%@`"']''', s) or s.strip() != s:
         return '"%s"' % s.replace('\\', '\\\\').replace('"', '\\"')
     return s
 
-def concept_md(ctype, title, sources, what, why):
+def concept_md(ctype, title, sources, what, why, notes=""):
     src_yaml = "".join("  - resource: %s\n" % s for s in sources)
     what = what or "(migrated)"
     body = "**What:** %s\n" % what
     if why:
         body += "\n**Why it matters:** %s\n" % why
+    if notes:
+        body += "\n**Notes:**\n%s\n" % notes
     return (
         "---\n"
         "type: %s\n" % ctype +
@@ -102,7 +126,11 @@ def main(bundle):
         if not os.path.isfile(p):
             continue
         body = strip_frontmatter(open(p).read())
-        for title, block in split_entries(body):
+        entries = split_entries(body)
+        pre = preamble_before_blocks(body)
+        if is_meaningful(pre):
+            curated_notes.append("### (preamble from %s.md)\n%s" % (stem, pre))
+        for title, block in entries:
             title = re.sub(r"\s*\(\d+\s*lines?\)\s*$", "", title)  # drop hotspot "(216 lines)" suffix
             sources = parse_sources(block)
             if not sources:
@@ -117,7 +145,8 @@ def main(bundle):
                 path = os.path.join(dst, "%s-%d.md" % (fn, i)); i += 1
             what = field(block, "What")
             why  = field(block, "Why it matters")
-            open(path, "w").write(concept_md(ctype, title, sources, what, why))
+            notes = block_notes(block)
+            open(path, "w").write(concept_md(ctype, title, sources, what, why, notes))
             concepts[subdir].append((title, os.path.basename(path)))
             n += 1
 
