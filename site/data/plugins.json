@@ -228,9 +228,9 @@
     },
     {
       "name": "code-reviewer",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "tagline": "Principle-aware PR review",
-      "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists.",
+      "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists. Includes `refresh-principles`, which learns the repo's own principle files from merged git + PR history.",
       "category": "review",
       "install": "claude plugin install code-reviewer@21-breakincode",
       "oneLiner": "Principle-aware PR review. Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, with configurable principle-directory roots.",
@@ -240,7 +240,12 @@
           "description": "Principle-aware PR review — layers a repo-specific review mindset on top of the standard 4+6 multi-agent review"
         }
       ],
-      "skills": [],
+      "skills": [
+        {
+          "name": "refresh-principles",
+          "description": "Refresh a repo's CodeReviewPrinciple files by learning from merged git + PR history (including reviewer↔author threads)."
+        }
+      ],
       "dependsOn": [
         "pr-review-toolkit",
         "hh"
