@@ -66,7 +66,7 @@ Two halves of one loop. An edit → eval → keep/discard engine improves any ar
 
 ## Review & Design
 
-### [code-reviewer](./code-reviewer/README.md) · `v0.3.0`
+### [code-reviewer](./code-reviewer/README.md) · `v0.3.1`
 
 *Principle-aware PR review*
 
