@@ -12,6 +12,11 @@ cat > "$B/07-red-flags.md" <<'EOF'
 - **What:** indexing streams[0] on a 0-byte upload crashes.
 - **Evidence:** PR #812 (https://github.com/plaxieappier/video-center-2/pull/812) · commit a1b2c3d4e5f — 2026-03-01
 - **Why it matters:** hard crash in the ingest path.
+
+### Bug: race condition in ingest
+- **What:** two workers claim the same
+  job when the queue is drained concurrently.
+- **Evidence:** PR #900 (https://github.com/plaxieappier/video-center-2/pull/900)
 EOF
 cat > "$B/02-pitfalls.md" <<'EOF'
 # Pitfalls
@@ -38,6 +43,12 @@ assert "type present"     'grep -q "^type: RedFlag" "$B/red-flags/null-deref-on-
 assert "pr source present" 'grep -q "pull/812" "$B/red-flags/null-deref-on-empty-audio-stream.md"'
 assert "sha source present" 'grep -q "a1b2c3d4e5f" "$B/red-flags/null-deref-on-empty-audio-stream.md"'
 assert "verified stamped"  'grep -q "human:whung" "$B/red-flags/null-deref-on-empty-audio-stream.md"'
+
+echo "Test: colon-in-title is YAML-quoted"
+assert "quoted title" 'grep -q '"'"'title: "Bug: race condition in ingest"'"'"' "$B/red-flags/bug-race-condition-in-ingest.md"'
+
+echo "Test: wrapped What continuation line is captured, not truncated"
+assert "continuation text present" 'grep -q "job when the queue is drained concurrently" "$B/red-flags/bug-race-condition-in-ingest.md"'
 
 echo "Test: uncited legacy block folded into index.md, not a concept"
 assert "no pitfall concept" '[ -z "$(ls -A "$B/pitfalls" 2>/dev/null)" ] || ! ls "$B/pitfalls"/*.md >/dev/null 2>&1'

@@ -64,9 +64,15 @@ def parse_sources(block):  # -> list of resource strings
         if h not in res: res.append(h)
     return res
 
-def field(block, label):  # extract '- **Label:** value'
-    m = re.search(r"^-\s*\*\*%s:\*\*\s*(.*)$" % re.escape(label), block, re.MULTILINE)
-    return m.group(1).strip() if m else ""
+def field(block, label):  # extract '- **Label:** value', capturing wrapped continuation lines
+    m = re.search(r"^-\s*\*\*%s:\*\*\s*(.*?)(?=\n-\s*\*\*|\n\s*\n|\Z)" % re.escape(label), block, re.MULTILINE | re.DOTALL)
+    if not m: return ""
+    return " ".join(ln.strip() for ln in m.group(1).splitlines()).strip()
+
+def yaml_str(s):  # quote only when the raw scalar would be YAML-hostile
+    if re.search(r'''[:#\[\]{}&*!|>%@`"']''', s) or s.strip() != s:
+        return '"%s"' % s.replace('\\', '\\\\').replace('"', '\\"')
+    return s
 
 def concept_md(ctype, title, sources, what, why):
     src_yaml = "".join("  - resource: %s\n" % s for s in sources)
@@ -77,7 +83,7 @@ def concept_md(ctype, title, sources, what, why):
     return (
         "---\n"
         "type: %s\n" % ctype +
-        "title: %s\n" % title +
+        "title: %s\n" % yaml_str(title) +
         "status: stable\n"
         "stale_after: %s\n" % STALE +
         "sources:\n" + src_yaml +
