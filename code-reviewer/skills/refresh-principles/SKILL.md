@@ -8,7 +8,9 @@ allowed-tools: ["Bash", "Read", "Edit", "Write", "AskUserQuestion"]
 # Refresh principles
 
 Mine this repo's **merged** history since the last watermark and distill
-evidence-anchored entries into the `01–07` principle files. Never invent — a
+evidence-anchored entries into OKF concept files — one concept per entry,
+written into its role subdir (`red-flags/`, `pitfalls/`, `hotspots/`,
+`domain-traps/`, `review-patterns/`, `conventions/`). Never invent — a
 finding without a citation is dropped. Never write without approval.
 
 ## Step 1 — Resolve (and if needed bootstrap) the principle dir
@@ -18,7 +20,19 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-principle-dir.sh"
 ```
 - Exit 0 → `PRINCIPLE_DIR=<stdout>`.
 - Exit 1/2 → tell the user no principle dir resolved; ask (AskUserQuestion) for an
-  absolute path to create. Create it and seed empty `01`–`07` `.md` files.
+  absolute path to create. Create it and seed the OKF skeleton: an `index.md`
+  with
+
+  ```
+  ---
+  okf_version: "0.2"
+  ---
+  # Overview — <repo>
+  ```
+
+  Role subdirs (`red-flags/`, `pitfalls/`, `hotspots/`, `domain-traps/`,
+  `review-patterns/`, `conventions/`) are not pre-created — they're created
+  lazily as concepts are written (Step 6).
 
 ## Step 2 — Determine the range
 

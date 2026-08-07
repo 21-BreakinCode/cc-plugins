@@ -30,7 +30,7 @@ Run:
 bash ${CLAUDE_PLUGIN_ROOT}/lib/load-principle.sh "<principle-dir>"
 ```
 
-This emits concept bundles in priority order (red-flags first, then pitfalls, hotspots, domain-traps, review-patterns, conventions), capped at ~30K chars. Each concept is marked with a trust tier (`[human-reviewed]` or `[machine-confirmed]`) and staleness (`[STALE]` if applicable). The output includes a coverage footer.
+This emits concept bundles in priority order (red-flags first, then pitfalls, hotspots, domain-traps, review-patterns, conventions), capped at ~30K chars. Each concept is marked with a trust tier (`[human-reviewed]` or `[machine-confirmed]`) and staleness (`[STALE]` if applicable). Each concept's header also prints its bundle-relative path in parentheses, e.g. `=== RedFlag: some title [human-reviewed] (red-flags/some-slug.md) ===` — use that exact path verbatim when citing; do not reconstruct a slug from the title. The output includes a coverage footer.
 
 Read the emitted content carefully. These principles cite specific PRs, commits, and file:line locations — they are evidence, not opinion.
 

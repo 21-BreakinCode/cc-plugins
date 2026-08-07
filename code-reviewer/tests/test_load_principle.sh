@@ -70,6 +70,9 @@ assert "red-flag precedes pitfall" '[ "$(printf "%s" "$OUT" | grep -m1 -n "old b
 echo "Test: stale entry flagged"
 assert "old blocker marked STALE" 'printf "%s" "$OUT" | grep -q "old blocker \[STALE\]"'
 
+echo "Test: header carries bundle-relative path for citation"
+assert "red-flag header includes path" 'printf "%s" "$OUT" | grep -q "(red-flags/old-blocker.md)"'
+
 echo "Test: trust tiers surfaced"
 assert "red-flag human-reviewed" 'printf "%s" "$OUT" | grep -q "\[human-reviewed\]"'
 assert "pitfall machine-confirmed" 'printf "%s" "$OUT" | grep -q "\[machine-confirmed\]"'

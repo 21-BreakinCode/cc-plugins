@@ -26,7 +26,7 @@ _fm() {  # extract frontmatter block of <file>
 }
 
 _emit() {  # <file> ; returns 1 if skipped/truncated
-  local f="$1" fm status stale title type tier flag="" chunk size
+  local f="$1" fm status stale title type tier flag="" chunk size rel
   fm="$(_fm "$f")"
   status="$(printf '%s\n' "$fm" | sed -n 's/^status:[[:space:]]*//p' | head -1)"
   status="${status:-stable}"
@@ -37,7 +37,8 @@ _emit() {  # <file> ; returns 1 if skipped/truncated
   type="$(printf '%s\n' "$fm" | sed -n 's/^type:[[:space:]]*//p' | head -1)"
   if printf '%s\n' "$fm" | grep -q '^verified:'; then tier="human-reviewed"; else tier="machine-confirmed"; fi
   if [[ -n "$stale" && "$stale" < "$today" ]]; then flag=" [STALE]"; stale_list+=("$(basename "$f")"); fi
-  chunk="=== ${type}: ${title}${flag} [${tier}] ===
+  rel="$(basename "$(dirname "$f")")/$(basename "$f")"
+  chunk="=== ${type}: ${title}${flag} [${tier}] (${rel}) ===
 $(cat "$f")
 "
   size=${#chunk}
