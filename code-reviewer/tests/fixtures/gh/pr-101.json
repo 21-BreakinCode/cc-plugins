@@ -1,0 +1,9 @@
+{
+  "number":101,
+  "reviews":[{"state":"CHANGES_REQUESTED","author":{"login":"reviewer1"}}],
+  "files":[{"path":"src/auth.ts"}],
+  "comments":[
+    {"path":"src/auth.ts","line":10,"body":"missing null check","url":"https://x/c1","author":{"login":"reviewer1"}},
+    {"path":"src/other.ts","line":3,"body":"nit","url":"https://x/c2","author":{"login":"reviewer1"}}
+  ]
+}
