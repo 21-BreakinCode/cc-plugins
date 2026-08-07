@@ -1,0 +1,6 @@
+# Generated docs (see CLAUDE.md "Docs are generated"; produced by ./scripts/cicd.sh GEN).
+# Marking them linguist-generated excludes them from code-reviewer's history-learner
+# churn/hotspots and collapses their diffs on GitHub.
+CATALOG.md linguist-generated=true
+site/data/plugins.json linguist-generated=true
+*/README.md linguist-generated=true
