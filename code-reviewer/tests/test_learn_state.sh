@@ -16,5 +16,11 @@ got="$(bash "$LIB" read "$tmp")"
 assert "last_merged_at persisted" '[ "$(echo "$got" | jq -r .last_merged_at)" = "2026-08-01T12:00:00Z" ]'
 assert "last_merged_sha persisted" '[ "$(echo "$got" | jq -r .last_merged_sha)" = "abc1234" ]'
 assert "counts persisted" '[ "$(echo "$got" | jq -r ".counts.\"07-red-flags\"")" = "2" ]'
+
+echo "Test: write with omitted counts defaults to {}"
+sf2="$(bash "$LIB" write "$tmp" "2026-08-02T00:00:00Z" "def5678")"
+got2="$(bash "$LIB" read "$tmp")"
+assert "omitted counts defaults to {}" '[ "$(echo "$got2" | jq -c .counts)" = "{}" ]'
+
 rm -rf "$tmp"
 finish

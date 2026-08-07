@@ -15,7 +15,7 @@ case "$cmd" in
     ;;
   write)
     [[ -d "$dir" ]] || die "principle dir not found: $dir" 2
-    merged_at="${3:-}"; sha="${4:-}"; counts="${5}"
+    merged_at="${3:-}"; sha="${4:-}"; counts="${5-}"
     [[ -n "$counts" ]] || counts="{}"
     tmp="$(mktemp)"
     jq -n --arg at "$merged_at" --arg sha "$sha" --argjson counts "$counts" \
