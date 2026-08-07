@@ -42,10 +42,11 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/mine-pr-signals.sh" "$BASE" "$SINCE"
 ## Step 4 — Distill (precision-first)
 
 Read `references/principle-file-format.md`. Turn ONLY high-signal, corroborated
-items into entries; prefer PR comments with `caused_change:true`, reverts,
-hotfixes, and clusters recurring across ≥N PRs (N default 2). Every entry gets an
-`Evidence:` line. Route entries to files per the format table. Drop anything you
-cannot cite.
+items into entries; prefer comments that went **outdated** after being posted —
+i.e. the flagged code was subsequently changed (`caused_change:true`) — plus
+reverts, hotfixes, and clusters recurring across ≥N PRs (N default 2). Every
+entry gets an `Evidence:` line. Route entries to files per the format table.
+Drop anything you cannot cite.
 
 ## Step 5 — Propose (approval gate)
 

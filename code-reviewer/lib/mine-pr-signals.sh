@@ -21,20 +21,20 @@ _pr_detail() {  # $1 = PR number → {number,reviews,files,comments}
   slug="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
   pv="$(gh pr view "$n" --json number,reviews,files)"
   inline="$(gh api "repos/$slug/pulls/$n/comments" \
-    --jq '[.[]|{path, line:(.line // .original_line), body, url:.html_url, author:{login:.user.login}}]')"
+    --jq '[.[]|{path, line:(.line // .original_line), position, original_position, created_at, body, url:.html_url, author:{login:.user.login}}]')"
   jq -n --argjson pv "$pv" --argjson c "$inline" '$pv + {comments:$c}'
 }
 
 _pr_list | jq -c '.[]' | while read -r pr; do
   n="$(echo "$pr" | jq -r '.number')"
   detail="$(_pr_detail "$n")"
+  # ponytail: caused_change ≈ comment went outdated (its code changed after it was posted); upgrade = correlate comment line-region vs commits with committedDate > comment.created_at
   jq -n --argjson pr "$pr" --argjson d "$detail" '
-    ($d.files // [] | map(.path)) as $paths
-    | $pr + {
+    $pr + {
         reviews:  ($d.reviews  // [] | map({state, author:(.author.login // "?")})),
         comments: ($d.comments // [] | map({
           path, line, body, url, author:(.author.login // "?"),
-          caused_change: ((.path as $path | $paths | index($path)) != null)
+          caused_change: (.original_position != null and .position == null)
         }))
       }'
 done | jq -s '.'
