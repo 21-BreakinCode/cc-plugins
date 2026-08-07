@@ -24,6 +24,16 @@ gh pr diff <PR_NUMBER> --name-only
 
 Examine the diff and changed-files list to understand the scope.
 
+## Phase 1.5: Coverage pre-pass (deterministic)
+
+```bash
+bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh coverage <PR_NUMBER>
+```
+
+Every `covered:true` file MUST be reflected in the review. Report every
+`uncovered` file explicitly as `excluded: <reason>` in the final report — a
+changed file is never silently omitted.
+
 ## Phase 2: Resolve principle directory (NEW)
 
 Run:
@@ -245,6 +255,11 @@ Ready-to-use PR comment. Should:
 
 ## Notes
 
+- **Validate finding locations.** Before emitting, run
+  `bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh validate <PR_NUMBER> <findings.json>`
+  (write the aggregated findings to a temp JSON of `{file,line,summary}` objects).
+  Any finding returned with `flag: "unverified location"` is kept but tagged
+  `(unverified location)` — never silently dropped.
 - **Promote red-flag-hits to Critical** when the principle-reviewer emits them — these represent documented live HEAD bugs or repeated regressions, not generic suggestions.
 - If ALL code looks good, verdict is APPROVE and the PR comment is a concise LGTM noting what was reviewed.
 - Adjust review depth to user's context (bugfix → regression + edge cases focus; feature → architecture + tests focus).
