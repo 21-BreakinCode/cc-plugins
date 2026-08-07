@@ -1,28 +1,48 @@
-# Principle file format
+# OKF concept format (v0.2)
 
-Each of `01-overview` … `07-red-flags` is a Markdown file of **entries**. Every
-entry MUST carry an `Evidence:` line citing at least one source — no citation,
-no entry (precision-first).
+A principle bundle is an OKF v0.2 directory tree. Each mined entry is ONE
+concept `.md` file with YAML frontmatter, grouped in a role subdir. Reserved
+files `index.md` (listing) and `log.md` (history) carry no `type`/`sources`.
 
-## Entry template
+## Concept schema
 
-### <short imperative title>
-- **What:** one-line description of the pattern/pitfall/hotspot.
-- **Evidence:** PR #<n> (<url>) · commit <sha> · comment <url> — <YYYY-MM-DD>
-- **Why it matters:** one line (impact / what breaks).
+```yaml
+---
+type: Pitfall                 # REQUIRED. RedFlag|Pitfall|Hotspot|DomainTrap|ReviewPattern|Convention
+title: <short imperative title>
+status: stable                # stable | deprecated
+stale_after: <YYYY-MM-DD>     # generated date + 6 months
+sources:                      # >=1 REQUIRED. No source -> drop the entry.
+  - resource: <PR url | commit sha | comment url>
+    title: <optional label>
+generated: { by: refresh-principles/<model>, at: <ISO-8601> }
+verified: [ { by: human:<id>, at: <YYYY-MM-DD> } ]   # stamped on approval
+---
+**What:** one line.
 
-## File roles
+**Why it matters:** one line.
+```
 
-| File | Holds |
-|---|---|
-| 07-red-flags | patterns that caused reverts/hotfixes or blocked-then-fixed reviews |
-| 02-pitfalls | bug clusters recurring across ≥N PRs |
-| 05-hotspots | high-churn files (cite commit counts) |
-| 04-domain-traps | domain gotchas raised in review that caused a change |
-| 03-review-patterns | what reviewers repeatedly ask for |
-| 06-conventions | recurring style/convention asks that caused a change |
-| 01-overview | auto-generated manifest: repo, window, counts, watermark |
+## Role -> type -> directory
 
-## Mechanical rule (test-checked)
-Every `###` entry outside `01-overview` has a line beginning `- **Evidence:**`
-with at least one of `PR #`, a 7+ hex SHA, or an `http` URL.
+| Signal | type | directory |
+|---|---|---|
+| reverts/hotfixes/blocked-then-fixed | RedFlag | red-flags/ |
+| bug clusters across >=2 PRs | Pitfall | pitfalls/ |
+| high-churn files | Hotspot | hotspots/ |
+| domain gotchas that caused change | DomainTrap | domain-traps/ |
+| repeated reviewer asks | ReviewPattern | review-patterns/ |
+| convention asks that caused change | Convention | conventions/ |
+
+## Reader priority
+
+`load-principle.sh` emits role dirs in this order (most merge-blocking first):
+red-flags -> pitfalls -> hotspots -> domain-traps -> review-patterns ->
+conventions -> index.md. The index contains `okf_version` (v0.2) and grouped
+listing. It skips `status: deprecated`, flags entries past `stale_after` as
+`[STALE]`, and marks each concept `[human-reviewed]` or `[machine-confirmed]`.
+
+## Conformance
+
+Every non-reserved `.md`: parseable frontmatter + non-empty `type` +
+>=1 `sources[].resource`. See `tests/test_principle_format.sh`.
