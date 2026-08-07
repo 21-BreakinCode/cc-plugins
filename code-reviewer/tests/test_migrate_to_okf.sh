@@ -82,5 +82,11 @@ assert "log.md exists"   '[ -f "$B/log.md" ]'
 assert "watermark kept"  '[ -f "$B/.learn-state.json" ]'
 assert "old role file removed" '[ ! -f "$B/07-red-flags.md" ]'
 
+echo "Test: re-run on an already-migrated bundle is a refused no-op (index.md preserved)"
+SAVED="$(mktemp)"; cp "$B/index.md" "$SAVED"
+python3 "$SUT" "$B" 2>/dev/null || true
+assert "index.md unchanged on re-run" 'diff -q "$SAVED" "$B/index.md" >/dev/null'
+rm -f "$SAVED"
+
 rm -rf "$B"
 finish

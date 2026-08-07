@@ -117,6 +117,13 @@ def concept_md(ctype, title, sources, what, why, notes=""):
     )
 
 def main(bundle):
+    # Guard: refuse a re-run. Once migrated, the old 0X-*.md are gone; regenerating
+    # index.md/log.md from their absence would wipe curated notes (which now live
+    # ONLY in index.md) and the log history. One-shot by design.
+    if not any(re.match(r"0[1-7]-.*\.md$", f) for f in os.listdir(bundle)):
+        print("refusing: no 0X-*.md in %s (already migrated / nothing to convert)"
+              % bundle, file=sys.stderr)
+        return
     repo = os.path.basename(bundle.rstrip("/"))
     concepts, curated_notes, overview_prose = {sd: [] for _, sd in ROLE.values()}, [], ""
     n = 0
