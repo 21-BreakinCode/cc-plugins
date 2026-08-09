@@ -62,10 +62,30 @@ When a plugin's behavior changes, bump its version in BOTH
 (keep the two equal). Marketplaces compare versions to offer `plugin update`, so
 an un-bumped change never reaches installed users.
 
+## 5. Update the changelog on every version bump (CRITICAL)
+
+Every plugin has a `<plugin>/CHANGELOG.md`. When a version is bumped, add a new
+entry **at the top** (newest first) following this format:
+
+```markdown
+## X.Y.Z — YYYY-MM-DD
+
+- **type:** description
+```
+
+Types: `feat`, `fix`, `refactor`, `chore`, `test`, `docs`, `perf`.
+
+Rules:
+- One bullet per logical change; derive from commit messages since the last version.
+- Date is the day the version is bumped, not the commit date of individual changes.
+- The changelog is hand-written (not generated) — it is NOT in the deny list.
+- A version bump without a changelog entry is incomplete work.
+
 ## Pre-commit checklist for a plugin change
 
 - [ ] No `find ~/.claude/plugins` in any command/agent/skill/lib
 - [ ] No reference to another plugin's files, agents, or skills
 - [ ] `${CLAUDE_PLUGIN_ROOT}` for bundled files; `$(dirname "${BASH_SOURCE[0]}")` for lib→sibling
 - [ ] Version bumped in `marketplace.json` + the plugin's `plugin.json` (if behavior changed)
+- [ ] `CHANGELOG.md` updated with new version entry (if version bumped)
 - [ ] `./scripts/cicd.sh VERIFY` passes (tests + generated docs in sync)
