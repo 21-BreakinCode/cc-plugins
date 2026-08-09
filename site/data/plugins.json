@@ -109,6 +109,78 @@
           "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent",
           "description": "Vault `Permanent/` dir used to ground `pick-up` card links and tags."
         }
+      ],
+      "changelog": [
+        {
+          "version": "2.1.0",
+          "date": "2026-08-04",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "collapse Constraints recaps into body"
+            }
+          ]
+        },
+        {
+          "version": "2.0.0",
+          "date": "2026-06-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "clean slate, skills-only reflection funnel"
+            },
+            {
+              "type": "feat",
+              "text": "add wrap-up skill"
+            },
+            {
+              "type": "feat",
+              "text": "add pick-up skill + card-format reference"
+            },
+            {
+              "type": "feat",
+              "text": "add recommend skill"
+            },
+            {
+              "type": "test",
+              "text": "add per-card conformance regression harness"
+            },
+            {
+              "type": "fix",
+              "text": "README skills copy — skills are slash-invocable, not 'no slash commands'"
+            }
+          ]
+        },
+        {
+          "version": "1.1.2",
+          "date": "2026-05-31",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "remove broken suggest-compact PreToolUse hook"
+            }
+          ]
+        },
+        {
+          "version": "1.1.1",
+          "date": "2026-05-31",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "remove broken stop-remind Stop hook"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "date": "2026-05-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — session-learner plugin"
+            }
+          ]
+        }
       ]
     },
     {
@@ -148,7 +220,87 @@
         }
       ],
       "dependsOn": [],
-      "config": []
+      "config": [],
+      "changelog": [
+        {
+          "version": "2.1.0",
+          "date": "2026-08-04",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "collapse experiment-loop Rules into steps"
+            },
+            {
+              "type": "refactor",
+              "text": "source improve.md libs via ${CLAUDE_PLUGIN_ROOT}"
+            }
+          ]
+        },
+        {
+          "version": "2.0.0",
+          "date": "2026-06-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "merge harness plugin into autoresearch (single plugin)"
+            }
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "date": "2026-06-27",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "glass + depth dashboard redesign"
+            }
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "date": "2026-06-27",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "redesign eval dashboard (Linear/Vercel-grade visuals + motion)"
+            }
+          ]
+        },
+        {
+          "version": "1.2.0",
+          "date": "2026-06-07",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "move harness commands and probes to standalone harness plugin"
+            },
+            {
+              "type": "refactor",
+              "text": "convert harness-check and harness-improvement to deprecation shims"
+            }
+          ]
+        },
+        {
+          "version": "1.1.1",
+          "date": "2026-06-06",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "infer metric direction, fix improvement %"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "date": "2026-05-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — autoresearch plugin"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "remotion-maker",
@@ -183,7 +335,39 @@
         }
       ],
       "dependsOn": [],
-      "config": []
+      "config": [],
+      "changelog": [
+        {
+          "version": "0.2.0",
+          "date": "2026-08-04",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "typo fixes, trigger-rich description, dedupe pointer"
+            }
+          ]
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-06-28",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "standardize plugin lib-sourcing on ${CLAUDE_PLUGIN_ROOT}"
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "date": "2026-05-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — Remotion video generation plugin"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "hh",
@@ -223,6 +407,76 @@
           "name": "HH_ARCHIVE_ROOT",
           "default": "$HOME/…/LifeOS/04Archive",
           "description": "Where `/hh:wrap-up` writes archived handovers. Quote the value — it contains `$HOME` and spaces."
+        }
+      ],
+      "changelog": [
+        {
+          "version": "0.1.5",
+          "date": "2026-06-05",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "accept dynamic destination path via ARCHIVE_ROOT env var"
+            }
+          ]
+        },
+        {
+          "version": "0.1.4",
+          "date": "2026-06-04",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "quote CLAUDE_PLUGIN_ROOT so bash expands it"
+            }
+          ]
+        },
+        {
+          "version": "0.1.3",
+          "date": "2026-06-01",
+          "changes": [
+            {
+              "type": "chore",
+              "text": "bump to trigger reload-plugins refresh"
+            }
+          ]
+        },
+        {
+          "version": "0.1.2",
+          "date": "2026-06-01",
+          "changes": [
+            {
+              "type": "chore",
+              "text": "align plugin manifest version with marketplace entry"
+            }
+          ]
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-06-01",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "gate stop-offer-new on ./handover symlink"
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "date": "2026-05-31",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — LifeOS handover document management"
+            },
+            {
+              "type": "feat",
+              "text": "add /hh:init-org, /hh:init-service, /hh:new, /hh:wrap-up commands"
+            },
+            {
+              "type": "feat",
+              "text": "TL;DR/Context/As-Is/To-Be/Implementation-Note seed body framework"
+            }
+          ]
         }
       ]
     },
@@ -266,6 +520,130 @@
           "default": "~/.claude/code-reviewer/principle-map.json",
           "description": "Override the per-repo principle-path cache."
         }
+      ],
+      "changelog": [
+        {
+          "version": "1.1.0",
+          "date": "2026-08-09",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "QA fixture representativeness check — flags synthetic test inputs asserting on diversity-sensitive behavior"
+            },
+            {
+              "type": "feat",
+              "text": "QA verdict → blast radius gate — flags structural decisions lacking production-shaped test evidence"
+            },
+            {
+              "type": "feat",
+              "text": "mine-git-signals revert chain detection (misdiagnosis signal)"
+            },
+            {
+              "type": "feat",
+              "text": "refresh-principles misdiagnosis sequence mining (Pitfall capture)"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "date": "2026-08-07",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "migrate to OKF v0.2 concept format"
+            },
+            {
+              "type": "feat",
+              "text": "reader walks OKF concept bundle, skips deprecated, flags stale"
+            },
+            {
+              "type": "feat",
+              "text": "principle-reviewer cites OKF concept paths + trust/stale weighting"
+            },
+            {
+              "type": "feat",
+              "text": "deterministic old→OKF bundle migration transform"
+            },
+            {
+              "type": "docs",
+              "text": "refresh-principles writes OKF concepts, stamps verified on approval"
+            },
+            {
+              "type": "fix",
+              "text": "seed OKF skeleton on bootstrap; emit concept path in reader header"
+            },
+            {
+              "type": "fix",
+              "text": "compute caused_change from comment outdated-ness"
+            },
+            {
+              "type": "fix",
+              "text": "exclude generated/vendored files from churn hotspots"
+            },
+            {
+              "type": "fix",
+              "text": "quote YAML-hostile concept titles, capture wrapped What/Why lines"
+            },
+            {
+              "type": "test",
+              "text": "OKF concept conformance check replaces evidence-line check"
+            }
+          ]
+        },
+        {
+          "version": "0.3.0",
+          "date": "2026-08-07",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "add learn-state watermark lib + test harness"
+            },
+            {
+              "type": "feat",
+              "text": "add git-signal miner (reverts/hotfixes/churn)"
+            },
+            {
+              "type": "feat",
+              "text": "add PR-signal miner with comment→change correlation"
+            },
+            {
+              "type": "feat",
+              "text": "add diff-coverage guard (coverage + finding validation)"
+            },
+            {
+              "type": "feat",
+              "text": "add refresh-principles producer skill + format reference"
+            },
+            {
+              "type": "feat",
+              "text": "wire deterministic coverage guards into orchestrator"
+            },
+            {
+              "type": "fix",
+              "text": "handle omitted counts in learn-state write"
+            }
+          ]
+        },
+        {
+          "version": "0.2.0",
+          "date": "2026-06-03",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "configurable principle-directory roots"
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "date": "2026-06-01",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — principle-aware PR review plugin"
+            }
+          ]
+        }
       ]
     },
     {
@@ -284,7 +662,77 @@
         }
       ],
       "dependsOn": [],
-      "config": []
+      "config": [],
+      "changelog": [
+        {
+          "version": "1.3.0",
+          "date": "2026-08-04",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "collapse description synonyms, dedupe triggers"
+            }
+          ]
+        },
+        {
+          "version": "1.2.2",
+          "date": "2026-06-27",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "use real installed skill names (design-taste-frontend, motion-design)"
+            }
+          ]
+        },
+        {
+          "version": "1.2.1",
+          "date": "2026-06-27",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "surface install hint when taste/motion skills missing"
+            }
+          ]
+        },
+        {
+          "version": "1.2.0",
+          "date": "2026-06-27",
+          "changes": [
+            {
+              "type": "chore",
+              "text": "bump version; update manifest description"
+            }
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "date": "2026-06-01",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "add awesome-design source for reference"
+            },
+            {
+              "type": "feat",
+              "text": "add orchestration reference (pipeline, gates, degradation)"
+            },
+            {
+              "type": "feat",
+              "text": "make SKILL.md the conductor; add ship pipeline mode"
+            }
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "date": "2026-06-01",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — UI/UX design advisor plugin"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "humanize",
@@ -312,6 +760,42 @@
           "default": "—",
           "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets."
         }
+      ],
+      "changelog": [
+        {
+          "version": "0.1.0",
+          "date": "2026-07-13",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — voice distillation + human rewrite plugin"
+            },
+            {
+              "type": "feat",
+              "text": "add rewrite and distill skills"
+            },
+            {
+              "type": "feat",
+              "text": "add built-in tone presets"
+            },
+            {
+              "type": "feat",
+              "text": "add English and zh-TW AI-tells references"
+            },
+            {
+              "type": "feat",
+              "text": "add safety-rails reference"
+            },
+            {
+              "type": "test",
+              "text": "add conformance fixtures and check"
+            },
+            {
+              "type": "fix",
+              "text": "resolve no-preset fallback and de-dash user-facing prose"
+            }
+          ]
+        }
       ]
     },
     {
@@ -335,6 +819,38 @@
           "name": "CLAUDE_ADHD_REVIEW",
           "default": "unset → on",
           "description": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to `0` to disable it for that session; unset (or `1`) re-enables. The style targets the main thread only; subagents never inherit it."
+        }
+      ],
+      "changelog": [
+        {
+          "version": "0.3.0",
+          "date": "2026-07-29",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "add Visual Layer — fenced ASCII diagrams for flow-shaped concepts"
+            }
+          ]
+        },
+        {
+          "version": "0.2.0",
+          "date": "2026-07-29",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "default-on with per-session opt-out"
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "date": "2026-07-27",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — ADHD-friendly per-reply shaping + Review-Ready handoff summaries"
+            }
+          ]
         }
       ]
     },
@@ -370,6 +886,32 @@
           "default": "claude-haiku-4-5",
           "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle."
         }
+      ],
+      "changelog": [
+        {
+          "version": "0.2.0",
+          "date": "2026-07-29",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "default-on with per-session opt-out"
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "date": "2026-07-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — claim-verification Stop hook"
+            },
+            {
+              "type": "feat",
+              "text": "tuned prefilter (autoresearch iterations: 75→100 score)"
+            }
+          ]
+        }
       ]
     },
     {
@@ -393,7 +935,27 @@
         }
       ],
       "dependsOn": [],
-      "config": []
+      "config": [],
+      "changelog": [
+        {
+          "version": "0.1.0",
+          "date": "2026-08-04",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — WOOP critical-thinking commit-lens plugin"
+            },
+            {
+              "type": "feat",
+              "text": "four modes: prevent / decide / firefight / retro"
+            },
+            {
+              "type": "feat",
+              "text": "always-on adversarial obstacle-hunter subagent"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

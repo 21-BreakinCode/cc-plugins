@@ -55,7 +55,10 @@ function makeReadPlugin() {
       })
       .sort((a, b) => a.name.localeCompare(b.name));
 
-    return { commands, skills };
+    const changelogPath = join(dir, 'CHANGELOG.md');
+    const changelog = existsSync(changelogPath) ? readFileSync(changelogPath, 'utf8') : '';
+
+    return { commands, skills, changelog };
   };
 }
 

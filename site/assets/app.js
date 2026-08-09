@@ -300,6 +300,19 @@ function configHtml(p) {
   </section>`;
 }
 
+function changelogHtml(p) {
+  if (!p.changelog || !p.changelog.length) return "";
+  const entries = p.changelog
+    .map((v) => {
+      const items = v.changes
+        .map((c) => `<li><span class="cl-type cl-type--${escapeHtml(c.type)}">${escapeHtml(c.type)}</span> ${escapeHtml(c.text)}</li>`)
+        .join("");
+      return `<div class="cl-version"><h3>${escapeHtml(v.version)} <span class="cl-date">${escapeHtml(v.date)}</span></h3><ul>${items}</ul></div>`;
+    })
+    .join("");
+  return `<section class="subpage-section" data-reveal><h2>Changelog</h2><div class="changelog">${entries}</div></section>`;
+}
+
 function depsHtml(p, byName) {
   if (!p.dependsOn.length) return "";
   const chips = p.dependsOn
@@ -348,6 +361,7 @@ function renderSubpage(data) {
     ${surfaceHtml(p)}
     ${configHtml(p)}
     ${depsHtml(p, byName)}
+    ${changelogHtml(p)}
   `;
 
   const copyBtn = document.getElementById("sub-copy");

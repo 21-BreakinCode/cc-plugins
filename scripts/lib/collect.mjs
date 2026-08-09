@@ -49,6 +49,7 @@ export function buildModel({ marketplace, content, readPlugin }) {
       install: installOne(entry.name, name),
       commands: harvested.commands ?? [],
       skills: harvested.skills ?? [],
+      changelog: harvested.changelog ?? '',
     };
   });
 
