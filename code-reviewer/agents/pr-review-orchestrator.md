@@ -152,6 +152,8 @@ While the agents run, analyze the diff yourself for these four perspectives:
 - **Edge Cases** — considered
 - **Regression Risk** — could break existing functionality
 - **User-facing Impact** — end-user experience
+- **Fixture Representativeness** — when diff adds/modifies test fixtures, flag synthetic inputs (identical values, trivial single-element data) asserting on behavior sensitive to input diversity; a test is FACT only about its input
+- **Verdict → Blast Radius** — when test evidence drives a structural decision (version pin, base image change, dependency lock), verify evidence was derived from production-shaped inputs before the pin
 
 #### Security Review
 

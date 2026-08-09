@@ -63,6 +63,15 @@ items into concepts; prefer comments that went **outdated** after being posted
 a `sources:` list built from the cited PR#/SHA/comment URLs. Drop anything you
 cannot cite.
 
+**Misdiagnosis sequences:** look specifically for `revert_chains` in git
+signals (a revert whose target was itself reverted) and for revert→different-fix
+pairs touching the same files. These signal that the original diagnosis was
+wrong and the fix was built on a contaminated premise — a test oracle that
+answered a question nobody meant to ask. Capture as a **Pitfall** citing both
+the original commit and the correction, with the **What** naming the
+misdiagnosis pattern (e.g., "synthetic fixture masked a legal encoder
+optimization as a regression").
+
 ## Step 5 — Propose (approval gate)
 
 Show a unified diff of the proposed concept files. Use AskUserQuestion:

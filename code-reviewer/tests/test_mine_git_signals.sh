@@ -20,5 +20,21 @@ assert "at least one hotfix"   '[ "$(echo "$out" | jq ".hotfixes|length")" -ge "
 assert "f1 is top churn file"  '[ "$(echo "$out" | jq -r ".churn[0].file")" = "f1" ]'
 assert "linguist-generated file excluded from churn" '[ "$(echo "$out" | jq "[.churn[].file]|index(\"gen.md\")")" = "null" ]'
 assert "dist/ file excluded from churn"              '[ "$(echo "$out" | jq "[.churn[].file]|index(\"dist/bundle.js\")")" = "null" ]'
+assert "revert_chains empty (no chain)" '[ "$(echo "$out" | jq ".revert_chains|length")" = "0" ]'
 rm -rf "$tmp"
+
+# revert chain detection: revert A, then revert the revert → misdiagnosis signal
+tmp2="$(mktemp -d)"; ( cd "$tmp2"
+  git init -q && git config user.email t@t && git config user.name t
+  echo a > f1; git add .; git commit -qm "feat: init"
+  echo b > f1; git add .; git commit -qm "fix: pin alpine to 3.20"
+  pin_sha="$(git rev-parse HEAD)"
+  git revert --no-edit HEAD   # Revert "fix: pin alpine to 3.20"
+  revert_sha="$(git rev-parse HEAD)"
+  git revert --no-edit HEAD   # Revert "Revert "fix: pin alpine to 3.20""
+)
+out2="$(cd "$tmp2" && bash "$LIB" 2000-01-01)"
+assert "revert_chains detected (revert of revert)" '[ "$(echo "$out2" | jq ".revert_chains|length")" -ge "1" ]'
+rm -rf "$tmp2"
+
 finish
