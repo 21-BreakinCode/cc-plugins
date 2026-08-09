@@ -17,6 +17,17 @@ You are running an autonomous improvement loop. Each iteration follows a strict 
 
 2. Read the target file(s) listed in `.autoresearch/program.md`
 
+   **On the first iteration only**, take the baseline revert point before any
+   edit:
+   ```bash
+   source "${CLAUDE_PLUGIN_ROOT}/lib/common.sh"
+   source "${CLAUDE_PLUGIN_ROOT}/lib/snapshot.sh"
+   ar_snapshot_save <target_files>
+   ```
+   The snapshot holds the **last known good** state. It advances only on a
+   keep — never before an edit, or a crash mid-edit would poison the revert
+   point. No git repo is required at the target.
+
 3. Decide what to try next:
    - **If first iteration:** Make the most obvious improvement based on the goal
    - **If previous iterations improved:** Continue in a similar direction, refine further
@@ -46,7 +57,7 @@ Extract the metric score from the output. Look for patterns like `metric_name: v
 
 If the command crashes (non-zero exit without a score):
 - This counts as an eval error
-- Revert the edit: `git checkout -- <target_files>`
+- Revert the edit: `ar_snapshot_restore <target_files>`
 - Log the iteration as `status: "discarded"` with the error in reasoning
 - If 2 consecutive eval errors, STOP and ask the user
 
@@ -70,15 +81,17 @@ Determine if this is an improvement based on the metric direction (lower_is_bett
 
 **If improved (keep):**
 ```bash
-git add <target_files>
-git commit -m "autoresearch: iteration <N> — <metric_name> <old>→<new> (kept)"
+ar_snapshot_save <target_files>
 ```
 
-Log the iteration to experiments.json with `status: "kept"`, the commit SHA, and your one-line reasoning.
+This advances the revert point to the new best state, so a later discard falls
+back to *this* iteration rather than the original baseline.
+
+Log the iteration to experiments.json with `status: "kept"` and your one-line reasoning.
 
 **If not improved (discard):**
 ```bash
-git checkout -- <target_files>
+ar_snapshot_restore <target_files>
 ```
 
 Log the iteration to experiments.json with `status: "discarded"`, your reasoning, and the attempted change in `diff_summary` — the dashboard shows your thinking, not just scores.

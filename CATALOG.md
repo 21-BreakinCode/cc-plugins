@@ -54,7 +54,7 @@ A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session 
 
 ## Measure & Improve
 
-### [autoresearch](./autoresearch/README.md) · `v2.1.0`
+### [autoresearch](./autoresearch/README.md) · `v2.2.0`
 
 *Eval-driven improvement, plus the harness to drive it*
 

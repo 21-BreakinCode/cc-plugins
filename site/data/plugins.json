@@ -185,7 +185,7 @@
     },
     {
       "name": "autoresearch",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "tagline": "Eval-driven improvement, plus the harness to drive it",
       "summary": "Two halves of one loop. An edit → eval → keep/discard engine improves any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both, and showing progress on a live auto-refreshing dashboard. A harness builder scores project health across six categories, scaffolds the Tier-1 components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue through the same loop.",
       "category": "improve",
@@ -222,6 +222,28 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.2.0",
+          "date": "2026-08-10",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "keep/discard no longer requires git. The experiment loop now"
+            },
+            {
+              "type": "fix",
+              "text": "stops polluting real repos with per-iteration commits. Nothing read"
+            },
+            {
+              "type": "breaking",
+              "text": "iterations no longer record a commit SHA in `experiments.json`"
+            },
+            {
+              "type": "test",
+              "text": "`tests/test_snapshot.sh` — 12 assertions, including that a discard"
+            }
+          ]
+        },
         {
           "version": "2.1.0",
           "date": "2026-08-04",

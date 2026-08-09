@@ -13,7 +13,7 @@
     {
       "name": "session-learner",
       "source": "./session-learner",
-      "description": "Turn a working session into atomic Zettelkasten knowledge via a wrap-up → pick-up → recommend reflection funnel",
+      "description": "Turn a working session into atomic Zettelkasten knowledge via a wrap-up \u2192 pick-up \u2192 recommend reflection funnel",
       "version": "2.1.0",
       "strict": true
     },
@@ -21,7 +21,7 @@
       "name": "autoresearch",
       "source": "./autoresearch",
       "description": "Eval-driven improvement loop (keep/discard with a live HTML dashboard) plus a dev-lifecycle harness builder that scores project health and scaffolds feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
-      "version": "2.1.0",
+      "version": "2.2.0",
       "strict": true
     },
     {
@@ -48,35 +48,35 @@
     {
       "name": "uiux-optimizer",
       "source": "./uiux-optimizer",
-      "description": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
+      "description": "UI/UX design advisor \u2014 orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction \u2192 static \u2192 motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
       "version": "1.3.0",
       "strict": true
     },
     {
       "name": "humanize",
       "source": "./humanize",
-      "description": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
+      "description": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English \u2014 meaning always preserved.",
       "version": "0.1.0",
       "strict": true
     },
     {
       "name": "adhd-review",
       "source": "./adhd-review",
-      "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
+      "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only \u2014 subagent returns stay full-detail.",
       "version": "0.3.0",
       "strict": true
     },
     {
       "name": "receipts",
       "source": "./receipts",
-      "description": "Stop-hook claim auditor — every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
+      "description": "Stop-hook claim auditor \u2014 every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
       "version": "0.2.0",
       "strict": true
     },
     {
       "name": "woop",
       "source": "./woop",
-      "description": "A WOOP critical-thinking commit-lens for the dev lifecycle — turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
+      "description": "A WOOP critical-thinking commit-lens for the dev lifecycle \u2014 turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
       "version": "0.1.0",
       "strict": true
     }
