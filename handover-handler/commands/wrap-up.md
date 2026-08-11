@@ -10,18 +10,20 @@ Daily wrap-up routine for renewing handover docs in the Obsidian vault. Vault-wi
 ## Vault location
 
 ```bash
-VAULT="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
+VAULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
 
-The vault is iCloud-synced across macOS machines. Always reference via `${HOME}` so the command works on every machine.
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue.
+
+The vault location is machine-specific and comes from `HH_LIFEOS_ROOT`. Never hardcode it.
 
 ## Archive destination
 
 ```bash
-ARCHIVE_ROOT="${HH_ARCHIVE_ROOT:-$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/04Archive}"
+ARCHIVE_ROOT="${HH_ARCHIVE_ROOT:-$VAULT/04Archive}"
 ```
 
-- Override by setting `HH_ARCHIVE_ROOT` in `~/.zshrc`. Keep the value double-quoted because the default path contains `$HOME` and spaces.
+- Defaults to `04Archive/` inside the resolved vault. Override by setting `HH_ARCHIVE_ROOT` in `~/.zshrc`. Keep the value double-quoted — vault paths may contain spaces.
 - Each handover archives under `"$ARCHIVE_ROOT/<ORG>/<new-filename>"`. Group-by-org is mandatory — never write directly under `$ARCHIVE_ROOT`.
 - `<ORG>` is derived from the source path: the segment immediately after `01Project/` (e.g. `…/LifeOS/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
 - If a handover is **not** under `…/LifeOS/01Project/<ORG>/…`, stop and ask the user which ORG subfolder to archive it under before proceeding. Do not invent one.
@@ -52,7 +54,7 @@ tags:
 Run:
 
 ```bash
-VAULT="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
+VAULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 grep -rl --include="*.md" -E "^[[:space:]]*-[[:space:]]+handover[[:space:]]*$" "$VAULT" 2>/dev/null \
 | while IFS= read -r f; do
     grep -qE "^[[:space:]]*-[[:space:]]+archive[[:space:]]*$" "$f" || printf '%s\n' "$f"
@@ -69,7 +71,7 @@ Send all Agent calls in a **single message** so they run concurrently. Use `suba
 
 Subagent prompt template (substitute `<file>` and today's date):
 
-> You are analyzing one Obsidian handover doc as part of a daily wrap-up routine. The vault is at `${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS`.
+> You are analyzing one Obsidian handover doc as part of a daily wrap-up routine. The vault is at `$VAULT` (substitute the resolved absolute path when dispatching).
 >
 > File: `<file>`
 > Today: `<YYYY-MM-DD>`
@@ -256,7 +258,7 @@ Print archived paths in copy-pastable form.
 
 ## Non-negotiable rules
 
-- **Archive destination**: `"$ARCHIVE_ROOT/<ORG>/<filename>"`. Honor `HH_ARCHIVE_ROOT` env var; default is `"$HOME/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/04Archive"`. Always quote the path (it contains `$HOME` and spaces). Never write directly under `$ARCHIVE_ROOT` without an `<ORG>` subfolder.
+- **Archive destination**: `"$ARCHIVE_ROOT/<ORG>/<filename>"`. Honor `HH_ARCHIVE_ROOT` env var; default is `"$VAULT/04Archive"`. Always quote the path (a vault path may contain spaces). Never write directly under `$ARCHIVE_ROOT` without an `<ORG>` subfolder.
 - **ORG resolution**: derive from the source path segment after `01Project/`. If the file is not under `01Project/<ORG>/`, stop and ask the user to pick an ORG — never guess.
 - **Naming convention**: `<prefix>__<status>-[date-]<topic>.md`, status ∈ {`done`, `superseded`}. Date is `YYYY-MM-DD`.
 - **Add `archive` tag**: append to existing tags list. Never replace, never reorder other tags.

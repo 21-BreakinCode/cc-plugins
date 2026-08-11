@@ -108,11 +108,11 @@ A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it 
 
 ## Workflow & Handover
 
-### [hh](./handover-handler/README.md) · `v0.1.5`
+### [hh](./handover-handler/README.md) · `v0.2.0`
 
 *Cross-context handover docs, LifeOS as the source of truth*
 
-Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine.
+Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.
 
 **Install** · `claude plugin install hh@21-breakincode`
 

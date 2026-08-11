@@ -10,8 +10,10 @@ One-time per repo. Resolves the current org, finds (or appends) the service mapp
 ## Vault location
 
 ```bash
-LIFEOS="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
+LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue to the next phase.
+
 
 ## Flow
 
@@ -20,7 +22,7 @@ LIFEOS="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
 ```bash
 ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || {
     rc=$?
-    [ "$rc" -eq 3 ] && { echo "LifeOS not reachable — check iCloud sync and re-run."; exit 3; }
+    [ "$rc" -eq 3 ] && { echo "LifeOS not reachable — relay the guard's setup guidance above and stop."; exit 3; }
     ORG=""
 }
 ```
@@ -49,7 +51,7 @@ RESULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-service.sh" "$PWD" "$ORG") && E
 ### Phase 4 — Append new mapping row
 
 Compute defaults:
-- `DEFAULT_APP_NAME` = current directory name converted to PascalCase (e.g. `creative-studio` → `CreativeStudio`, `bust-backend` → `BustBackend`).
+- `DEFAULT_APP_NAME` = current directory name, used verbatim in kebab-case (e.g. `creative-studio` → `creative-studio`, `bust-backend` → `bust-backend`). If the directory name is not already kebab-case, lowercase it and replace `_`, spaces, and camelCase boundaries with `-`.
 - `DEFAULT_LIFEOS_SUBPATH` = `Services/$DEFAULT_APP_NAME`.
 
 `AskUserQuestion` (batched, 2 questions in a single call). The Q2 default uses `$DEFAULT_APP_NAME`, not the user's Q1 answer, because batched questions resolve simultaneously:
@@ -63,7 +65,7 @@ Append a new row to the `## Service Mapping` table in `$INIT`:
 
 ```bash
 # Compute a row like:
-#   | NewApp          | $HOME/Projects/Appier/appier/new-app      | Services/NewApp           |
+#   | new-app         | $HOME/Projects/Appier/appier/new-app      | Services/new-app          |
 # Use a Python heredoc to align columns to existing widths if reliable;
 # otherwise just append with single-space padding (Obsidian tables tolerate it).
 ```

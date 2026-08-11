@@ -11,8 +11,10 @@ Create a new handover document. The topic argument becomes the slug. Frontmatter
 ## Vault location
 
 ```bash
-LIFEOS="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
+LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue to the next phase.
+
 
 ## Flow
 
@@ -20,7 +22,7 @@ LIFEOS="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
 
 ```bash
 [ -L "./handover" ] || { echo "Run /hh:init-service first — ./handover is not a symlink."; exit 1; }
-readlink -e "./handover" >/dev/null || { echo "LifeOS target unreachable — check iCloud sync."; exit 3; }
+readlink -e "./handover" >/dev/null || { echo "./handover is a dangling symlink — its LifeOS target is gone. Re-run /hh:init-service to relink."; exit 3; }
 ```
 
 If either check fails, stop and report.
@@ -36,8 +38,8 @@ APP_NAME="${RESULT%%|*}"
 ### Phase 3 — Build filename
 
 - `TOPIC` = the slash-command argument (`$ARGUMENTS`). If missing, `AskUserQuestion` for a free-form topic.
-- `PREFIX` = `$APP_NAME` converted from PascalCase/camelCase to kebab-case.
-  - Examples: `CreativeStudio` → `creative-studio`, `CrPerf2` → `cr-perf-2`, `BustDice` → `bust-dice`, `bustBackend` → `bust-backend`.
+- `PREFIX` = `$APP_NAME` in kebab-case. Since /hh:init-service now stores app_names as kebab-case, this is usually a passthrough; the conversion below only applies to legacy PascalCase rows.
+  - Examples: `creative-studio` → `creative-studio` (passthrough), `CreativeStudio` → `creative-studio`, `CrPerf2` → `cr-perf-2`, `bustBackend` → `bust-backend`.
   - Algorithm: insert `-` before each uppercase letter (except position 0), lowercase the result, collapse repeated `-`.
 - `SLUG` = topic kebab-cased, lowercased, non-alphanumerics → `-`, collapsed repeats, trimmed to 60 chars.
 - `DATE` = `$(date +%Y-%m-%d)`.

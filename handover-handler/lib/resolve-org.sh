@@ -3,17 +3,15 @@
 # under $LifeOS/01Project/. Tries git remote first, then workspace_root prefix.
 # Prints the org name to stdout on success, exits 1 if nothing matches.
 #
-# Optional env var: HH_LIFEOS_ROOT overrides the LifeOS path (for tests).
+# Required env var: HH_LIFEOS_ROOT — see lib/lifeos-root.sh.
 
 set -euo pipefail
 
-LIFEOS="${HH_LIFEOS_ROOT:-${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS}"
-PROJECT_ROOT="$LIFEOS/01Project"
-
-if [ ! -d "$PROJECT_ROOT" ]; then
-    echo "resolve-org.sh: LifeOS not reachable at $PROJECT_ROOT" >&2
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if ! LIFEOS="$(bash "$SCRIPT_DIR/lifeos-root.sh")"; then
     exit 3
 fi
+PROJECT_ROOT="$LIFEOS/01Project"
 
 cwd="$(pwd)"
 remote_url=""

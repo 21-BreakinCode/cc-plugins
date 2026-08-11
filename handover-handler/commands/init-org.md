@@ -10,8 +10,10 @@ One-time setup per ORG. Creates `handover_handler__initiation.md` in `$LifeOS/01
 ## Vault location
 
 ```bash
-LIFEOS="${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS"
+LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue to the next phase.
+
 
 ## Flow
 

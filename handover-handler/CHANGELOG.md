@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.2.0 — 2026-08-11
+
+- **feat!:** `HH_LIFEOS_ROOT` is now required. The hardcoded iCloud vault path
+  is gone from all 9 call sites; commands fail fast with setup guidance instead of
+  falling back to a path that may not exist. Set it once in `~/.zshrc`.
+- **feat:** add `lib/lifeos-root.sh` — single resolver + guard for the vault root,
+  used by every command and lib.
+- **feat:** `/hh:init-service` now defaults `app_name` to the repo's kebab-case
+  directory name instead of PascalCase (`creative-studio`, not `CreativeStudio`).
+- **fix:** `HH_ARCHIVE_ROOT` defaults to `$VAULT/04Archive` instead of a second
+  hardcoded iCloud path.
+- **fix:** `/hh:new` reports a dangling `./handover` symlink with a real remedy
+  (re-run `/hh:init-service`) instead of blaming iCloud sync.
+
 ## 0.1.5 — 2026-06-05
 
 - **feat:** accept dynamic destination path via ARCHIVE_ROOT env var

@@ -2,7 +2,7 @@
 
 > Cross-context handover docs, LifeOS as the source of truth
 
-Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine.
+Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.
 
 ## Install
 
@@ -21,8 +21,9 @@ claude plugin install hh@21-breakincode
 
 | Variable | Default | Description |
 |---|---|---|
+| `HH_LIFEOS_ROOT` | `(required — no default)` | Absolute path to your LifeOS vault: the folder containing `01Project/`. **Required** — every command stops with setup guidance if it is unset or wrong, rather than falling back to a path that may not exist. Set it once in `~/.zshrc`: `export HH_LIFEOS_ROOT="$HOME/Projects/LifeOS"`. Find yours with `find "$HOME" -maxdepth 4 -type d -name '01Project'`. Quote the value if the path contains spaces. |
 | `CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP` | `0` | When `1`, the Stop hook offers `/hh:new` after a wrap-up session (requires a working `./handover` symlink). |
-| `HH_ARCHIVE_ROOT` | `$HOME/…/LifeOS/04Archive` | Where `/hh:wrap-up` writes archived handovers. Quote the value — it contains `$HOME` and spaces. |
+| `HH_ARCHIVE_ROOT` | `$HH_LIFEOS_ROOT/04Archive` | Where `/hh:wrap-up` writes archived handovers. Defaults to `04Archive/` inside the resolved vault. Quote the value if the path contains spaces. |
 
 ---
 

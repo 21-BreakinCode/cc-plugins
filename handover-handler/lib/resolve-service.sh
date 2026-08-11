@@ -10,20 +10,18 @@
 #   2 — initiation.md missing for org
 #   3 — LifeOS unreachable
 #
-# Optional env var: HH_LIFEOS_ROOT overrides the LifeOS path (for tests).
+# Required env var: HH_LIFEOS_ROOT — see lib/lifeos-root.sh.
 
 set -euo pipefail
 
 cwd="${1:?usage: resolve-service.sh <cwd> <org>}"
 org="${2:?usage: resolve-service.sh <cwd> <org>}"
 
-LIFEOS="${HH_LIFEOS_ROOT:-${HOME}/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS}"
-PROJECT_ROOT="$LIFEOS/01Project"
-
-if [ ! -d "$PROJECT_ROOT" ]; then
-    echo "resolve-service.sh: LifeOS not reachable at $PROJECT_ROOT" >&2
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if ! LIFEOS="$(bash "$SCRIPT_DIR/lifeos-root.sh")"; then
     exit 3
 fi
+PROJECT_ROOT="$LIFEOS/01Project"
 
 init="$PROJECT_ROOT/$org/handover_handler__initiation.md"
 if [ ! -f "$init" ]; then
@@ -31,7 +29,6 @@ if [ ! -f "$init" ]; then
     exit 2
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 records="$(bash "$SCRIPT_DIR/parse-mapping.sh" "$init")"
 [ -n "$records" ] || exit 1
 

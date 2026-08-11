@@ -35,7 +35,7 @@
       "name": "hh",
       "source": "./handover-handler",
       "description": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
-      "version": "0.1.5",
+      "version": "0.2.0",
       "strict": true
     },
     {
