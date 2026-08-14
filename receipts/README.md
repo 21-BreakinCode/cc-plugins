@@ -7,55 +7,52 @@ A Stop hook that enforces provable claims. When the finished turn asserts a **FA
 ## Architecture
 
 ```
-  Stop hook fires
-        │
-        ▼
-  receipts-check.sh ── guards: CLAUDE_RECEIPTS=0? nested? → exit
-        │
-        ▼
-  extract.py ── parse transcript JSONL
-  │  find last real user prompt
-  │  collect assistant text + tool calls since then
-  │  → (turn_text, tools[{name, input, output}])
-        │
-        ▼
-  check.py ── extract_claims()
-  │  regex-scan for **FACT:** tags + completion verbs
-  │  no claims? → approve
-        │
-        ▼
-  classify.py ── per-claim, deterministic (no LLM)
-  │
-  │  no tools this turn?
-  │    ├─ claim has observable signal → CHEATING
-  │    └─ purely analytical          → ESCALATE
-  │
-  │  has tools:
-  │    1. extract anchors (backticked, file refs, work keywords)
-  │    2. flatten all tool I/O into one blob
-  │    3. "tests pass" but blob shows failure? → CHEATING
-  │    4. any anchor found in blob?            → BACKED
-  │    5. no match                             → CHEATING
-  │    6. no anchors extractable               → ESCALATE
-  │
-  ├── backed/cheating ──────────────────────────────────────┐
-  │                                                        │
-  └── escalate                                             │
-        │                                                  │
-        ▼                                                  │
-  judge.sh ── fresh Haiku call                             │
-  │  send claims + tool summaries                          │
-  │  ask: "backed" or "cheating"?                          │
-  │  fail-open: any error → treat as backed                │
-        │                                                  │
-        ▼                                                  ▼
-  check.py ── verdict aggregation
-  │  all backed → approve
-  │  any cheating:
-  │    dedupe via ledger (challenge each claim ONCE)
-  │    mode=report → approve (silent log)
-  │    mode=warn   → approve + systemMessage warning
-  │    mode=block  → block (forces Claude to keep going)
+Stop hook fires
+      |
+      v
+receipts-check.sh
+      |  guards: CLAUDE_RECEIPTS=0? nested? --> exit
+      v
+extract.py -- parse transcript JSONL
+      |  find last real user prompt
+      |  collect assistant text + tool calls
+      |  --> (turn_text, tools[{name, input, output}])
+      v
+check.py -- extract_claims()
+      |  regex-scan for **FACT:** tags + completion verbs
+      |  no claims? --> approve
+      v
+classify.py -- per-claim, deterministic (no LLM)
+      |
+      |  no tools this turn?
+      |    yes + observable signal --> CHEATING
+      |    yes + analytical        --> ESCALATE
+      |
+      |  has tools:
+      |    1. extract anchors (backticked, file refs, keywords)
+      |    2. flatten all tool I/O into one blob
+      |    3. "tests pass" but blob shows failure? --> CHEATING
+      |    4. any anchor found in blob?            --> BACKED
+      |    5. no match                             --> CHEATING
+      |    6. no anchors extractable               --> ESCALATE
+      |
+      +-- backed/cheating --> straight to verdict
+      |
+      +-- escalate
+            |
+            v
+      judge.sh -- fresh Haiku call
+            |  send claims + tool summaries
+            |  ask: backed or cheating?
+            |  fail-open: any error --> backed
+            v
+check.py -- verdict aggregation
+      |  all backed --> approve
+      |  any cheating:
+      |    dedupe via ledger (challenge each claim ONCE)
+      |    mode=report --> approve (silent log)
+      |    mode=warn   --> approve + warning note
+      |    mode=block  --> block (forces Claude to keep going)
 ```
 
 ## Install
