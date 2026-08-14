@@ -43,6 +43,7 @@ export function buildModel({ marketplace, content, readPlugin }) {
       oneLiner: entry.description ?? '',
       tagline: c.tagline ?? '',
       summary: c.summary ?? '',
+      architecture: c.architecture ?? '',
       category: c.category ?? '',
       dependsOn: c.dependsOn ?? [],
       config: c.config ?? [],

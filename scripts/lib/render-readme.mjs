@@ -43,9 +43,16 @@ export function renderReadme(plugin, model) {
     `# ${plugin.name}`,
     `> ${plugin.tagline}`,
     plugin.summary,
+  ];
+
+  if (plugin.architecture) {
+    blocks.push(['## Architecture', '', '```', plugin.architecture, '```'].join('\n'));
+  }
+
+  blocks.push(
     ['## Install', '', '```bash', plugin.install, '```'].join('\n'),
     surface(plugin),
-  ];
+  );
 
   const config = configTable(plugin);
   if (config) blocks.push(config);
