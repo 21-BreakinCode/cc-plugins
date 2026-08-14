@@ -1,7 +1,7 @@
 {
   "name": "adhd-review",
   "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": {
     "name": "William Hung"
   }

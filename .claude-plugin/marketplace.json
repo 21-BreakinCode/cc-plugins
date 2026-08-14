@@ -62,8 +62,8 @@
     {
       "name": "adhd-review",
       "source": "./adhd-review",
-      "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only \u2014 subagent returns stay full-detail.",
-      "version": "0.3.0",
+      "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
+      "version": "0.3.1",
       "strict": true
     },
     {

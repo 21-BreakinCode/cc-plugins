@@ -39,8 +39,12 @@ above already stands subagents down, so this never leaks into an agent hop.
 
 - **Draw non-linear flow-shaped concepts, don't describe them.** When the thing you're
   explaining is a branch/decision, a loop/cycle, parallel paths, state transitions, a
-  hierarchy/tree, or a before→after transformation, render it as an ASCII diagram — the
+  hierarchy/tree, or a before→after transformation, render it as a visual — the
   picture *is* the explanation.
+- **Pick the smallest visual form that makes the point:** pseudocode for logic/algorithms,
+  call trees for runtime flow, component/file trees for structure, mermaid for
+  interactions/sequences, diffs for before→after changes, HTML artifacts for focused
+  diagrams or infographics.
 - **Always fence the diagram** in a triple-backtick code block so monospace alignment
   survives. Unfenced ASCII is the failure mode — the columns drift and it turns to noise.
 - **Keep it small.** Fits without horizontal scroll; label nodes with real names; one
