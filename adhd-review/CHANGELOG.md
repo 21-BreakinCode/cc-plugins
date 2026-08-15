@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.3.1 — 2026-08-15
+## 0.4.0 — 2026-08-15
 
 - **feat:** expand Visual Layer with technique vocabulary (pseudocode, call trees, component/file trees, mermaid, diffs, HTML artifacts)
+- **feat:** add format picker — content-type→view mapping (sequence diagrams for service flows, diff view for code changes, flow diagrams for data paths, done/action view for handoffs)
 
 ## 0.3.0 — 2026-07-29
 

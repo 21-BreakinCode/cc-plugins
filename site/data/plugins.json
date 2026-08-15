@@ -849,7 +849,7 @@
     },
     {
       "name": "adhd-review",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "tagline": "Action-first replies, blockers before FYI",
       "summary": "One output style, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: the output-style mechanism and a default-on SessionStart hook both target the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
       "category": "workflow",
@@ -872,12 +872,16 @@
       ],
       "changelog": [
         {
-          "version": "0.3.1",
+          "version": "0.4.0",
           "date": "2026-08-15",
           "changes": [
             {
               "type": "feat",
               "text": "expand Visual Layer with technique vocabulary (pseudocode, call trees, component/file trees, mermaid, diffs, HTML artifacts)"
+            },
+            {
+              "type": "feat",
+              "text": "add format picker — content-type→view mapping (sequence diagrams for service flows, diff view for code changes, flow diagrams for data paths, done/action view for handoffs)"
             }
           ]
         },

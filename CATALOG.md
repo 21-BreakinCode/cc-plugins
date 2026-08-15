@@ -118,7 +118,7 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 
 **Commands** · `/hh:init-org` · `/hh:init-service` · `/hh:new` · `/hh:wrap-up`
 
-### [adhd-review](./adhd-review/README.md) · `v0.3.1`
+### [adhd-review](./adhd-review/README.md) · `v0.4.0`
 
 *Action-first replies, blockers before FYI*
 

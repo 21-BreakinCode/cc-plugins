@@ -53,6 +53,18 @@ above already stands subagents down, so this never leaks into an agent hop.
   that's already the visual. No boxes around a flat list, two items, or anything one
   sentence conveys. A diagram that adds no structure is the noise Layer 1 exists to cut.
 
+### Format picker — match content to view
+
+- **Service/system interaction → sequence diagram.** Multi-actor service or architecture
+  flows render as a sequence or flowchart diagram, not a prose walkthrough.
+- **Code changes → diff view.** Summarize what changed in a `\`\`\`diff` block or
+  before/after comparison — not a prose description, not the whole file.
+- **Data/request flow path → flow diagram.** Pipeline-shaped movement (client → gateway →
+  service → response) renders as a visual flow diagram with labeled nodes.
+- **Done/shipped work + what the user needs to check → done/action view.** Separate
+  completed work from action items the user must verify — use this mid-task too,
+  not only in Layer 2 final wrap-ups.
+
 ## Layer 2 — Review-Ready wrap-up
 
 Apply **only when both hold: the work is substantial and multi-step, AND this is its final
