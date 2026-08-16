@@ -5,7 +5,7 @@
     "version": "1.11.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install woop@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install woop@21-breakincode && \\\n  claude plugin install note-visualizer@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -25,10 +25,11 @@
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
-        "woop@21-breakincode": true
+        "woop@21-breakincode": true,
+        "note-visualizer@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update woop@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update woop@21-breakincode && \\\n  claude plugin update note-visualizer@21-breakincode"
   },
   "categories": [
     {
@@ -74,7 +75,8 @@
       "id": "content",
       "label": "Writing & Content",
       "plugins": [
-        "humanize"
+        "humanize",
+        "note-visualizer"
       ]
     }
   ],
@@ -1015,6 +1017,44 @@
             {
               "type": "feat",
               "text": "always-on adversarial obstacle-hunter subagent"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "note-visualizer",
+      "version": "0.1.0",
+      "tagline": "Draw the concept, don't describe it",
+      "summary": "One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Self-contained — no hooks, no cross-plugin deps.",
+      "category": "content",
+      "install": "claude plugin install note-visualizer@21-breakincode",
+      "oneLiner": "Make markdown notes scannable — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
+      "commands": [],
+      "skills": [
+        {
+          "name": "visualize",
+          "description": "Use proactively after creating or editing notes under Zettelkasten/ — add compact ASCII diagrams for spatial concepts and Obsidian callouts…"
+        }
+      ],
+      "dependsOn": [],
+      "config": [],
+      "changelog": [
+        {
+          "version": "0.1.0",
+          "date": "2026-08-16",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release — `visualize` skill with inline and batch modes"
+            },
+            {
+              "type": "feat",
+              "text": "visual-patterns reference codifying concept-shape → diagram-type mapping, callout rules, and one-screen budget constraints"
+            },
+            {
+              "type": "feat",
+              "text": "model-invoked proactive triggering on Zettelkasten/ note writes"
             }
           ]
         }

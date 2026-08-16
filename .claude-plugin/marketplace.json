@@ -79,6 +79,13 @@
       "description": "A WOOP critical-thinking commit-lens for the dev lifecycle \u2014 turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
       "version": "0.1.0",
       "strict": true
+    },
+    {
+      "name": "note-visualizer",
+      "source": "./note-visualizer",
+      "description": "Make markdown notes scannable \u2014 add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
+      "version": "0.1.0",
+      "strict": true
     }
   ]
 }

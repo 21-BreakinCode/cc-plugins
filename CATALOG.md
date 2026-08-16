@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.11.0 · 10 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.11.0 · 11 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -18,7 +18,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
-  claude plugin install woop@21-breakincode
+  claude plugin install woop@21-breakincode && \
+  claude plugin install note-visualizer@21-breakincode
 ```
 
 ## Update everything
@@ -37,7 +38,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
-  claude plugin update woop@21-breakincode
+  claude plugin update woop@21-breakincode && \
+  claude plugin update note-visualizer@21-breakincode
 ```
 
 ## Memory & Knowledge
@@ -151,3 +153,13 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 **Install** · `claude plugin install humanize@21-breakincode`
 
 **Skills** · `distill` · `rewrite`
+
+### [note-visualizer](./note-visualizer/README.md) · `v0.1.0`
+
+*Draw the concept, don't describe it*
+
+One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Self-contained — no hooks, no cross-plugin deps.
+
+**Install** · `claude plugin install note-visualizer@21-breakincode`
+
+**Skills** · `visualize`

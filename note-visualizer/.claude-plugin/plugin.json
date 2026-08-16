@@ -1,0 +1,8 @@
+{
+  "name": "note-visualizer",
+  "description": "Make markdown notes scannable — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
+  "version": "0.1.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
