@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0 — 2026-08-28
+
+- **feat:** add Language Layer — enforce ASD-STE100 Simplified Technical English (all 53 rules + 8 general recommendations) as mandatory on every reply
+
 ## 0.4.0 — 2026-08-15
 
 - **feat:** expand Visual Layer with technique vocabulary (pseudocode, call trees, component/file trees, mermaid, diffs, HTML artifacts)
