@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.3.0 — 2026-09-09
+
+- **feat:** add Acceptance Criteria section to `/hh:new` template between To-Be
+  and Implementation Note. Phase 3.5 confirms AC items with the user via
+  AskUserQuestion before writing. Supports checkbox and Given/When/Then formats.
+- **feat:** inline STE writing rules in Phase 4 — sentence limits, active voice,
+  simple tenses, banned-word kill list. Every handover doc comes out clean on
+  first write without a separate skill invocation.
+- **feat:** inline ASCII diagram guidance in Phase 4 — add a compact diagram when
+  a section describes something with shape (flow, nesting, branching). Skip
+  diagrams for flat lists and linear definitions.
+- **chore:** expand word budget from 330 to 400 words (~2 min read) to
+  accommodate the new AC section.
+
 ## 0.2.0 — 2026-08-11
 
 - **feat!:** `HH_LIFEOS_ROOT` is now required. The hardcoded iCloud vault path

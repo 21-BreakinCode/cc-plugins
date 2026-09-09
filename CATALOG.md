@@ -110,7 +110,7 @@ A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it 
 
 ## Workflow & Handover
 
-### [hh](./handover-handler/README.md) · `v0.2.0`
+### [hh](./handover-handler/README.md) · `v0.3.0`
 
 *Cross-context handover docs, LifeOS as the source of truth*
 
