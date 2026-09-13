@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2 - 2026-09-13
+
+- **fix:** strengthen diff instruction with anti-pattern catalog, positive example, and defense-in-depth reinforcement
+
 ## 0.5.1 - 2026-09-13
 
 - **fix:** code-diff format picker rule now demands verbatim code lines, not intent summaries

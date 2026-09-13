@@ -161,7 +161,15 @@ above already stands subagents down, so this never leaks into an agent hop.
 - **Service/system interaction → sequence diagram.** Multi-actor service or architecture
   flows render as a sequence or flowchart diagram, not a prose walkthrough.
 - **Code changes → diff view.** Show verbatim `+`/`-` code lines in a ````diff` block or
-  before/after comparison — never an intent summary like "Added validation", never the whole file.
+  before/after comparison — the code lines, not the intent description or summary of why.
+  NEVER paraphrase or summarize the diff. NEVER write intent phrases like "Added validation",
+  "Updated error handling", "Changed the return type", or "Refactored the loop".
+  Show the exact code lines from the diff:
+
+```diff
+-  const result = fetch(url)
++  const result = await fetch(url, { signal })
+```
 - **Data/request flow path → flow diagram.** Pipeline-shaped movement (client → gateway →
   service → response) renders as a visual flow diagram with labeled nodes.
 - **Done/shipped work + what the user needs to check → done/action view.** Separate
