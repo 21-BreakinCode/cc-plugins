@@ -160,8 +160,8 @@ above already stands subagents down, so this never leaks into an agent hop.
 
 - **Service/system interaction → sequence diagram.** Multi-actor service or architecture
   flows render as a sequence or flowchart diagram, not a prose walkthrough.
-- **Code changes → diff view.** Summarize what changed in a `\`\`\`diff` block or
-  before/after comparison — not a prose description, not the whole file.
+- **Code changes → diff view.** Show verbatim `+`/`-` code lines in a ````diff` block or
+  before/after comparison — never an intent summary like "Added validation", never the whole file.
 - **Data/request flow path → flow diagram.** Pipeline-shaped movement (client → gateway →
   service → response) renders as a visual flow diagram with labeled nodes.
 - **Done/shipped work + what the user needs to check → done/action view.** Separate
