@@ -1,7 +1,7 @@
 ---
 name: experimenter
 description: "Autonomous improvement agent. Runs the edit-eval-keep/discard loop defined in program.md. Spawned by /autoresearch:improve after setup is complete. Use when the improve command hands off to start the iteration loop."
-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "WebSearch", "WebFetch"]
+tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Artifact", "WebSearch", "WebFetch"]
 ---
 
 # Experimenter Agent
@@ -16,6 +16,8 @@ You received a `.autoresearch/program.md` that defines:
 - How to evaluate each iteration (shell command, LLM-as-judge, or both)
 - When to stop
 - Any constraints to respect
+
+You also received `<dashboard_url>` from the setup command. Use that URL for every Artifact dashboard update with `url: <dashboard_url>` and `favicon: 📈`. If the prompt lacks `<dashboard_url>`, publish `.autoresearch/dashboard.html` once with Artifact using `favicon: 📈`, report the returned URL, and reuse it for every later update.
 
 Your job: iterate on the target files to improve them according to the eval metrics. Each iteration: edit → eval → keep or discard → update dashboard → check stop → repeat.
 
@@ -52,4 +54,4 @@ Available libs:
 - `common.sh`: shared constants and helpers
 - `experiment-log.sh`: read/write experiments.json
 - `eval.sh`: run evals, extract scores, compare
-- `dashboard.sh`: generate and open the HTML dashboard
+- `dashboard.sh`: generate the HTML dashboard

@@ -1,6 +1,6 @@
 ---
 description: "Iteratively improve any artifact using an edit-eval-keep/discard loop with live dashboard"
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "AskUserQuestion", "WebSearch", "WebFetch"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "Artifact", "AskUserQuestion", "WebSearch", "WebFetch"]
 ---
 
 # /autoresearch:improve
@@ -101,30 +101,38 @@ ar_log_set_baseline '{"<metric_name>": <score>}'
 
 For LLM-as-judge evals: read the target file and score it against the criteria. Record the score as the baseline.
 
-## Step 6: Generate Initial Dashboard and Open It
+## Step 6: Generate and Publish Initial Dashboard
 
 ```bash
 source "${CLAUDE_PLUGIN_ROOT}/lib/dashboard.sh"
 ar_dashboard_generate
-ar_dashboard_open
 ```
 
 If `ar_dashboard_generate` fails, stop and report the error. Do not proceed to the loop.
 
+Call Artifact with:
+- `file_path`: `.autoresearch/dashboard.html`
+- `favicon`: `📈`
+- `title`: `Autoresearch Dashboard`
+- `description`: `Live progress for the current autoresearch improvement run.`
+
+Save the returned URL as `<dashboard_url>`.
+
 ## Step 7: Hand Off to Experimenter Agent
 
 Tell the user:
-> Baseline established. Dashboard is open. Starting the improvement loop.
+> Baseline established. Dashboard: <dashboard_url>. Starting the improvement loop.
 
 Then spawn the experimenter agent:
 
-Use the Agent tool to spawn the `experimenter` agent with type from `agents/experimenter.md`. Pass the full content of `.autoresearch/program.md` and the path to `.autoresearch/experiments.json` as context in the prompt.
+Use the Agent tool to spawn the `experimenter` agent with type from `agents/experimenter.md`. Pass the full content of `.autoresearch/program.md`, the path to `.autoresearch/experiments.json`, and `<dashboard_url>` as context in the prompt.
 
 The prompt to the agent must include:
 1. The full program.md content
 2. The path to the project root
 3. The paths to the lib scripts (for dashboard generation)
-4. Instruction to read the experiment-loop skill for the iteration protocol
+4. The `<dashboard_url>` from the initial Artifact publish
+5. Instruction to read the experiment-loop skill for the iteration protocol
 
 ## Important Notes
 

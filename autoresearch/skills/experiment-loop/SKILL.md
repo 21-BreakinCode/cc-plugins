@@ -34,6 +34,15 @@ You are running an autonomous improvement loop. Each iteration follows a strict 
    - **If 2+ consecutive non-improvements:** Shift strategy entirely. Do not tweak. Try a fundamentally different approach.
    - **If stuck and need knowledge:** Use WebSearch + `npx defuddle parse <url> --md` to research. Log as a research entry (see Research Protocol below). This does NOT count as an iteration.
 
+## Dashboard Artifact Update
+
+After any dashboard generation, call Artifact with:
+- `file_path`: `.autoresearch/dashboard.html`
+- `url`: `<dashboard_url>`
+- `favicon`: `📈`
+
+The stable update arguments are `url: <dashboard_url>` and `favicon: 📈`. If the Artifact publish fails, retry once. If the retry fails, stop the loop and report the publish error. Use this procedure after a normal iteration, after research dashboard regeneration, and after final completion.
+
 ## The Iteration Protocol
 
 ### 1. Plan
@@ -111,6 +120,8 @@ If `ar_dashboard_generate` returns non-zero:
 2. Try generating again
 3. If it still fails, STOP the loop and report: "Dashboard generation failed. Iteration paused. Error: <details>"
 
+After generation succeeds, follow the Dashboard Artifact Update procedure.
+
 ### 7. Check Stopping Condition
 
 Read the config from experiments.json:
@@ -131,7 +142,7 @@ source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_set_status "complete"
 ```
 
-Regenerate the dashboard one final time. When status is "complete", the auto-refresh meta tag is removed.
+Regenerate the dashboard one final time. When status is "complete", the auto-refresh meta tag is removed. Follow the Dashboard Artifact Update procedure after this final generation.
 
 Print a summary to the user:
 ```
@@ -143,7 +154,7 @@ Improvement:  <percentage>%
 Iterations:   <total> (<kept> kept, <discarded> discarded)
 Reason:       <why it stopped — max iterations / convergence / threshold met>
 
-Dashboard: .autoresearch/dashboard.html
+Dashboard: <dashboard_url>
 ```
 
 ## Research Protocol
@@ -160,7 +171,7 @@ source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_append_research <next_id> "<query>" '["<url1>", "<url2>"]' "<what you learned>"
 ```
 
-5. Regenerate the dashboard (research entries show as info rows)
+5. Regenerate the dashboard (research entries show as info rows), then follow the Dashboard Artifact Update procedure
 6. Proceed to the next iteration with the new knowledge
 
 Research does NOT count toward the iteration limit or consecutive non-improvement count.

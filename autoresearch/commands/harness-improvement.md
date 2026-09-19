@@ -1,6 +1,6 @@
 ---
 description: "Execute improvement loop on the top-ranked harness issue: auto-generates eval from probes and spawns the autoresearch:experimenter agent"
-allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "AskUserQuestion"]
+allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "Artifact", "AskUserQuestion"]
 ---
 
 # /autoresearch:harness-improvement
@@ -88,25 +88,33 @@ ar_log_set_baseline '{"score": '"${score}"'}'
 Print:
 > Running baseline... <score>/100
 
-## Step 8: Generate Initial Dashboard
+## Step 8: Generate and Publish Initial Dashboard
 
 ```bash
 ar_dashboard_generate
-ar_dashboard_open
 ```
 
 If `ar_dashboard_generate` fails, stop and report the error. Do NOT proceed.
 
+Call Artifact with:
+- `file_path`: `.autoresearch/dashboard.html`
+- `favicon`: `📈`
+- `title`: `Autoresearch Dashboard`
+- `description`: `Live progress for the current autoresearch improvement run.`
+
+Save the returned URL as `<dashboard_url>`.
+
 ## Step 9: Hand Off to Experimenter Agent
 
 Tell the user:
-> Baseline established. Dashboard is open. Starting the improvement loop.
+> Baseline established. Dashboard: <dashboard_url>. Starting the improvement loop.
 
 Then spawn the experimenter agent using the Agent tool with `subagent_type: "autoresearch:experimenter"`. Pass:
 1. The full content of `.autoresearch/program.md`
 2. The path to the project root
 3. The paths to the lib scripts (all under `${CLAUDE_PLUGIN_ROOT}/lib/`: probes.sh and harness.sh for probe-based evals, plus experiment-log.sh, eval.sh, dashboard.sh)
-4. Instruction to read the experiment-loop skill (in this plugin) for the iteration protocol
+4. The `<dashboard_url>` from the initial Artifact publish
+5. Instruction to read the experiment-loop skill (in this plugin) for the iteration protocol
 
 The experimenter agent (in autoresearch) handles the edit-eval-keep/discard loop from here.
 
