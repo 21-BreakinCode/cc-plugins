@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.2 - 2026-09-19
+
+- **feat:** publish the live improvement dashboard as a private Claude Artifact. The dashboard now uses inline SVG and no external assets.
+
 ## 2.2.1 - 2026-09-19
 
 - **fix:** rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape. "harness" stays: standard term for this plugin.

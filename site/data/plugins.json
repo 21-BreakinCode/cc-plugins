@@ -182,12 +182,12 @@
     },
     {
       "name": "autoresearch",
-      "version": "2.2.1",
+      "version": "2.2.2",
       "tagline": "Eval-driven improvement, plus the harness to drive it",
-      "summary": "Two halves of one loop. An edit → eval → keep/discard engine improves any artifact — code, prompts, or docs — scoring each change with a shell command, an LLM judge, or both, and showing progress on a live auto-refreshing dashboard. A harness builder scores project health across six categories, scaffolds the Tier-1 components a project is missing — feedback loops, evals, sensors, and context-mgmt advisories — and auto-fixes the top-ranked issue through the same loop.",
+      "summary": "Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.",
       "category": "improve",
       "install": "claude plugin install autoresearch@21-breakincode",
-      "oneLiner": "Eval-driven improvement loop (keep/discard with a live HTML dashboard) plus a dev-lifecycle harness builder that scores project health and scaffolds feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
+      "oneLiner": "Eval-driven improvement loop (keep/discard with a live Artifact dashboard) plus a dev-lifecycle harness builder that measures project health and creates feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
       "commands": [
         {
           "name": "/autoresearch:harness-build",

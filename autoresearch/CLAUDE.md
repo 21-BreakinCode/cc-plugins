@@ -31,8 +31,10 @@ Commands source libs via `${CLAUDE_PLUGIN_ROOT}/lib/…`. Libs source siblings v
 Created in the user's project directory under `.autoresearch/`:
 - `program.md`: generated experiment spec
 - `experiments.json`: structured iteration log
-- `dashboard.html`: auto-refreshing HTML dashboard
+- `dashboard.html`: self-contained local fallback for the live Artifact dashboard
 - `harness.json`: health scorecard with impact-ranked improvements
+
+Artifact publication uses a session-scoped URL. The commands do not write this URL to `experiments.json`.
 
 The harness build command also writes into the user's project:
 - `.claude/hooks/<name>.json`: generated feedback loops
