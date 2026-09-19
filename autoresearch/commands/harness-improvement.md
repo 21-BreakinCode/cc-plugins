@@ -102,6 +102,8 @@ Call Artifact with:
 - `title`: `Autoresearch Dashboard`
 - `description`: `Live progress for the current autoresearch improvement run.`
 
+If the initial Artifact publish fails, stop and report the error. Do NOT proceed.
+
 Save the returned URL as `<dashboard_url>`.
 
 ## Step 9: Hand Off to Experimenter Agent
