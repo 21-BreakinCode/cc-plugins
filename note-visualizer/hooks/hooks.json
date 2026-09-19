@@ -1,0 +1,17 @@
+{
+  "description": "Reminds Claude to apply note-visualizer's diagram and callout principles after markdown edits.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/remind-visualize.py",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

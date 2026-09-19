@@ -1,3 +1,8 @@
+## 0.2.0 - 2026-09-20
+
+- **feat:** add a `PostToolUse` hook (`hooks/hooks.json` + `hooks/remind-visualize.py`) that reminds Claude to apply the visualize principle on any markdown edit, in any project. Replaces the plugin's earlier "no hooks" design.
+- **feat:** add a sequence-diagram style to the visual-patterns reference, for flows with 3+ participants trading ordered messages. Includes its own line and width budget.
+
 ## 0.1.1 - 2026-09-19
 
 - **fix:** rewrite the visualize skill's prose to clear the simple-english linter. No content or meaning changed, only sentence shape.
