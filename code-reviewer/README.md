@@ -12,7 +12,7 @@ claude plugin install code-reviewer@21-breakincode
 
 ## Commands
 
-- **`/code-reviewer:review-pr`** — Principle-aware PR review — layers a repo-specific review mindset on top of the standard 4+6 multi-agent review
+- **`/code-reviewer:review-pr`** — Principle-aware PR review: layers a repo-specific review mindset on top of the standard 4+6 multi-agent review
 
 ## Configuration
 

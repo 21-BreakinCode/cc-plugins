@@ -1,5 +1,5 @@
 ---
-description: "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness — produces a scored harness report with impact-ranked improvements"
+description: "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness. Produces a scored harness report with impact-ranked improvements"
 allowed-tools: ["Read", "Bash", "Glob", "Grep"]
 ---
 
@@ -16,9 +16,10 @@ source "${CLAUDE_PLUGIN_ROOT}/lib/harness.sh"
 
 ## Step 2: Parse Arguments
 
-Check if the user passed any flags:
-- `--json` — output raw harness.json instead of formatted scorecard
-- `--probe <name>` — run only a specific probe (lint, tests, runtime, architecture)
+Check the user's flags:
+
+- `--json`: output raw harness.json instead of formatted scorecard
+- `--probe <name>`: run only a specific probe (lint, tests, runtime, architecture)
 
 ## Step 3: Detect Tooling
 
@@ -30,8 +31,8 @@ Print what was detected:
 > 🔍 Scanning project...
 >   Detected: <list of tools found>
 
-If nothing was detected (all probes would be skipped), tell the user:
-> Could not detect any tooling in this project. Make sure you're in a project root with config files (package.json, pyproject.toml, Cargo.toml, etc).
+If nothing was detected (all probes will be skipped), tell the user:
+> Cannot detect any tooling in this project. Make sure you are in a project root with config files (package.json, pyproject.toml, Cargo.toml, and others).
 
 ## Step 4: Run Probes
 

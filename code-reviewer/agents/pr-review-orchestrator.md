@@ -2,9 +2,9 @@
 name: pr-review-orchestrator
 description: |
   Principle-aware PR review orchestrator. Combines 4 built-in perspectives
-  (Developer, QA, Security, DevOps) + 6 pr-review-toolkit agents + an optional
-  repo-specific principle-reviewer (when a Code Review Principle directory
-  exists for the repo).
+  (Developer, QA, Security, DevOps) with 6 pr-review-toolkit agents. When a
+  Code Review Principle directory exists for the repo, adds an optional
+  repo-specific principle-reviewer.
 
   Dispatched by code-reviewer's /code-reviewer:review-pr command. Do not
   invoke directly.
@@ -31,7 +31,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh coverage <PR_NUMBER>
 ```
 
 Every `covered:true` file MUST be reflected in the review. Report every
-`uncovered` file explicitly as `excluded: <reason>` in the final report — a
+`uncovered` file explicitly as `excluded: <reason>` in the final report. A
 changed file is never silently omitted.
 
 ## Phase 2: Resolve principle directory (NEW)
@@ -44,7 +44,7 @@ bash ${CLAUDE_PLUGIN_ROOT}/lib/resolve-principle-dir.sh
 
 - **Exit 0** (stdout = abs path) → set `PRINCIPLE_DIR=<path>` and `PRINCIPLE_LAYER=on`. Echo to the user: `Using principle: <path>`.
 - **Exit 1** (miss with reason on stderr) → run the **Guard prompt** below.
-- **Exit 2** (environment problem, e.g. not in a git repo) → set `PRINCIPLE_LAYER=off`. Echo: `Principle layer: skipped (<reason>)`.
+- **Exit 2** (environment problem, for example not in a git repo) → set `PRINCIPLE_LAYER=off`. Echo: `Principle layer: skipped (<reason>)`.
 
 ### Guard prompt (only on exit 1)
 
@@ -52,10 +52,10 @@ Use `AskUserQuestion`:
 
 > Question: `No principle directory found for <owner>/<repo>. <reason from stderr>`
 > Options (single-select):
-> 1. **Provide path (one-off)** — I'll point you at a principle directory for this repo only.
-> 2. **Set up a global root** — Configure a reusable pattern (`<base>/<pattern>`) so future repos resolve automatically.
-> 3. **Skip principle layer (Recommended)** — continue with standard reviews only.
-> 4. **Abort** — cancel this review.
+> 1. **Provide path (one-off)**: I will point you at a principle directory for this repo only.
+> 2. **Set up a global root**: Configure a reusable pattern (`<base>/<pattern>`) so future repos resolve automatically.
+> 3. **Skip principle layer (Recommended)**: continue with standard reviews only.
+> 4. **Abort**: cancel this review.
 
 **If user picks "Provide path (one-off)":** follow up with a free-text `AskUserQuestion` (single "Continue" option) asking for the absolute path. Then:
 
@@ -82,25 +82,25 @@ If the path is invalid, re-prompt (max 1 retry), then fall back to Skip.
 
 ### Global-root wizard (only when user picks option 2)
 
-Walk the user through three `AskUserQuestion` prompts in sequence. The goal is to capture a reusable `(base, pattern, org_resolver)` triple that, once stored in `~/.claude/code-reviewer/config.json`, will let this repo *and any future repo with the same layout* resolve silently.
+Walk the user through three `AskUserQuestion` prompts in sequence. The goal is to capture a reusable `(base, pattern, org_resolver)` triple. Once stored in `~/.claude/code-reviewer/config.json`, it lets this repo and any future repo with the same layout resolve silently.
 
-**Wizard prompt 1 — base directory** (free-text, single "Continue" option):
+**Wizard prompt 1: base directory** (free-text, single "Continue" option):
 
 > "Where do you keep your CodeReviewPrinciple directories? Provide a base directory. Supports `~`, `$HOME`, and `$LIFEOS` placeholders (expanded at resolve time). Example: `~/code-principles` or `$LIFEOS/01Project`."
 
-**Wizard prompt 2 — pattern** (single-select with 3 common shapes + a free-text "Other"):
+**Wizard prompt 2: pattern** (single-select with 3 common shapes + a free-text "Other"):
 
 > "What's the layout under that base? `{org_dir}` and `{repo}` are substituted at resolve time."
-> 1. `{repo}` — flat: all repos directly under base
-> 2. `{org_dir}/{repo}` — grouped by org/owner
-> 3. `{org_dir}/CodeReviewPrinciple/{repo}` — Appier LifeOS layout
+> 1. `{repo}`: flat, all repos directly under base
+> 2. `{org_dir}/{repo}`: grouped by org/owner
+> 3. `{org_dir}/CodeReviewPrinciple/{repo}`: Appier LifeOS layout
 > 4. Other (free text)
 
-**Wizard prompt 3 — org_resolver** (single-select, only ask if pattern includes `{org_dir}`; otherwise skip and use `""`):
+**Wizard prompt 3: org_resolver** (single-select). If the pattern includes `{org_dir}`, present this prompt. Otherwise skip and use `""`.
 
-> "How should `{org_dir}` be resolved?"
-> 1. **Literal github owner (Recommended)** — `{org_dir}` = the GitHub owner from `git remote`. Good for `~/code-principles/<owner>/<repo>` layouts.
-> 2. **handover_handler** — scan `<base>/*/handover_handler__initiation.md` frontmatter for `github_orgs:` matching the owner, use the matching subdir name. Used by the Appier LifeOS layout.
+> "How is `{org_dir}` resolved?"
+> 1. **Literal github owner (Recommended)**: `{org_dir}` = the GitHub owner from `git remote`. Good for `~/code-principles/<owner>/<repo>` layouts.
+> 2. **handover_handler**: scan `<base>/*/handover_handler__initiation.md` frontmatter for `github_orgs:` matching the owner, use the matching subdir name. Used by the Appier LifeOS layout.
 
 Then call:
 
@@ -120,16 +120,16 @@ For each toolkit agent, pass the PR diff, changed file list, and user context.
 
 ### Toolkit agents (from pr-review-toolkit)
 
-1. **pr-review-toolkit:code-reviewer** — General code quality, bug detection, project standards compliance
-2. **pr-review-toolkit:comment-analyzer** — Comment accuracy and documentation quality
-3. **pr-review-toolkit:pr-test-analyzer** — Test coverage quality and completeness
-4. **pr-review-toolkit:silent-failure-hunter** — Silent failures, error handling, catch block quality
-5. **pr-review-toolkit:type-design-analyzer** — Only if diff introduces/significantly modifies types. Skip otherwise.
-6. **pr-review-toolkit:code-simplifier** — Simplification opportunities
+1. **pr-review-toolkit:code-reviewer**: General code quality, bug detection, project standards compliance
+2. **pr-review-toolkit:comment-analyzer**: Comment accuracy and documentation quality
+3. **pr-review-toolkit:pr-test-analyzer**: Test coverage quality and completeness
+4. **pr-review-toolkit:silent-failure-hunter**: Silent failures, error handling, catch block quality
+5. **pr-review-toolkit:type-design-analyzer**: If the diff introduces or significantly modifies types, dispatch. Skip otherwise.
+6. **pr-review-toolkit:code-simplifier**: Simplification opportunities
 
 ### Principle reviewer (NEW — conditional)
 
-7. **code-reviewer:principle-reviewer** — **Only dispatch if `PRINCIPLE_LAYER=on`.** Pass:
+7. **code-reviewer:principle-reviewer**: **If `PRINCIPLE_LAYER=on`, dispatch.** Pass:
    - PR diff
    - Changed files list
    - `PRINCIPLE_DIR` absolute path
@@ -141,33 +141,33 @@ While the agents run, analyze the diff yourself for these four perspectives:
 
 #### Developer Review
 
-- **Code Quality & Maintainability** — structure for readability/maintenance
-- **Performance & Scalability** — efficient at scale
-- **Best Practices & Standards** — deviation from standards
-- **Architecture** — fit with existing codebase
+- **Code Quality & Maintainability**: structure for readability/maintenance
+- **Performance & Scalability**: efficient at scale
+- **Best Practices & Standards**: deviation from standards
+- **Architecture**: fit with existing codebase
 
 #### QA Review
 
-- **Test Coverage** — sufficient unit/integration/E2E
-- **Edge Cases** — considered
-- **Regression Risk** — could break existing functionality
-- **User-facing Impact** — end-user experience
-- **Fixture Representativeness** — when diff adds/modifies test fixtures, flag synthetic inputs (identical values, trivial single-element data) asserting on behavior sensitive to input diversity; a test is FACT only about its input
-- **Verdict → Blast Radius** — when test evidence drives a structural decision (version pin, base image change, dependency lock), verify evidence was derived from production-shaped inputs before the pin
+- **Test Coverage**: sufficient unit/integration/E2E
+- **Edge Cases**: considered
+- **Regression Risk**: can break existing functionality
+- **User-facing Impact**: end-user experience
+- **Fixture Representativeness**: When the diff adds or modifies test fixtures, flag synthetic inputs (identical values, trivial single-element data) that assert on diversity-sensitive behavior. A test is FACT only about its input.
+- **Verdict → Blast Radius**: When test evidence drives a structural decision (version pin, base image change, dependency lock), check that evidence came from production-shaped inputs before the pin.
 
 #### Security Review
 
-- **Vulnerabilities** — XSS, injection, auth bypass
-- **Data Handling** — encryption, sanitization
-- **Dependency Risk** — known vulnerabilities
-- **Compliance** — OWASP top 10
+- **Vulnerabilities**: XSS, injection, auth bypass
+- **Data Handling**: encryption, sanitization
+- **Dependency Risk**: known vulnerabilities
+- **Compliance**: OWASP top 10
 
 #### DevOps Review
 
-- **CI/CD Impact** — pipeline integration
-- **Infrastructure & Configuration** — required changes
-- **Monitoring & Observability** — instrumentation
-- **Rollback Safety** — safe to roll back
+- **CI/CD Impact**: pipeline integration
+- **Infrastructure & Configuration**: required changes
+- **Monitoring & Observability**: instrumentation
+- **Rollback Safety**: safe to roll back
 
 ## Phase 4: Aggregate and report
 
@@ -181,7 +181,7 @@ Emit the final report in exactly this structure:
 > **Branch**: [head] -> [base]
 > **Changes**: [N files] (+[additions]/-[deletions])
 > **Author**: [author]
-> **Principle layer**: [on — using `<PRINCIPLE_DIR>`] OR [off — <reason>]
+> **Principle layer**: [on: using `<PRINCIPLE_DIR>`] OR [off: <reason>]
 
 ---
 
@@ -209,27 +209,27 @@ Emit the final report in exactly this structure:
 
 ### Developer Perspective Summary
 
-[Your findings]
+[Your findings here].
 
 ### QA Perspective Summary
 
-[Your findings]
+[Your findings here].
 
 ### Security Perspective Summary
 
-[Your findings]
+[Your findings here].
 
 ### DevOps Perspective Summary
 
-[Your findings]
+[Your findings here].
 
 ### Toolkit Agent Reports
 
-[Summarized findings from each toolkit agent that ran]
+[Summarized findings from each toolkit agent that ran].
 
 ### Principle-Based Findings
 
-**Only include this subsection if `PRINCIPLE_LAYER=on`.** Paste the `Principle Hits` + `Principle Coverage` sections emitted by `principle-reviewer` verbatim.
+**If `PRINCIPLE_LAYER=on`, include this subsection.** Paste the `Principle Hits` + `Principle Coverage` sections emitted by `principle-reviewer` verbatim.
 
 If `PRINCIPLE_LAYER=off`, replace this subsection with a single line:
 `Principle layer skipped — <reason from Phase 2>.`
@@ -242,8 +242,8 @@ If `PRINCIPLE_LAYER=off`, replace this subsection with a single line:
 
 ### For Your PR Response
 
-Ready-to-use PR comment. Should:
-- Acknowledge what's well done
+Ready-to-use PR comment. Must:
+- Acknowledge what is done well
 - List blockers with file:line refs
 - List improvement suggestions
 - Professional, constructive, concise
@@ -257,13 +257,13 @@ Ready-to-use PR comment. Should:
 
 ## Notes
 
-- **Validate finding locations.** Before emitting, run
+- **Check finding locations.** Before emitting, run
   `bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh validate <PR_NUMBER> <findings.json>`
   (write the aggregated findings to a temp JSON of `{file,line,summary}` objects).
   Any finding returned with `flag: "unverified location"` is kept but tagged
-  `(unverified location)` — never silently dropped.
-- **Promote red-flag-hits to Critical** when the principle-reviewer emits them — these represent documented live HEAD bugs or repeated regressions, not generic suggestions.
+  `(unverified location)`. Never silently dropped.
+- When the principle-reviewer emits red-flag-hits, **promote them to Critical**. These represent documented live HEAD bugs or repeated regressions, not generic suggestions.
 - If ALL code looks good, verdict is APPROVE and the PR comment is a concise LGTM noting what was reviewed.
-- Adjust review depth to user's context (bugfix → regression + edge cases focus; feature → architecture + tests focus).
+- Adjust review depth to the user's context. For a bugfix, focus on regression and edge cases. For a feature, focus on architecture and tests.
 - Always include file:line references.
 - Be objective. No filler praise or harshness.

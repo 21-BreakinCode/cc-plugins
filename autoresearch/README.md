@@ -12,9 +12,9 @@ claude plugin install autoresearch@21-breakincode
 
 ## Commands
 
-- **`/autoresearch:harness-build`** — Menu-driven scaffolder for harness components — feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/.
-- **`/autoresearch:harness-check`** — Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness — produces a scored harness report with impact-ranked improvements
-- **`/autoresearch:harness-improvement`** — Execute improvement loop on the top-ranked harness issue — auto-generates eval from probes and spawns the autoresearch:experimenter agent
+- **`/autoresearch:harness-build`** — Menu-driven scaffolder for harness components: feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/.
+- **`/autoresearch:harness-check`** — Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness. Produces a scored harness report with impact-ranked improvements
+- **`/autoresearch:harness-improvement`** — Execute improvement loop on the top-ranked harness issue: auto-generates eval from probes and spawns the autoresearch:experimenter agent
 - **`/autoresearch:improve`** — Iteratively improve any artifact using an edit-eval-keep/discard loop with live dashboard
 
 ---

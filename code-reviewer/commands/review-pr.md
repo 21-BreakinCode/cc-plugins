@@ -1,5 +1,5 @@
 ---
-description: "Principle-aware PR review — layers a repo-specific review mindset on top of the standard 4+6 multi-agent review"
+description: "Principle-aware PR review: layers a repo-specific review mindset on top of the standard 4+6 multi-agent review"
 argument-hint: "<pr-number>"
 allowed-tools: ["Bash", "Read", "Glob", "Grep", "Task", "AskUserQuestion"]
 ---
@@ -12,7 +12,7 @@ allowed-tools: ["Bash", "Read", "Glob", "Grep", "Task", "AskUserQuestion"]
 
 If `$ARGUMENTS` is empty or not numeric, tell the user:
 
-> Usage: `/code-reviewer:review-pr <pr-number>` (e.g., `/code-reviewer:review-pr 5`)
+> Usage: `/code-reviewer:review-pr <pr-number>` (for example, `/code-reviewer:review-pr 5`)
 
 Then stop.
 
@@ -31,7 +31,7 @@ Display a brief summary:
 
 Use `AskUserQuestion`:
 
-> "What is this PR about? This helps focus the review on what matters. (e.g., 'New feature for user authentication', 'Bugfix for login timeout on slow networks', 'Refactoring payment module to use new SDK')"
+> "What is this PR about? This helps focus the review on what matters. (For example, 'New feature for user authentication', 'Bugfix for login timeout on slow networks', 'Refactoring payment module to use new SDK')"
 
 Free-text. Wait for the response.
 

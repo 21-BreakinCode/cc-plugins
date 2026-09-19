@@ -11,10 +11,10 @@ You are the setup phase of the autoresearch plugin. Your job is to gather the in
 
 The user invoked this command with inline content describing what they want to improve. Extract:
 
-1. **Improvement goal** — what they want to make better
-2. **Target file(s)** — if mentioned (may need to ask)
-3. **Eval method** — if mentioned (may need to ask)
-4. **Stopping condition** — if mentioned (may need to ask)
+1. **Improvement goal**: what they want to make better
+2. **Target file(s)**: if mentioned (ask if not)
+3. **Eval method**: if mentioned (ask if not)
+4. **Stopping condition**: if mentioned (ask if not)
 
 ## Step 2: Eval Metrics Guard (MANDATORY)
 
@@ -26,39 +26,42 @@ If NO eval method is detected, you MUST ask before proceeding:
 
 > Before I start iterating, I need to know how to measure improvement. Please provide one or both:
 >
-> **Objective** — a shell command that outputs a measurable score (e.g., `npm test`, `pytest --benchmark`, `lighthouse --output json`)
+> **Objective**: a shell command that outputs a measurable score (for example, `npm test`, `pytest --benchmark`, `lighthouse --output json`)
 >
-> **Subjective** — criteria for me to judge each iteration (e.g., "rate code readability 1-10 considering naming, structure, and complexity")
+> **Subjective**: criteria for me to judge each iteration.
+> For example: "rate code readability 1-10 considering naming, structure, and complexity."
 >
-> Without eval metrics, I can't determine if changes are improvements.
+> Without eval metrics, I cannot tell whether changes are improvements.
 
-**Do NOT proceed until at least one eval method is confirmed.**
+**Do NOT proceed until you check that at least one eval method is set.**
 
 ## Step 3: Interactive Gap-Filling
 
 Ask for any missing information, one question at a time. Skip questions where the answer is already known from the user's input.
 
 **Target file(s):**
-If not specified, try to auto-detect from the goal and current project context (read nearby files, check what's relevant). If unclear, ask:
-> Which file(s) should I modify during the improvement loop?
+
+If not specified, try to auto-detect from the goal and current project context (read nearby files, check what is relevant). If unclear, ask:
+> Which file(s) do I modify during the improvement loop?
 
 **Eval method details:**
-- If shell command: confirm the exact command and which metric name to extract from output
-- If LLM-as-judge: confirm the criteria and scale (default 1-10)
-- If both: confirm both
+
+- Shell command: check the exact command and which metric name to extract from output.
+- LLM-as-judge: check the criteria and scale (default 1-10).
+- Both: check both.
 
 **Metric direction:**
 > For `<metric_name>`, is lower better or higher better?
 
 **Stopping condition:**
-> How should the loop stop?
+> How does the loop stop?
 > 1. When all metrics pass a threshold (you specify the threshold)
 > 2. Smart defaults (max 10 iterations OR 3 consecutive non-improvements)
 > 3. Custom (you specify max iterations and non-improvement limit)
 
 **Constraints (optional):**
-> Any constraints I should respect? (e.g., "don't change the public API", "keep bundle under 50KB")
-> If none, I'll just focus on the improvement goal.
+> Any constraints I must respect? (for example, "do not change the public API", "keep bundle under 50KB")
+> If none, I will focus on the improvement goal.
 
 ## Step 4: Generate program.md
 
@@ -72,7 +75,7 @@ ar_ensure_dir
 ar_ensure_gitignore
 ```
 
-2. Write `.autoresearch/program.md` with all the gathered information. Use the template at `templates/program.template.md` as a reference but fill in the actual values. Replace any `{{PLACEHOLDER}}` sections that don't apply with "N/A".
+2. Write `.autoresearch/program.md` with all the gathered information. Use the template at `templates/program.template.md` as a reference but fill in the actual values. Replace any `{{PLACEHOLDER}}` sections that do not apply with "N/A".
 
 3. Initialize the experiment log:
 
@@ -117,7 +120,7 @@ Then spawn the experimenter agent:
 
 Use the Agent tool to spawn the `experimenter` agent with type from `agents/experimenter.md`. Pass the full content of `.autoresearch/program.md` and the path to `.autoresearch/experiments.json` as context in the prompt.
 
-The prompt to the agent should include:
+The prompt to the agent must include:
 1. The full program.md content
 2. The path to the project root
 3. The paths to the lib scripts (for dashboard generation)

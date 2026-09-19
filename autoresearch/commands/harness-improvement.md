@@ -1,5 +1,5 @@
 ---
-description: "Execute improvement loop on the top-ranked harness issue — auto-generates eval from probes and spawns the autoresearch:experimenter agent"
+description: "Execute improvement loop on the top-ranked harness issue: auto-generates eval from probes and spawns the autoresearch:experimenter agent"
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "Agent", "AskUserQuestion"]
 ---
 
@@ -19,25 +19,26 @@ source "${CLAUDE_PLUGIN_ROOT}/lib/dashboard.sh"
 
 ## Step 2: Validate Harness Exists
 
-Check if `.autoresearch/harness.json` exists:
+Check that `.autoresearch/harness.json` exists:
 ```bash
 ar_harness_read > /dev/null
 ```
 
-If it doesn't exist, tell the user:
+If it does not exist, tell the user:
 > No harness report found. Run `/autoresearch:harness-check` first to scan your project.
 
-If it's stale (>24h old), warn:
+If it is stale (>24h old), warn:
 > ⚠️ Harness report is over 24 hours old. Consider re-running `/autoresearch:harness-check` for fresh results.
 > Proceeding with existing report...
 
 ## Step 3: Parse Arguments
 
-Check if the user passed any flags:
-- `--rank <N>` — target the Nth ranked improvement (default: 1)
-- `--focus <category>` — target a specific category (lint, tests, runtime, architecture)
-- `--threshold <N>` — override the default target score
-- `--max-iterations <N>` — override default iteration limit
+Check the user's flags:
+
+- `--rank <N>`: target the Nth ranked improvement (default: 1)
+- `--focus <category>`: target a specific category (lint, tests, runtime, architecture)
+- `--threshold <N>`: override the default target score
+- `--max-iterations <N>`: override default iteration limit
 
 If `--focus <category>` is specified, find the rank for that category from harness.json.
 
@@ -53,16 +54,21 @@ Read the harness.json and check the target:
 ar_harness_to_program <rank>
 ```
 
-Print what's being targeted:
+Print what is being targeted:
+
 > **Target:** <Category> (rank #<N>, score <score>/100)
+
 > **Goal:** <description>
+
 > **Eval:** ar_probe_<category> (re-run after each iteration)
+
 > **Threshold:** ≥<threshold>/100
-> **Max iterations:** <max>
+
+> **Max iterations:** <max>.
 
 ## Step 6: Initialize Experiment Log
 
-Read the generated program.md to extract the goal and eval details, then:
+Read the generated program.md to extract the goal and eval details. Then run:
 
 ```bash
 ar_log_init "<goal>" "shell" "<eval_command>" "" "<max_iterations>" "3"

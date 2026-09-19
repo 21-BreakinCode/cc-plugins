@@ -52,7 +52,7 @@ A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session 
 
 ## Measure & Improve
 
-### [autoresearch](./autoresearch/README.md) · `v2.2.0`
+### [autoresearch](./autoresearch/README.md) · `v2.2.1`
 
 *Eval-driven improvement, plus the harness to drive it*
 
@@ -64,7 +64,7 @@ Two halves of one loop. An edit → eval → keep/discard engine improves any ar
 
 ## Review & Design
 
-### [code-reviewer](./code-reviewer/README.md) · `v1.1.0`
+### [code-reviewer](./code-reviewer/README.md) · `v1.1.1`
 
 *Principle-aware PR review*
 
@@ -74,7 +74,7 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 
 **Commands** · `/code-reviewer:review-pr`
 
-### [uiux-optimizer](./uiux-optimizer/README.md) · `v1.3.0`
+### [uiux-optimizer](./uiux-optimizer/README.md) · `v1.3.1`
 
 *Reference-driven UI/UX design advisor*
 

@@ -1,5 +1,5 @@
 ---
-description: "Menu-driven scaffolder for harness components — feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
+description: "Menu-driven scaffolder for harness components: feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
 allowed-tools: ["Read", "Write", "Edit", "Bash", "Glob", "Grep", "AskUserQuestion"]
 ---
 
@@ -29,24 +29,24 @@ Parse the comma-separated `recommended` list. It will contain zero or more of:
 ## Step 3: Present the menu
 
 Use AskUserQuestion with a single question. The header is "Component type".
-Construct option labels by annotating each with " (recommended)" if the type
-appears in `recommended`. Keep the four options in the same order every time.
+When the type appears in `recommended`, annotate each option label with " (recommended)".
+Keep the four options in the same order every time.
 The user's pick determines the next step.
 
 Options:
-1. Feedback loop — hook on a Claude Code event that posts a domain principle
-2. Eval loop — script that returns JSON `{pass, metric, reason}`
-3. Sensor — wrap a linter, emit agent-tuned fix messages
-4. Context-mgmt — generate an advisory report of oversized agent/skill files
+1. Feedback loop: hook on a Claude Code event that posts a domain principle
+2. Eval loop: script that returns JSON `{pass, metric, reason}`
+3. Sensor: wrap a linter, emit agent-tuned fix messages
+4. Context-mgmt: generate an advisory report of oversized agent/skill files
 
 ## Step 4: Run the focused intake for the chosen type
 
 ### If feedback loop
 
-Ask 3 questions via AskUserQuestion (one per call OR a single 3-question batch — your call):
+Ask 3 questions via AskUserQuestion (one per call OR a single 3-question batch, your choice):
 
 - Q1 (header "Event"): Which Claude Code event? Options: `UserPromptSubmit`, `Stop`, `PostToolUse`, `PreToolUse`.
-- Q2 (header "Matcher"): What tool/pattern should fire? Default: `Edit`. Accept free-text.
+- Q2 (header "Matcher"): What tool/pattern must fire? Default: `Edit`. Accept free-text.
 - Q3 (header "Principle"): One-line description of the principle to enforce. Free-text.
 
 Then call:
@@ -107,11 +107,11 @@ Read each output path printed by the builder. Print to the user:
 - **Feedback loop:** the generated `.claude/hooks/<name>.json` is a snippet, not an auto-loaded hook. Tell the user to copy the value of its top-level `"hooks"` key into their `.claude/settings.json` under that file's `"hooks"` key, then restart Claude Code. The generated file's `_install` field repeats this.
 - **Eval loop:** the script at `eval/<name>.sh` is the eval. Tell the user they can invoke it directly, or pass it to `/autoresearch:improve` as the `eval_command`.
 - **Sensor:** the script at `.claude/sensors/<name>.sh` is invocable on demand. Tell the user to optionally wire it into a hook for automatic firing.
-- **Context-mgmt:** the report at `.claude/harness-report-<date>.md` is advisory. Tell the user to read it and act manually — the build command never edits agent files directly.
+- **Context-mgmt:** the report at `.claude/harness-report-<date>.md` is advisory. Tell the user to read it and act manually. The build command never edits agent files directly.
 
 ## Important notes
 
 - Always produce Tier-1 only. Never emit a Tier-2 or Tier-3 scaffold.
-- Never edit existing files in `.claude/agents/` or `.claude/skills/` — even for context-mgmt, only the advisory report is written.
+- Never edit existing files in `.claude/agents/` or `.claude/skills/`. Even for context-mgmt, only the advisory report is written.
 - If the user types a component name that already exists at the destination, ask before overwriting (use AskUserQuestion: overwrite / pick new name).
-- Always confirm the destination path before writing, e.g. "I'll write `.claude/hooks/<name>.json` — OK?"
+- Always check the destination path before writing, for example: "I will write `.claude/hooks/<name>.json`. OK?"

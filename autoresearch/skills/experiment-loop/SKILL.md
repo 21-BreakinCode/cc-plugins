@@ -11,9 +11,9 @@ You are running an autonomous improvement loop. Each iteration follows a strict 
 
 1. Read `.autoresearch/experiments.json` to understand:
    - The goal and constraints from the config
-   - What has been tried before (avoid repeating failed approaches)
+   - What was tried before (avoid repeating failed approaches)
    - The current best score
-   - How many consecutive non-improvements have occurred
+   - How many consecutive non-improvements happened
 
 2. Read the target file(s) listed in `.autoresearch/program.md`
 
@@ -25,24 +25,24 @@ You are running an autonomous improvement loop. Each iteration follows a strict 
    ar_snapshot_save <target_files>
    ```
    The snapshot holds the **last known good** state. It advances only on a
-   keep — never before an edit, or a crash mid-edit would poison the revert
+   keep. Never save before an edit, or a crash mid-edit will poison the revert
    point. No git repo is required at the target.
 
 3. Decide what to try next:
    - **If first iteration:** Make the most obvious improvement based on the goal
    - **If previous iterations improved:** Continue in a similar direction, refine further
-   - **If 2+ consecutive non-improvements:** Shift strategy entirely. Don't tweak — try a fundamentally different approach.
+   - **If 2+ consecutive non-improvements:** Shift strategy entirely. Do not tweak. Try a fundamentally different approach.
    - **If stuck and need knowledge:** Use WebSearch + `npx defuddle parse <url> --md` to research. Log as a research entry (see Research Protocol below). This does NOT count as an iteration.
 
 ## The Iteration Protocol
 
 ### 1. Plan
 
-Write a one-line hypothesis: what you're going to change and why you expect it to improve the metric.
+Write a one-line hypothesis: what you plan to change and why you expect it to improve the metric.
 
 ### 2. Edit
 
-Make the edit to the target file(s). **One hypothesis per iteration** — keep changes focused and minimal, one idea at a time.
+Make the edit to the target file(s). **One hypothesis per iteration.** Keep changes focused and minimal, one idea at a time.
 
 ### 3. Eval
 
@@ -71,11 +71,11 @@ Run the shell command first, then do the LLM-as-judge scoring. Log both scores. 
 
 ### 4. Compare
 
-Compare the new score against the previous best score (not baseline — the running best).
+Compare the new score against the previous best score (not baseline, the running best).
 
 Calculate the delta: `new_score - previous_best_score`
 
-Determine if this is an improvement based on the metric direction (lower_is_better or higher_is_better).
+Use the metric direction (lower_is_better or higher_is_better) to determine whether this is an improvement.
 
 ### 5. Keep or Discard
 
@@ -84,8 +84,8 @@ Determine if this is an improvement based on the metric direction (lower_is_bett
 ar_snapshot_save <target_files>
 ```
 
-This advances the revert point to the new best state, so a later discard falls
-back to *this* iteration rather than the original baseline.
+This advances the revert point to the new best state. A later discard falls
+back to *this* iteration, not the original baseline.
 
 Log the iteration to experiments.json with `status: "kept"` and your one-line reasoning.
 
@@ -94,7 +94,7 @@ Log the iteration to experiments.json with `status: "kept"` and your one-line re
 ar_snapshot_restore <target_files>
 ```
 
-Log the iteration to experiments.json with `status: "discarded"`, your reasoning, and the attempted change in `diff_summary` — the dashboard shows your thinking, not just scores.
+Log the iteration to experiments.json with `status: "discarded"`, your reasoning, and the attempted change in `diff_summary`. The dashboard shows your thinking, not just scores.
 
 ### 6. Update Dashboard
 
@@ -107,7 +107,7 @@ ar_dashboard_generate
 ```
 
 If `ar_dashboard_generate` returns non-zero:
-1. Attempt to fix the issue (e.g., re-read the template, check experiments.json validity)
+1. Attempt to fix the issue (for example, re-read the template, check experiments.json validity)
 2. Try generating again
 3. If it still fails, STOP the loop and report: "Dashboard generation failed. Iteration paused. Error: <details>"
 
@@ -131,7 +131,7 @@ source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_set_status "complete"
 ```
 
-Regenerate the dashboard one final time (the auto-refresh meta tag is removed when status is "complete").
+Regenerate the dashboard one final time. When status is "complete", the auto-refresh meta tag is removed.
 
 Print a summary to the user:
 ```

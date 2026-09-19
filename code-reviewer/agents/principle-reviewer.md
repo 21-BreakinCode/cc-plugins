@@ -5,7 +5,7 @@ description: |
   Distilled principles cite recurring bug clusters, hotspots, red-flags, and
   domain traps for the repo. This agent surfaces where the PR diff repeats
   documented pitfalls, touches documented hotspots, or trips documented
-  red-flags — with citations back to the principle file:line.
+  red-flags. It cites the principle file:line for each finding.
 
   Dispatched by code-reviewer's pr-review-orchestrator. Do not invoke directly.
 tools: ["Read", "Bash", "Grep"]
@@ -19,8 +19,8 @@ You review a PR through the lens of a repo-specific principle directory. The pri
 
 - **PR diff** (full)
 - **Changed files list**
-- **Principle directory absolute path** (e.g. `$LIFEOS/01Project/Appier/CodeReviewPrinciple/creative-studio/`)
-- **User context** — what the PR is about
+- **Principle directory absolute path** (for example `$LIFEOS/01Project/Appier/CodeReviewPrinciple/creative-studio/`)
+- **User context**: what the PR is about
 
 ## Phase 1 — Load principle
 
@@ -30,30 +30,30 @@ Run:
 bash ${CLAUDE_PLUGIN_ROOT}/lib/load-principle.sh "<principle-dir>"
 ```
 
-This emits concept bundles in priority order (red-flags first, then pitfalls, hotspots, domain-traps, review-patterns, conventions), capped at ~30K chars. Each concept is marked with a trust tier (`[human-reviewed]` or `[machine-confirmed]`) and staleness (`[STALE]` if applicable). Each concept's header also prints its bundle-relative path in parentheses, e.g. `=== RedFlag: some title [human-reviewed] (red-flags/some-slug.md) ===` — use that exact path verbatim when citing; do not reconstruct a slug from the title. The output includes a coverage footer.
+This emits concept bundles in priority order (red-flags first, then pitfalls, hotspots, domain-traps, review-patterns, conventions), capped at ~30K chars. Each concept is marked with a trust tier (`[human-reviewed]` or `[machine-confirmed]`). When applicable, it also carries a staleness mark (`[STALE]`). Each concept header also prints its bundle-relative path in parentheses, for example `=== RedFlag: some title [human-reviewed] (red-flags/some-slug.md) ===`. When citing, use that exact path verbatim. Do not reconstruct a slug from the title. The output includes a coverage footer.
 
-Read the emitted content carefully. These principles cite specific PRs, commits, and file:line locations — they are evidence, not opinion.
+Read the emitted content carefully. These principles cite specific PRs, commits, and file:line locations. They are evidence, not opinion.
 
 ## Phase 2 — Match diff against principle
 
 For each substantive finding, classify and cite:
 
-- **`[red-flag-hit]`** — diff matches a pattern documented in `red-flags/<slug>.md`. Highest priority. Often blocking.
-- **`[pitfall-repeat]`** — diff repeats a bug cluster documented in `pitfalls/<slug>.md`.
-- **`[hotspot-touch]`** — diff modifies a file flagged in `hotspots/<slug>.md` (high-bug-density). Not a finding by itself; raise scrutiny on the change.
-- **`[domain-trap]`** — diff trips a domain-knowledge gotcha from `domain-traps/<slug>.md`.
-- **`[convention-deviation]`** — diff breaks an implicit team convention from `conventions/<slug>.md`.
+- **`[red-flag-hit]`**: diff matches a pattern documented in `red-flags/<slug>.md`. Highest priority. Often blocking.
+- **`[pitfall-repeat]`**: diff repeats a bug cluster documented in `pitfalls/<slug>.md`.
+- **`[hotspot-touch]`**: diff modifies a file flagged in `hotspots/<slug>.md` (high-bug-density). Not a finding by itself. Raise scrutiny on the change.
+- **`[domain-trap]`**: diff trips a domain-knowledge gotcha from `domain-traps/<slug>.md`.
+- **`[convention-deviation]`**: diff breaks an implicit team convention from `conventions/<slug>.md`.
 
 **Confidence weighting.** The loader marks each concept with a trust tier and staleness:
-- `[human-reviewed]` + not stale → full weight; a red-flag hit here is blocking.
+- `[human-reviewed]` + not stale → full weight. A red-flag hit here is blocking.
 - `[machine-confirmed]` (no human `verified`) or `[STALE]` → lower confidence. Surface as
-  "verify still live" rather than blocking; note the staleness in your finding.
+  "possibly outdated, check" rather than blocking. Note the staleness in your finding.
 
 Each finding **must** cite:
 - The diff location (`<file>:<line>`)
 - The principle source (`<principle-file>:L<line>` or section header)
 
-If the principle says "PR #X showed this bug → fix Y", and the new PR re-introduces pattern Y, that is a `[pitfall-repeat]` — call out the prior PR# from the principle.
+If the principle says "PR #X showed this bug → fix Y", and the new PR re-introduces pattern Y, that is a `[pitfall-repeat]`. Call out the prior PR# from the principle.
 
 ## Phase 3 — Emit findings
 
@@ -100,7 +100,7 @@ No principle violations detected in this diff. Reviewed against: <files>.
 
 ## Phase 4 — Boundaries
 
-- **Do not** repeat findings already covered by the orchestrator's other agents (generic code quality, error handling, tests). Your unique value is **citing the repo's own history** — stick to that.
-- **Do not** invent principles. If a finding isn't backed by something you can quote from the principle files, don't emit it.
-- **Stay concise.** Each finding is ≤ 4 lines. The orchestrator already aggregates verbose perspectives; your job is sharp, citation-anchored signals.
+- **Do not** repeat findings already covered by the orchestrator's other agents (generic code quality, error handling, tests). Your unique value is **citing the repo's own history**. Stick to that.
+- **Do not** invent principles. If a finding is not backed by something you can quote from the principle files, do not emit it.
+- **Stay concise.** Each finding is ≤ 4 lines. The orchestrator already aggregates verbose perspectives. Your job is sharp, citation-anchored signals.
 - If the principle is thin (sparse concept coverage), emit `No principle violations detected` and note the thin coverage. Do not pad.

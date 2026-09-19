@@ -1,9 +1,13 @@
 # Changelog
 
-## 1.1.0 — 2026-08-09
+## 1.1.1 - 2026-09-19
 
-- **feat:** QA fixture representativeness check — flags synthetic test inputs asserting on diversity-sensitive behavior
-- **feat:** QA verdict → blast radius gate — flags structural decisions lacking production-shaped test evidence
+- **fix:** rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape.
+
+## 1.1.0 - 2026-08-09
+
+- **feat:** QA fixture representativeness check. Flags synthetic test inputs asserting on diversity-sensitive behavior.
+- **feat:** QA verdict → blast radius gate. Flags structural decisions lacking production-shaped test evidence.
 - **feat:** mine-git-signals revert chain detection (misdiagnosis signal)
 - **feat:** refresh-principles misdiagnosis sequence mining (Pitfall capture)
 
@@ -14,7 +18,7 @@
 - **feat:** principle-reviewer cites OKF concept paths + trust/stale weighting
 - **feat:** deterministic old→OKF bundle migration transform
 - **docs:** refresh-principles writes OKF concepts, stamps verified on approval
-- **fix:** seed OKF skeleton on bootstrap; emit concept path in reader header
+- **fix:** seed OKF skeleton on bootstrap. Emit concept path in reader header.
 - **fix:** compute caused_change from comment outdated-ness
 - **fix:** exclude generated/vendored files from churn hotspots
 - **fix:** quote YAML-hostile concept titles, capture wrapped What/Why lines
@@ -36,4 +40,4 @@
 
 ## 0.1.0 — 2026-06-01
 
-- **feat:** initial release — principle-aware PR review plugin
+- **feat:** initial release. Principle-aware PR review plugin.

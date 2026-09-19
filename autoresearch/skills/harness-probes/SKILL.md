@@ -38,7 +38,7 @@ Every probe is a bash function in `lib/probes.sh` that:
 - Start at 100 (perfect)
 - Deduct points per finding based on severity
 - Clamp to 0 minimum
-- Return null if skipped
+- If skipped, return null
 
 ### Adding a New Probe
 
