@@ -142,7 +142,7 @@ source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
 ar_log_set_status "complete"
 ```
 
-Regenerate the dashboard one final time. When status is "complete", the auto-refresh meta tag is removed. Follow the Dashboard Artifact Update procedure after this final generation.
+Regenerate the dashboard one final time. Follow the Dashboard Artifact Update procedure after this final generation.
 
 Print a summary to the user:
 ```

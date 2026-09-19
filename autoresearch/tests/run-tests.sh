@@ -77,6 +77,7 @@ assert "loop updates after normal iterations" assert_contains "${EXPERIMENT_LOOP
 assert "loop updates after research regeneration" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'then follow the Dashboard Artifact Update procedure'
 assert "loop updates after final completion" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'Follow the Dashboard Artifact Update procedure after this final generation.'
 assert "loop reports the Artifact URL" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'Dashboard: <dashboard_url>'
+assert "loop has no auto-refresh instructions" assert_not_contains "${EXPERIMENT_LOOP_SKILL}" 'auto-refresh'
 assert "experimenter can use Artifact" assert_frontmatter_tool "${EXPERIMENTER_AGENT}" "tools" "Artifact"
 assert "experimenter uses the passed URL for updates" assert_contains "${EXPERIMENTER_AGENT}" 'url: <dashboard_url>` and `favicon: 📈'
 assert "experimenter falls back to one publish" assert_contains "${EXPERIMENTER_AGENT}" 'publish `.autoresearch/dashboard.html` once with Artifact using `favicon: 📈`'
