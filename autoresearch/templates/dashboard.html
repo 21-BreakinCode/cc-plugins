@@ -232,7 +232,7 @@
       const scores = [baselineScore, ...experiments.map(item => item.scores[primaryMetric])];
       const validScores = scores.filter(Number.isFinite);
       if (validScores.length === 0) {
-        chart.innerHTML = '<text x="360" y="110" text-anchor="middle">No score data</text>';
+        chart.innerHTML = '<text x="360" y="110" text-anchor="middle" fill="currentColor">No score data</text>';
         return;
       }
 

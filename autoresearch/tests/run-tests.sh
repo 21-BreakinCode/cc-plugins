@@ -51,6 +51,7 @@ assert "sizes the SVG chart to its container" assert_contains "${TEMPLATE}" '#sc
 assert "wraps the iteration table for horizontal scrolling" assert_contains "${TEMPLATE}" '<div class="table-container">'
 assert "constrains iteration table overflow" assert_contains "${TEMPLATE}" '.table-container { max-width: 100%; overflow-x: auto; }'
 assert "renders the SVG chart" assert_contains "${TEMPLATE}" 'function renderScoreChart()'
+assert "shows the no-score message with visible text" assert_contains "${TEMPLATE}" 'fill="currentColor">No score data</text>'
 assert "keeps gaps between missing score points" assert_contains "${TEMPLATE}" 'index === 0 || !points[index - 1]'
 assert "has no remote assets" bash -c '! grep -Eq "https?://|//cdn\." "$1"' _ "${TEMPLATE}"
 assert "has no Chart.js renderer" assert_not_contains "${TEMPLATE}" 'new Chart('
