@@ -3,7 +3,7 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
-# Generate dashboard.html from experiments.json and template
+# Generate Artifact-ready dashboard HTML from experiments.json and template
 # Returns: 0 on success, 1 on failure
 ar_dashboard_generate() {
   local template="${AR_TEMPLATES_DIR}/dashboard.html"
@@ -37,24 +37,5 @@ with open('${output}', 'w') as f:
   fi
 
   ar_log "Dashboard updated: ${output}"
-  return 0
-}
-
-# Open dashboard in the default browser (macOS)
-# Returns: 0 on success (or best-effort warning), never blocks the loop
-ar_dashboard_open() {
-  local dashboard="${AR_DASHBOARD_FILE}"
-
-  if [ ! -f "${dashboard}" ]; then
-    ar_log "WARNING: Dashboard file not found at ${dashboard}"
-    return 0
-  fi
-
-  if command -v open &>/dev/null; then
-    open "${dashboard}" 2>/dev/null || ar_log "WARNING: Could not open dashboard. Open manually: ${dashboard}"
-  else
-    ar_log "Dashboard ready at: ${dashboard}"
-  fi
-
   return 0
 }

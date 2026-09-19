@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="5">
-  <title>autoresearch dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-  <style>
+<title>Autoresearch Dashboard</title>
+<style>
     :root {
       --bg: #0a0c10;
       --surface: #161b22;
@@ -21,9 +14,9 @@
       --text: #c9d1d9;
       --text-muted: #8b949e;
       --text-dim: #6e7681;
-      --accent: #58a6ff;
-      --green: #3fb950;
-      --red: #f85149;
+      --accent: #3987e5;
+      --green: #199e70;
+      --red: #e66767;
       --amber: #d29922;
       --orange: #f0883e;
       --radius: 12px;
@@ -136,10 +129,8 @@
       .stat-card.hero { background: var(--surface-hero); }
       th { background: var(--bg); }
     }
-  </style>
-</head>
-<body>
-  <div class="header">
+</style>
+<div class="header">
     <h1>autoresearch dashboard</h1>
     <div class="goal" id="goal"></div>
     <div class="status" id="status"></div>
@@ -149,7 +140,7 @@
 
   <div class="chart-container">
     <h2>Score Over Iterations</h2>
-    <canvas id="scoreChart" height="80"></canvas>
+    <svg id="scoreChart" viewBox="0 0 720 220" role="img" aria-label="Score over iterations"></svg>
   </div>
 
   <table id="iterationTable">
@@ -179,11 +170,6 @@
     statusEl.textContent = 'Status: ' + statusText;
     statusEl.className = 'status status-' + DATA.status;
 
-    // Stop auto-refresh if complete
-    if (DATA.status === 'complete' || DATA.status === 'error') {
-      const meta = document.querySelector('meta[http-equiv="refresh"]');
-      if (meta) meta.remove();
-    }
 
     // Summary stats
     const summaryEl = document.getElementById('summary');
@@ -237,59 +223,38 @@
       summaryEl.innerHTML += `<div class="stat-card${heroClass}"><div class="label">${c.label}</div><div class="value ${c.cls}">${c.value}</div></div>`;
     });
 
-    // Chart
-    const chartLabels = ['Baseline', ...experiments.map((_, i) => `#${i + 1}`)];
-    const chartData = [baselineScore, ...experiments.map(e => e.scores[primaryMetric])];
-    const chartColors = ['#58a6ff', ...experiments.map(e => e.status === 'kept' ? '#3fb950' : '#f85149')];
-    const pointStyles = ['circle', ...experiments.map(e => e.status === 'kept' ? 'circle' : 'crossRot')];
-
-    new Chart(document.getElementById('scoreChart'), {
-      type: 'line',
-      data: {
-        labels: chartLabels,
-        datasets: [{
-          label: primaryMetric,
-          data: chartData,
-          borderColor: 'rgba(88, 166, 255, 0.6)',
-          borderWidth: 1.5,
-          backgroundColor: (ctx) => {
-            const { ctx: c, chartArea } = ctx.chart;
-            if (!chartArea) return 'transparent';
-            const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-            gradient.addColorStop(0, 'rgba(88, 166, 255, 0.12)');
-            gradient.addColorStop(1, 'rgba(88, 166, 255, 0)');
-            return gradient;
-          },
-          fill: true,
-          pointBackgroundColor: chartColors,
-          pointBorderColor: chartColors,
-          pointBorderWidth: 0,
-          pointRadius: 5,
-          pointHoverRadius: 7,
-          pointStyle: pointStyles,
-          tension: 0.3,
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            callbacks: {
-              label: (ctx) => `${primaryMetric}: ${ctx.raw}`
-            }
-          }
-        },
-        scales: {
-          x: { grid: { color: '#21262d' }, ticks: { color: '#8b949e' } },
-          y: {
-            grid: { color: '#21262d' },
-            ticks: { color: '#8b949e' },
-            reverse: metricDirection === 'lower_is_better'
-          }
-        }
+    function renderScoreChart() {
+      const chart = document.getElementById('scoreChart');
+      const scores = [baselineScore, ...experiments.map(item => item.scores[primaryMetric])];
+      const validScores = scores.filter(Number.isFinite);
+      if (validScores.length === 0) {
+        chart.innerHTML = '<text x="360" y="110" text-anchor="middle">No score data</text>';
+        return;
       }
-    });
+
+      const minimumScore = Math.min(...validScores);
+      const maximumScore = Math.max(...validScores);
+      const scoreRange = maximumScore - minimumScore || Math.max(Math.abs(maximumScore) * 0.1, 1);
+      const paddedMinimum = minimumScore - scoreRange * 0.05;
+      const paddedMaximum = maximumScore + scoreRange * 0.05;
+      const chartRange = paddedMaximum - paddedMinimum;
+      const x = index => scores.length === 1 ? 360 : 40 + index * 640 / (scores.length - 1);
+      const y = score => {
+        const normalizedScore = (score - paddedMinimum) / chartRange;
+        return metricDirection === 'lower_is_better' ? 20 + normalizedScore * 180 : 200 - normalizedScore * 180;
+      };
+      const points = scores.map((score, index) => Number.isFinite(score) ? { score, index, x: x(index), y: y(score) } : null);
+      const linePath = points.filter(Boolean).map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+
+      chart.innerHTML = `<path d="${linePath}" fill="none" stroke="#3987e5" stroke-width="2" stroke-linecap="round" />` + points.map(point => {
+        if (!point) return '';
+        const experiment = point.index === 0 ? null : experiments[point.index - 1];
+        const color = !experiment ? '#3987e5' : experiment.status === 'kept' ? '#199e70' : '#e66767';
+        const label = !experiment ? 'Baseline' : `Iteration ${experiment.id}`;
+        return `<circle cx="${point.x}" cy="${point.y}" r="5" fill="${color}"><title>${label}: ${point.score}</title></circle>`;
+      }).join('');
+    }
+    renderScoreChart();
 
     // Iteration table
     const tbody = document.getElementById('iterationBody');
@@ -347,5 +312,3 @@
       if (el) el.classList.toggle('open');
     }
   </script>
-</body>
-</html>
