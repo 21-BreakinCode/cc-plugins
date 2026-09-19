@@ -17,7 +17,7 @@ You received a `.autoresearch/program.md` that defines:
 - When to stop
 - Any constraints to respect
 
-You also received `<dashboard_url>` from the setup command. Use that URL for every Artifact dashboard update with `url: <dashboard_url>` and `favicon: 📈`. If the prompt lacks `<dashboard_url>`, publish `.autoresearch/dashboard.html` once with Artifact using `favicon: 📈`, report the returned URL, and reuse it for every later update.
+You also received `<dashboard_url>` from the setup command. Use that URL for every Artifact dashboard update with `url: <dashboard_url>` and `favicon: 📈`. If the prompt lacks `<dashboard_url>`, Read the complete `.autoresearch/dashboard.html` with Read before you publish it. Then publish `.autoresearch/dashboard.html` once with Artifact using `favicon: 📈`, report the returned URL, and reuse it for every later update.
 
 Your job: iterate on the target files to improve them according to the eval metrics. Each iteration: edit → eval → keep or discard → update dashboard → check stop → repeat.
 

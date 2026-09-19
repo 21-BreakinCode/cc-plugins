@@ -47,7 +47,11 @@ assert_frontmatter_tool() {
 printf 'Test: dashboard artifact fragment\n'
 assert "keeps the required title" assert_contains "${TEMPLATE}" "<title>Autoresearch Dashboard</title>"
 assert "uses an inline SVG chart" assert_contains "${TEMPLATE}" '<svg id="scoreChart" viewBox="0 0 720 220" role="img" aria-label="Score over iterations"></svg>'
+assert "sizes the SVG chart to its container" assert_contains "${TEMPLATE}" '#scoreChart { display: block; width: 100%; height: auto; }'
+assert "wraps the iteration table for horizontal scrolling" assert_contains "${TEMPLATE}" '<div class="table-container">'
+assert "constrains iteration table overflow" assert_contains "${TEMPLATE}" '.table-container { max-width: 100%; overflow-x: auto; }'
 assert "renders the SVG chart" assert_contains "${TEMPLATE}" 'function renderScoreChart()'
+assert "keeps gaps between missing score points" assert_contains "${TEMPLATE}" 'index === 0 || !points[index - 1]'
 assert "has no remote assets" bash -c '! grep -Eq "https?://|//cdn\." "$1"' _ "${TEMPLATE}"
 assert "has no Chart.js renderer" assert_not_contains "${TEMPLATE}" 'new Chart('
 assert "has no refresh markup" bash -c '! grep -Eqi "http-equiv=\\\"refresh\\\"|meta\\[http-equiv=\\\"refresh\\\"\\]" "$1"' _ "${TEMPLATE}"
@@ -63,16 +67,19 @@ assert "improve initial publish uses required favicon" assert_contains "${IMPROV
 assert "improve initial publish uses required title" assert_contains "${IMPROVE_COMMAND}" 'title`: `Autoresearch Dashboard`'
 assert "improve initial publish uses required description" assert_contains "${IMPROVE_COMMAND}" 'Live progress for the current autoresearch improvement run.'
 assert "improve stops on initial Artifact failure" assert_contains "${IMPROVE_COMMAND}" 'If the initial Artifact publish fails, stop and report the error. Do not proceed to the loop.'
+assert "improve reads the dashboard before publishing" assert_contains "${IMPROVE_COMMAND}" 'Read the complete `.autoresearch/dashboard.html` with Read before you call Artifact.'
 assert "harness-improvement publishes the initial dashboard" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'Call Artifact with:'
 assert "harness-improvement initial publish uses dashboard path" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'file_path`: `.autoresearch/dashboard.html`'
 assert "harness-improvement initial publish uses required favicon" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'favicon`: `📈`'
 assert "harness-improvement initial publish uses required title" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'title`: `Autoresearch Dashboard`'
 assert "harness-improvement initial publish uses required description" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'Live progress for the current autoresearch improvement run.'
 assert "harness-improvement stops on initial Artifact failure" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'If the initial Artifact publish fails, stop and report the error. Do NOT proceed.'
+assert "harness-improvement reads the dashboard before publishing" assert_contains "${HARNESS_IMPROVEMENT_COMMAND}" 'Read the complete `.autoresearch/dashboard.html` with Read before you call Artifact.'
 assert "loop updates the stable dashboard path" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'file_path`: `.autoresearch/dashboard.html`'
 assert "loop updates the stable dashboard URL" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'url`: `<dashboard_url>`'
 assert "loop keeps the dashboard favicon" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'favicon`: `📈`'
 assert "loop retries a publish failure once" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'retry once'
+assert "loop reads the dashboard before publishing" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'Read the complete `.autoresearch/dashboard.html` with Read before you call Artifact.'
 assert "loop updates after normal iterations" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'After generation succeeds, follow the Dashboard Artifact Update procedure.'
 assert "loop updates after research regeneration" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'then follow the Dashboard Artifact Update procedure'
 assert "loop updates after final completion" assert_contains "${EXPERIMENT_LOOP_SKILL}" 'Follow the Dashboard Artifact Update procedure after this final generation.'
@@ -80,6 +87,7 @@ assert "loop reports the Artifact URL" assert_contains "${EXPERIMENT_LOOP_SKILL}
 assert "loop has no auto-refresh instructions" assert_not_contains "${EXPERIMENT_LOOP_SKILL}" 'auto-refresh'
 assert "experimenter can use Artifact" assert_frontmatter_tool "${EXPERIMENTER_AGENT}" "tools" "Artifact"
 assert "experimenter uses the passed URL for updates" assert_contains "${EXPERIMENTER_AGENT}" 'url: <dashboard_url>` and `favicon: 📈'
+assert "experimenter reads the fallback dashboard before publishing" assert_contains "${EXPERIMENTER_AGENT}" 'Read the complete `.autoresearch/dashboard.html` with Read before you publish it.'
 assert "experimenter falls back to one publish" assert_contains "${EXPERIMENTER_AGENT}" 'publish `.autoresearch/dashboard.html` once with Artifact using `favicon: 📈`'
 assert "experimenter reuses the dashboard URL" assert_contains "${EXPERIMENTER_AGENT}" 'reuse it for every later update'
 

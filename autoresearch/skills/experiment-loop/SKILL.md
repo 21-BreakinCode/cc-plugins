@@ -36,7 +36,7 @@ You are running an autonomous improvement loop. Each iteration follows a strict 
 
 ## Dashboard Artifact Update
 
-After any dashboard generation, call Artifact with:
+After any dashboard generation, Read the complete `.autoresearch/dashboard.html` with Read before you call Artifact. Call Artifact with:
 - `file_path`: `.autoresearch/dashboard.html`
 - `url`: `<dashboard_url>`
 - `favicon`: `📈`

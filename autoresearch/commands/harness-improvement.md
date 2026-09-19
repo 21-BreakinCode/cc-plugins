@@ -96,6 +96,8 @@ ar_dashboard_generate
 
 If `ar_dashboard_generate` fails, stop and report the error. Do NOT proceed.
 
+Read the complete `.autoresearch/dashboard.html` with Read before you call Artifact.
+
 Call Artifact with:
 - `file_path`: `.autoresearch/dashboard.html`
 - `favicon`: `📈`

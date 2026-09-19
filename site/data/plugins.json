@@ -220,6 +220,48 @@
       "config": [],
       "changelog": [
         {
+          "version": "2.2.2",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "publish the live improvement dashboard as a private Claude Artifact. The dashboard now uses inline SVG and no external assets."
+            }
+          ]
+        },
+        {
+          "version": "2.2.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape. \"harness\" stays: standard term for this plugin."
+            }
+          ]
+        },
+        {
+          "version": "2.2.0",
+          "date": "2026-08-10",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "keep/discard no longer requires git. The experiment loop now"
+            },
+            {
+              "type": "fix",
+              "text": "stops polluting real repos with per-iteration commits. Nothing read"
+            },
+            {
+              "type": "breaking",
+              "text": "iterations no longer record a commit SHA in `experiments.json`"
+            },
+            {
+              "type": "test",
+              "text": "`tests/test_snapshot.sh`: 12 assertions, including that a discard"
+            }
+          ]
+        },
+        {
           "version": "2.1.0",
           "date": "2026-08-04",
           "changes": [

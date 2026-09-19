@@ -81,6 +81,8 @@
       border-radius: var(--radius); padding: 20px 20px 16px; margin-bottom: 24px;
     }
     .chart-container h2 { font-size: 11px; color: var(--text-muted); margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+    #scoreChart { display: block; width: 100%; height: auto; }
+    .table-container { max-width: 100%; overflow-x: auto; }
 
     table { width: 100%; border-collapse: collapse; background: rgba(13, 17, 23, 0.55); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-border); box-shadow: var(--inner-hi), var(--elev); border-radius: var(--radius); overflow: hidden; }
     th { background: rgba(255, 255, 255, 0.03); text-align: left; padding: 10px 14px; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; border-bottom: 1px solid var(--glass-border); }
@@ -143,7 +145,8 @@
     <svg id="scoreChart" viewBox="0 0 720 220" role="img" aria-label="Score over iterations"></svg>
   </div>
 
-  <table id="iterationTable">
+  <div class="table-container">
+    <table id="iterationTable">
     <thead>
       <tr>
         <th>#</th>
@@ -154,7 +157,8 @@
       </tr>
     </thead>
     <tbody id="iterationBody"></tbody>
-  </table>
+    </table>
+  </div>
 
   <script>
     const DATA = {{DATA_JSON}};
@@ -244,7 +248,7 @@
         return metricDirection === 'lower_is_better' ? 20 + normalizedScore * 180 : 200 - normalizedScore * 180;
       };
       const points = scores.map((score, index) => Number.isFinite(score) ? { score, index, x: x(index), y: y(score) } : null);
-      const linePath = points.filter(Boolean).map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+      const linePath = points.map((point, index) => point ? `${index === 0 || !points[index - 1] ? 'M' : 'L'} ${point.x} ${point.y}` : '').join(' ');
 
       chart.innerHTML = `<path d="${linePath}" fill="none" stroke="#3987e5" stroke-width="2" stroke-linecap="round" />` + points.map(point => {
         if (!point) return '';

@@ -1,14 +1,14 @@
 # Changelog
 
-## 2.2.2 - 2026-09-19
+## 2.2.2 — 2026-09-19
 
 - **feat:** publish the live improvement dashboard as a private Claude Artifact. The dashboard now uses inline SVG and no external assets.
 
-## 2.2.1 - 2026-09-19
+## 2.2.1 — 2026-09-19
 
 - **fix:** rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape. "harness" stays: standard term for this plugin.
 
-## 2.2.0 - 2026-08-10
+## 2.2.0 — 2026-08-10
 
 - **feat:** keep/discard no longer requires git. The experiment loop now
   snapshots target files into `.autoresearch/snapshot/` instead of committing
