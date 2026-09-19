@@ -5,7 +5,7 @@
     "version": "1.11.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install remotion-maker@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install woop@21-breakincode && \\\n  claude plugin install note-visualizer@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install note-visualizer@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -18,18 +18,16 @@
       "enabledPlugins": {
         "session-learner@21-breakincode": true,
         "autoresearch@21-breakincode": true,
-        "remotion-maker@21-breakincode": true,
         "hh@21-breakincode": true,
         "code-reviewer@21-breakincode": true,
         "uiux-optimizer@21-breakincode": true,
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
-        "woop@21-breakincode": true,
         "note-visualizer@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update remotion-maker@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update woop@21-breakincode && \\\n  claude plugin update note-visualizer@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update note-visualizer@21-breakincode"
   },
   "categories": [
     {
@@ -52,8 +50,7 @@
       "plugins": [
         "code-reviewer",
         "uiux-optimizer",
-        "receipts",
-        "woop"
+        "receipts"
       ]
     },
     {
@@ -67,9 +64,7 @@
     {
       "id": "media",
       "label": "Media",
-      "plugins": [
-        "remotion-maker"
-      ]
+      "plugins": []
     },
     {
       "id": "content",
@@ -83,7 +78,7 @@
   "plugins": [
     {
       "name": "session-learner",
-      "version": "2.1.0",
+      "version": "2.1.1",
       "tagline": "Turn a session into atomic Zettelkasten knowledge",
       "summary": "A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.",
       "category": "memory",
@@ -97,7 +92,7 @@
         },
         {
           "name": "recommend",
-          "description": "Use after wrap-up when unsure which take-away topic matters most — picks exactly one topic to keep, with reasoning."
+          "description": "When several take-away topics compete, use this after wrap-up."
         },
         {
           "name": "wrap-up",
@@ -149,7 +144,7 @@
             },
             {
               "type": "fix",
-              "text": "README skills copy — skills are slash-invocable, not 'no slash commands'"
+              "text": "README skills copy, skills are slash-invocable, not 'no slash commands'"
             }
           ]
         },
@@ -179,7 +174,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release — session-learner plugin"
+              "text": "initial release, session-learner plugin"
             }
           ]
         }
@@ -327,75 +322,8 @@
       ]
     },
     {
-      "name": "remotion-maker",
-      "version": "0.2.0",
-      "tagline": "Generate styled Remotion videos, end to end",
-      "summary": "A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.",
-      "category": "media",
-      "install": "claude plugin install remotion-maker@21-breakincode",
-      "oneLiner": "Generate Remotion videos with consistent style, media sourcing, and multi-tier verification",
-      "commands": [
-        {
-          "name": "/remotion-maker:create",
-          "description": "Full video creation pipeline: style -> generate -> preview -> verify -> render"
-        },
-        {
-          "name": "/remotion-maker:define-style",
-          "description": "Create or manage video style definitions for consistent series look and feel"
-        },
-        {
-          "name": "/remotion-maker:find-media",
-          "description": "Search free resources for media assets (images, videos, audio) for video scenes"
-        },
-        {
-          "name": "/remotion-maker:verify",
-          "description": "Verify generated Remotion video against style definition (3-tier: static, frame sampling, Playwright)"
-        }
-      ],
-      "skills": [
-        {
-          "name": "remotion-best-practices",
-          "description": "Domain knowledge for Remotion (video creation in React)."
-        }
-      ],
-      "dependsOn": [],
-      "config": [],
-      "changelog": [
-        {
-          "version": "0.2.0",
-          "date": "2026-08-04",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "typo fixes, trigger-rich description, dedupe pointer"
-            }
-          ]
-        },
-        {
-          "version": "0.1.1",
-          "date": "2026-06-28",
-          "changes": [
-            {
-              "type": "refactor",
-              "text": "standardize plugin lib-sourcing on ${CLAUDE_PLUGIN_ROOT}"
-            }
-          ]
-        },
-        {
-          "version": "0.1.0",
-          "date": "2026-05-28",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "initial release — Remotion video generation plugin"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "hh",
-      "version": "0.3.0",
+      "version": "0.3.2",
       "tagline": "Cross-context handover docs, LifeOS as the source of truth",
       "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.",
       "category": "workflow",
@@ -440,6 +368,20 @@
       ],
       "changelog": [
         {
+          "version": "0.3.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "remove the inline STE writing rules from `/hh:new` Phase 4. This command now"
+            },
+            {
+              "type": "fix",
+              "text": "rewrite the rest of `/hh:new` to clear the simple-english linter. No content or"
+            }
+          ]
+        },
+        {
           "version": "0.3.0",
           "date": "2026-09-09",
           "changes": [
@@ -449,11 +391,11 @@
             },
             {
               "type": "feat",
-              "text": "inline STE writing rules in Phase 4 — sentence limits, active voice,"
+              "text": "inline STE writing rules in Phase 4: sentence limits, active voice,"
             },
             {
               "type": "feat",
-              "text": "inline ASCII diagram guidance in Phase 4 — add a compact diagram when"
+              "text": "inline ASCII diagram guidance in Phase 4: add a compact diagram when"
             },
             {
               "type": "chore",
@@ -467,7 +409,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "add `lib/lifeos-root.sh` — single resolver + guard for the vault root,"
+              "text": "add `lib/lifeos-root.sh`, a single resolver + guard for the vault root,"
             },
             {
               "type": "feat",
@@ -539,7 +481,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release — LifeOS handover document management"
+              "text": "initial release, LifeOS handover document management"
             },
             {
               "type": "feat",
@@ -547,7 +489,7 @@
             },
             {
               "type": "feat",
-              "text": "TL;DR/Context/As-Is/To-Be/Implementation-Note seed body framework"
+              "text": "`TL;DR`/Context/As-Is/To-Be/Implementation-Note seed body framework"
             }
           ]
         }
@@ -809,7 +751,7 @@
     },
     {
       "name": "humanize",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "tagline": "Sound like a person, in zh-TW or English",
       "summary": "Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.",
       "category": "content",
@@ -841,7 +783,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release — voice distillation + human rewrite plugin"
+              "text": "initial release, a voice distillation and human rewrite plugin"
             },
             {
               "type": "feat",
@@ -873,7 +815,7 @@
     },
     {
       "name": "adhd-review",
-      "version": "0.5.1",
+      "version": "0.5.5",
       "tagline": "Action-first replies, blockers before FYI",
       "summary": "One output style, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: the output-style mechanism and a default-on SessionStart hook both target the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
       "category": "workflow",
@@ -883,7 +825,7 @@
       "skills": [
         {
           "name": "adhd-review-mode",
-          "description": "Use to toggle the adhd-review output style for the current session — turn ADHD-friendly, action-first, blocker-before-FYI reply shaping on…"
+          "description": "Use to toggle the adhd-review output style for the current session."
         }
       ],
       "dependsOn": [],
@@ -898,7 +840,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -946,7 +888,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release — claim-verification Stop hook"
+              "text": "initial release, a claim-verification Stop hook"
             },
             {
               "type": "feat",
@@ -957,51 +899,8 @@
       ]
     },
     {
-      "name": "woop",
-      "version": "0.1.0",
-      "tagline": "Turn a conclusion into an obstacle-aware if-then plan",
-      "summary": "A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it caps work you've already done and turns a conclusion into an obstacle-aware, if-then plan before you act, never redoing the analysis. One engine, four temporal modes: prevent (pre-mortem before you build), decide (pressure-test a conclusion before you commit), firefight (triage a live incident under hard constraints), and retro (convert a post-mortem into if-then commitments that stick). Every run reframes the surface wish into the essence-wish, then dispatches an adversarial read-only obstacle-hunter subagent that red-teams the plan and returns ranked obstacles with actionability plus if-then trigger seeds; only obstacles you can attach a trigger to become commitments, the rest stay visible flagged 'no if-then'. Output is a terminal WOOP INSIGHT (FACT/ASSUME/INSIGHT/SUGGEST) you check, with an optional ask-per-run record saved to docs/woop/ so if-then plans accumulate into a decision journal. Experimental. Self-contained — no hooks, no cross-plugin deps.",
-      "category": "review",
-      "install": "claude plugin install woop@21-breakincode",
-      "oneLiner": "A WOOP critical-thinking commit-lens for the dev lifecycle — turn a conclusion into an obstacle-aware if-then plan before you act, across four modes (prevent / decide / firefight / retro), with an always-on adversarial obstacle-hunter subagent",
-      "commands": [
-        {
-          "name": "/woop:woop",
-          "description": "Pressure-test a decision with WOOP — pick a mode (prevent/decide/firefight/retro) or type one directly."
-        }
-      ],
-      "skills": [
-        {
-          "name": "woop",
-          "description": "Use to pressure-test a decision with WOOP (Wish·Outcome·Obstacle·Plan) before you commit."
-        }
-      ],
-      "dependsOn": [],
-      "config": [],
-      "changelog": [
-        {
-          "version": "0.1.0",
-          "date": "2026-08-04",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "initial release — WOOP critical-thinking commit-lens plugin"
-            },
-            {
-              "type": "feat",
-              "text": "four modes: prevent / decide / firefight / retro"
-            },
-            {
-              "type": "feat",
-              "text": "always-on adversarial obstacle-hunter subagent"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "note-visualizer",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "tagline": "Draw the concept, don't describe it",
       "summary": "One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Self-contained — no hooks, no cross-plugin deps.",
       "category": "content",
@@ -1011,7 +910,7 @@
       "skills": [
         {
           "name": "visualize",
-          "description": "Use proactively after creating or editing notes under Zettelkasten/ — add compact ASCII diagrams for spatial concepts and Obsidian callouts…"
+          "description": "Use proactively after creating or editing notes under Zettelkasten/."
         }
       ],
       "dependsOn": [],
@@ -1023,7 +922,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release — `visualize` skill with inline and batch modes"
+              "text": "initial release, a `visualize` skill with inline and batch modes"
             },
             {
               "type": "feat",

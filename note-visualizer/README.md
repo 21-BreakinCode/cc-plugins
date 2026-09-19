@@ -14,7 +14,7 @@ claude plugin install note-visualizer@21-breakincode
 
 Invoke one directly as `/note-visualizer:<skill>`, or let it activate automatically when relevant.
 
-- **`visualize`** — Use proactively after creating or editing notes under Zettelkasten/ — add compact ASCII diagrams for spatial concepts and Obsidian callouts…
+- **`visualize`** — Use proactively after creating or editing notes under Zettelkasten/.
 
 ---
 

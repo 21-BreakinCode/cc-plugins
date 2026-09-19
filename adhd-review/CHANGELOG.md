@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.5 - 2026-09-19
+
+- **fix:** rewrite `skills/adhd-review-mode/SKILL.md` to clear the simple-english linter. No content or meaning changed, only sentence shape.
+
+## 0.5.4 - 2026-09-19
+
+- **fix:** rewrite the remaining prose (Scope guard, Layer 1, Visual Layer, Layer 2) to clear the simple-english linter. No content or meaning changed, only sentence shape.
+- **feat:** add a hard rule to the Visual Layer. Diagrams in a reply are always ASCII. Never use mermaid, since a plain chat reply cannot render it as a picture.
+
+## 0.5.3 - 2026-09-19
+
+- **fix:** remove the Language Layer (the embedded ASD-STE100 Simple English rules). This plugin now covers reply shaping only. Install the simple-english plugin for language rules. That plugin already covers this job.
+
 ## 0.5.2 - 2026-09-13
 
 - **fix:** strengthen diff instruction with anti-pattern catalog, positive example, and defense-in-depth reinforcement

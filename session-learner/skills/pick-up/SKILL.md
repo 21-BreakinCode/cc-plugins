@@ -5,13 +5,13 @@ description: Use after wrap-up to turn chosen topic numbers into atomic Zettelka
 
 # Pick-Up
 
-Turn chosen topic number(s) from the last `wrap-up` into atomic Zettelkasten cards, each grounded in this session's real case plus up to 3 web sources per topic. Use `Read`/`Glob` for the vault and `WebSearch`/`WebFetch` for sources. Display everything in the terminal — DO NOT write any files.
+Turn chosen topic number(s) from the last `wrap-up` into atomic Zettelkasten cards. Ground each card in this session's real case, plus up to 3 web sources per topic. Use `Read`/`Glob` for the vault and `WebSearch`/`WebFetch` for sources. Display everything in the terminal. Do NOT write any files.
 
-`pick-up` is strictly downstream of `wrap-up`. It accepts topic numbers only — no free-text topics, no "all topics" default.
+`pick-up` is strictly downstream of `wrap-up`. It accepts topic numbers only, no free-text topics, no "all topics" default.
 
 ## Argument
 
-`$ARGUMENTS` — comma- or space-separated topic numbers referencing the last `wrap-up` (e.g. `1,3`).
+`$ARGUMENTS`: comma- or space-separated topic numbers referencing the last `wrap-up` (for example, `1,3`).
 
 ## Phase 0 — Resolve topics
 
@@ -25,18 +25,18 @@ Find the most recent `🧭 Session Wrap-Up` output in the conversation and its n
   ```
   Run /session-learner:wrap-up first so I have numbered topics.
   ```
-- **Some numbers out of range** (e.g. `9` when wrap-up listed 5) → note the invalid ones in the output and proceed with the valid numbers.
+- **Some numbers out of range** (for example, `9` with only 5 topics listed) → note the invalid ones, then proceed with the valid numbers.
 
 ## Phase 1 — Build each topic
 
-No confirmation gate — resolve the numbers and produce cards directly. Read `references/card-format.md` and follow it. For each resolved topic:
+No confirmation gate. Resolve the numbers and produce cards directly. Read `references/card-format.md` and follow it. For each resolved topic:
 
-1. **Session case** — identify what actually happened in THIS session that surfaced the topic (the concrete example, bug, or decision).
-2. **Web sources** — `WebSearch` for the topic, `WebFetch` candidates to confirm relevance, keep the ≤3 most relevant. ≤3 PER TOPIC.
-3. **Vault grounding** — `Glob` `*.md` filenames ONLY under `CLAUDE_SESSION_LEARNER_ZK_PATH` (default below); never read vault file contents. Reuse existing titles for `[[links]]` and matching tags.
-4. **Atomic cards** — one concept per card, ≤50 lines each. Split a multi-concept topic into multiple cards; a topic's ≤3 sources are shared across its cards.
+1. **Session case:** identify what actually happened in THIS session that surfaced the topic (the concrete example, bug, or decision).
+2. **Web sources:** `WebSearch` for the topic, `WebFetch` candidates to confirm relevance, keep the ≤3 most relevant. ≤3 PER TOPIC.
+3. **Vault grounding:** `Glob` `*.md` filenames ONLY under `CLAUDE_SESSION_LEARNER_ZK_PATH` (default below). Never read vault file contents. Reuse existing titles for `[[links]]` and matching tags.
+4. **Atomic cards:** one concept per card, ≤50 lines each. Split a multi-concept topic into multiple cards. That topic's ≤3 sources are shared across its cards.
 
-Default vault path if the env var is unset:
+If the env var is unset, use this default vault path:
 `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/03-Resource/Zettelkasten/Permanent`
 
 ## Phase 2 — Output

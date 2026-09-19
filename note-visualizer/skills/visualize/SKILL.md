@@ -1,6 +1,6 @@
 ---
 name: visualize
-description: Use proactively after creating or editing notes under Zettelkasten/ — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks to make notes scannable. Also use when the user says 'visualize', 'add diagrams', '加圖', 'refine notes', 'make scannable', or points at a folder/file of markdown notes and asks for visual improvement.
+description: Use proactively after creating or editing notes under Zettelkasten/. Add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. This makes notes scannable. These words also trigger it, 'visualize', 'add diagrams', '加圖', 'refine notes', 'make scannable'. Pointing at a folder or file of markdown notes and asking for visual improvement also triggers it.
 ---
 
 # Visualize — make notes scannable
@@ -17,12 +17,12 @@ diagram constraints, callout rules, and the one-screen budget.
 
 ## 2. Determine mode
 
-- **Inline mode** — you are currently writing or editing a note (e.g. via
+- **Inline mode:** you are currently writing or editing a note (for example via
   session-learner pick-up, daily-helper, or direct authoring). Apply the
   visual patterns as you write: place the diagram before the prose, tighten
   bullets to stay within budget.
 
-- **Batch mode** — the user pointed at a folder, file glob, or file list.
+- **Batch mode:** the user pointed at a folder, file glob, or file list.
   Scan each target note, identify concept shapes and callout candidates,
   and apply refinements. Report a summary table at the end.
 
@@ -38,7 +38,7 @@ diagram constraints, callout rules, and the one-screen budget.
    from the note.
 
 3. **Place diagram before prose.** The diagram is the overview the eye lands
-   on; the bullets add nuance the diagram can't show.
+   on. The bullets add nuance the diagram cannot show.
 
 4. **Tighten prose.** Remove words the diagram now conveys. Merge redundant
    bullets. The note must still fit one screen (~40 lines) after adding the
@@ -46,10 +46,10 @@ diagram constraints, callout rules, and the one-screen budget.
 
 5. **Add callouts.** Wrap "From this session" blocks in
    `> [!example] From this session`. Use `> [!warning]` for traps/anti-patterns.
-   Prefer one callout per note — if everything stands out, nothing does.
+   If everything stands out, nothing does. Prefer one callout per note.
 
-6. **Skip if no shape.** Linear definitions and flat lists are already
-   scannable. Don't force a diagram where a numbered list is the right form.
+6. **Skip flat concepts.** Linear definitions and flat lists are already
+   scannable. Do not force a diagram where a numbered list is the right form.
 
 ## 4. Batch-mode summary
 

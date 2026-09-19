@@ -5,14 +5,14 @@ allowed-tools: ["Bash", "Read", "Write", "Edit", "AskUserQuestion"]
 
 # /hh:init-service
 
-One-time per repo. Resolves the current org, finds (or appends) the service mapping row for this repo, creates the LifeOS handover folder if missing, symlinks `./handover` to it, and ensures `.gitignore` covers it.
+One-time per repo. It resolves the current org, and finds or appends the service mapping row for this repo. If the LifeOS handover folder is missing, it creates one. It symlinks `./handover` to that folder, and checks that `.gitignore` covers it.
 
 ## Vault location
 
 ```bash
 LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue to the next phase.
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue to the next phase.
 
 
 ## Flow
@@ -27,7 +27,7 @@ ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || {
 }
 ```
 
-- If `$ORG` is empty: tell the user "Could not auto-detect ORG. Run /hh:init-org first if this is a new ORG, or use AskUserQuestion to pick from existing ORGs." Then `AskUserQuestion` listing existing ORG dirs under `$LIFEOS/01Project/`. If user picks one with no initiation.md, stop and instruct them to run `/hh:init-org $ORG` first.
+- If `$ORG` is empty: tell the user "Did not auto-detect an ORG. If this is a new ORG, run /hh:init-org first. Otherwise, use AskUserQuestion to pick from existing ORGs." Then `AskUserQuestion` listing existing ORG dirs under `$LIFEOS/01Project/`. If user picks one with no initiation.md, stop and instruct them to run `/hh:init-org $ORG` first.
 
 Report: "Org: $ORG".
 
@@ -51,7 +51,7 @@ RESULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-service.sh" "$PWD" "$ORG") && E
 ### Phase 4 — Append new mapping row
 
 Compute defaults:
-- `DEFAULT_APP_NAME` = current directory name, used verbatim in kebab-case (e.g. `creative-studio` → `creative-studio`, `bust-backend` → `bust-backend`). If the directory name is not already kebab-case, lowercase it and replace `_`, spaces, and camelCase boundaries with `-`.
+- `DEFAULT_APP_NAME` = current directory name, used verbatim in kebab-case (for example, `creative-studio` → `creative-studio`, `bust-backend` → `bust-backend`). If the directory name is not already kebab-case, lowercase it and replace `_`, spaces, and camelCase boundaries with `-`.
 - `DEFAULT_LIFEOS_SUBPATH` = `Services/$DEFAULT_APP_NAME`.
 
 `AskUserQuestion` (batched, 2 questions in a single call). The Q2 default uses `$DEFAULT_APP_NAME`, not the user's Q1 answer, because batched questions resolve simultaneously:
@@ -70,7 +70,7 @@ Append a new row to the `## Service Mapping` table in `$INIT`:
 # otherwise just append with single-space padding (Obsidian tables tolerate it).
 ```
 
-Use `Edit` to append the new row after the last existing data row (or after the separator row if the table is empty). Preserve all other content.
+If the table is empty, use `Edit` to append the new row after the separator row. Otherwise, append it after the last existing data row. Preserve all other content.
 
 ### Phase 5 — Create LifeOS handover folder
 
@@ -88,9 +88,9 @@ EXIT=$?
 ```
 
 Handle exit codes:
-- 0 — proceed.
-- 1 — `./handover/` exists with content. Stop and report; do not destroy data.
-- 4 — symlink exists pointing elsewhere. `AskUserQuestion`: `[Keep existing]`, `[Overwrite — force]`, `[Abort]`. If overwrite, re-run with `force`.
+- 0: proceed.
+- 1: `./handover/` exists with content. Stop and report. Do not destroy data.
+- 4: symlink exists pointing elsewhere. `AskUserQuestion`: `[Keep existing]`, `[Overwrite (force)]`, `[Abort]`. If overwrite, re-run with `force`.
 
 ### Phase 7 — Ensure .gitignore
 
@@ -114,6 +114,6 @@ Next: /hh:new <topic>
 ## Non-negotiable rules
 
 - Never destroy a non-empty `./handover/` directory. If conflict, stop and ask the user.
-- Service mapping rows are append-only via this command — never rewrite existing rows.
+- Service mapping rows are append-only via this command. Never rewrite existing rows.
 - The .gitignore edit only adds `handover/`. It never removes or reorders existing lines.
 - BustDice currently uses `Devops/` instead of `Services/`. If the user picks a non-`Services/` `lifeos_subpath`, warn but allow.

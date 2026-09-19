@@ -1,11 +1,11 @@
 ---
 name: recommend
-description: Use after wrap-up when unsure which take-away topic matters most — picks exactly one topic to keep, with reasoning.
+description: When several take-away topics compete, use this after wrap-up. It picks exactly one topic to keep, with reasoning.
 ---
 
 # Recommend
 
-From the candidate topics in the last `wrap-up`, *converge*: pick exactly ONE to keep and justify it — don't produce cards, that's `pick-up`'s job. Display everything in the terminal — DO NOT write any files.
+From the candidate topics in the last `wrap-up`, *converge*: pick exactly ONE to keep, and justify it. This does not produce cards, that is `pick-up`'s job. Display everything in the terminal. Do NOT write any files.
 
 ## Argument
 
@@ -23,10 +23,10 @@ None. Reads the numbered topics from the most recent `🧭 Session Wrap-Up` in t
 
 Rank the candidate topics on:
 
-- **Reusability** — applies across projects, not a one-off fix.
-- **Cost of the lesson** — how much pain it caused here, or would prevent later.
-- **Recurrence** — how often it will come up again.
-- **Non-obviousness** — worth recording vs. already-common knowledge.
+- **Reusability:** applies across projects, not a one-off fix.
+- **Cost of the lesson:** how much pain it caused here, or how much it prevents later.
+- **Recurrence:** how often it will come up again.
+- **Non-obviousness:** worth recording vs. already-common knowledge.
 
 Pick the single strongest topic.
 

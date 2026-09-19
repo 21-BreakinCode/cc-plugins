@@ -13,7 +13,7 @@ Daily wrap-up routine for renewing handover docs in the Obsidian vault. Vault-wi
 VAULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
 
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue.
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue.
 
 The vault location is machine-specific and comes from `HH_LIFEOS_ROOT`. Never hardcode it.
 
@@ -23,19 +23,19 @@ The vault location is machine-specific and comes from `HH_LIFEOS_ROOT`. Never ha
 ARCHIVE_ROOT="${HH_ARCHIVE_ROOT:-$VAULT/04Archive}"
 ```
 
-- Defaults to `04Archive/` inside the resolved vault. Override by setting `HH_ARCHIVE_ROOT` in `~/.zshrc`. Keep the value double-quoted — vault paths may contain spaces.
-- Each handover archives under `"$ARCHIVE_ROOT/<ORG>/<new-filename>"`. Group-by-org is mandatory — never write directly under `$ARCHIVE_ROOT`.
-- `<ORG>` is derived from the source path: the segment immediately after `01Project/` (e.g. `…/LifeOS/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
+- Defaults to `04Archive/` inside the resolved vault. Override by setting `HH_ARCHIVE_ROOT` in `~/.zshrc`. Keep the value double-quoted. Vault paths can contain spaces.
+- Each handover archives under `"$ARCHIVE_ROOT/<ORG>/<new-filename>"`. Group-by-org is mandatory. Never write directly under `$ARCHIVE_ROOT`.
+- `<ORG>` is derived from the source path: the segment immediately after `01Project/` (for example, `…/LifeOS/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
 - If a handover is **not** under `…/LifeOS/01Project/<ORG>/…`, stop and ask the user which ORG subfolder to archive it under before proceeding. Do not invent one.
 
 ## What this command does
 
 1. Discover active handovers (tagged `handover`, not `archive`).
 2. Dispatch one subagent per handover **in parallel** to analyze state and suggest a default action.
-3. Present a single batched table to the user; collect all decisions in one pass.
+3. Present a single batched table to the user. Collect all decisions in one pass.
 4. Execute archives, updates, and suspensions **in parallel** via subagents.
-5. Update wikilinks in **living** docs only — leave historical records alone.
-6. Print a `Wrap-up complete (<date>):` report. (The literal phrase `Wrap-up complete` is required — the Stop hook keys off it.)
+5. Update wikilinks in **living** docs only. Leave historical records alone.
+6. Print a `Wrap-up complete (<date>):` report. (The literal phrase `Wrap-up complete` is required. The Stop hook keys off it.)
 
 If no active handovers are found, print `No active handovers — nothing to wrap up.` and stop.
 
@@ -71,30 +71,30 @@ Send all Agent calls in a **single message** so they run concurrently. Use `suba
 
 Subagent prompt template (substitute `<file>` and today's date):
 
-> You are analyzing one Obsidian handover doc as part of a daily wrap-up routine. The vault is at `$VAULT` (substitute the resolved absolute path when dispatching).
+> You are analyzing one Obsidian handover doc as part of a daily wrap-up routine. The vault is at `$VAULT`. Substitute the resolved absolute path before dispatching.
 >
 > File: `<file>`
 > Today: `<YYYY-MM-DD>`
 >
 > Read the file and report under 150 words, structured as:
 >
-> 1. **Topic** — one-line summary.
-> 2. **ORG** — the path segment immediately after `01Project/` (e.g. `…/01Project/Appier/Services/CsDomain/…` → `Appier`). If the file is not under `01Project/<ORG>/`, report `ORG: <unresolved>` so the caller can ask the user.
-> 3. **Project prefix** — derive from path. Examples:
+> 1. **Topic:** one-line summary.
+> 2. **ORG:** the path segment immediately after `01Project/` (for example, `…/01Project/Appier/Services/CsDomain/…` → `Appier`). If the file is not under `01Project/<ORG>/`, report `ORG: <unresolved>` so the caller can ask the user.
+> 3. **Project prefix:** derive from path. Examples:
 >    - `01Project/BustDice/Services/...` → `bust-dice`
 >    - filename references `CR-1660` → `CR-1660`
->    - otherwise short topic slug, e.g. `cs-domain`
-> 4. **Visible state** — explicit `status:` field in frontmatter, plus checkbox completion ratio (`[x]` count / total).
-> 5. **Suggested action** — pick ONE and explain in <20 words:
->    - `done` — work is complete; status reads done/complete/live/shipped
->    - `superseded` — newer handover replaces this one (name it if you can spot it)
->    - `suspended` — work paused; explicit `status: suspended` or visible indicators of indefinite hold
->    - `active` — still in progress, no fresh entry needed
->    - `active-update` — still in progress AND visible state suggests fresh entry today
-> 6. **Suggested filename if archiving** — `<prefix>__<status>-<date>-<topic>.md`. Use today's date for `done`; original/inferred date for `superseded`.
-> 7. **Cross-references** — incoming wikilinks. Run `grep -rl "\[\[<basename-no-ext>\]\]" "$VAULT"` and classify each result:
->    - `living` — active reference doc (pitfall notes, current handovers, deploy guides)
->    - `historical` — under `02-Area/Journal/`, or filename matches `^\d{4}-\d{2}-\d{2}` and lives in `handover/`/`meeting/`/etc.
+>    - otherwise short topic slug, for example `cs-domain`
+> 4. **Visible state:** explicit `status:` field in frontmatter, plus checkbox completion ratio (`[x]` count / total).
+> 5. **Suggested action:** pick ONE and explain in <20 words:
+>    - `done`: work is complete. Status reads done, complete, live, or shipped.
+>    - `superseded`: a newer handover replaces this one. If you can spot it, name it.
+>    - `suspended`: work paused. An explicit `status: suspended` field, or a visible indicator of an indefinite hold, both count.
+>    - `active`: still in progress, no fresh entry needed.
+>    - `active-update`: still in progress, and the visible state suggests a fresh entry today.
+> 6. **Suggested archive filename:** `<prefix>__<status>-<date>-<topic>.md`. Use today's date for `done`. Use the original or inferred date for `superseded`.
+> 7. **Cross-references:** incoming wikilinks. Run `grep -rl "\[\[<basename-no-ext>\]\]" "$VAULT"` and classify each result:
+>    - `living`: active reference doc (pitfall notes, current handovers, deploy guides).
+>    - `historical`: under `02-Area/Journal/`, or the filename matches `^\d{4}-\d{2}-\d{2}` and lives in a folder such as `handover/` or `meeting/`.
 >
 > Format as Markdown with bold field labels.
 
@@ -115,7 +115,7 @@ Active handovers found: <N>
 | 2 | ...                               | ...                    | ...            |
 ```
 
-Then ask via `AskUserQuestion` — one question per handover, all batched in a single tool call:
+Then ask via `AskUserQuestion`. Ask one question per handover, all batched in a single tool call:
 
 - `question`: `Handover #<N>: <basename>`
 - `header`: `<basename truncated to ~12 chars>`
@@ -126,7 +126,7 @@ Then ask via `AskUserQuestion` — one question per handover, all batched in a s
   - `Active — suspend`
   - `Archive: done`
   - `Archive: superseded`
-  - `Other` (custom action; will follow up)
+  - `Other` (custom action, follow up after)
 
 For any answer of `Active — append update`, `Active — suspend`, or `Other`, send a follow-up `AskUserQuestion` to capture the update/suspend text or custom action.
 
@@ -141,7 +141,7 @@ Group user answers into:
 - **update set** (`Active — append update`)
 - **suspend set** (`Active — suspend`)
 - **untouched set** (`Active — no change`)
-- **custom set** (`Other` — handle inline; do NOT spawn subagents)
+- **custom set** (`Other`, handle inline, do NOT spawn subagents)
 
 ### 4a. Archive set — parallel subagents
 
@@ -152,8 +152,8 @@ Subagent prompt:
 > Archive an Obsidian handover.
 >
 > Source: `<source-path>`
-> Destination: `<archive-root>/<ORG>/<new-filename>` — both `<archive-root>` and `<ORG>` are resolved by the caller and passed in verbatim. Do NOT re-resolve them. Create the `<ORG>` subdirectory with `mkdir -p` before writing.
-> Filename to use (precomputed from Phase 2 analysis): `<new-filename>` — do NOT re-derive a slug or date.
+> Destination: `<archive-root>/<ORG>/<new-filename>`. Both `<archive-root>` and `<ORG>` are resolved by the caller and passed in verbatim. Do NOT re-resolve them. Create the `<ORG>` subdirectory with `mkdir -p` before writing.
+> Filename to use (precomputed from Phase 2 analysis): `<new-filename>`. Do NOT re-derive a slug or date.
 > Living wikilink references: `<list-of-paths>`
 > Historical wikilink references: `<list-of-paths>` (will be left broken intentionally)
 >
@@ -161,7 +161,7 @@ Subagent prompt:
 > 1. Read the source file.
 > 2. In the frontmatter `tags` list, append `- archive` (preserve other tags, no duplicates, preserve order).
 > 3. Set the frontmatter `status:` field to the archive status (`done` or `superseded`).
-> 4. Ensure the destination directory exists (`mkdir -p "<archive-root>/<ORG>"`), then write the modified content to the destination path.
+> 4. If the destination directory is missing, create it first (`mkdir -p "<archive-root>/<ORG>"`). Then write the modified content to the destination path.
 > 5. Delete the source file (`rm <source>`).
 > 6. For each living-reference doc, update wikilinks: `[[<old-basename>]]` → `[[<new-basename>]]`. Preserve display text after `|`. Use Edit with `replace_all: true`. Skip historical references entirely.
 > 7. Do NOT add aliases to the archived file.
@@ -184,7 +184,9 @@ Subagent prompt:
 >
 > Steps:
 > 1. Read the file.
-> 2. If a `## Updates` heading exists, append a new subsection. Otherwise, create the heading at the bottom (above any `## Cross-References` block; otherwise at the end).
+> 2. If a `## Updates` heading exists, append a new subsection. Otherwise, create the heading
+>    at the bottom. If a `## Cross-References` block exists, put the new heading above it. If
+>    not, put it at the very end.
 > 3. Append:
 >    ```
 >    ### <YYYY-MM-DD>
@@ -203,28 +205,30 @@ Subagent prompt:
 >
 > File: `<file>`
 > Today: `<YYYY-MM-DD>`
-> Reason (verbatim, may be empty):
+> Reason (verbatim, can be empty):
 > ```
 > <user-supplied-reason>
 > ```
 >
 > Steps:
 > 1. Read the file.
-> 2. In frontmatter, set `status: suspended` (insert the field if missing; overwrite existing status).
-> 3. Append a `## Suspended` section at the end of the file:
+> 2. In frontmatter, set `status: suspended`. If the field is missing, insert it. Otherwise,
+>    overwrite the existing status.
+> 3. Add a `### <YYYY-MM-DD>` subsection. If a `## Suspended` section already exists, append
+>    the subsection under it. Otherwise, create the `## Suspended` heading first, then use this
+>    form:
 >    ```
 >    ## Suspended
 >    ### <YYYY-MM-DD>
 >    <user-reason if non-empty, else "paused — no reason given">
 >    ```
->    If `## Suspended` already exists, append a new `### <YYYY-MM-DD>` subsection under it.
 > 4. Do NOT change tags. The file keeps `handover`, does NOT get `archive`.
 >
 > Report: `{ file, action: "suspended" | "re-suspended" }`.
 
 ### 4d. Custom set — handle inline
 
-For `Other` answers, present the user-supplied custom action back to the user and ask for confirmation before executing. Do not spawn a subagent for these.
+For `Other` answers, present the user-supplied custom action back to the user. Check with them before executing. Do not spawn a subagent for these.
 
 ---
 
@@ -258,14 +262,14 @@ Print archived paths in copy-pastable form.
 
 ## Non-negotiable rules
 
-- **Archive destination**: `"$ARCHIVE_ROOT/<ORG>/<filename>"`. Honor `HH_ARCHIVE_ROOT` env var; default is `"$VAULT/04Archive"`. Always quote the path (a vault path may contain spaces). Never write directly under `$ARCHIVE_ROOT` without an `<ORG>` subfolder.
-- **ORG resolution**: derive from the source path segment after `01Project/`. If the file is not under `01Project/<ORG>/`, stop and ask the user to pick an ORG — never guess.
+- **Archive destination**: `"$ARCHIVE_ROOT/<ORG>/<filename>"`. Honor the `HH_ARCHIVE_ROOT` env var. The default is `"$VAULT/04Archive"`. Always quote the path. A vault path can contain spaces. Never write directly under `$ARCHIVE_ROOT` without an `<ORG>` subfolder.
+- **ORG resolution**: derive from the source path segment after `01Project/`. If the file is not under `01Project/<ORG>/`, stop and ask the user to pick an ORG. Never guess.
 - **Naming convention**: `<prefix>__<status>-[date-]<topic>.md`, status ∈ {`done`, `superseded`}. Date is `YYYY-MM-DD`.
 - **Add `archive` tag**: append to existing tags list. Never replace, never reorder other tags.
-- **Don't edit historical records**: journals (`02-Area/Journal/**`), dated handovers (`^\d{4}-\d{2}-\d{2}-*.md` inside `handover/`/`meeting/`/etc.). Broken wikilinks in these files are an honest signal of a rename.
+- **Do not edit historical records**: journals (`02-Area/Journal/**`), dated handovers (`^\d{4}-\d{2}-\d{2}-*.md` inside a folder such as `handover/` or `meeting/`). Broken wikilinks in these files are an honest signal of a rename.
 - **No generic aliases**: do not add `aliases:` to the archived file as a workaround for broken wikilinks. If genuinely needed, scope it explicitly.
 - **Update wikilinks in living docs only**: pitfall notes, current handovers, active references, deploy guides.
-- **Active updates only append content**: only a dated subsection. Don't add tags, don't change frontmatter, don't mark "still active" anywhere.
-- **Suspended state never archives**: `suspended` is an active-side state. The file keeps `handover` tag, does NOT get `archive`.
-- **Stop and ask** when project prefix is ambiguous, when a `superseded` action requires naming the replacing doc, or when a cross-reference scan finds a file that's hard to classify.
-- **Phase 5 output must contain the literal phrase `Wrap-up complete`** — the Stop hook keys off it.
+- **Active updates only append content**: only a dated subsection. Do not add tags. Do not change frontmatter. Do not mark "still active" anywhere.
+- **Suspended state never archives**: `suspended` is an active-side state. The file keeps the `handover` tag, and does NOT get `archive`.
+- **Stop and ask** in three cases. The project prefix is ambiguous. A `superseded` action needs the name of the replacing doc. A cross-reference scan finds a file that is hard to classify.
+- **Phase 5 output must contain the literal phrase `Wrap-up complete`.** The Stop hook keys off it.

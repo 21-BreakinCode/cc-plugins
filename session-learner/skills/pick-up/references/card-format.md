@@ -4,14 +4,14 @@ Rules and template for the atomic Zettelkasten cards `pick-up` produces.
 
 ## Hard rules
 
-- **One concept per card.** If a topic holds two concepts, make two cards.
-- **≤50 lines per card**, including the tag line and links. If a card would exceed 50 lines, split the concept or tighten the body — never ship a >50-line card.
-- **Atomic & reusable.** Capture the idea, not the play-by-play. A card should still make sense months later, out of this session's context.
+- **One concept per card.** A topic with two concepts becomes two cards.
+- **≤50 lines per card**, including the tag line and links. If a card exceeds 50 lines, split the concept or tighten the body. Never ship a >50-line card.
+- **Atomic & reusable.** Capture the idea, not the play-by-play. A card must still make sense months later, out of this session's context.
 
 ## Tags
 
-- Slash-namespaced when fitting: `#domain/<area>`, `#lang/<lang>`.
-- Prefer tags that match the user's existing vault taxonomy (from the `Glob` of vault filenames). Fall back to inferred namespaces when the vault is unavailable.
+- A slash-namespaced tag, for example `#domain/<area>` or `#lang/<lang>`, is the preferred form.
+- Prefer tags that match the user's existing vault taxonomy (from the `Glob` of vault filenames). When the vault is unavailable, fall back to inferred namespaces.
 
 ## Links
 
@@ -22,7 +22,7 @@ Rules and template for the atomic Zettelkasten cards `pick-up` produces.
 ## Sources
 
 - Up to 3 web sources per topic, distributed across that topic's cards where relevant.
-- Only sources you actually fetched and confirmed relevant. Omit the `Sources:` line if none.
+- Only sources you actually fetched and confirmed relevant. If there are none, omit the `Sources:` line.
 
 ## Session case
 

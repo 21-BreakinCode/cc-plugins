@@ -7,8 +7,8 @@ allowed-tools: ["Bash"]
 # /receipts
 
 With **no argument**, print the most recent receipts audit ledger and summarize it.
-With `block` / `warn` / `report`, set the audit mode (persists across sessions until
-changed); `default` clears the override, reverting to `CLAUDE_RECEIPTS_MODE` or the
+With `block` / `warn` / `report`, set the audit mode. This choice persists across sessions
+until changed. `default` clears the override. It reverts to `CLAUDE_RECEIPTS_MODE` or the
 `warn` default.
 
 ```bash

@@ -14,7 +14,7 @@ claude plugin install adhd-review@21-breakincode
 
 Invoke one directly as `/adhd-review:<skill>`, or let it activate automatically when relevant.
 
-- **`adhd-review-mode`** — Use to toggle the adhd-review output style for the current session — turn ADHD-friendly, action-first, blocker-before-FYI reply shaping on…
+- **`adhd-review-mode`** — Use to toggle the adhd-review output style for the current session.
 
 ## Configuration
 

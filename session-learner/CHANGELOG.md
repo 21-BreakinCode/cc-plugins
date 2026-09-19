@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.1.1 - 2026-09-19
+
+- **fix:** rewrite prose across all 4 skill files and this changelog to clear the simple-english linter. No content or meaning changed, only sentence shape. "harness" stays: standard term used throughout this repo, not AI-slop.
+
 ## 2.1.0 — 2026-08-04
 
 - **refactor:** collapse Constraints recaps into body
@@ -11,7 +15,7 @@
 - **feat:** add pick-up skill + card-format reference
 - **feat:** add recommend skill
 - **test:** add per-card conformance regression harness
-- **fix:** README skills copy — skills are slash-invocable, not 'no slash commands'
+- **fix:** README skills copy, skills are slash-invocable, not 'no slash commands'
 
 ## 1.1.2 — 2026-05-31
 
@@ -23,4 +27,4 @@
 
 ## 1.0.0 — 2026-05-28
 
-- **feat:** initial release — session-learner plugin
+- **feat:** initial release, session-learner plugin

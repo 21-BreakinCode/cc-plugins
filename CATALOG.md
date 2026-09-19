@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.11.0 · 11 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.11.0 · 9 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -11,14 +11,12 @@
 claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install session-learner@21-breakincode && \
   claude plugin install autoresearch@21-breakincode && \
-  claude plugin install remotion-maker@21-breakincode && \
   claude plugin install hh@21-breakincode && \
   claude plugin install code-reviewer@21-breakincode && \
   claude plugin install uiux-optimizer@21-breakincode && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
-  claude plugin install woop@21-breakincode && \
   claude plugin install note-visualizer@21-breakincode
 ```
 
@@ -31,20 +29,18 @@ update each installed plugin:
 claude plugin marketplace update 21-breakincode && \
   claude plugin update session-learner@21-breakincode && \
   claude plugin update autoresearch@21-breakincode && \
-  claude plugin update remotion-maker@21-breakincode && \
   claude plugin update hh@21-breakincode && \
   claude plugin update code-reviewer@21-breakincode && \
   claude plugin update uiux-optimizer@21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
-  claude plugin update woop@21-breakincode && \
   claude plugin update note-visualizer@21-breakincode
 ```
 
 ## Memory & Knowledge
 
-### [session-learner](./session-learner/README.md) · `v2.1.0`
+### [session-learner](./session-learner/README.md) · `v2.1.1`
 
 *Turn a session into atomic Zettelkasten knowledge*
 
@@ -88,7 +84,7 @@ Orchestrates live design references (refero.design + the getdesign.md catalogue)
 
 **Skills** · `uiux-optimizer`
 
-### [receipts](./receipts/README.md) · `v0.2.0`
+### [receipts](./receipts/README.md) · `v0.2.1`
 
 *No claim without a receipt*
 
@@ -98,19 +94,9 @@ A Stop hook that enforces provable claims. When the finished turn asserts a **FA
 
 **Commands** · `/receipts:receipts`
 
-### [woop](./woop/README.md) · `v0.1.0`
-
-*Turn a conclusion into an obstacle-aware if-then plan*
-
-A WOOP (Wish·Outcome·Obstacle·Plan) commit-lens for critical thinking — it caps work you've already done and turns a conclusion into an obstacle-aware, if-then plan before you act, never redoing the analysis. One engine, four temporal modes: prevent (pre-mortem before you build), decide (pressure-test a conclusion before you commit), firefight (triage a live incident under hard constraints), and retro (convert a post-mortem into if-then commitments that stick). Every run reframes the surface wish into the essence-wish, then dispatches an adversarial read-only obstacle-hunter subagent that red-teams the plan and returns ranked obstacles with actionability plus if-then trigger seeds; only obstacles you can attach a trigger to become commitments, the rest stay visible flagged 'no if-then'. Output is a terminal WOOP INSIGHT (FACT/ASSUME/INSIGHT/SUGGEST) you check, with an optional ask-per-run record saved to docs/woop/ so if-then plans accumulate into a decision journal. Experimental. Self-contained — no hooks, no cross-plugin deps.
-
-**Install** · `claude plugin install woop@21-breakincode`
-
-**Commands** · `/woop:woop`
-
 ## Workflow & Handover
 
-### [hh](./handover-handler/README.md) · `v0.3.0`
+### [hh](./handover-handler/README.md) · `v0.3.2`
 
 *Cross-context handover docs, LifeOS as the source of truth*
 
@@ -120,7 +106,7 @@ Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, s
 
 **Commands** · `/hh:init-org` · `/hh:init-service` · `/hh:new` · `/hh:wrap-up`
 
-### [adhd-review](./adhd-review/README.md) · `v0.5.1`
+### [adhd-review](./adhd-review/README.md) · `v0.5.5`
 
 *Action-first replies, blockers before FYI*
 
@@ -130,21 +116,9 @@ One output style, three layers. Layer 1 shapes every reply — lead with the act
 
 **Skills** · `adhd-review-mode`
 
-## Media
-
-### [remotion-maker](./remotion-maker/README.md) · `v0.2.0`
-
-*Generate styled Remotion videos, end to end*
-
-A full pipeline for Remotion (React) videos: define a consistent style, generate scenes from your content, source free media, review preview frames, and verify against the style before rendering to MP4.
-
-**Install** · `claude plugin install remotion-maker@21-breakincode`
-
-**Commands** · `/remotion-maker:create` · `/remotion-maker:define-style` · `/remotion-maker:find-media` · `/remotion-maker:verify`
-
 ## Writing & Content
 
-### [humanize](./humanize/README.md) · `v0.1.0`
+### [humanize](./humanize/README.md) · `v0.1.1`
 
 *Sound like a person, in zh-TW or English*
 
@@ -154,7 +128,7 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 
 **Skills** · `distill` · `rewrite`
 
-### [note-visualizer](./note-visualizer/README.md) · `v0.1.0`
+### [note-visualizer](./note-visualizer/README.md) · `v0.1.1`
 
 *Draw the concept, don't describe it*
 

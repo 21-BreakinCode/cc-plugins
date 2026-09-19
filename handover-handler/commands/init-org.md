@@ -5,14 +5,14 @@ allowed-tools: ["Bash", "Read", "Write", "AskUserQuestion"]
 
 # /hh:init-org
 
-One-time setup per ORG. Creates `handover_handler__initiation.md` in `$LifeOS/01Project/$ORG/`. Safe to re-run — no-ops if already initialized.
+One-time setup per ORG. Creates `handover_handler__initiation.md` in `$LifeOS/01Project/$ORG/`. Safe to re-run. If already initialized, it does nothing.
 
 ## Vault location
 
 ```bash
 LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue to the next phase.
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue to the next phase.
 
 
 ## Flow
@@ -31,11 +31,11 @@ Run `bash ${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh` from the current working dir
 
 - **Exit 0 (org printed):** use that org name. Tell the user "Detected org: $ORG".
 - **Exit 1 (no match):** list directories under `$LIFEOS/01Project/` (excluding `RawHandover/`), then `AskUserQuestion`:
-  - `question`: "Which ORG should this initiation be for?"
+  - `question`: "Which ORG is this initiation for?"
   - `options`: one per existing directory, plus "New ORG (enter name)"
 - **Exit 3 (LifeOS unreachable):** stop (already handled in Phase 1, but be defensive).
 
-If the user picks "New ORG", follow up via `AskUserQuestion` with a free-form question for the ORG name (use a single option whose label is "Continue").
+If the user picks "New ORG", follow up via `AskUserQuestion` with a free-form question for the ORG name. Use a single option whose label is "Continue".
 
 ### Phase 3 — Check existing initiation.md
 
@@ -56,7 +56,7 @@ INIT="$LIFEOS/01Project/$ORG/handover_handler__initiation.md"
 
 ### Phase 5 — Write template
 
-If confirmed:
+If the user said yes:
 
 ```bash
 mkdir -p "$LIFEOS/01Project/$ORG"
@@ -79,5 +79,5 @@ Next steps:
 ## Non-negotiable rules
 
 - Never overwrite an existing `handover_handler__initiation.md`. Always check first.
-- Always use `${CLAUDE_PLUGIN_ROOT}/lib/initiation-template.md` as the source (do not inline the template — keep it editable in one place).
-- Always confirm via `AskUserQuestion` before writing.
+- Always use `${CLAUDE_PLUGIN_ROOT}/lib/initiation-template.md` as the source. Do not inline the template. Keep it editable in one place.
+- Always check with the user via `AskUserQuestion` before writing.

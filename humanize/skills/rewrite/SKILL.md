@@ -1,6 +1,6 @@
 ---
 name: rewrite
-description: Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning. Triggers on "humanize this", "make this sound less like AI / ChatGPT", "去AI味", "rewrite my PR comment to sound human", or "check my draft for AI-tells" (flag-only).
+description: Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning. Triggers on "humanize this", "make this sound less like AI / ChatGPT", or "去AI味". Also triggers on "rewrite my PR comment to sound human" or "check my draft for AI-tells" (flag-only).
 ---
 
 # Rewrite (humanize existing text)
@@ -18,7 +18,7 @@ clean only formatting, and say why.
 - Latin script → use `${CLAUDE_PLUGIN_ROOT}/references/ai-tells-en.md`.
 - Mixed → apply both to their respective spans.
 - **Simplified Chinese detected** → warn: this ruleset targets Traditional
-  Chinese (Taiwan); offer to run the TW-localization pass (vocab swap +
+  Chinese (Taiwan). Offer to run the TW-localization pass (vocab swap +
   punctuation) rather than treating it as native. Do not silently proceed.
 - An explicit target language in the request overrides detection.
 
@@ -30,7 +30,7 @@ used no tone preset.
 
 ## 3. Mode
 - **Default (transform):** rewrite to remove the clustered AI-tells from the
-  language reference and match the tone. Preserve meaning; keep one rough edge;
+  language reference and match the tone. Preserve meaning. Keep one rough edge.
   English output must contain zero em/en dashes.
 - **`--flag-only` (audit):** do NOT edit. List each tell found as
   `original / why it's a tell / suggested fix`, then give a /50 score across
@@ -43,5 +43,5 @@ used no tone preset.
   WAIT for the reply. Only then edit the file, applying only approved edits.
 
 ## Output (transform mode)
-Show, in order: the rewrite; then a short "changed:" list (what you cut and why).
-For English, confirm "0 em-dashes" in the changed list.
+Show the rewrite first. Then show a short "changed:" list (what you cut and why).
+For English, check for "0 em-dashes" in the changed list.

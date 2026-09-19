@@ -6,7 +6,7 @@ description: Use to capture a writing voice into a reusable tone preset from sam
 # Distill (materials → tone preset)
 
 Turn writing samples into a reusable tone preset file. This reads existing
-material and describes its voice. It never invents a persona the samples don't show.
+material and describes its voice. It never invents a persona the samples do not show.
 
 ## 1. Gather materials
 Accept file paths or a prompt naming specific materials (past posts, PRs, notes).
@@ -18,7 +18,7 @@ Identify, grounded in the samples (quote where you can):
 - **Diction** (preferred words, banned words).
 - **Rhythm** (sentence-length pattern, paragraph shape).
 - **Quirks** (recurring habits to reproduce, or avoid).
-- **Do / Don't** (short bullets).
+- **Do / Do Not** (short bullets).
 - **Examples** (1 to 2 verbatim lines from the samples that exemplify the voice).
 - **Language** (`en`, `zh-TW`, or `auto` based on the samples).
 
@@ -35,7 +35,7 @@ language: <en|zh-TW|auto>
 - **Diction:** …
 - **Rhythm:** …
 - **Quirks:** …
-- **Do / Don't:** …
+- **Do / Do Not:** …
 - **Examples:** …
 ```
 

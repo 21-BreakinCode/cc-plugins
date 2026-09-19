@@ -13,7 +13,7 @@ Create a new handover document. The topic argument becomes the slug. Frontmatter
 ```bash
 LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim and stop — do not guess a vault path and do not continue to the next phase.
+**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue to the next phase.
 
 
 ## Flow
@@ -38,7 +38,7 @@ APP_NAME="${RESULT%%|*}"
 ### Phase 3 — Build filename
 
 - `TOPIC` = the slash-command argument (`$ARGUMENTS`). If missing, `AskUserQuestion` for a free-form topic.
-- `PREFIX` = `$APP_NAME` in kebab-case. Since /hh:init-service now stores app_names as kebab-case, this is usually a passthrough; the conversion below only applies to legacy PascalCase rows.
+- `PREFIX` = `$APP_NAME` in kebab-case. Since /hh:init-service now stores app_names as kebab-case, this is usually a passthrough. The conversion below only applies to legacy PascalCase rows.
   - Examples: `creative-studio` → `creative-studio` (passthrough), `CreativeStudio` → `creative-studio`, `CrPerf2` → `cr-perf-2`, `bustBackend` → `bust-backend`.
   - Algorithm: insert `-` before each uppercase letter (except position 0), lowercase the result, collapse repeated `-`.
 - `SLUG` = topic kebab-cased, lowercased, non-alphanumerics → `-`, collapsed repeats, trimmed to 60 chars.
@@ -47,46 +47,28 @@ APP_NAME="${RESULT%%|*}"
 
 ### Phase 3.5 — Acceptance Criteria confirmation
 
-Before writing the body, confirm AC items with the user.
+Before writing the body, check the AC items with the user.
 
-1. Scan the conversation for testable outcomes — return values, error conditions, performance targets, user-visible behavior.
+1. Scan the conversation for testable outcomes: return values, error conditions, performance targets, user-visible behavior.
 2. Draft AC items. Pick the format that fits the task:
    - **Checkbox list** for concrete pass/fail items: `- [ ] API returns 200 for valid input`
    - **Given/When/Then** for behavior scenarios: `Given expired token, When user calls /api, Then return 401`
-   - Default to checkbox. Use Given/When/Then only when the criterion describes a multi-step interaction.
+   - Default to checkbox. When the criterion describes a multi-step interaction, use Given/When/Then instead.
 3. Present via `AskUserQuestion`:
    - `header`: `AC`
    - `question`: `"Here are the acceptance criteria I extracted — edit or add items:\n\n<drafted-items>\n\nAccept these, or type your own?"`
    - `options`: `["Accept as-is"]` (user can pick Other to type custom AC)
-4. Store the confirmed AC items for Phase 4.
+4. Store the checked AC items for Phase 4.
 
-If the conversation has no testable outcomes (pure exploration, open-ended investigation), ask the user: "No clear AC found — skip the AC section or provide items?" If they skip, omit `## Acceptance Criteria` from the doc entirely.
+Sometimes the conversation has no testable outcomes, for example pure exploration or open-ended investigation. When that happens, ask the user whether to skip the Acceptance Criteria section or provide items instead. If they skip it, omit `## Acceptance Criteria` from the doc entirely.
 
 ### Phase 4 — Seed body
 
-Read the current conversation context, then fill the template below. The whole document must read in **≤ 2 min** (target ≤ 400 words total). Keep each section to its budget — if you run long, cut.
+Read the current conversation context, then fill the template below. The whole document must read in **≤ 2 min** (target ≤ 400 words total). Keep each section to its budget. If you run long, cut.
 
-#### Writing rules (apply while drafting)
+#### Diagram judgment (apply while drafting)
 
-These rules govern every word outside code blocks, identifiers, and file paths.
-
-**Sentence discipline:**
-- Procedural text (instructions): imperative mood, max 20 words per sentence.
-- Descriptive text (explanations): simple present/past/future, max 25 words per sentence.
-- One instruction per sentence. One new fact per sentence.
-- Condition before command: "If the build fails, read the log."
-
-**Word discipline:**
-- One term per concept. Do not call it "config" here and "settings" there.
-- Approved modals: can, will, must. Never use should, would, may, might, could.
-- Active voice. Passive only when the agent is unknown.
-- Simple tenses only. No "has been", "is being", "had been".
-- Use "-ing" only as a noun ("logging"), never as a verb after a comma.
-- Action = verb: "compress the file", not "perform compression".
-
-**Kill on sight:** leverage, utilize, in order to, ensure, simply, just, robust, comprehensive, however, therefore, e.g., i.e., etc., seamlessly, delve into, out of the box, under the hood.
-
-**Diagram judgment:** If a section describes something with shape (nesting, layers, flow, branching, fan-in/out, state transitions), add a compact ASCII diagram (≤ 15 lines, ≤ 60 chars wide, fenced code block, real names from the doc). Do not diagram flat lists or linear definitions — a numbered list is already the visual. One diagram per concept. Place the diagram before the prose it replaces, then tighten the prose to remove words the diagram now conveys.
+When a section describes something with shape (nesting, layers, flow, branching, fan-in/out, state transitions), add a compact ASCII diagram. Keep it to 15 lines or fewer, 60 characters wide or less, in a fenced code block, using real names from the doc. Do not diagram flat lists or linear definitions. A numbered list is already the visual. Add one diagram per concept. Place the diagram before the prose it replaces, then tighten the prose to remove the words the diagram now conveys.
 
 #### Capture from the conversation
 
