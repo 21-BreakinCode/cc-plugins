@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.11.0 · 9 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.12.0 · 10 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -17,7 +17,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
-  claude plugin install note-visualizer@21-breakincode
+  claude plugin install note-visualizer@21-breakincode && \
+  claude plugin install simple-mandarin@21-breakincode
 ```
 
 ## Update everything
@@ -35,7 +36,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
-  claude plugin update note-visualizer@21-breakincode
+  claude plugin update note-visualizer@21-breakincode && \
+  claude plugin update simple-mandarin@21-breakincode
 ```
 
 ## Memory & Knowledge
@@ -137,3 +139,13 @@ One skill, two modes. Inline mode fires proactively when you create or edit Zett
 **Install** · `claude plugin install note-visualizer@21-breakincode`
 
 **Skills** · `visualize`
+
+### [simple-mandarin](./simple-mandarin/README.md) · `v0.1.0`
+
+*One term, one meaning, every sentence lands*
+
+Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.
+
+**Install** · `claude plugin install simple-mandarin@21-breakincode`
+
+**Skills** · `simple-mandarin`

@@ -2,10 +2,10 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.11.0"
+    "version": "1.12.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install note-visualizer@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install note-visualizer@21-breakincode && \\\n  claude plugin install simple-mandarin@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -24,10 +24,11 @@
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
-        "note-visualizer@21-breakincode": true
+        "note-visualizer@21-breakincode": true,
+        "simple-mandarin@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update note-visualizer@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update note-visualizer@21-breakincode && \\\n  claude plugin update simple-mandarin@21-breakincode"
   },
   "categories": [
     {
@@ -71,7 +72,8 @@
       "label": "Writing & Content",
       "plugins": [
         "humanize",
-        "note-visualizer"
+        "note-visualizer",
+        "simple-mandarin"
       ]
     }
   ],
@@ -929,6 +931,36 @@
             {
               "type": "feat",
               "text": "model-invoked proactive triggering on Zettelkasten/ note writes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "simple-mandarin",
+      "version": "0.1.0",
+      "tagline": "One term, one meaning, every sentence lands",
+      "summary": "Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.",
+      "category": "content",
+      "install": "claude plugin install simple-mandarin@21-breakincode",
+      "oneLiner": "Write plain, unambiguous Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language: short sentences by character count, active voice, one term one meaning, condition before command.",
+      "commands": [],
+      "skills": [
+        {
+          "name": "simple-mandarin",
+          "description": "|"
+        }
+      ],
+      "dependsOn": [],
+      "config": [],
+      "changelog": [
+        {
+          "version": "0.1.0",
+          "date": "2026-09-20",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release. A `simple-mandarin` skill covers rewriting"
             }
           ]
         }

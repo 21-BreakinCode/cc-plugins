@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Knowledge management and workflow automation plugins for Claude Code",
-    "version": "1.11.0",
+    "version": "1.12.0",
     "repo": "21-BreakinCode/cc-plugins"
   },
   "plugins": [
@@ -71,6 +71,13 @@
       "source": "./note-visualizer",
       "description": "Make markdown notes scannable — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
       "version": "0.2.0",
+      "strict": true
+    },
+    {
+      "name": "simple-mandarin",
+      "source": "./simple-mandarin",
+      "description": "Write plain, unambiguous Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language: short sentences by character count, active voice, one term one meaning, condition before command.",
+      "version": "0.1.0",
       "strict": true
     }
   ]

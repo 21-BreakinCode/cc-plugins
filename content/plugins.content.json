@@ -90,6 +90,13 @@
       "category": "content",
       "dependsOn": [],
       "config": []
+    },
+    "simple-mandarin": {
+      "tagline": "One term, one meaning, every sentence lands",
+      "summary": "Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.",
+      "category": "content",
+      "dependsOn": [],
+      "config": []
     }
   }
 }
