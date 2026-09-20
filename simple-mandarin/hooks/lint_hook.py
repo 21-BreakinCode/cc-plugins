@@ -85,6 +85,101 @@ def reader_check(text):
     }
 
 
+def absolute(path, cwd=None):
+    """Make the path absolute. The harness can send it relative to the session directory."""
+    return pathlib.Path(cwd or ".", pathlib.Path(path).expanduser()).absolute()
+
+
+def variants(path):
+    """The path as written and the path with symlinks resolved. A symlink can hide
+    a directory name in both directions, so both forms must miss for a file to
+    reach the linter."""
+    return {pathlib.Path(os.path.normpath(path)), path.resolve()}
+
+
+def excluded(target):
+    """True for agent-internal Markdown and for the paths the user excludes."""
+    config_dirs = variants(absolute(os.environ.get("CLAUDE_CONFIG_DIR") or f"~/{CLAUDE_DIR}"))
+    raw = os.environ.get("SIMPLE_MANDARIN_LINT_EXCLUDE", "").split(os.pathsep)
+    patterns = [os.path.expanduser(p) for p in raw if p]
+    for form in variants(target):
+        if CLAUDE_DIR in form.parts or any(form.is_relative_to(d) for d in config_dirs):
+            return True
+        if any(fnmatch.fnmatch(str(form), p) for p in patterns):
+            return True
+    return False
+
+
+def post_tool_use(event):
+    path = (event.get("tool_input") or {}).get("file_path") or ""
+    if not path.endswith(".md"):
+        return 0
+    target = absolute(path, event.get("cwd"))
+    if excluded(target):
+        return 0
+    try:
+        text = target.read_text(encoding="utf-8")
+    except OSError:
+        return 0
+    body = strip_code(text)
+    long_sentences = find_long_sentences(text)
+    fillers = find_filler_words(body)
+    passives = find_passive_markers(body)
+    em_dashes = count_em_dash(body)
+    total = len(long_sentences) + len(fillers) + len(passives) + em_dashes
+    if not total:
+        return 0
+    lines = [f"simple-mandarin: {target.name} has {total} writing hit(s)."]
+    for n, s in long_sentences[:MAX_HOOK_HITS]:
+        lines.append(f"  {n} chars (max {MAX_SENTENCE_CHARS}): {s}")
+    if fillers:
+        lines.append(f"  filler word(s): {'、'.join(fillers)}")
+    if passives:
+        lines.append(f"  passive-voice marker(s): {len(passives)} (soft signal, check manually)")
+    if em_dashes:
+        lines.append(f"  em-dash(es): {em_dashes}")
+    lines.append("Fix these hits in the file you just wrote, then continue.")
+    sys.stderr.write("\n".join(lines) + "\n")
+    return 2
+
+
+def stop(event):
+    reply = event.get("last_assistant_message") or ""
+    body = strip_code(reply)
+    counts = reader_check(reply)
+    problems = []
+    for key, label in (("em_dash", "em-dash"), ("bold", "bold span"), ("headers", "header"), ("bullets", "list item")):
+        if counts[key]:
+            problems.append(f"{counts[key]} {label}(s)")
+    fillers = find_filler_words(body)
+    if fillers:
+        problems.append(f"{len(fillers)} filler word(s)")
+    if OPENERS.search(reply):
+        problems.append("a filler opener")
+    if CLOSERS.search(reply):
+        problems.append("a filler closer")
+    if problems:
+        message = "simple-mandarin reply check: " + "; ".join(problems) + "。用連續文字作答，不用標題、項目符號、表格、粗體。"
+        print(json.dumps({"systemMessage": message}, ensure_ascii=False))
+    return 0
+
+
+def main():
+    try:
+        event = json.load(sys.stdin)
+    except Exception:
+        return 0
+    try:
+        name = event.get("hook_event_name", "")
+        if name == "PostToolUse":
+            return post_tool_use(event)
+        if name == "Stop":
+            return stop(event)
+    except Exception:
+        return 0
+    return 0
+
+
 def self_test():
     text = "你好。今天天氣真的非常好，陽光普照，適合出門走走看看世界的美好風景。"
     sentences = split_sentences(text)
@@ -114,3 +209,4 @@ if __name__ == "__main__":
     if "--self-test" in sys.argv:
         self_test()
         sys.exit(0)
+    sys.exit(main())
