@@ -44,10 +44,11 @@ Return ONLY a JSON object mapping the claim index (as a string) to "backed" or
 PY
 )"
 
-# Neutral cwd, no skills, no tools. Not --bare: it skips OAuth, so the judge would fail open.
+# Neutral cwd, --safe-mode (no plugins, hooks, skills, MCP, or CLAUDE.md), no tools.
+# Not --bare: it skips OAuth, so the judge would fail open.
 # The prompt goes through stdin because the variadic --tools flag swallows a trailing argument.
-out="$(cd "${TMPDIR:-/tmp}" && printf '%s' "${prompt}" | RECEIPTS_NESTED=1 CLAUDE_ADHD_REVIEW=0 \
-  claude -p --model "${model}" --disable-slash-commands --tools "" 2>/dev/null)" || exit 3
+out="$(cd "${TMPDIR:-/tmp}" && printf '%s' "${prompt}" | RECEIPTS_NESTED=1 \
+  claude -p --safe-mode --tools "" --model "${model}" 2>/dev/null)" || exit 3
 
 RECEIPTS_OUT="${out}" RECEIPTS_PAYLOAD="${payload}" python3 - <<'PY' || exit 3
 import os, json, re, sys

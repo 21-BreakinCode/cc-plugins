@@ -878,7 +878,7 @@
           "changes": [
             {
               "type": "perf",
-              "text": "run the Haiku judge from a neutral folder with no skills and no tools. Each judge call no longer loads the full user setup (plugins, skill and agent listings, project CLAUDE.md)."
+              "text": "run the Haiku judge from a neutral folder with `--safe-mode` and no tools. A judge call no longer loads plugins, hooks, skills, agents, MCP servers, or CLAUDE.md. A test call used about 3,600 input tokens, down from about 44,000 in 0.2.1."
             }
           ]
         },
