@@ -86,7 +86,7 @@ Orchestrates live design references (refero.design + the getdesign.md catalogue)
 
 **Skills** · `uiux-optimizer`
 
-### [receipts](./receipts/README.md) · `v0.2.1`
+### [receipts](./receipts/README.md) · `v0.2.2`
 
 *No claim without a receipt*
 

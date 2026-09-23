@@ -840,7 +840,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -872,6 +872,26 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.2.2",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "perf",
+              "text": "run the Haiku judge from a neutral folder with no skills and no tools. Each judge call no longer loads the full user setup (plugins, skill and agent listings, project CLAUDE.md)."
+            }
+          ]
+        },
+        {
+          "version": "0.2.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite prose in `commands/receipts.md` and this changelog to clear the simple-english linter. No content or meaning changed, only sentence shape."
+            }
+          ]
+        },
         {
           "version": "0.2.0",
           "date": "2026-07-29",
