@@ -8,10 +8,11 @@ PostToolUse (Write|Edit on a .md file): split into sentences, count
 Han characters per sentence (not words — Chinese has no word spaces),
 and flag anything over MAX_SENTENCE_CHARS. Also flag em-dashes, filler
 or marketing words, and passive-voice markers. Skips paths under the
-Claude config directory. Exit 2 is advisory: the file already exists.
+Claude config directory, and files with no Han characters. Exit 2 is
+advisory: the file already exists.
 
-Stop: check the reply register (headers, bold, bullets, em-dashes,
-filler words, opener/closer phrases). Always exit 0.
+Stop: check a reply that contains Han characters for em-dashes, filler
+words, and opener/closer phrases. Always exit 0.
 """
 import fnmatch
 import json
@@ -76,15 +77,6 @@ def count_em_dash(text):
     return text.count("—")
 
 
-def reader_check(text):
-    return {
-        "headers": len(re.findall(r"^#{1,6}\s", text, re.M)),
-        "bold": len(re.findall(r"\*\*[^*]+\*\*", text)),
-        "bullets": len(re.findall(r"^\s*[-*]\s", text, re.M)),
-        "em_dash": count_em_dash(text),
-    }
-
-
 def absolute(path, cwd=None):
     """Make the path absolute. The harness can send it relative to the session directory."""
     return pathlib.Path(cwd or ".", pathlib.Path(path).expanduser()).absolute()
@@ -122,6 +114,8 @@ def post_tool_use(event):
     except OSError:
         return 0
     body = strip_code(text)
+    if not CJK_RE.search(body):
+        return 0
     long_sentences = find_long_sentences(text)
     fillers = find_filler_words(body)
     passives = find_passive_markers(body)
@@ -143,14 +137,14 @@ def post_tool_use(event):
     return 2
 
 
-def stop(event):
-    reply = event.get("last_assistant_message") or ""
+def reply_problems(reply):
     body = strip_code(reply)
-    counts = reader_check(reply)
+    if not CJK_RE.search(body):
+        return []
     problems = []
-    for key, label in (("em_dash", "em-dash"), ("bold", "bold span"), ("headers", "header"), ("bullets", "list item")):
-        if counts[key]:
-            problems.append(f"{counts[key]} {label}(s)")
+    em_dashes = count_em_dash(reply)
+    if em_dashes:
+        problems.append(f"{em_dashes} em-dash(s)")
     fillers = find_filler_words(body)
     if fillers:
         problems.append(f"{len(fillers)} filler word(s)")
@@ -158,8 +152,13 @@ def stop(event):
         problems.append("a filler opener")
     if CLOSERS.search(reply):
         problems.append("a filler closer")
+    return problems
+
+
+def stop(event):
+    problems = reply_problems(event.get("last_assistant_message") or "")
     if problems:
-        message = "simple-mandarin reply check: " + "; ".join(problems) + "。用連續文字作答，不用標題、項目符號、表格、粗體。"
+        message = "simple-mandarin reply check: " + "; ".join(problems) + "。不用破折號，不用開場白或結尾語。"
         print(json.dumps({"systemMessage": message}, ensure_ascii=False))
     return 0
 
@@ -200,8 +199,14 @@ def self_test():
     assert not CLOSERS.search("這是說明。")
     assert find_passive_markers("這個檔案被刪除了")
     assert not find_passive_markers("刪除這個檔案")
-    counts = reader_check("# 標題\n**粗體**\n- 項目\n這是—測試")
-    assert counts == {"headers": 1, "bold": 1, "bullets": 1, "em_dash": 1}, counts
+    assert reply_problems("Plain English reply — with an em-dash.") == []
+    assert reply_problems("# 標題\n**粗體**\n- 項目\n這是說明。") == []
+    assert reply_problems("這是—測試") == ["1 em-dash(s)"]
+    import tempfile
+    with tempfile.TemporaryDirectory() as tmp:
+        english_md = pathlib.Path(tmp, "notes.md")
+        english_md.write_text("Plain English — with an em-dash.\n", encoding="utf-8")
+        assert post_tool_use({"tool_input": {"file_path": str(english_md)}}) == 0
     print("self-test passed")
 
 

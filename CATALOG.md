@@ -140,7 +140,7 @@ One skill, two modes. Inline mode fires proactively when you create or edit Zett
 
 **Skills** · `visualize`
 
-### [simple-mandarin](./simple-mandarin/README.md) · `v0.2.0`
+### [simple-mandarin](./simple-mandarin/README.md) · `v0.2.1`
 
 *One term, one meaning, every sentence lands*
 

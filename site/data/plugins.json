@@ -958,7 +958,7 @@
     },
     {
       "name": "simple-mandarin",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "tagline": "One term, one meaning, every sentence lands",
       "summary": "Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.",
       "category": "content",
@@ -974,6 +974,20 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "0.2.1",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "the Stop hook no longer flags headers, bold, or bullets, and its message states the current reply rule (no em-dashes, no opener or closer). Commit 743265a removed the old formatting rule from the style and the skill, but the hook still printed it."
+            },
+            {
+              "type": "fix",
+              "text": "both lint hooks skip text with no Han characters. Before, English files and English replies got em-dash reports."
+            }
+          ]
+        },
         {
           "version": "0.2.0",
           "date": "2026-09-20",
