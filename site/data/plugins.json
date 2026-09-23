@@ -815,7 +815,7 @@
     },
     {
       "name": "adhd-review",
-      "version": "0.5.5",
+      "version": "0.5.6",
       "tagline": "Action-first replies, blockers before FYI",
       "summary": "One output style, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: the output-style mechanism and a default-on SessionStart hook both target the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode or /output-style adhd-review.",
       "category": "workflow",
@@ -920,9 +920,9 @@
     },
     {
       "name": "note-visualizer",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "tagline": "Draw the concept, don't describe it",
-      "summary": "One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Ships a PostToolUse hook reminding you to apply these rules on any markdown edit. No cross-plugin deps.",
+      "summary": "One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Ships a PostToolUse hook that reminds Claude to apply these rules when a Zettelkasten note is edited. No cross-plugin deps.",
       "category": "content",
       "install": "claude plugin install note-visualizer@21-breakincode",
       "oneLiner": "Make markdown notes scannable — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
@@ -958,7 +958,7 @@
     },
     {
       "name": "simple-mandarin",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "tagline": "One term, one meaning, every sentence lands",
       "summary": "Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.",
       "category": "content",
@@ -974,6 +974,20 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "0.2.1",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "the Stop hook no longer flags headers, bold, or bullets, and its message states the current reply rule (no em-dashes, no opener or closer). Commit 743265a removed the old formatting rule from the style and the skill, but the hook still printed it."
+            },
+            {
+              "type": "fix",
+              "text": "both lint hooks skip text with no Han characters. Before, English files and English replies got em-dash reports."
+            }
+          ]
+        },
         {
           "version": "0.2.0",
           "date": "2026-09-20",

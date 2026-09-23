@@ -9,15 +9,12 @@ with its own `CLAUDE.md`.
 - General: `~/.claude/rules/dev-principles.md`, `~/.claude/rules/coding-style.md`, `~/.claude/rules/git-workflow.md`
 - Plugin development (sourcing, cross-plugin boundaries, generated docs, versioning) — **follow for any plugin change:**
 - Skill authoring (invocation, information hierarchy, leading words, failure modes) — **follow for any skill change:**
+  `.claude/rules/writing-great-skills.md`. When you read a `skills/` or
+  `commands/` file, it loads. When you create a new skill, read it first.
 
 @.claude/rules/plugin-rules.md
-@.claude/rules/writing-great-skills.md
 
 ## Docs are generated
-
-`CATALOG.md`, per-plugin `README.md`, and `site/*` are generated from
-`.claude-plugin/marketplace.json` + `content/plugins.content.json`. Run
-`./scripts/cicd.sh GEN` (or rely on the pre-commit hook) — never hand-edit them.
 
 Edit/Write on `CATALOG.md`, `*/README.md`, and `site/data/plugins.json` is
 mechanically denied (`.claude/settings.json`). `site/*.html` IS hand-editable —

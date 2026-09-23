@@ -56,7 +56,7 @@
       "name": "adhd-review",
       "source": "./adhd-review",
       "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
-      "version": "0.5.5",
+      "version": "0.5.6",
       "strict": true
     },
     {
@@ -70,14 +70,14 @@
       "name": "note-visualizer",
       "source": "./note-visualizer",
       "description": "Make markdown notes scannable — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "strict": true
     },
     {
       "name": "simple-mandarin",
       "source": "./simple-mandarin",
       "description": "Write plain, unambiguous Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language: short sentences by character count, active voice, one term one meaning, condition before command.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "strict": true
     }
   ]

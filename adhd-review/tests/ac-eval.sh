@@ -42,7 +42,7 @@ t() { # t "description" 'shell expression'
 # a global, so we write to a file and let `return` carry the code up).
 run_hook() { # cfg outfile [extra VAR=val env assignments...]
   local cfg="$1" outfile="$2"; shift 2
-  env CLAUDE_PLUGIN_ROOT="$PLUGIN_DIR" CLAUDE_CONFIG_DIR="$cfg" "$@" bash "$HOOK_SH" >"$outfile" 2>/dev/null
+  env CLAUDE_PLUGIN_ROOT="$PLUGIN_DIR" CLAUDE_CONFIG_DIR="$cfg" CLAUDE_PROJECT_DIR="$TMP/proj" "$@" bash "$HOOK_SH" >"$outfile" 2>/dev/null
   return $?
 }
 
@@ -54,6 +54,7 @@ t "hooks/hooks.json exists"                  "[ -f '$HOOK_JSON' ]"
 t "scripts/session-start.sh exists"          "[ -f '$HOOK_SH' ]"
 t "session-start.sh is executable"           "[ -x '$HOOK_SH' ]"
 t "no per-plugin marketplace.json (repo has one)" "[ ! -f '$PLUGIN_DIR/.claude-plugin/marketplace.json' ]"
+t "style keeps built-in coding instructions" "grep -q '^keep-coding-instructions: true$' '$STYLE'"
 
 echo "── AC #2  strict validation ──────────────────────────────────"
 if command -v claude >/dev/null 2>&1; then
@@ -95,7 +96,7 @@ t "guard: demands complete/full-detail return" "grep -Eqi 'complete, full-detail
 
 echo "── AC #6/#8  hook situations (dynamic) ───────────────────────"
 TMP="$(mktemp -d)"
-mkdir -p "$TMP/cfg"
+mkdir -p "$TMP/cfg" "$TMP/proj"
 
 # Default (no disable var): on → emits the style body.
 run_hook "$TMP/cfg" "$TMP/default.out"; rc_default=$?
@@ -115,6 +116,16 @@ env -u CLAUDE_PLUGIN_ROOT CLAUDE_CONFIG_DIR="$TMP/cfg" bash "$HOOK_SH" >"$TMP/no
 rc_noroot=$?
 t "active but CLAUDE_PLUGIN_ROOT unset: silent + exit 0" \
   "[ ! -s '$TMP/noroot.out' ] && [ '$rc_noroot' = 0 ]"
+# Style already active natively (outputStyle set) → silent, so it never loads twice.
+mkdir -p "$TMP/cfg-style" "$TMP/proj-other/.claude"
+printf '{\n  "outputStyle": "adhd-review:ADHD Review"\n}\n' >"$TMP/cfg-style/settings.json"
+run_hook "$TMP/cfg-style" "$TMP/style-set.out"; rc_style_set=$?
+# A project-local outputStyle outranks the user one → another style is active, so inject.
+printf '{"outputStyle": "default"}\n' >"$TMP/proj-other/.claude/settings.local.json"
+run_hook "$TMP/cfg-style" "$TMP/style-other.out" CLAUDE_PROJECT_DIR="$TMP/proj-other"
+t "outputStyle already ADHD Review: silent (no second copy)" "[ ! -s '$TMP/style-set.out' ]"
+t "outputStyle already ADHD Review: exit 0"                  "[ '$rc_style_set' = 0 ]"
+t "project-local outputStyle outranks user: emits body"      "[ -s '$TMP/style-other.out' ]"
 
 echo "── plugin-rules compliance ───────────────────────────────────"
 t "hook command uses \${CLAUDE_PLUGIN_ROOT}"   "grep -q 'CLAUDE_PLUGIN_ROOT' '$HOOK_JSON'"

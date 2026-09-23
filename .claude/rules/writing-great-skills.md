@@ -1,3 +1,9 @@
+---
+paths:
+  - "**/skills/**"
+  - "**/commands/**"
+---
+
 # Writing Great Skills
 
 Principles and vocabulary for authoring/editing skills well. Follow these

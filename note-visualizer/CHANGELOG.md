@@ -1,3 +1,8 @@
+## 0.2.1 - 2026-09-24
+
+- **fix:** the PostToolUse reminder returns `additionalContext`, so it reaches Claude. It used `systemMessage`, which only the user sees, so the reminder never steered the model.
+- **fix:** the reminder fires only for Markdown files under a `Zettelkasten/` folder. Before, it fired on every Markdown edit in every project, including READMEs and CHANGELOGs.
+
 ## 0.2.0 - 2026-09-20
 
 - **feat:** add a `PostToolUse` hook (`hooks/hooks.json` + `hooks/remind-visualize.py`) that reminds Claude to apply the visualize principle on any markdown edit, in any project. Replaces the plugin's earlier "no hooks" design.
