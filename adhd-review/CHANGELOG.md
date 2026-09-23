@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.6 - 2026-09-24
+
+- **fix:** skip the SessionStart injection when `outputStyle` already selects ADHD Review. Claude Code loads that body natively, so the hook added a second copy (about 1,374 tokens) at every start, resume, clear, and compact.
+- **fix:** set `keep-coding-instructions: true` on the output style. Without it, Claude Code removes its built-in software engineering instructions while the style is active.
+
 ## 0.5.5 - 2026-09-19
 
 - **fix:** rewrite `skills/adhd-review-mode/SKILL.md` to clear the simple-english linter. No content or meaning changed, only sentence shape.

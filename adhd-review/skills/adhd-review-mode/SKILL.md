@@ -31,7 +31,9 @@ plugin shapes the main thread out of the box. To silence it for a session, set a
 - Disable: `export CLAUDE_ADHD_REVIEW=0` (before launching, or in that session's shell)
 - Re-enable: unset it (or `export CLAUDE_ADHD_REVIEW=1`)
 
-The hook injects the style into the **main session only**.
+The hook injects the style into the **main session only**. If `outputStyle` already selects
+this style, the hook stays silent. Claude Code then loads the style itself, so a second copy
+only spends tokens.
 
 ## Why this is human-facing only (the load-bearing design)
 
