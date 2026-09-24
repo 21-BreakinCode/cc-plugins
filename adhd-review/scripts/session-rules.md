@@ -1,9 +1,3 @@
----
-name: ADHD Review
-description: Action-first replies with blockers before FYI. Layer 1 shapes every reply. Layer 2 renders Review-Ready buckets for substantial multi-step wrap-ups. Human-facing thread only.
-keep-coding-instructions: true
----
-
 ## Scope: human-facing thread only
 
 These rules shape replies to the **person** on the other end, a reader with limited

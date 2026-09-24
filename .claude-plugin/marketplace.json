@@ -56,7 +56,7 @@
       "name": "adhd-review",
       "source": "./adhd-review",
       "description": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
-      "version": "0.5.6",
+      "version": "0.6.0",
       "strict": true
     },
     {
@@ -77,7 +77,7 @@
       "name": "simple-mandarin",
       "source": "./simple-mandarin",
       "description": "Write plain, unambiguous Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language: short sentences by character count, active voice, one term one meaning, condition before command.",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "strict": true
     }
   ]

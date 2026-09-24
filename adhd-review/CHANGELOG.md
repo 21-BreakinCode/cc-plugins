@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0 - 2026-09-24
+
+- **refactor:** ship the reply rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set `outputStyle` for it. The rules moved from `output-styles/adhd-review.md` to `scripts/session-rules.md`. If your settings set `outputStyle` to `adhd-review:ADHD Review`, delete that line.
+- **refactor:** remove the `outputStyle` check and the frontmatter strip from `scripts/session-start.sh`. With one delivery path, the rules cannot load twice.
+
 ## 0.5.6 - 2026-09-24
 
 - **fix:** skip the SessionStart injection when `outputStyle` already selects ADHD Review. Claude Code loads that body natively, so the hook added a second copy (about 1,374 tokens) at every start, resume, clear, and compact.

@@ -1,3 +1,7 @@
+## 0.3.0 — 2026-09-24
+
+- **refactor:** ship the rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set `outputStyle` for it. The rules moved from `output-styles/simple-mandarin.md` to `hooks/session-rules.md`. If your settings select the simple-mandarin output style, delete that line.
+
 ## 0.2.1 — 2026-09-24
 
 - **fix:** the Stop hook no longer flags headers, bold, or bullets, and its message states the current reply rule (no em-dashes, no opener or closer). Commit 743265a removed the old formatting rule from the style and the skill, but the hook still printed it.

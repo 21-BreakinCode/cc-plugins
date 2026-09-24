@@ -6,8 +6,8 @@
 # `ac_pass_rate: NN.N` that autoresearch's eval runner extracts, plus a
 # per-check PASS/FAIL log for humans.
 #
-# Behavioral ACs that need a LIVE multi-agent session (real output-style
-# application on the main thread, real subagent isolation) cannot be unit
+# Behavioral ACs that need a LIVE multi-agent session (real rule
+# injection on the main thread, real subagent isolation) cannot be unit
 # tested here — a platform guarantee, not our code. We assert their *evidence*:
 # the style directives are present and the subagent stand-down guard is
 # unambiguous. Those checks are tagged [proxy].
@@ -18,7 +18,7 @@ set -uo pipefail   # deliberately NOT -e: every check must run
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLUGIN_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 REPO_ROOT="$(cd "$PLUGIN_DIR/.." && pwd)"
-STYLE="$PLUGIN_DIR/output-styles/adhd-review.md"
+STYLE="$PLUGIN_DIR/scripts/session-rules.md"
 SKILL="$PLUGIN_DIR/skills/adhd-review-mode/SKILL.md"
 HOOK_JSON="$PLUGIN_DIR/hooks/hooks.json"
 HOOK_SH="$PLUGIN_DIR/scripts/session-start.sh"
@@ -37,24 +37,25 @@ t() { # t "description" 'shell expression'
   fi
 }
 
-# Run the hook with a given config dir, writing stdout to <outfile>.
+# Run the hook, writing stdout to <outfile>.
 # Returns the hook's exit code (a command-substitution subshell would swallow
 # a global, so we write to a file and let `return` carry the code up).
-run_hook() { # cfg outfile [extra VAR=val env assignments...]
-  local cfg="$1" outfile="$2"; shift 2
-  env CLAUDE_PLUGIN_ROOT="$PLUGIN_DIR" CLAUDE_CONFIG_DIR="$cfg" CLAUDE_PROJECT_DIR="$TMP/proj" "$@" bash "$HOOK_SH" >"$outfile" 2>/dev/null
+run_hook() { # outfile [extra VAR=val env assignments...]
+  local outfile="$1"; shift
+  env CLAUDE_PLUGIN_ROOT="$PLUGIN_DIR" "$@" bash "$HOOK_SH" >"$outfile" 2>/dev/null
   return $?
 }
 
 echo "── AC #1  structure ──────────────────────────────────────────"
 t "plugin.json exists"                       "[ -f '$PLUGIN_JSON' ]"
-t "output-styles/adhd-review.md exists"      "[ -f '$STYLE' ]"
+t "scripts/session-rules.md exists"          "[ -f '$STYLE' ]"
 t "skills/adhd-review-mode/SKILL.md exists"  "[ -f '$SKILL' ]"
 t "hooks/hooks.json exists"                  "[ -f '$HOOK_JSON' ]"
 t "scripts/session-start.sh exists"          "[ -f '$HOOK_SH' ]"
 t "session-start.sh is executable"           "[ -x '$HOOK_SH' ]"
 t "no per-plugin marketplace.json (repo has one)" "[ ! -f '$PLUGIN_DIR/.claude-plugin/marketplace.json' ]"
-t "style keeps built-in coding instructions" "grep -q '^keep-coding-instructions: true$' '$STYLE'"
+t "no output-styles/ folder (rules ship by hook only)" "[ ! -e '$PLUGIN_DIR/output-styles' ]"
+t "no SubagentStart/SubagentStop hook (main thread only)" "! grep -qE '\"Subagent(Start|Stop)\"' '$HOOK_JSON'"
 
 echo "── AC #2  strict validation ──────────────────────────────────"
 if command -v claude >/dev/null 2>&1; then
@@ -96,12 +97,11 @@ t "guard: demands complete/full-detail return" "grep -Eqi 'complete, full-detail
 
 echo "── AC #6/#8  hook situations (dynamic) ───────────────────────"
 TMP="$(mktemp -d)"
-mkdir -p "$TMP/cfg" "$TMP/proj"
 
 # Default (no disable var): on → emits the style body.
-run_hook "$TMP/cfg" "$TMP/default.out"; rc_default=$?
+run_hook "$TMP/default.out"; rc_default=$?
 # Disabled for the session: CLAUDE_ADHD_REVIEW=0 → silent no-op.
-run_hook "$TMP/cfg" "$TMP/off.out" CLAUDE_ADHD_REVIEW=0; rc_off=$?
+run_hook "$TMP/off.out" CLAUDE_ADHD_REVIEW=0; rc_off=$?
 
 t "default (no var): emits body"                 "[ -s '$TMP/default.out' ]"
 t "default (no var): exit 0"                      "[ '$rc_default' = 0 ]"
@@ -112,20 +112,10 @@ t "frontmatter stripped from injected body" \
   "! head -1 '$TMP/default.out' | grep -qE '^(---|name:|description:)' && grep -q 'human-facing thread only' '$TMP/default.out'"
 # Robustness: even active-by-default, an unset CLAUDE_PLUGIN_ROOT must stay a
 # clean silent no-op — never a `set -u` abort. (Regression for the guard fix.)
-env -u CLAUDE_PLUGIN_ROOT CLAUDE_CONFIG_DIR="$TMP/cfg" bash "$HOOK_SH" >"$TMP/noroot.out" 2>/dev/null
+env -u CLAUDE_PLUGIN_ROOT bash "$HOOK_SH" >"$TMP/noroot.out" 2>/dev/null
 rc_noroot=$?
 t "active but CLAUDE_PLUGIN_ROOT unset: silent + exit 0" \
   "[ ! -s '$TMP/noroot.out' ] && [ '$rc_noroot' = 0 ]"
-# Style already active natively (outputStyle set) → silent, so it never loads twice.
-mkdir -p "$TMP/cfg-style" "$TMP/proj-other/.claude"
-printf '{\n  "outputStyle": "adhd-review:ADHD Review"\n}\n' >"$TMP/cfg-style/settings.json"
-run_hook "$TMP/cfg-style" "$TMP/style-set.out"; rc_style_set=$?
-# A project-local outputStyle outranks the user one → another style is active, so inject.
-printf '{"outputStyle": "default"}\n' >"$TMP/proj-other/.claude/settings.local.json"
-run_hook "$TMP/cfg-style" "$TMP/style-other.out" CLAUDE_PROJECT_DIR="$TMP/proj-other"
-t "outputStyle already ADHD Review: silent (no second copy)" "[ ! -s '$TMP/style-set.out' ]"
-t "outputStyle already ADHD Review: exit 0"                  "[ '$rc_style_set' = 0 ]"
-t "project-local outputStyle outranks user: emits body"      "[ -s '$TMP/style-other.out' ]"
 
 echo "── plugin-rules compliance ───────────────────────────────────"
 t "hook command uses \${CLAUDE_PLUGIN_ROOT}"   "grep -q 'CLAUDE_PLUGIN_ROOT' '$HOOK_JSON'"

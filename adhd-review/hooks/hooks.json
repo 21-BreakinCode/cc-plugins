@@ -1,5 +1,5 @@
 {
-  "description": "Inject the adhd-review output style into the main session. On by default; set CLAUDE_ADHD_REVIEW=0 to disable it for a session.",
+  "description": "Inject the adhd-review reply rules into the main session. On by default; set CLAUDE_ADHD_REVIEW=0 to disable it for a session.",
   "hooks": {
     "SessionStart": [
       {
