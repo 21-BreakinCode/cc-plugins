@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.3 — 2026-09-24
+
+- **fix:** replace the word caps in `/hh:wrap-up` Phase 2 with the shape of the Phase 3 table. Each subagent report fills one table row.
+
 ## 0.3.2 - 2026-09-19
 
 - **fix:** rewrite `commands/wrap-up.md`, `init-service.md`, `init-org.md`, and this

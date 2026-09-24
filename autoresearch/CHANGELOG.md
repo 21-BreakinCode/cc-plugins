@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.3 — 2026-09-24
+
+- **fix:** state the eval-metrics guard in `/autoresearch:improve` once, with its reason, instead of five times with rising emphasis.
+
 ## 2.2.2 — 2026-09-19
 
 - **feat:** publish the live improvement dashboard as a private Claude Artifact. The dashboard now uses inline SVG and no external assets.
