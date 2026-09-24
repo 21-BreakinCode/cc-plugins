@@ -6,7 +6,7 @@ function parseChangelog(md) {
   const versions = [];
   let current = null;
   for (const line of md.split('\n')) {
-    const heading = line.match(/^## (.+?) — (\d{4}-\d{2}-\d{2})$/);
+    const heading = line.match(/^## (.+?) [—-] (\d{4}-\d{2}-\d{2})$/);
     if (heading) {
       current = { version: heading[1], date: heading[2], changes: [] };
       versions.push(current);

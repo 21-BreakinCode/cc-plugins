@@ -111,6 +111,16 @@
       ],
       "changelog": [
         {
+          "version": "2.1.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite prose across all 4 skill files and this changelog to clear the simple-english linter. No content or meaning changed, only sentence shape. \"harness\" stays: standard term used throughout this repo, not AI-slop."
+            }
+          ]
+        },
+        {
           "version": "2.1.0",
           "date": "2026-08-04",
           "changes": [
@@ -390,6 +400,16 @@
       ],
       "changelog": [
         {
+          "version": "0.3.2",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite `commands/wrap-up.md`, `init-service.md`, `init-org.md`, and this"
+            }
+          ]
+        },
+        {
           "version": "0.3.1",
           "date": "2026-09-19",
           "changes": [
@@ -560,6 +580,38 @@
       ],
       "changelog": [
         {
+          "version": "1.1.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape."
+            }
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "date": "2026-08-09",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "QA fixture representativeness check. Flags synthetic test inputs asserting on diversity-sensitive behavior."
+            },
+            {
+              "type": "feat",
+              "text": "QA verdict → blast radius gate. Flags structural decisions lacking production-shaped test evidence."
+            },
+            {
+              "type": "feat",
+              "text": "mine-git-signals revert chain detection (misdiagnosis signal)"
+            },
+            {
+              "type": "feat",
+              "text": "refresh-principles misdiagnosis sequence mining (Pitfall capture)"
+            }
+          ]
+        },
+        {
           "version": "1.0.0",
           "date": "2026-08-07",
           "changes": [
@@ -680,6 +732,16 @@
       "config": [],
       "changelog": [
         {
+          "version": "1.3.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape."
+            }
+          ]
+        },
+        {
           "version": "1.3.0",
           "date": "2026-08-04",
           "changes": [
@@ -778,6 +840,16 @@
       ],
       "changelog": [
         {
+          "version": "0.1.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite prose in both skills to clear the simple-english linter. No content or meaning changed, only sentence shape. Also align the \"Do / Do Not\" field label between distill's steps and its template."
+            }
+          ]
+        },
+        {
           "version": "0.1.0",
           "date": "2026-07-13",
           "changes": [
@@ -836,7 +908,144 @@
           "description": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to `0` to disable it for that session; unset (or `1`) re-enables. The style targets the main thread only; subagents never inherit it."
         }
       ],
-      "changelog": []
+      "changelog": [
+        {
+          "version": "0.6.0",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "ship the reply rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set `outputStyle` for it. The rules moved from `output-styles/adhd-review.md` to `scripts/session-rules.md`. If your settings set `outputStyle` to `adhd-review:ADHD Review`, delete that line."
+            },
+            {
+              "type": "refactor",
+              "text": "remove the `outputStyle` check and the frontmatter strip from `scripts/session-start.sh`. With one delivery path, the rules cannot load twice."
+            }
+          ]
+        },
+        {
+          "version": "0.5.6",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "skip the SessionStart injection when `outputStyle` already selects ADHD Review. Claude Code loads that body natively, so the hook added a second copy (about 1,374 tokens) at every start, resume, clear, and compact."
+            },
+            {
+              "type": "fix",
+              "text": "set `keep-coding-instructions: true` on the output style. Without it, Claude Code removes its built-in software engineering instructions while the style is active."
+            }
+          ]
+        },
+        {
+          "version": "0.5.5",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite `skills/adhd-review-mode/SKILL.md` to clear the simple-english linter. No content or meaning changed, only sentence shape."
+            }
+          ]
+        },
+        {
+          "version": "0.5.4",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite the remaining prose (Scope guard, Layer 1, Visual Layer, Layer 2) to clear the simple-english linter. No content or meaning changed, only sentence shape."
+            },
+            {
+              "type": "feat",
+              "text": "add a hard rule to the Visual Layer. Diagrams in a reply are always ASCII. Never use mermaid, since a plain chat reply cannot render it as a picture."
+            }
+          ]
+        },
+        {
+          "version": "0.5.3",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "remove the Language Layer (the embedded ASD-STE100 Simple English rules). This plugin now covers reply shaping only. Install the simple-english plugin for language rules. That plugin already covers this job."
+            }
+          ]
+        },
+        {
+          "version": "0.5.2",
+          "date": "2026-09-13",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "strengthen diff instruction with anti-pattern catalog, positive example, and defense-in-depth reinforcement"
+            }
+          ]
+        },
+        {
+          "version": "0.5.1",
+          "date": "2026-09-13",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "code-diff format picker rule now demands verbatim code lines, not intent summaries"
+            }
+          ]
+        },
+        {
+          "version": "0.5.0",
+          "date": "2026-08-28",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "add Language Layer that enforces ASD-STE100 Simplified Technical English as mandatory on every reply (all 53 rules + 8 general recommendations)"
+            }
+          ]
+        },
+        {
+          "version": "0.4.0",
+          "date": "2026-08-15",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "expand Visual Layer with technique vocabulary (pseudocode, call trees, component/file trees, mermaid, diffs, HTML artifacts)"
+            },
+            {
+              "type": "feat",
+              "text": "add format picker for content-type to view mapping (sequence diagrams, diff view, flow diagrams, done/action view)"
+            }
+          ]
+        },
+        {
+          "version": "0.3.0",
+          "date": "2026-07-29",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "add Visual Layer with fenced ASCII diagrams for flow-shaped concepts"
+            }
+          ]
+        },
+        {
+          "version": "0.2.0",
+          "date": "2026-07-29",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "default-on with per-session opt-out"
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "date": "2026-07-27",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "initial release of ADHD-friendly per-reply shaping + Review-Ready handoff summaries"
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "receipts",
@@ -936,6 +1145,44 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "0.2.1",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "the PostToolUse reminder returns `additionalContext`, so it reaches Claude. It used `systemMessage`, which only the user sees, so the reminder never steered the model."
+            },
+            {
+              "type": "fix",
+              "text": "the reminder fires only for Markdown files under a `Zettelkasten/` folder. Before, it fired on every Markdown edit in every project, including READMEs and CHANGELOGs."
+            }
+          ]
+        },
+        {
+          "version": "0.2.0",
+          "date": "2026-09-20",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "add a `PostToolUse` hook (`hooks/hooks.json` + `hooks/remind-visualize.py`) that reminds Claude to apply the visualize principle on any markdown edit, in any project. Replaces the plugin's earlier \"no hooks\" design."
+            },
+            {
+              "type": "feat",
+              "text": "add a sequence-diagram style to the visual-patterns reference, for flows with 3+ participants trading ordered messages. Includes its own line and width budget."
+            }
+          ]
+        },
+        {
+          "version": "0.1.1",
+          "date": "2026-09-19",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "rewrite the visualize skill's prose to clear the simple-english linter. No content or meaning changed, only sentence shape."
+            }
+          ]
+        },
         {
           "version": "0.1.0",
           "date": "2026-08-16",

@@ -7,6 +7,7 @@ import { cliOneLiner, settingsSnippet, installOne, updateAllCli } from './lib/in
 import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
 import { stampAssets, stampCounts } from './lib/stamp.mjs';
+import { buildSiteData } from './lib/site-data.mjs';
 
 const marketplace = {
   name: 'cc-plugins',
@@ -191,4 +192,22 @@ test('stampCounts injects the live plugin count into both hero spans', () => {
   assert.doesNotMatch(out, /99/);
   // Spans that aren't the count spans are left untouched.
   assert.equal(stampCounts('<span id="other">1</span>', 6), '<span id="other">1</span>');
+});
+
+// --- site data ---
+test('buildSiteData parses changelog headings with an em-dash or a hyphen before the date', () => {
+  const changelog = [
+    '## 0.3.0 - 2026-09-25',
+    '- **feat:** newest, hyphen heading',
+    '## 0.2.0 — 2026-09-24',
+    '- **fix:** middle, em-dash heading',
+    '## 0.1.0 - 2026-09-20',
+    '- **feat:** oldest, hyphen heading',
+  ].join('\n');
+  const [plugin] = buildSiteData({ plugins: [{ name: 'alpha', changelog }] }).plugins;
+  assert.deepEqual(plugin.changelog, [
+    { version: '0.3.0', date: '2026-09-25', changes: [{ type: 'feat', text: 'newest, hyphen heading' }] },
+    { version: '0.2.0', date: '2026-09-24', changes: [{ type: 'fix', text: 'middle, em-dash heading' }] },
+    { version: '0.1.0', date: '2026-09-20', changes: [{ type: 'feat', text: 'oldest, hyphen heading' }] },
+  ]);
 });
