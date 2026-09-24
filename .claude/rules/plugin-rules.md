@@ -62,7 +62,7 @@ When a plugin's behavior changes, bump its version in BOTH
 (keep the two equal). Marketplaces compare versions to offer `plugin update`, so
 an un-bumped change never reaches installed users.
 
-## 5. Update the changelog on every version bump (CRITICAL)
+## 5. Update the changelog on every version bump
 
 Every plugin has a `<plugin>/CHANGELOG.md`. When a version is bumped, add a new
 entry **at the top** (newest first) following this format:

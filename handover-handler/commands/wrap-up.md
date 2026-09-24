@@ -67,7 +67,7 @@ Expect 0–10 results. If the count is unexpectedly high (>15), warn the user an
 
 ## Phase 2 — Parallel analysis (one subagent per handover)
 
-Send all Agent calls in a **single message** so they run concurrently. Use `subagent_type: general-purpose`. Cap response to ~150 words each.
+Send all Agent calls in a **single message** so they run concurrently. Use `subagent_type: general-purpose`. Each report fills one row of the Phase 3 table, so keep it to the fields below.
 
 Subagent prompt template (substitute `<file>` and today's date):
 
@@ -76,7 +76,7 @@ Subagent prompt template (substitute `<file>` and today's date):
 > File: `<file>`
 > Today: `<YYYY-MM-DD>`
 >
-> Read the file and report under 150 words, structured as:
+> Read the file and report these fields, one line each where possible:
 >
 > 1. **Topic:** one-line summary.
 > 2. **ORG:** the path segment immediately after `01Project/` (for example, `…/01Project/Appier/Services/CsDomain/…` → `Appier`). If the file is not under `01Project/<ORG>/`, report `ORG: <unresolved>` so the caller can ask the user.
@@ -85,7 +85,7 @@ Subagent prompt template (substitute `<file>` and today's date):
 >    - filename references `CR-1660` → `CR-1660`
 >    - otherwise short topic slug, for example `cs-domain`
 > 4. **Visible state:** explicit `status:` field in frontmatter, plus checkbox completion ratio (`[x]` count / total).
-> 5. **Suggested action:** pick ONE and explain in <20 words:
+> 5. **Suggested action:** pick ONE and give a one-phrase reason:
 >    - `done`: work is complete. Status reads done, complete, live, or shipped.
 >    - `superseded`: a newer handover replaces this one. If you can spot it, name it.
 >    - `suspended`: work paused. An explicit `status: suspended` field, or a visible indicator of an indefinite hold, both count.

@@ -21,14 +21,14 @@
       "name": "autoresearch",
       "source": "./autoresearch",
       "description": "Eval-driven improvement loop (keep/discard with a live Artifact dashboard) plus a dev-lifecycle harness builder that measures project health and creates feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
-      "version": "2.2.2",
+      "version": "2.2.3",
       "strict": true
     },
     {
       "name": "hh",
       "source": "./handover-handler",
       "description": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "strict": true
     },
     {

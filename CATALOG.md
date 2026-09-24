@@ -54,7 +54,7 @@ A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session 
 
 ## Measure & Improve
 
-### [autoresearch](./autoresearch/README.md) · `v2.2.2`
+### [autoresearch](./autoresearch/README.md) · `v2.2.3`
 
 *Eval-driven improvement, plus the harness to drive it*
 
@@ -98,7 +98,7 @@ A Stop hook that enforces provable claims. When the finished turn asserts a **FA
 
 ## Workflow & Handover
 
-### [hh](./handover-handler/README.md) · `v0.3.2`
+### [hh](./handover-handler/README.md) · `v0.3.3`
 
 *Cross-context handover docs, LifeOS as the source of truth*
 

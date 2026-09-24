@@ -16,13 +16,11 @@ The user invoked this command with inline content describing what they want to i
 3. **Eval method**: if mentioned (ask if not)
 4. **Stopping condition**: if mentioned (ask if not)
 
-## Step 2: Eval Metrics Guard (MANDATORY)
-
-**This check is non-negotiable. ALWAYS perform it.**
+## Step 2: Eval Metrics Guard
 
 Scan the user's input for eval-related content: words like "score", "metric", "benchmark", "test", "measure", "judge", "rate", "evaluate", "pass", "fail", a shell command, or scoring criteria.
 
-If NO eval method is detected, you MUST ask before proceeding:
+If no eval method is detected, ask before proceeding:
 
 > Before I start iterating, I need to know how to measure improvement. Please provide one or both:
 >
@@ -33,7 +31,7 @@ If NO eval method is detected, you MUST ask before proceeding:
 >
 > Without eval metrics, I cannot tell whether changes are improvements.
 
-**Do NOT proceed until you check that at least one eval method is set.**
+Start the loop only after at least one eval method is set.
 
 ## Step 3: Interactive Gap-Filling
 
@@ -140,7 +138,6 @@ The prompt to the agent must include:
 
 ## Important Notes
 
-- NEVER start the loop without eval metrics. This is the #1 rule.
 - Ask questions ONE AT A TIME, not all at once.
 - If the user provides everything upfront, skip to Step 4.
 - The `.autoresearch/` directory must exist before generating the dashboard.

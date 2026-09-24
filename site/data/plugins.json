@@ -194,7 +194,7 @@
     },
     {
       "name": "autoresearch",
-      "version": "2.2.2",
+      "version": "2.2.3",
       "tagline": "Eval-driven improvement, plus the harness to drive it",
       "summary": "Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.",
       "category": "improve",
@@ -231,6 +231,16 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.2.3",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "state the eval-metrics guard in `/autoresearch:improve` once, with its reason, instead of five times with rising emphasis."
+            }
+          ]
+        },
         {
           "version": "2.2.2",
           "date": "2026-09-19",
@@ -355,7 +365,7 @@
     },
     {
       "name": "hh",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "tagline": "Cross-context handover docs, LifeOS as the source of truth",
       "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.",
       "category": "workflow",
@@ -399,6 +409,16 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.3.3",
+          "date": "2026-09-24",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "replace the word caps in `/hh:wrap-up` Phase 2 with the shape of the Phase 3 table. Each subagent report fills one table row."
+            }
+          ]
+        },
         {
           "version": "0.3.2",
           "date": "2026-09-19",
