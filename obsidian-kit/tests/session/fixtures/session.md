@@ -1,4 +1,4 @@
-# Fixture session — "build session-learner 2.0"
+# Fixture session — "build the session reflection skills 2.0"
 
 A fixed, real-case session summary used as the input to the funnel eval. The
 funnel runs `wrap-up` on THIS, then `pick-up` on the chosen topics. Keep it
@@ -6,7 +6,7 @@ constant so generation input never changes between iterations.
 
 ## What happened this session
 
-Redesigned the `session-learner` plugin to v2.0.0 — a three-skill reflection
+Redesigned the session reflection skills to v2.0.0 — a three-skill reflection
 funnel (`wrap-up` → `pick-up` → `recommend`) that turns a working session into
 atomic Zettelkasten cards. Removed the v1 commands and hooks (clean slate).
 

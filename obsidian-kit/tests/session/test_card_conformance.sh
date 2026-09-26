@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Regression check for the per-card Zettelkasten contract enforced by
-# session-learner's pick-up skill. Scores the committed golden reference cards
+# the session-pick-up skill. Scores the committed golden reference cards
 # against the 6 mechanical rules and asserts full conformance.
 #
 # This is the deterministic part. The full regression after editing the skills

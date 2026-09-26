@@ -1,5 +1,5 @@
 ---
-name: wrap-up
+name: session-wrap-up
 description: Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep.
 ---
 
@@ -43,8 +43,8 @@ Display exactly this structure in the terminal:
 
 ---
 Next:
-  /session-learner:pick-up <n[,n…]>   → turn topic(s) into atomic Zettelkasten cards
-  /session-learner:recommend           → not sure which? I'll pick the single best one and tell you why
+  /obsidian-kit:session-pick-up <n[,n…]>   → turn topic(s) into atomic Zettelkasten cards
+  /obsidian-kit:session-recommend           → not sure which? I'll pick the single best one and tell you why
 ```
 
 ## Empty or trivial session

@@ -1,18 +1,23 @@
+## 1.1.0 — 2026-09-26
+
+- **feat:** absorb the three session reflection skills as `session-wrap-up`, `session-pick-up`, and `session-recommend`.
+- **feat:** `session-pick-up` gains a Phase 3 write step. It can save cards into the vault through `format-note`, gated by one `AskUserQuestion` approval.
+
 ## 1.0.3 — 2026-09-26
 
 - **fix:** format-note accepts a bold claim inside a quote or callout (`> **claim**`, `> [!danger] **claim**`).
 - **fix:** format-note no longer asks a map directly in a type folder to be renamed, matching migrate-notes 1.0.1.
 - **feat:** `Sources:` is optional for concept and takeaway notes. `Related:` stays required.
-- **feat:** a literature note may name its source with `> Link: <url>`, `> Source: <name>`, or a `Sources:` line. A literature note beside a `00__map__` note needs none, because the map names the series source.
+- **feat:** a literature note can name its source with `> Link: <url>`, `> Source: <name>`, or a `Sources:` line. A literature note beside a `00__map__` note needs none, because the map names the series source.
 
 ## 1.0.2 — 2026-09-26
 
-- **fix:** audit-tags ends a tag at the next `#`, so a false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS.
+- **fix:** audit-tags ends a tag at the next `#`. A false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS.
 
 ## 1.0.1 — 2026-09-26
 
-- **fix:** audit-tags suggests a duplicate only when one tag is a prefix covering at least half of the other. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli).
-- **fix:** migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/, instead of renaming it after that folder.
+- **fix:** one tag must be a prefix covering at least half of the other for audit-tags to suggest a duplicate. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli).
+- **fix:** migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/. It no longer renames the note after that folder.
 
 ## 1.0.0 — 2026-09-26
 

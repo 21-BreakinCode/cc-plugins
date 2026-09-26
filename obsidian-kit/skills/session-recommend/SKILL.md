@@ -1,5 +1,5 @@
 ---
-name: recommend
+name: session-recommend
 description: When several take-away topics compete, use this after wrap-up. It picks exactly one topic to keep, with reasoning.
 ---
 
@@ -15,7 +15,7 @@ None. Reads the numbered topics from the most recent `🧭 Session Wrap-Up` in t
 
 - **No wrap-up in the conversation** → output exactly this, then stop:
   ```
-  Run /session-learner:wrap-up first so I have topics to choose from.
+  Run /obsidian-kit:session-wrap-up first so I have topics to choose from.
   ```
 - **Only one candidate topic** → recommend it, noting it was the only one.
 
@@ -42,5 +42,5 @@ Why this one:
   • <why it beats the runners-up, named briefly>
 
 ---
-Deepen it →  /session-learner:pick-up <n>
+Deepen it →  /obsidian-kit:session-pick-up <n>
 ```

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Objective per-card conformance scorer for session-learner's pick-up cards.
+# Objective per-card conformance scorer for session-pick-up cards.
 #
 # Usage: bash score_cards.sh [CARDS_DIR]
 #   CARDS_DIR holds one-card-per-file markdown (default: fixtures/golden-cards).

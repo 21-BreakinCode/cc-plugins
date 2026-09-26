@@ -14,5 +14,5 @@
 
 ---
 Next:
-  /session-learner:pick-up <n[,n…]>   → turn topic(s) into atomic Zettelkasten cards
-  /session-learner:recommend           → not sure which? I'll pick the single best one and tell you why
+  /obsidian-kit:session-pick-up <n[,n…]>   → turn topic(s) into atomic Zettelkasten cards
+  /obsidian-kit:session-recommend           → not sure which? I'll pick the single best one and tell you why

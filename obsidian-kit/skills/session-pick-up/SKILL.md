@@ -1,11 +1,11 @@
 ---
-name: pick-up
+name: session-pick-up
 description: Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources.
 ---
 
 # Pick-Up
 
-Turn chosen topic number(s) from the last `wrap-up` into atomic Zettelkasten cards. Ground each card in this session's real case, plus up to 3 web sources per topic. Use `Read`/`Glob` for the vault and `WebSearch`/`WebFetch` for sources. Display everything in the terminal. Do NOT write any files.
+Turn chosen topic number(s) from the last `wrap-up` into atomic Zettelkasten cards. Ground each card in this session's real case, plus up to 3 web sources per topic. Use `Read`/`Glob` for the vault and `WebSearch`/`WebFetch` for sources. Display everything in the terminal, then offer to save.
 
 `pick-up` is strictly downstream of `wrap-up`. It accepts topic numbers only, no free-text topics, no "all topics" default.
 
@@ -19,11 +19,11 @@ Find the most recent `🧭 Session Wrap-Up` output in the conversation and its n
 
 - **No numbers given** → output exactly this, then stop:
   ```
-  Provide topic numbers, e.g. /session-learner:pick-up 1,3. Run /session-learner:wrap-up first if you haven't.
+  Provide topic numbers, e.g. /obsidian-kit:session-pick-up 1,3. Run /obsidian-kit:session-wrap-up first if you haven't.
   ```
 - **Numbers given but no wrap-up in the conversation** → output exactly this, then stop:
   ```
-  Run /session-learner:wrap-up first so I have numbered topics.
+  Run /obsidian-kit:session-wrap-up first so I have numbered topics.
   ```
 - **Some numbers out of range** (for example, `9` with only 5 topics listed) → note the invalid ones, then proceed with the valid numbers.
 
@@ -53,3 +53,24 @@ Display the cards using the template and output wrapper in `references/card-form
   ```
   ⚠ Vault not found — links are proposed, not grounded.
   ```
+
+## Phase 3 — Offer to keep the cards
+
+After printing the cards, ask ONCE with `AskUserQuestion`:
+
+- `header`: `Save cards`
+- `question`: `Write these N cards into the vault?`
+- `options`: `Write all` / `Let me pick` / `Terminal only`
+
+On `Write all`, write each card through the `format-note` rules. When a card
+states a reusable idea, it is a `concept`. When a card states a lesson from
+this session's case, it is a `takeaway`. Read the destination from
+`typeFolders` in `.obsidian-kit.json`. Never hardcode a vault path.
+
+On `Let me pick`, ask a second `AskUserQuestion` listing the card titles with
+`multiSelect: true`, then write only the selected ones.
+
+On `Terminal only`, write nothing and stop.
+
+The vault has no version control. Never write without this approval, and never
+overwrite an existing note. If a filename exists, report the collision and stop.
