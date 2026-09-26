@@ -19,6 +19,9 @@ assert infer_type("03Resource/Zettelkasten/Permanent/connecting_remote_databases
 # __overview is not a map name.
 assert infer_type("03Resource/Zettelkasten/Permanent/GraphQL__overview.md", set(), TYPE_FOLDERS) == (
     "concept", "folder:03Resource/Zettelkasten/Permanent")
+# MOC/MoC must be tokens, not substrings.
+assert infer_type("a/PROMOCODE.md", set(), {}) == (None, "unmatched")
+assert infer_type("a/_indexOfDrawings.md", set(), {}) == (None, "unmatched")
 # Rule 2: numbered note next to a map.
 assert infer_type(f"{GO_SERIES}/31__semaphore__Weighted__internals.md", GO_SIBLINGS, TYPE_FOLDERS) == (
     "takeaway", "numbered-with-map")

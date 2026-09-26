@@ -3,7 +3,7 @@ import re
 from pathlib import PurePosixPath
 
 MAP_PREFIX = "00__map__"
-MAP_NAME = re.compile(r"^(00__map__.*|_index.*|.*__index|.*MOC.*|.*MoC.*)\.md$")
+MAP_NAME = re.compile(r"^(00__map__.*|_index([_.].*)?|.*__index|(.*[\s_])?(MOC|MoC)([\s_].*)?)\.md$")
 NUMBERED_NAME = re.compile(r"^\d{2}__.+\.md$")
 
 
