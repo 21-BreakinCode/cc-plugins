@@ -1,3 +1,11 @@
+## 1.0.0 — 2026-09-26
+
+- **feat:** rename note-visualizer to obsidian-kit. The visualize skill becomes format-note.
+- **feat:** add create-excali and update-excali, moved from the LifeOS vault skill excalidraw-refine.
+- **feat:** add migrate-notes and audit-tags.
+- **feat:** absorb obsidian-markdown and obsidian-bases from kepano/obsidian-skills (MIT).
+- **feat:** add a SessionStart primer for the obsidian CLI and defuddle.
+
 ## 0.2.1 - 2026-09-24
 
 - **fix:** the PostToolUse reminder returns `additionalContext`, so it reaches Claude. It used `systemMessage`, which only the user sees, so the reminder never steered the model.

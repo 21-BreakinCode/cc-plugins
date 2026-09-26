@@ -5,7 +5,7 @@
     "version": "1.12.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install note-visualizer@21-breakincode && \\\n  claude plugin install simple-mandarin@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode && \\\n  claude plugin install simple-mandarin@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -24,11 +24,11 @@
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
-        "note-visualizer@21-breakincode": true,
+        "obsidian-kit@21-breakincode": true,
         "simple-mandarin@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update note-visualizer@21-breakincode && \\\n  claude plugin update simple-mandarin@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode && \\\n  claude plugin update simple-mandarin@21-breakincode"
   },
   "categories": [
     {
@@ -72,7 +72,7 @@
       "label": "Writing & Content",
       "plugins": [
         "humanize",
-        "note-visualizer",
+        "obsidian-kit",
         "simple-mandarin"
       ]
     }
@@ -1148,13 +1148,13 @@
       ]
     },
     {
-      "name": "note-visualizer",
-      "version": "0.2.1",
-      "tagline": "Draw the concept, don't describe it",
-      "summary": "One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Ships a PostToolUse hook that reminds Claude to apply these rules when a Zettelkasten note is edited. No cross-plugin deps.",
+      "name": "obsidian-kit",
+      "version": "1.0.0",
+      "tagline": "One plugin for the vault: draw, format, tag",
+      "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
-      "install": "claude plugin install note-visualizer@21-breakincode",
-      "oneLiner": "Make markdown notes scannable — add compact ASCII diagrams for spatial concepts and Obsidian callouts for key blocks. Proactive on Zettelkasten notes, manual on any folder.",
+      "install": "claude plugin install obsidian-kit@21-breakincode",
+      "oneLiner": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
       "commands": [],
       "skills": [
         {
@@ -1165,6 +1165,32 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "1.0.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "rename note-visualizer to obsidian-kit. The visualize skill becomes format-note."
+            },
+            {
+              "type": "feat",
+              "text": "add create-excali and update-excali, moved from the LifeOS vault skill excalidraw-refine."
+            },
+            {
+              "type": "feat",
+              "text": "add migrate-notes and audit-tags."
+            },
+            {
+              "type": "feat",
+              "text": "absorb obsidian-markdown and obsidian-bases from kepano/obsidian-skills (MIT)."
+            },
+            {
+              "type": "feat",
+              "text": "add a SessionStart primer for the obsidian CLI and defuddle."
+            }
+          ]
+        },
         {
           "version": "0.2.1",
           "date": "2026-09-24",

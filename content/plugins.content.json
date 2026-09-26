@@ -84,9 +84,9 @@
         { "name": "CLAUDE_RECEIPTS_MODEL", "default": "claude-haiku-4-5", "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle." }
       ]
     },
-    "note-visualizer": {
-      "tagline": "Draw the concept, don't describe it",
-      "summary": "One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Ships a PostToolUse hook that reminds Claude to apply these rules when a Zettelkasten note is edited. No cross-plugin deps.",
+    "obsidian-kit": {
+      "tagline": "One plugin for the vault: draw, format, tag",
+      "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
       "dependsOn": [],
       "config": []

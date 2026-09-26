@@ -17,7 +17,7 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
-  claude plugin install note-visualizer@21-breakincode && \
+  claude plugin install obsidian-kit@21-breakincode && \
   claude plugin install simple-mandarin@21-breakincode
 ```
 
@@ -36,7 +36,7 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
-  claude plugin update note-visualizer@21-breakincode && \
+  claude plugin update obsidian-kit@21-breakincode && \
   claude plugin update simple-mandarin@21-breakincode
 ```
 
@@ -130,13 +130,13 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 
 **Skills** · `distill` · `rewrite`
 
-### [note-visualizer](./note-visualizer/README.md) · `v0.2.1`
+### [obsidian-kit](./obsidian-kit/README.md) · `v1.0.0`
 
-*Draw the concept, don't describe it*
+*One plugin for the vault: draw, format, tag*
 
-One skill, two modes. Inline mode fires proactively when you create or edit Zettelkasten notes — it applies visual-pattern rules while you write, placing compact ASCII diagrams before prose and wrapping key blocks in Obsidian callouts. Batch mode scans an existing folder of notes and retrofits the same refinements, reporting a summary table of changes. A bundled visual-patterns reference codifies the concept-shape to diagram-type mapping (nesting, layers, flow, comparison, timeline, fan-in/out), the one-screen budget constraint, callout rules, and box-drawing conventions. Ships a PostToolUse hook that reminds Claude to apply these rules when a Zettelkasten note is edited. No cross-plugin deps.
+Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
 
-**Install** · `claude plugin install note-visualizer@21-breakincode`
+**Install** · `claude plugin install obsidian-kit@21-breakincode`
 
 **Skills** · `visualize`
 

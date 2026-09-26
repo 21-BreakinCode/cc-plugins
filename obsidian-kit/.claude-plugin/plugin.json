@@ -1,0 +1,8 @@
+{
+  "name": "obsidian-kit",
+  "description": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
+  "version": "1.0.0",
+  "author": {
+    "name": "William Hung"
+  }
+}
