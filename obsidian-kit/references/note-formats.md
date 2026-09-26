@@ -40,6 +40,9 @@ Related: [[Other Note]]
 Sources: [name](url)
 ```
 
+`Related:` is required. `Sources:` is optional, for a card that is your own synthesis.
+The bold claim may also sit in a quote or a callout: `> **claim**`.
+
 ## takeaway
 
 Name: `NN__<slug>.md`. Tens are the section and units are the step. Same body and
@@ -67,6 +70,8 @@ Any name. No line budget.
 free notes
 ```
 
+For a book, podcast, or course, use `> Source: <name>` in place of `> Link:`.
+A `Sources:` line also counts. A literature note in a series folder needs no source line of its own, because the series map names it.
 For a web page source, get the body with `defuddle parse <url> --md`, then trim it.
 
 ## fleeting

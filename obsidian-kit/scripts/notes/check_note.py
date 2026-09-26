@@ -14,16 +14,18 @@ from common.vault import VaultConfigError, find_vault_root, is_in_scope, load_co
 ONE_SCREEN_LINES = 45
 TAG_LINE = re.compile(r"^#[^\s#]")
 TITLE_LINE = re.compile(r"^#{1,2} \S")
-BOLD_CLAIM = re.compile(r"^\*\*.+\*\*")
+# The claim may sit in a quote or a callout: "> **x**", "> [!danger] **x**".
+BOLD_CLAIM = re.compile(r"^(>\s*(\[![\w-]+\]\s*)?)?\*\*.+\*\*")
 FENCED_BLOCK = re.compile(r"^```", re.MULTILINE)
-LITERATURE_LINK = re.compile(r"^> Link: https?://", re.MULTILINE)
+LITERATURE_SOURCE = re.compile(r"^(> Link: https?://|> Source: \S|Sources?: \S)", re.MULTILINE)
 SESSION_CALLOUT = "> [!example] From this session"
 ONE_SCREEN_TYPES = {"concept", "takeaway"}
 CLAIM_TYPES = {"map", "concept", "takeaway", "literature"}
 RELATED_TYPES = {"concept", "takeaway"}
 
 
-def check_note(note_type: str, file_name: str, text: str) -> list[str]:
+def check_note(note_type: str, file_name: str, text: str, keep_map_name: bool = False,
+               in_mapped_series: bool = False) -> list[str]:
     frontmatter, body = split_frontmatter(text)
     body_lines = body.strip("\n").split("\n")
     failures = []
@@ -38,21 +40,23 @@ def check_note(note_type: str, file_name: str, text: str) -> list[str]:
     if note_type in ONE_SCREEN_TYPES and len(body_lines) > ONE_SCREEN_LINES:
         failures.append(f"over one screen: {len(body_lines)} lines > {ONE_SCREEN_LINES}")
     if note_type in RELATED_TYPES:
-        failures += [f"missing {label}" for label in ("Related:", "Sources:") if label not in body]
+        if "Related:" not in body:
+            failures.append("missing Related:")
     if note_type == "takeaway":
         if SESSION_CALLOUT not in body:
             failures.append(f"missing {SESSION_CALLOUT}")
         if "[[00__map__" not in body:
             failures.append("missing link back to the map")
     if note_type == "map":
-        if not file_name.startswith("00__map__"):
+        if not keep_map_name and not file_name.startswith("00__map__"):
             failures.append("name must start with 00__map__")
         if not FENCED_BLOCK.search(body):
             failures.append("missing overview diagram")
         if "[[" not in body:
             failures.append("missing ordered [[links]]")
-    if note_type == "literature" and not LITERATURE_LINK.search(body):
-        failures.append("missing > Link: <url>")
+    # In a series, the 00__map__ note names the source for every note beside it.
+    if note_type == "literature" and not in_mapped_series and not LITERATURE_SOURCE.search(body):
+        failures.append("missing > Link: <url> or > Source: <name>")
     return failures
 
 
@@ -82,7 +86,10 @@ def main() -> int:
             print(f"{relative_path}\tunset note-type (run /obsidian-kit:migrate-notes)")
             failing_count += 1
             continue
-        failures = check_note(note_type, note.name, text)
+        is_type_folder = note.parent.relative_to(vault_root).as_posix() in config["typeFolders"]
+        in_mapped_series = any(sibling.name.startswith("00__map__") for sibling in note.parent.glob("*.md"))
+        failures = check_note(note_type, note.name, text, keep_map_name=is_type_folder,
+                              in_mapped_series=in_mapped_series)
         if failures:
             failing_count += 1
             print(f"{relative_path}\t{note_type}\t" + "; ".join(failures))

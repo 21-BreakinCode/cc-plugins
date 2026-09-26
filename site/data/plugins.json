@@ -1149,7 +1149,7 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "tagline": "One plugin for the vault: draw, format, tag",
       "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
@@ -1189,6 +1189,28 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "1.0.3",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "format-note accepts a bold claim inside a quote or callout (`> **claim**`, `> [!danger] **claim**`)."
+            },
+            {
+              "type": "fix",
+              "text": "format-note no longer asks a map directly in a type folder to be renamed, matching migrate-notes 1.0.1."
+            },
+            {
+              "type": "feat",
+              "text": "`Sources:` is optional for concept and takeaway notes. `Related:` stays required."
+            },
+            {
+              "type": "feat",
+              "text": "a literature note may name its source with `> Link: <url>`, `> Source: <name>`, or a `Sources:` line. A literature note beside a `00__map__` note needs none, because the map names the series source."
+            }
+          ]
+        },
         {
           "version": "1.0.2",
           "date": "2026-09-26",

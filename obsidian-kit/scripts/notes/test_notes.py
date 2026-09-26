@@ -45,7 +45,11 @@ assert "missing note-type property" in failures
 assert "line 1 is not a tag line" in failures
 assert "missing bold one-sentence claim" in failures
 assert any(failure.startswith("over one screen") for failure in failures)
-assert "missing Related:" in failures and "missing Sources:" in failures
+assert "missing Related:" in failures and "missing Sources:" not in failures
+# A bold claim may sit in a quote or a callout line.
+for claim_line in ("> **Claim.**", "> [!danger] **Claim.**"):
+    quoted = f"---\nnote-type: concept\n---\n#t\n\n## T\n{claim_line}\n\nRelated: [[a]]\n"
+    assert check_note("concept", "x.md", quoted) == [], claim_line
 
 TAKEAWAY = "---\nnote-type: takeaway\n---\n#lang/go\n\n## Title\n**Claim.**\n\n> [!example] From this session\n> x\n\nRelated: [[00__map__go]]\nSources: x\n"
 assert check_note("takeaway", "31__x.md", TAKEAWAY) == []
@@ -54,10 +58,16 @@ assert "missing link back to the map" in check_note("takeaway", "31__x.md", TAKE
 MAP = "---\nnote-type: map\n---\n#lang/go\n\n## Map\n**Claim.**\n\n```\na → b\n```\n- [[01__a]]: gloss\n"
 assert check_note("map", "00__map__go.md", MAP) == []
 assert "name must start with 00__map__" in check_note("map", "DP__MoC.md", MAP)
+# A map directly in a type folder keeps its name (migrate-notes does not rename it).
+assert check_note("map", "connecting__index.md", MAP, keep_map_name=True) == []
 
 LITERATURE = "---\nnote-type: literature\n---\n#domain/psychology\n\n> Link: https://youtu.be/x\n\n# Title\n**Claim.**\n" + "- x\n" * 80
 assert check_note("literature", "a.md", LITERATURE) == []
-assert "missing > Link: <url>" in check_note("literature", "a.md", LITERATURE.replace("> Link: https://youtu.be/x", ""))
+assert "missing > Link: <url> or > Source: <name>" in check_note(
+    "literature", "a.md", LITERATURE.replace("> Link: https://youtu.be/x", ""))
+assert check_note("literature", "a.md", LITERATURE.replace("> Link: https://youtu.be/x", "> Source: Atomic Habits")) == []
+assert check_note("literature", "a.md", LITERATURE.replace("> Link: https://youtu.be/x", "") + "Sources: https://x\n") == []
+assert check_note("literature", "a.md", LITERATURE.replace("> Link: https://youtu.be/x", ""), in_mapped_series=True) == []
 
 assert check_note("fleeting", "a.md", "---\nnote-type: fleeting\n---\n#x\n\n## Title\nanything\n") == []
 

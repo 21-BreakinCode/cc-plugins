@@ -137,9 +137,9 @@ All types share line 1: inline tags from the taxonomy.
 | note-type | Name | Required body |
 |---|---|---|
 | `map` | `00__map__<topic>.md` in its series folder | bold claim, overview ASCII diagram, ordered `[[links]]` with a one-line gloss |
-| `concept` | free | title, bold one-sentence claim, a diagram for an idea with shape, bullets, `Related:`, `Sources:`. One screen, about 40 lines |
+| `concept` | free | title, bold one-sentence claim, a diagram for an idea with shape, bullets, `Related:`, optional `Sources:`. One screen, about 40 lines |
 | `takeaway` | `NN__<slug>.md` (tens = section, units = step) | same as concept, plus `> [!example] From this session` and a link back to the map |
-| `literature` | free | `> Link: <url>`, title, bold claim. No line budget. For a URL source, the body comes from defuddle |
+| `literature` | free | `> Link: <url>` or `> Source: <name>`, title, bold claim. No line budget. For a URL source, the body comes from defuddle |
 | `fleeting` | free | tags and title only |
 
 The ASCII and callout rules in `references/visual-patterns.md` apply to
