@@ -49,12 +49,9 @@ def is_ordered_subsequence(shorter: str, longer: str) -> bool:
     return all(char in remaining_chars for char in shorter)
 
 
-def is_abbreviation_pair(first_leaf: str, second_leaf: str) -> bool:
-    shorter, longer = sorted((first_leaf, second_leaf), key=len)
-    if longer.startswith(shorter):
-        return True
-    return (len(shorter) <= ABBREVIATION_MAX_LENGTH and shorter[0] == longer[0]
-            and is_ordered_subsequence(shorter, longer))
+def is_abbreviation(shorter: str, longer: str) -> bool:
+    return (len(shorter) < len(longer) and len(shorter) <= ABBREVIATION_MAX_LENGTH
+            and shorter[0] == longer[0] and is_ordered_subsequence(shorter, longer))
 
 
 def find_duplicate_target(tag: str, counts: dict[str, int]) -> str | None:
@@ -63,7 +60,8 @@ def find_duplicate_target(tag: str, counts: dict[str, int]) -> str | None:
         other_parent, _, other_leaf = other.rpartition("/")
         if other == tag or other_parent != parent or min(len(leaf), len(other_leaf)) < DUPLICATE_MIN_LEAF:
             continue
-        if is_abbreviation_pair(leaf, other_leaf) and counts[other] > counts[tag]:
+        is_prefix_pair = other_leaf.startswith(leaf) or leaf.startswith(other_leaf)
+        if (is_prefix_pair or is_abbreviation(leaf, other_leaf)) and counts[other] > counts[tag]:
             return other
     return None
 
