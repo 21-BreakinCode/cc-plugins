@@ -829,7 +829,7 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "tagline": "One plugin for the vault: draw, format, tag",
       "summary": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
@@ -902,6 +902,16 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.1.0",
+          "date": "2026-09-27",
+          "changes": [
+            {
+              "type": "refactor",
+              "text": "stop linting Markdown files. The PostToolUse `.md` lint is removed, with `SIMPLE_MANDARIN_LINT_EXCLUDE`. The Stop check on Mandarin chat replies stays, renamed from `mandarin-lint.py` to `mandarin-reply-check.py`. The Mandarin rules still load at session start inside a vault."
+            }
+          ]
+        },
         {
           "version": "2.0.0",
           "date": "2026-09-26",

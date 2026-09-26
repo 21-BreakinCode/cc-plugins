@@ -2,7 +2,6 @@
 import importlib.util
 import os
 import subprocess
-import sys
 import tempfile
 from pathlib import Path
 
@@ -28,9 +27,10 @@ with tempfile.TemporaryDirectory() as tmp:
     assert run_rules(vault) != "", "gate A must emit the rules inside a vault"
     assert run_rules(vault, {"OBSIDIAN_KIT_MANDARIN": "0"}) == "", "the off switch must win"
 
-spec = importlib.util.spec_from_file_location("mandarin_lint", HERE / "mandarin-lint.py")
-mandarin_lint = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(mandarin_lint)
+spec = importlib.util.spec_from_file_location("mandarin_reply_check", HERE / "mandarin-reply-check.py")
+assert spec and spec.loader, "mandarin-reply-check.py must be loadable"
+mandarin_reply_check = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(mandarin_reply_check)
 
 with tempfile.TemporaryDirectory() as tmp:
     plain = Path(tmp) / "repo"
@@ -38,13 +38,13 @@ with tempfile.TemporaryDirectory() as tmp:
     vault = Path(tmp) / "vault"
     (vault / ".obsidian").mkdir(parents=True)
 
-    assert mandarin_lint.in_vault(plain) is False, "gate A must be false outside a vault"
-    assert mandarin_lint.in_vault(vault) is True, "gate A must be true inside a vault"
+    assert mandarin_reply_check.in_vault(plain) is False, "gate A must be false outside a vault"
+    assert mandarin_reply_check.in_vault(vault) is True, "gate A must be true inside a vault"
 
     cwd = os.getcwd()
     try:
         os.chdir(plain)
-        assert mandarin_lint.main() == 0, "main() must no-op outside a vault"
+        assert mandarin_reply_check.main() == 0, "main() must no-op outside a vault"
     finally:
         os.chdir(cwd)
 
