@@ -6,6 +6,7 @@ CJK_PUNCTUATION = re.compile(r"[，。、：；！？（）「」『』]")
 TYPO_MAX_DISTANCE = 2
 TYPO_MIN_LENGTH = 5
 DUPLICATE_MIN_LEAF = 2
+ABBREVIATION_MAX_LENGTH = 4
 
 
 def is_false_tag(tag: str) -> bool:
@@ -43,16 +44,26 @@ def find_typo_target(tag: str, candidates: list[str]) -> str | None:
     return None
 
 
+def is_ordered_subsequence(shorter: str, longer: str) -> bool:
+    remaining_chars = iter(longer)
+    return all(char in remaining_chars for char in shorter)
+
+
+def is_abbreviation_pair(first_leaf: str, second_leaf: str) -> bool:
+    shorter, longer = sorted((first_leaf, second_leaf), key=len)
+    if longer.startswith(shorter):
+        return True
+    return (len(shorter) <= ABBREVIATION_MAX_LENGTH and shorter[0] == longer[0]
+            and is_ordered_subsequence(shorter, longer))
+
+
 def find_duplicate_target(tag: str, counts: dict[str, int]) -> str | None:
     parent, _, leaf = tag.rpartition("/")
     for other in sorted(counts):
         other_parent, _, other_leaf = other.rpartition("/")
         if other == tag or other_parent != parent or min(len(leaf), len(other_leaf)) < DUPLICATE_MIN_LEAF:
             continue
-        # Check if one leaf is contained in the other (substring match)
-        # or if they're similar by edit distance threshold
-        if ((len(other_leaf) > len(leaf) and other_leaf[0] == leaf[0]) or
-            leaf in other_leaf) and counts[other] > counts[tag]:
+        if is_abbreviation_pair(leaf, other_leaf) and counts[other] > counts[tag]:
             return other
     return None
 

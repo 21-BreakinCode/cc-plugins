@@ -26,6 +26,13 @@ assert "domain/llm" not in findings and "lc/topic/DP" not in findings
 # Short tags are never typo candidates: db vs os is distance 2 but not a typo.
 assert "domain/os" not in findings and findings["domain/db"]["kind"] != "typo"
 
+real_domain = {finding["tag"]: finding for finding in classify(
+    {"domain/db": 30, "domain/database": 32, "domain/docker": 15, "domain/debugging": 17,
+     "domain/devops": 41, "domain/dsa": 16}, allowed=set(), merged={})}
+assert real_domain["domain/db"]["new"] == "domain/database"
+for unrelated in ("domain/docker", "domain/dsa"):
+    assert real_domain[unrelated]["kind"] == "off-taxonomy", unrelated
+
 body = "\n".join([
     "#domain/db #domain/db/query #domain/dbx",
     "color `#0c8599` and #0c8599, see https://x.com/a#0c8599",
