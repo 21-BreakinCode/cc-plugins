@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.12.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v2.0.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -56,7 +56,7 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 
 **Commands** · `/code-reviewer:review-pr`
 
-### [receipts](./receipts/README.md) · `v0.2.2`
+### [receipts](./receipts/README.md) · `v0.3.0`
 
 *No claim without a receipt*
 
@@ -90,11 +90,11 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 
 **Skills** · `distill` · `rewrite`
 
-### [obsidian-kit](./obsidian-kit/README.md) · `v1.1.0`
+### [obsidian-kit](./obsidian-kit/README.md) · `v2.0.0`
 
 *One plugin for the vault: draw, format, tag*
 
-create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault, absorbed from the retired hh plugin. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault, absorbed from the retired session-learner plugin. The simple-mandarin skill writes and checks controlled Traditional Chinese inside the vault, absorbed from the retired simple-mandarin plugin. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
+create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
 
 **Install** · `claude plugin install obsidian-kit@21-breakincode`
 

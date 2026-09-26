@@ -1,3 +1,12 @@
+## 2.0.0 — 2026-09-26
+
+- **feat:** absorb `session-learner` as `session-wrap-up`, `session-pick-up`, and `session-recommend`. `session-pick-up` now writes cards into the vault after one approval.
+- **feat:** absorb `hh` as `handover-new`, `handover-wrap-up`, `handover-init-org`, and `handover-init-service`.
+- **feat:** absorb `simple-mandarin`. Its rules and lint now run only inside a vault.
+- **fix:** handover discovery uses the Obsidian tag index and the current taxonomy. The old grep for the retired `handover` tag matched nothing.
+- **fix:** archiving moves the file and never renames it, so wikilinks keep resolving. The living and historical reference classifier is gone.
+- **refactor:** one vault resolver. `HH_LIFEOS_ROOT`, `HH_ARCHIVE_ROOT`, and `CLAUDE_SIMPLE_MANDARIN` are deleted. `OBSIDIAN_KIT_MANDARIN` and `OBSIDIAN_KIT_OFFER_HANDOVER` replace the two behavior toggles.
+
 ## 1.1.0 — 2026-09-26
 
 - **feat:** absorb the three session reflection skills as `session-wrap-up`, `session-pick-up`, and `session-recommend`.

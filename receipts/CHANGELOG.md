@@ -1,8 +1,12 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-09-26
 
 - **test:** baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.406, dropped_at_extraction 64
+- **fix:** audit the final assistant message, not every line of the turn. Table rows, headings, and `**ASSUME:**` lines are no longer claims.
+- **fix:** a claim is backed only when a tool's OUTPUT shows it. A file name in a tool input no longer counts.
+- **feat:** every verdict carries evidence, and the ledger is JSONL.
+- **feat:** `unproven` records a claim the judge could not reach, which used to be logged as `backed`.
 
 ## 0.2.2 — 2026-09-24
 

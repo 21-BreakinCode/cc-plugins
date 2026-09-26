@@ -2,7 +2,7 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.12.0"
+    "version": "2.0.0"
   },
   "installAll": {
     "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode",
@@ -654,7 +654,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.2.2",
+      "version": "0.3.0",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -686,6 +686,32 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.3.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "test",
+              "text": "baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.406, dropped_at_extraction 64"
+            },
+            {
+              "type": "fix",
+              "text": "audit the final assistant message, not every line of the turn. Table rows, headings, and `**ASSUME:**` lines are no longer claims."
+            },
+            {
+              "type": "fix",
+              "text": "a claim is backed only when a tool's OUTPUT shows it. A file name in a tool input no longer counts."
+            },
+            {
+              "type": "feat",
+              "text": "every verdict carries evidence, and the ledger is JSONL."
+            },
+            {
+              "type": "feat",
+              "text": "`unproven` records a claim the judge could not reach, which used to be logged as `backed`."
+            }
+          ]
+        },
         {
           "version": "0.2.2",
           "date": "2026-09-24",
@@ -734,9 +760,9 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "1.1.0",
+      "version": "2.0.0",
       "tagline": "One plugin for the vault: draw, format, tag",
-      "summary": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault, absorbed from the retired hh plugin. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault, absorbed from the retired session-learner plugin. The simple-mandarin skill writes and checks controlled Traditional Chinese inside the vault, absorbed from the retired simple-mandarin plugin. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
+      "summary": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
       "install": "claude plugin install obsidian-kit@21-breakincode",
       "oneLiner": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
@@ -807,6 +833,36 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.0.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "absorb `session-learner` as `session-wrap-up`, `session-pick-up`, and `session-recommend`. `session-pick-up` now writes cards into the vault after one approval."
+            },
+            {
+              "type": "feat",
+              "text": "absorb `hh` as `handover-new`, `handover-wrap-up`, `handover-init-org`, and `handover-init-service`."
+            },
+            {
+              "type": "feat",
+              "text": "absorb `simple-mandarin`. Its rules and lint now run only inside a vault."
+            },
+            {
+              "type": "fix",
+              "text": "handover discovery uses the Obsidian tag index and the current taxonomy. The old grep for the retired `handover` tag matched nothing."
+            },
+            {
+              "type": "fix",
+              "text": "archiving moves the file and never renames it, so wikilinks keep resolving. The living and historical reference classifier is gone."
+            },
+            {
+              "type": "refactor",
+              "text": "one vault resolver. `HH_LIFEOS_ROOT`, `HH_ARCHIVE_ROOT`, and `CLAUDE_SIMPLE_MANDARIN` are deleted. `OBSIDIAN_KIT_MANDARIN` and `OBSIDIAN_KIT_OFFER_HANDOVER` replace the two behavior toggles."
+            }
+          ]
+        },
         {
           "version": "1.1.0",
           "date": "2026-09-26",
