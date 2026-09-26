@@ -33,11 +33,11 @@ No confirmation gate. Resolve the numbers and produce cards directly. Read `refe
 
 1. **Session case:** identify what actually happened in THIS session that surfaced the topic (the concrete example, bug, or decision).
 2. **Web sources:** `WebSearch` for the topic, `WebFetch` candidates to confirm relevance, keep the ≤3 most relevant. ≤3 PER TOPIC.
-3. **Vault grounding:** `Glob` `*.md` filenames ONLY under `CLAUDE_SESSION_LEARNER_ZK_PATH` (default below). Never read vault file contents. Reuse existing titles for `[[links]]` and matching tags.
+3. **Vault grounding:** read `typeFolders` from `.obsidian-kit.json` at the vault
+   root, the same source Phase 3 writes through, and `Glob` `*.md` filenames
+   under the folders mapped to `concept` or `takeaway`. Never read vault file
+   contents. Reuse existing titles for `[[links]]` and matching tags.
 4. **Atomic cards:** one concept per card, ≤50 lines each. Split a multi-concept topic into multiple cards. That topic's ≤3 sources are shared across its cards.
-
-If the env var is unset, use this default vault path:
-`~/Library/Mobile Documents/iCloud~md~obsidian/Documents/LifeOS/03-Resource/Zettelkasten/Permanent`
 
 ## Phase 2 — Output
 
