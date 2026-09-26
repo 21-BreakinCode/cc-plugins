@@ -1158,6 +1158,10 @@
       "commands": [],
       "skills": [
         {
+          "name": "audit-tags",
+          "description": "Audit the vault's tags against the approved taxonomy and apply one approved refactor plan."
+        },
+        {
           "name": "create-excali",
           "description": "Create a new Obsidian Excalidraw drawing in the vault house style."
         },

@@ -14,6 +14,7 @@ claude plugin install obsidian-kit@21-breakincode
 
 Invoke one directly as `/obsidian-kit:<skill>`, or let it activate automatically when relevant.
 
+- **`audit-tags`** — Audit the vault's tags against the approved taxonomy and apply one approved refactor plan.
 - **`create-excali`** — Create a new Obsidian Excalidraw drawing in the vault house style.
 - **`format-note`** — Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting).
 - **`migrate-notes`** — One-time vault migration to set note-type and rename map notes by plan approval.
