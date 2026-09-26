@@ -39,6 +39,7 @@ def build_rows(note_paths: list[str], existing_paths: set[str], type_folders: di
     names_by_folder: dict[str, set[str]] = {}
     for path in note_paths:
         names_by_folder.setdefault(str(PurePosixPath(path).parent), set()).add(PurePosixPath(path).name)
+    assigned_targets: set[str] = set()
     rows = []
     for path in note_paths:
         folder = PurePosixPath(path).parent
@@ -46,10 +47,11 @@ def build_rows(note_paths: list[str], existing_paths: set[str], type_folders: di
         new_path = ""
         if note_type == "map" and not folder.name == "" and not PurePosixPath(path).name.startswith(MAP_PREFIX):
             target = str(folder / f"{MAP_PREFIX}{folder.name}.md")
-            if target in existing_paths or target in note_paths:
+            if target in existing_paths or target in note_paths or target in assigned_targets:
                 rule = "map-name (rename target exists)"
             else:
                 new_path = target
+                assigned_targets.add(target)
         rows.append({"path": path, "note_type": note_type or "", "rule": rule, "new_path": new_path})
     return rows
 
@@ -70,6 +72,11 @@ def write_plan(work_dir: Path, vault_root: Path, config: dict) -> int:
     return 0
 
 
+def is_already_moved(vault_root: Path, row: dict) -> bool:
+    return bool(row["new_path"]) and not (vault_root / row["path"]).exists() \
+        and (vault_root / row["new_path"]).exists()
+
+
 def apply_plan(work_dir: Path, vault_root: Path, config: dict) -> int:
     with (work_dir / PLAN_NAME).open(encoding="utf-8") as plan_file:
         rows = list(csv.DictReader(plan_file, delimiter="\t"))
@@ -83,6 +90,12 @@ def apply_plan(work_dir: Path, vault_root: Path, config: dict) -> int:
                 or is_excluded(row["path"], config):
             continue
         try:
+            if is_already_moved(vault_root, row):
+                run_cli("property:set", "name=note-type", f"value={row['note_type']}", f"path={row['new_path']}")
+                log_lines.append(f"- already moved: {row['path']} -> {row['new_path']}, set "
+                                 f"note-type={row['note_type']} "
+                                 f"(undo: obsidian property:remove name=note-type path=\"{row['new_path']}\")")
+                continue
             run_cli("property:set", "name=note-type", f"value={row['note_type']}", f"path={row['path']}")
             final_path = row["new_path"] or row["path"]
             log_lines.append(f"- set note-type={row['note_type']}: {row['path']} "

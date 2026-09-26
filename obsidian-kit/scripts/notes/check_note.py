@@ -74,7 +74,10 @@ def main() -> int:
         if not is_in_scope(relative_path, config):
             continue
         text = note.read_text(encoding="utf-8")
-        note_type = read_property(split_frontmatter(text)[0], "note-type")
+        frontmatter = split_frontmatter(text)[0]
+        if read_property(frontmatter, "excalidraw-plugin"):
+            continue
+        note_type = read_property(frontmatter, "note-type")
         if note_type is None:
             print(f"{relative_path}\tunset note-type (run /obsidian-kit:migrate-notes)")
             failing_count += 1

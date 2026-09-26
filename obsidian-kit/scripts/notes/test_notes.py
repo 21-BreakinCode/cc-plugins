@@ -1,6 +1,14 @@
 """Self-check for note-type inference and format checks: python3 test_notes.py"""
+import json
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
 from check_note import check_note
 from infer_type import infer_type
+
+CHECK_NOTE_SCRIPT = Path(__file__).resolve().parent / "check_note.py"
 
 TYPE_FOLDERS = {
     "03Resource/Zettelkasten/Permanent": "concept",
@@ -52,5 +60,20 @@ assert check_note("literature", "a.md", LITERATURE) == []
 assert "missing > Link: <url>" in check_note("literature", "a.md", LITERATURE.replace("> Link: https://youtu.be/x", ""))
 
 assert check_note("fleeting", "a.md", "---\nnote-type: fleeting\n---\n#x\n\n## Title\nanything\n") == []
+
+# M3: check_note.py main() must not report an Excalidraw drawing as an unset note-type.
+with tempfile.TemporaryDirectory() as temp:
+    vault_root = Path(temp)
+    (vault_root / ".obsidian").mkdir()
+    (vault_root / ".obsidian-kit.json").write_text(json.dumps({
+        "taxonomyPath": "t.md", "noteFormatFolders": ["Z"], "excludedPaths": [], "typeFolders": {},
+    }), encoding="utf-8")
+    (vault_root / "Z").mkdir()
+    (vault_root / "Z/drawing.md").write_text("---\nexcalidraw-plugin: parsed\n---\n", encoding="utf-8")
+    completed = subprocess.run([sys.executable, str(CHECK_NOTE_SCRIPT), "Z/drawing.md"],
+                               cwd=vault_root, capture_output=True, text=True)
+    assert completed.returncode == 0, completed.stderr
+    assert "0 of 1 notes fail" in completed.stdout
+    assert "unset note-type" not in completed.stdout
 
 print("test_notes: all passed")

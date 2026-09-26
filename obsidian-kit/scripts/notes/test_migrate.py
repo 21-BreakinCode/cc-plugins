@@ -2,7 +2,7 @@
 import tempfile
 from pathlib import Path
 
-from migrate import build_rows, collect_notes
+from migrate import build_rows, collect_notes, is_already_moved
 
 TYPE_FOLDERS = {"Z/Literature": "literature"}
 
@@ -21,6 +21,10 @@ assert rows["Z/Literature/Habits/原子習慣 MOC.md"]["rule"] == "map-name (ren
 assert rows["Z/Literature/Old/00__map__Old.md"]["new_path"] == ""
 assert rows["L/0796.__rotate.md"]["note_type"] == ""
 
+# I4: two maps in the same folder must not both claim the same rename target.
+same_folder_rows = build_rows(["Z/Series/_index.md", "Z/Series/Series MOC.md"], set(), {})
+assert sum(1 for row in same_folder_rows if row["new_path"] == "Z/Series/00__map__Series.md") == 1
+
 with tempfile.TemporaryDirectory() as temp:
     vault_root = Path(temp)
     for relative_path, text in {
@@ -36,5 +40,16 @@ with tempfile.TemporaryDirectory() as temp:
     config = {"noteFormatFolders": ["Z"], "excludedPaths": ["Z/Credentials"], "typeFolders": {}}
     assert collect_notes(vault_root, config) == ["Z/a.md"]
     (vault_root / "Z/Credentials/secret.md").chmod(0o600)
+
+# I5: a re-run after a partial failure treats an already-moved row as done.
+with tempfile.TemporaryDirectory() as temp:
+    vault_root = Path(temp)
+    (vault_root / "Z").mkdir()
+    (vault_root / "Z/00__map__Series.md").write_text("moved already", encoding="utf-8")
+    moved_row = {"path": "Z/_index.md", "new_path": "Z/00__map__Series.md"}
+    assert is_already_moved(vault_root, moved_row)
+    (vault_root / "Z/_index.md").write_text("not moved yet", encoding="utf-8")
+    assert not is_already_moved(vault_root, moved_row)
+    assert not is_already_moved(vault_root, {"path": "Z/_index.md", "new_path": ""})
 
 print("test_migrate: all passed")
