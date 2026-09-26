@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-09-26
+
+- **fix:** a claim is backed only when tool output repeats a run of it word for word (24 characters or more). Shared vocabulary proved nothing: replaying 71 real ledger turns showed 47 of 52 `backed` verdicts resting on one shared word against a median claim of 8, so "W2a is done: 55 tests pass" came back backed by an agent's boilerplate line containing "files".
+- **fix:** scope the failure signal to the tool that ran the work. An unrelated `gh` call exiting 1 in the same turn used to mark a true "All 15 tests pass" as a bluff.
+- **feat:** `replay_ledger.py` rejoins a ledger claim to the transcript turn that produced it, so an old `.log` row can be re-judged against its real evidence.
+- **test:** 10 ledger claims adjudicated against their full turn evidence by a fresh-context subagent, each row carrying that evidence so the eval exercises the evidence rules.
+- **test:** on the labeled set: precision 0.250, recall 0.200, escalation_rate 0.351, dropped_at_extraction 69. The first two were 0.000 before, because the label set held no positive class.
+
 ## 0.3.0 — 2026-09-26
 
 - **test:** baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.406, dropped_at_extraction 64

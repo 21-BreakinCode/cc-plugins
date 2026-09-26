@@ -653,7 +653,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -685,6 +685,32 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.4.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "a claim is backed only when tool output repeats a run of it word for word (24 characters or more). Shared vocabulary proved nothing: replaying 71 real ledger turns showed 47 of 52 `backed` verdicts resting on one shared word against a median claim of 8, so \"W2a is done: 55 tests pass\" came back backed by an agent's boilerplate line containing \"files\"."
+            },
+            {
+              "type": "fix",
+              "text": "scope the failure signal to the tool that ran the work. An unrelated `gh` call exiting 1 in the same turn used to mark a true \"All 15 tests pass\" as a bluff."
+            },
+            {
+              "type": "feat",
+              "text": "`replay_ledger.py` rejoins a ledger claim to the transcript turn that produced it, so an old `.log` row can be re-judged against its real evidence."
+            },
+            {
+              "type": "test",
+              "text": "10 ledger claims adjudicated against their full turn evidence by a fresh-context subagent, each row carrying that evidence so the eval exercises the evidence rules."
+            },
+            {
+              "type": "test",
+              "text": "on the labeled set: precision 0.250, recall 0.200, escalation_rate 0.351, dropped_at_extraction 69. The first two were 0.000 before, because the label set held no positive class."
+            }
+          ]
+        },
         {
           "version": "0.3.0",
           "date": "2026-09-26",

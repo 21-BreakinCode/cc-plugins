@@ -9,6 +9,8 @@ LS_ONLY = [{"name": "Bash", "input": {"command": "ls config.yaml"}, "output": "c
 READ_IT = [{"name": "Read", "input": {"file_path": "config.yaml"},
             "output": "replicas: 5\nimage: nginx"}]
 FAILING = [{"name": "Bash", "input": {"command": "pytest"}, "output": "3 failed, 1 passed"}]
+READ_IT_LONG = [{"name": "Read", "input": {"file_path": "handler.py"},
+                 "output": "# routing notes\n# The handler returns 503 when the upstream pool is drained.\nimage: nginx"}]
 
 CLAIM = "**FACT:** `config.yaml` sets replicas to 5."
 
@@ -18,17 +20,43 @@ verdict, evidence = classify(CLAIM, LS_ONLY)
 assert verdict == ESCALATE, (verdict, evidence)
 assert evidence is None, evidence
 
-# The same claim over output that actually shows the asserted content.
+# A paraphrase of the content is no longer backed here. "sets replicas to 5"
+# never appears in the file, so the free tier cannot prove it and defers to the
+# judge, which can read for meaning.
 verdict, evidence = classify(CLAIM, READ_IT)
+assert verdict == ESCALATE, (verdict, evidence)
+
+# Output that repeats the claim word for word, over the span minimum.
+QUOTED = "The handler returns 503 when the upstream pool is drained."
+verdict, evidence = classify(QUOTED, READ_IT_LONG)
 assert verdict == BACKED, (verdict, evidence)
 assert evidence["field"] == "output", evidence
 assert evidence["tool_index"] == 0, evidence
-assert "replicas: 5" in evidence["matched"], evidence
-assert evidence["line_range"] == [1, 1], evidence
+assert evidence["line_range"] == [2, 2], evidence
+assert "upstream pool is drained" in evidence["span"], evidence
+
+# One shared word is not evidence. This is the defect the span rule removes:
+# a real ledger turn had "W2a is done: 55 tests pass" marked backed because an
+# agent's boilerplate line contained the word "files".
+BOILERPLATE = [{"name": "Agent", "input": {}, "output":
+                "Do not duplicate this agent's work - avoid working with the "
+                "same files or topics it is using."}]
+verdict, evidence = classify("W2a is done: 55 tests pass, and both demos are "
+                             "isolated from real data.", BOILERPLATE)
+assert verdict == ESCALATE, (verdict, evidence)
 
 # A success claim over output that shows failure.
 verdict, evidence = classify("All tests pass.", FAILING)
 assert verdict == CHEATING, (verdict, evidence)
+
+# The failure has to come from the tool that ran the work. An unrelated command
+# exiting 1 in the same turn used to be enough to call a true claim a bluff.
+UNRELATED_FAILURE = [
+    {"name": "Bash", "input": {"command": "pytest"}, "output": "15 passed"},
+    {"name": "Bash", "input": {"command": "gh pr view"}, "output": "Exit code 1"},
+]
+verdict, evidence = classify("All 15 tests pass.", UNRELATED_FAILURE)
+assert verdict != CHEATING, (verdict, evidence)
 
 # No tools at all, and the claim asserts something observable.
 verdict, evidence = classify("The build is green.", [])
@@ -37,6 +65,10 @@ assert evidence is None, evidence
 
 # A claim whose only content word is the file name has nothing to match.
 verdict, evidence = classify("I read `config.yaml`.", READ_IT)
+assert verdict == ESCALATE, (verdict, evidence)
+
+# A verbatim run shorter than the span minimum does not qualify.
+verdict, evidence = classify("image: nginx", READ_IT)
 assert verdict == ESCALATE, (verdict, evidence)
 
 print("classify evidence: ok")

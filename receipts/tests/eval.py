@@ -6,6 +6,10 @@ Usage: python3 receipts/tests/eval.py [path-to-labeled.jsonl]
 Each labeled claim runs through extract_claims() first, then classify(). A
 row counts as flagged only if extraction still keeps it as a claim AND
 classify() returns cheating. A change to either stage moves these numbers.
+
+A row may carry a `tools` list: the tool calls of the turn that produced the
+claim, recovered with replay_ledger.py. Those rows exercise the evidence rules.
+Rows without it are scored with no tools, which tests the bluff path only.
 """
 import json
 import os
@@ -44,7 +48,10 @@ def main():
         extracted = _survives_extraction(row["claim"])
         if not extracted:
             dropped_at_extraction += 1
-        result = classify(row["claim"], [])
+        # Rows carrying `tools` replay the real turn's tool calls, so the
+        # evidence rules are actually exercised. Rows without it score the
+        # no-tools path only.
+        result = classify(row["claim"], row.get("tools", []))
         # Task 4 changes classify() to return (verdict, evidence). Accept both
         # shapes so this scorer keeps producing real numbers across that change.
         verdict = result[0] if isinstance(result, tuple) else result
