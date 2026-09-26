@@ -17,7 +17,9 @@ set -euo pipefail
 # Per-repo convention: ./handover must be a symlink that resolves into the vault.
 # Matches /obsidian-kit:handover-new's Phase 1 precondition — no point offering
 # /obsidian-kit:handover-new otherwise.
-[ -L "./handover" ] && readlink -e "./handover" >/dev/null 2>&1 || exit 0
+[ -L "./handover" ] || exit 0
+target="$(readlink -f "./handover" 2>/dev/null)" || exit 0
+[ -n "$target" ] && [ -e "$target" ] || exit 0
 
 payload="$(cat)"
 

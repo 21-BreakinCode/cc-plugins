@@ -149,7 +149,7 @@ Use `Write` to create the file at `$TARGET`.
 Print:
 ```
 Created: $TARGET
-  Resolved to LifeOS: $(readlink -e "$TARGET")
+  Resolved to LifeOS: $(readlink -f "$TARGET")
 
 Open it in Obsidian to refine TL;DR / To-Be.
 ```
