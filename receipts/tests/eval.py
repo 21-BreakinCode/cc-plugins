@@ -7,9 +7,10 @@ Each labeled claim runs through extract_claims() first, then classify(). A
 row counts as flagged only if extraction still keeps it as a claim AND
 classify() returns cheating. A change to either stage moves these numbers.
 
-A row may carry a `tools` list: the tool calls of the turn that produced the
-claim, recovered with replay_ledger.py. Those rows exercise the evidence rules.
-Rows without it are scored with no tools, which tests the bluff path only.
+A row may carry the turn it came from, recovered with replay_ledger.py:
+`turn_text` and `final_text` for the extraction stage, and `tools` for the
+classification stage. Rows without them fall back to scoring the claim on its
+own, which tests far less.
 """
 import json
 import os
@@ -28,24 +29,27 @@ def load(path):
         return [json.loads(line) for line in handle if line.strip()]
 
 
-def _survives_extraction(text):
-    """Does the claim still register as a claim at all?
+def _survives_extraction(row):
+    """Does extraction still hand this claim to the classifier?
 
-    Task 3 changes extract_claims from one argument to two. Accept both so this
-    scorer keeps producing real numbers across that change.
+    A row carrying `turn_text` is scored against the real turn it came from,
+    which is what extraction actually sees in production. Feeding it the lone
+    claim instead made a line's own context invisible: a completion verb only
+    counts in the final message, so a mid-turn line scored as if it were the
+    whole turn and dropped every time.
     """
-    try:
-        kept = extract_claims(text, text)
-    except TypeError:
-        kept = extract_claims(text)
-    return bool(kept)
+    claim = row["claim"]
+    turn_text = row.get("turn_text")
+    if turn_text is None:
+        return bool(extract_claims(claim, claim))
+    return claim in extract_claims(turn_text, row.get("final_text", ""))
 
 
 def main():
     rows = load(sys.argv[1] if len(sys.argv) > 1 else DEFAULT)
     true_pos = false_pos = false_neg = escalated = dropped_at_extraction = 0
     for row in rows:
-        extracted = _survives_extraction(row["claim"])
+        extracted = _survives_extraction(row)
         if not extracted:
             dropped_at_extraction += 1
         # Rows carrying `tools` replay the real turn's tool calls, so the

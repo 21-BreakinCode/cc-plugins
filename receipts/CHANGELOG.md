@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.6.0 — 2026-09-26
+
+- **test:** the labeled fixture now stores each claim's real turn (`turn_text`, `final_text`) for the 53 rows whose transcript still exists, so the eval scores extraction the way production sees it instead of feeding it the lone claim as if it were the whole turn.
+- **test:** recall goes 0.200 to 0.600 on the same labels. Two mid-turn narrations stop being scored as claims, because a completion verb only counts in the final message, and two real bluffs start being caught.
+- **test:** tool evidence is stored only on the adjudicated rows, which are the ones labeled for what `classify` decides. Storing it everywhere put a single 249 KB turn in the fixture.
+- **feat:** `attach_turn_context.py` rebuilds the fixture from the transcripts, so labels added later can pick up their turn context while it is still on disk.
+
 ## 0.5.0 — 2026-09-26
 
 - **fix:** a lone slug or file name no longer backs a claim. The verbatim span must contain at least two words, because an `ls` line carrying a handover's name was backing the table cell that claimed it had been archived.

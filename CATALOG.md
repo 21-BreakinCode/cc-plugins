@@ -56,7 +56,7 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 
 **Commands** · `/code-reviewer:review-pr`
 
-### [receipts](./receipts/README.md) · `v0.5.0`
+### [receipts](./receipts/README.md) · `v0.6.0`
 
 *No claim without a receipt*
 

@@ -38,33 +38,42 @@ def transcripts_for(session_ids):
 
 
 def turns(path):
-    """Yield (turn_text, tools) for every main-session turn in a transcript."""
+    """Yield (turn_text, final_text, tools) for every main-session turn.
+
+    turn_text is everything the assistant said in the turn, final_text only its
+    last message. check.extract_claims needs both: a FACT tag counts anywhere in
+    the turn, a completion verb only in the final message.
+    """
     rows = [r for r in _load(path) if not r.get("isSidechain")]
     starts = [i for i, r in enumerate(rows) if _is_real_user_prompt(r)]
     if not starts:
         return
     bounds = list(zip(starts, starts[1:] + [len(rows)]))
     for start, end in bounds:
-        texts, tool_uses, results = [], [], {}
+        texts, final_texts, tool_uses, results = [], [], [], {}
         for row in rows[start + 1 : end]:
             rtype = row.get("type")
+            row_texts = []
             for block in _blocks(row):
                 if not isinstance(block, dict):
                     continue
                 btype = block.get("type")
                 if rtype == "assistant" and btype == "text":
                     texts.append(block.get("text", ""))
+                    row_texts.append(block.get("text", ""))
                 elif rtype == "assistant" and btype == "tool_use":
                     tool_uses.append((block.get("id"), block.get("name", ""), block.get("input", "")))
                 elif btype == "tool_result":
                     results[block.get("tool_use_id")] = _result_text(block.get("content"))
+            if row_texts:
+                final_texts = row_texts
         if not texts:
             continue
         tools = [
             {"name": name, "input": inp, "output": results.get(tid, "")}
             for (tid, name, inp) in tool_uses
         ]
-        yield "\n".join(texts), tools
+        yield "\n".join(texts), "\n".join(final_texts), tools
 
 
 def excerpt(tools, evidence):
@@ -87,7 +96,7 @@ def main():
 
     found = {}
     for path in transcripts_for(ledger_session_ids()):
-        for turn_text, tools in turns(path):
+        for turn_text, _final_text, tools in turns(path):
             for claim, logged in wanted.items():
                 if claim in found or claim not in turn_text:
                     continue

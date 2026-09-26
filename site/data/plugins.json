@@ -653,7 +653,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -685,6 +685,28 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.6.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "test",
+              "text": "the labeled fixture now stores each claim's real turn (`turn_text`, `final_text`) for the 53 rows whose transcript still exists, so the eval scores extraction the way production sees it instead of feeding it the lone claim as if it were the whole turn."
+            },
+            {
+              "type": "test",
+              "text": "recall goes 0.200 to 0.600 on the same labels. Two mid-turn narrations stop being scored as claims, because a completion verb only counts in the final message, and two real bluffs start being caught."
+            },
+            {
+              "type": "test",
+              "text": "tool evidence is stored only on the adjudicated rows, which are the ones labeled for what `classify` decides. Storing it everywhere put a single 249 KB turn in the fixture."
+            },
+            {
+              "type": "feat",
+              "text": "`attach_turn_context.py` rebuilds the fixture from the transcripts, so labels added later can pick up their turn context while it is still on disk."
+            }
+          ]
+        },
         {
           "version": "0.5.0",
           "date": "2026-09-26",
