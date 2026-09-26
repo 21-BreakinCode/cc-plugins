@@ -13,12 +13,15 @@ Usage: python3 provisional_labels.py > receipts/tests/fixtures/labeled.jsonl
 Reads the same ledger glob as sample_ledger.py.
 """
 import json
+import re
 
 from sample_ledger import rows
 
+_HEADING = re.compile(r"^#{1,6}\s")
+
 
 def is_structural_non_claim(claim):
-    return claim.startswith("|") or claim.startswith("#") or "**ASSUME:**" in claim
+    return claim.startswith("|") or _HEADING.match(claim) or "**ASSUME:**" in claim
 
 
 def main():

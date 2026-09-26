@@ -32,14 +32,13 @@ _VERB = re.compile(
 _ASSUME_TAG = re.compile(r"\*\*ASSUME:\*\*")
 _TABLE_ROW = re.compile(r"^\|")
 _HEADING = re.compile(r"^#{1,6}\s")
-_ISSUE_REF = re.compile(r"^#\d")
 
 
 def _is_claimable(line):
-    """Structural filter: a table cell, heading, or issue-ref marker is not an assertion."""
+    """Structural filter: a table cell or a heading is not an assertion."""
     if not line:
         return False
-    if _TABLE_ROW.match(line) or _HEADING.match(line) or _ISSUE_REF.match(line):
+    if _TABLE_ROW.match(line) or _HEADING.match(line):
         return False
     return not _ASSUME_TAG.search(line)
 
