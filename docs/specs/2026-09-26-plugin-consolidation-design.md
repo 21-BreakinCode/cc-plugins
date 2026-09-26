@@ -18,9 +18,9 @@ Success criteria:
 1. `obsidian-kit` 2.0.0 ships 11 skills and 4 commands. The three merged plugin
    directories are deleted.
 2. `uiux-optimizer` is deleted.
-3. `/obsidian-kit:handover-wrap-up` finds the 20 notes tagged `type/handover` and not
-   `status/archived` in the LifeOS vault. Today the command finds 0. One of the 20 is a
-   known mis-tag that this document leaves alone. See Out of scope.
+3. `/obsidian-kit:handover-wrap-up` finds the 16 live handovers in the LifeOS vault.
+   Today the command finds 0. Counted on 2026-09-26 with
+   `obsidian search query="tag:#type/handover -tag:#status/archived"`.
 4. `receipts` 0.3.0 writes an evidence trail with every verdict, and scores better
    than its current baseline on a labeled set drawn from real ledger data.
 5. `./scripts/cicd.sh VERIFY` passes.
@@ -305,7 +305,7 @@ deterministic prefilter rules, not a looser matcher.
                         one resolver, one hooks.json
                         verify: test suites pass, each gate fires correctly
 4  handover fixes       tags, CLI discovery, move without rename
-                        verify: discovery returns 20, one nominated
+                        verify: discovery returns 16, one nominated
                         handover archives correctly under review
 5  delete 4 plugins     git rm, marketplace entries, content entries,
                         root README tree
@@ -319,7 +319,7 @@ deterministic prefilter rules, not a looser matcher.
 
 Commit 4 runs against a vault with no version control. The first archive runs on one
 handover the user nominates. The user sees the move result and the rewritten tags
-before the other 19 are touched.
+before the other 15 are touched.
 
 ## Safety
 
@@ -339,23 +339,54 @@ before the other 19 are touched.
 - `receipts/tests/eval.py`: scores the classifier against the labeled set.
 - The `session-learner` conformance tests move in unchanged.
 
-## Migration
+## Migration across machines
 
-The user runs one command after commit 7.
+The dotfiles repo at `~/Projects/breakincode/dotfiles` is the source of truth for
+which plugins a machine installs. `config/claude/scripts/claude-sync.sh` holds two
+arrays. `PLUGINS` is installed. `RETIRED_PLUGINS` is uninstalled if still present.
+
+The change moves four names from the first array to the second.
 
 ```
-claude-sync reinstall
+PLUGINS                          RETIRED_PLUGINS
+  session-learner@...     ->       session-learner@...   # merged into obsidian-kit
+  hh@...                  ->       hh@...                # merged into obsidian-kit
+  simple-mandarin@...     ->       simple-mandarin@...   # merged into obsidian-kit
+  uiux-optimizer@...      ->       uiux-optimizer@...    # removed
+  obsidian-kit@...                 note-visualizer@...   # already there
+  receipts@...                     obsidian@...          # already there
 ```
 
-Until then the old plugins stay installed and their hooks fire alongside the merged
-plugin's. The user would see the Mandarin lint twice and two handover offers. This is
-why the receipts commits land first.
+No new mechanism is needed. `bootstrap.sh` already runs `claude-sync.sh reinstall`,
+and `pulldot` already runs `git pull` followed by `bootstrap.sh`.
+
+```
+this Mac                          other Mac
+  edit claude-sync.sh
+  pushdot                 ---->     pulldot
+    gen-file-map.sh                   git pull
+    git commit                        bootstrap.sh
+    git push                            claude-sync.sh reinstall
+                                          installs obsidian-kit 2.0.0
+                                          uninstalls the 4 retired plugins
+```
+
+Both machines end with the same 6 plugins. The user runs `pushdot` here and
+`pulldot` there. Nothing else.
+
+Until `pushdot` runs, the old plugins stay installed on this machine and their hooks
+fire alongside the merged plugin's. The user would see the Mandarin lint twice and
+two handover offers. This is why the receipts commits land first.
 
 ## Out of scope
 
 - Renaming existing archived files. The vault holds two naming conventions. Both stay.
-- Fixing `01Project/Leetcode/Strategy/DP/00__map__DP.md`, which carries an inline
-  `#type/handover` tag and is not a handover. It was reported to the peer session.
-  It belongs to the tag refactor, not to this one.
+- Retagging `01Project/Leetcode/Strategy/DP/00__map__DP.md`. It carried an inline
+  `#type/handover` tag and is not a handover. The peer session fixed it after this
+  document reported it.
+- Deciding what to do with `image-center-2__2026-08-28-ic2-capture-split-keda.md`. It
+  carries `type/handover` and `status/archived` at once, and still lives under
+  `01Project/`, so it is marked archived but was never moved. The new archive command
+  handles it correctly when the user selects it. Nothing retroactive is done here.
 - Editing the vault's `CLAUDE.md`, which still documents `tags: [daily]`.
 - `autoresearch`, `code-reviewer`, `humanize`, and `adhd-review`. Untouched.
