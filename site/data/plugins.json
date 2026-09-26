@@ -653,7 +653,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.4.0",
+      "version": "0.5.0",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -685,6 +685,28 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.5.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "a lone slug or file name no longer backs a claim. The verbatim span must contain at least two words, because an `ls` line carrying a handover's name was backing the table cell that claimed it had been archived."
+            },
+            {
+              "type": "fix",
+              "text": "contradict a success claim only when exactly one command in the turn looks like a test, build or lint run. With several runs there is no cheap way to attribute the failure, and picking the failing one called true claims bluffs: \"Test 1 passes\" was contradicted by an unrelated command reporting \"1 error\"."
+            },
+            {
+              "type": "fix",
+              "text": "drop \"works\" from the completion verbs. It reads as an observation in \"the fix works\" and as an opinion in \"it works best as a secondary cross-check\", and the second sense had a real analysis paragraph logged as a bluff."
+            },
+            {
+              "type": "test",
+              "text": "on the labeled set: precision 1.000 (was 0.250), recall 0.200, escalation_rate 0.419, dropped_at_extraction 69. All three fixes trade flagging for deferral, so precision rises while recall holds."
+            }
+          ]
+        },
         {
           "version": "0.4.0",
           "date": "2026-09-26",

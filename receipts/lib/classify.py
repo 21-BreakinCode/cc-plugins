@@ -30,8 +30,11 @@ _WORK_KEYWORDS = (
 # observable and should escalate to the judge instead of being blocked.
 _COMPLETION_VERBS = (
     "verified", "verify", "confirmed", "confirm", "returns", "returned",
-    "passes", "passed", "compiles", "compiled", "works", "succeeded", "ran",
+    "passes", "passed", "compiles", "compiled", "succeeded", "ran",
 )
+# "works" is deliberately absent. It reads as an observation in "the fix works"
+# and as an opinion in "it works best as a secondary cross-check", and the
+# second sense had a real analysis paragraph logged as a bluff.
 
 _FILE_REF = re.compile(r"[\w./\\-]+\.\w+(?::\d+)?")
 
@@ -78,9 +81,13 @@ def _work_success_contradicted(claim, tools):
     if not (has_work and asserts_success):
         return False
     runners = [tool for tool in tools if _runs_work(tool)]
-    return any(
-        _FAIL_SIGNAL.search("\n".join(_output_lines(tool)).lower()) for tool in runners
-    )
+    # With several runs in one turn there is no cheap way to tell which one the
+    # claim is about, and picking the failing one called true claims bluffs:
+    # "Test 1 passes" was contradicted by an unrelated command reporting
+    # "1 error". One run means the attribution is unambiguous.
+    if len(runners) != 1:
+        return False
+    return bool(_FAIL_SIGNAL.search("\n".join(_output_lines(runners[0])).lower()))
 
 
 def _has_observable_signal(claim):
@@ -135,6 +142,11 @@ def _longest_span_in(words, line):
             if longer not in line:
                 break
             span, end = longer, end + 1
+        # A single long token is a file name or slug. It shows the thing was
+        # located, never that anything was done to it: an `ls` line carrying
+        # a handover's name backed the cell that claimed it was archived.
+        if " " not in span:
+            continue
         if len(span) >= MIN_SPAN_CHARS and len(span) > len(best):
             best = span
     return best

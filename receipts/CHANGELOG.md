@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.0 — 2026-09-26
+
+- **fix:** a lone slug or file name no longer backs a claim. The verbatim span must contain at least two words, because an `ls` line carrying a handover's name was backing the table cell that claimed it had been archived.
+- **fix:** contradict a success claim only when exactly one command in the turn looks like a test, build or lint run. With several runs there is no cheap way to attribute the failure, and picking the failing one called true claims bluffs: "Test 1 passes" was contradicted by an unrelated command reporting "1 error".
+- **fix:** drop "works" from the completion verbs. It reads as an observation in "the fix works" and as an opinion in "it works best as a secondary cross-check", and the second sense had a real analysis paragraph logged as a bluff.
+- **test:** on the labeled set: precision 1.000 (was 0.250), recall 0.200, escalation_rate 0.419, dropped_at_extraction 69. All three fixes trade flagging for deferral, so precision rises while recall holds.
+
 ## 0.4.0 — 2026-09-26
 
 - **fix:** a claim is backed only when tool output repeats a run of it word for word (24 characters or more). Shared vocabulary proved nothing: replaying 71 real ledger turns showed 47 of 52 `backed` verdicts resting on one shared word against a median claim of 8, so "W2a is done: 55 tests pass" came back backed by an agent's boilerplate line containing "files".
