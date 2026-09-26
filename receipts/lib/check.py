@@ -29,16 +29,39 @@ _VERB = re.compile(
 )
 
 
-def extract_claims(turn_text):
-    """Triggering claims: the **FACT:** tag plus work-completion phrasings."""
+_ASSUME_TAG = re.compile(r"\*\*ASSUME:\*\*")
+_TABLE_ROW = re.compile(r"^\|")
+_HEADING = re.compile(r"^#{1,6}\s")
+_ISSUE_REF = re.compile(r"^#\d")
+
+
+def _is_claimable(line):
+    """Structural filter: a table cell, heading, or issue-ref marker is not an assertion."""
+    if not line:
+        return False
+    if _TABLE_ROW.match(line) or _HEADING.match(line) or _ISSUE_REF.match(line):
+        return False
+    return not _ASSUME_TAG.search(line)
+
+
+def extract_claims(turn_text, final_text):
+    """Triggering claims.
+
+    A completion phrasing counts only in the FINAL assistant message, because
+    mid-turn narration is superseded by the time the turn ends. A **FACT:** tag
+    counts anywhere in the turn, because it is an explicit assertion.
+    """
     claims = []
     for line in turn_text.splitlines():
         stripped = line.strip()
-        if not stripped:
+        if not _is_claimable(stripped):
             continue
         tag = _FACT_TAG.search(stripped)
         if tag:
             claims.append(tag.group(1).strip())
+    for line in final_text.splitlines():
+        stripped = line.strip()
+        if not _is_claimable(stripped) or _FACT_TAG.search(stripped):
             continue
         if _VERB.search(stripped):
             claims.append(stripped)
@@ -164,11 +187,11 @@ def main():
     if not transcript or not os.path.exists(transcript):
         approve()
     try:
-        turn_text, tools = extract(transcript)
+        turn_text, final_text, tools = extract(transcript)
     except OSError:
         approve()
 
-    claims = extract_claims(turn_text)
+    claims = extract_claims(turn_text, final_text)
     if not claims:
         approve()
 
