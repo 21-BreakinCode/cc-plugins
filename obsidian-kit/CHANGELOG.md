@@ -1,3 +1,7 @@
+## 2.1.0 — 2026-09-27
+
+- **refactor:** stop linting Markdown files. The PostToolUse `.md` lint is removed, with `SIMPLE_MANDARIN_LINT_EXCLUDE`. The Stop check on Mandarin chat replies stays, renamed from `mandarin-lint.py` to `mandarin-reply-check.py`. The Mandarin rules still load at session start inside a vault.
+
 ## 2.0.0 — 2026-09-26
 
 - **feat:** absorb `session-learner` as `session-wrap-up`, `session-pick-up`, and `session-recommend`. `session-pick-up` now writes cards into the vault after one approval.
