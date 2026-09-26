@@ -140,7 +140,28 @@ Group user answers into:
 
 ### 4a. Archive set — parallel subagents
 
-For each handover, resolve `<destination>` first via `plan_archive` (see Archive destination, above). Do not let the subagent re-derive it. Then send one Agent call per handover. Issue all calls in a single message.
+For each handover, resolve `<destination>` first via `plan_archive` (see Archive destination, above). Do not let the subagent re-derive it.
+
+```bash
+python3 -c "
+import sys
+sys.path.insert(0, '${CLAUDE_PLUGIN_ROOT}/scripts')
+from pathlib import Path
+from common.vault import VaultConfigError, load_config
+from handover.archive import plan_archive
+try:
+    config = load_config(Path('$VAULT'))
+    for source in ['<source-1>', '<source-2>']:
+        plan = plan_archive(source, '$VAULT', config)
+        print(f\"{source} -> {plan['destination']}/{plan['filename']}\")
+except VaultConfigError as error:
+    print(error, file=sys.stderr); sys.exit(3)
+"
+```
+
+Substitute the archive set's vault-relative source paths for `<source-1>`, `<source-2>`, … before running. **If this exits 3**, relay the stderr message to the user verbatim and stop.
+
+Then send one Agent call per handover. Issue all calls in a single message.
 
 Subagent prompt:
 

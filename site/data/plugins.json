@@ -261,8 +261,7 @@
         }
       ],
       "dependsOn": [
-        "pr-review-toolkit",
-        "hh"
+        "pr-review-toolkit"
       ],
       "config": [
         {

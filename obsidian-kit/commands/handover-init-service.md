@@ -100,6 +100,16 @@ Append a new row to the `## Service Mapping` table in `$INIT`:
 
 If the table is empty, use `Edit` to append the new row after the separator row. Otherwise, append it after the last existing data row. Preserve all other content.
 
+### Phase 4a — Confirm with user
+
+`AskUserQuestion`:
+- `question`: "Append this row to $INIT and create $VAULT/01Project/$ORG/$LIFEOS_SUBPATH/handover/?\n| $APP_NAME | $PWD | $LIFEOS_SUBPATH |"
+- `options`:
+  - "Yes, write it"
+  - "No, abort"
+
+If the user picks "No, abort", stop. Do not write the row and do not run Phase 5.
+
 ### Phase 5 — Create LifeOS handover folder
 
 ```bash
