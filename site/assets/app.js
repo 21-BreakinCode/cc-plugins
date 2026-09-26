@@ -1,27 +1,17 @@
-// cc-plugins site — fetches generated plugins.json and renders the landing grid +
-// per-plugin subpage with a choreographed entrance. No framework, no build step.
+// cc-plugins site — fetches generated plugins.json and renders the landing index
+// + per-plugin subpage. No framework, no build step.
 
-const CAT_COLOR = {
-  memory: "var(--cat-memory)",
-  improve: "var(--cat-improve)",
-  review: "var(--cat-review)",
-  workflow: "var(--cat-workflow)",
-  media: "var(--cat-media)",
-  content: "var(--cat-content)",
-};
-
-// Crafted 1.5px-stroke glyphs (Lucide-style), one per category — no emoji.
-const CAT_ICON = {
-  memory: `<svg viewBox="0 0 16 16"><circle cx="4" cy="8" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="12" cy="12" r="2"/><line x1="6" y1="8" x2="10" y2="4.8"/><line x1="6" y1="8" x2="10" y2="11.2"/></svg>`,
-  improve: `<svg viewBox="0 0 16 16"><line x1="3" y1="13" x2="3" y2="9"/><line x1="7" y1="13" x2="7" y2="6"/><line x1="11" y1="13" x2="11" y2="3"/><polyline points="1,5 4,2 7,4 11,1 15,3" opacity="0.5"/></svg>`,
-  review: `<svg viewBox="0 0 16 16"><circle cx="6.5" cy="6.5" r="3.5"/><line x1="9.5" y1="9.5" x2="13" y2="13"/><line x1="4" y1="6.5" x2="9" y2="6.5" opacity="0.5"/></svg>`,
-  workflow: `<svg viewBox="0 0 16 16"><rect x="1" y="5.5" width="4" height="5" rx="1"/><rect x="6" y="5.5" width="4" height="5" rx="1"/><rect x="11" y="5.5" width="4" height="5" rx="1"/><line x1="5" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="11" y2="8"/></svg>`,
-  media: `<svg viewBox="0 0 16 16"><rect x="1" y="4" width="14" height="10" rx="1.5"/><line x1="1" y1="7" x2="15" y2="7"/><line x1="5" y1="4" x2="3" y2="7"/><line x1="9" y1="4" x2="7" y2="7"/><line x1="13" y1="4" x2="11" y2="7"/><polyline points="6.5,9.5 10,11 6.5,12.5" fill="currentColor" stroke="none" opacity="0.7"/></svg>`,
-  content: `<svg viewBox="0 0 16 16"><path d="M10.5 2.5l3 3-7.5 7.5-3.5 1 1-3.5z"/><line x1="8.5" y1="4.5" x2="11.5" y2="7.5"/></svg>`,
+const CATEGORY_LABEL = {
+  memory: "Memory",
+  improve: "Improve",
+  review: "Review",
+  workflow: "Workflow",
+  media: "Media",
+  content: "Content",
 };
 
 const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const icon = (cat) => CAT_ICON[cat] || CAT_ICON.workflow;
+const categoryLabel = (id) => CATEGORY_LABEL[id] || id;
 
 function escapeHtml(s) {
   return String(s)
@@ -95,7 +85,8 @@ function initReveal() {
 function initHeroEntrance() {
   const sequence = [
     [".hero h1", 0],
-    [".hero-terminal", 120],
+    [".hero-sub", 110],
+    [".hero-terminal", 220],
   ];
   const reduced = reduceMotion();
   sequence.forEach(([selector, delay]) => {
@@ -125,7 +116,7 @@ function typeReveal(el, html) {
       setTimeout(() => cursor.remove(), 600);
     }
   };
-  setTimeout(tick, 360);
+  setTimeout(tick, 420);
 }
 
 function initHero(data) {
@@ -163,33 +154,34 @@ function initHero(data) {
   });
 }
 
-/* --------------------------------- Grid ----------------------------------- */
-function cardHtml(p, delay) {
+/* ------------------------------ Plugin index ------------------------------ */
+function rowHtml(p, index, delay) {
+  const number = String(index + 1).padStart(2, "0");
   return `
-  <article class="plugin-card" data-reveal data-category="${escapeHtml(p.category)}" style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}; --delay:${delay}ms">
-    <a class="card-link" href="plugin.html?name=${encodeURIComponent(p.name)}" aria-label="${escapeHtml(p.name)} — ${escapeHtml(p.tagline)}"></a>
-    <div class="card-top">
-      <div class="plugin-icon">${icon(p.category)}</div>
-      <div class="card-name-row">
-        <span class="plugin-name">${escapeHtml(p.name)}</span>
-        <span class="version">v${escapeHtml(p.version)}</span>
-      </div>
-    </div>
-    <p class="plugin-tagline">${escapeHtml(p.tagline)}</p>
-    <div class="card-install card-cta-row">
+  <li class="plugin-row" data-reveal data-category="${escapeHtml(p.category)}" style="--delay:${delay}ms">
+    <a class="row-link" href="plugin.html?name=${encodeURIComponent(p.name)}">
+      <span class="row-num">${number}</span>
+      <span>
+        <span class="row-name">
+          ${escapeHtml(p.name)}
+          <span class="row-cat">${escapeHtml(categoryLabel(p.category))}</span>
+        </span>
+        <span class="row-tagline">${escapeHtml(p.tagline)}</span>
+      </span>
+      <span class="row-meta">
+        <span>v${escapeHtml(p.version)}</span>
+        <span class="row-arrow" aria-hidden="true">→</span>
+      </span>
+    </a>
+    <div class="row-install">
       <span class="prompt">$</span>
       <code>${escapeHtml(p.install)}</code>
       <button class="mini-copy" type="button" data-copy="${escapeHtml(p.install)}" aria-label="Copy install command for ${escapeHtml(p.name)}">Copy</button>
     </div>
-  </article>`;
+  </li>`;
 }
 
-// Short, capitalized chip label derived from the category id — no static headers.
-function chipLabel(id) {
-  return id.charAt(0).toUpperCase() + id.slice(1);
-}
-
-function renderGrid(data) {
+function renderIndex(data) {
   const root = document.getElementById("plugin-sections");
   const byName = new Map(data.plugins.map((p) => [p.name, p]));
   const active = data.categories.filter((c) => c.plugins.length);
@@ -198,17 +190,17 @@ function renderGrid(data) {
     `<button class="chip active" type="button" data-filter="all" aria-pressed="true">All</button>`,
     ...active.map(
       (c) =>
-        `<button class="chip" type="button" data-filter="${escapeHtml(c.id)}" aria-pressed="false">${escapeHtml(chipLabel(c.id))}</button>`,
+        `<button class="chip" type="button" data-filter="${escapeHtml(c.id)}" aria-pressed="false">${escapeHtml(categoryLabel(c.id))}</button>`,
     ),
   ].join("");
 
-  // Flatten plugins in category order so the single grid stays coherent when filtered.
+  // Flatten in category order so the single list stays coherent when filtered.
   const ordered = active.flatMap((c) => c.plugins.map((name) => byName.get(name)).filter(Boolean));
-  const cards = ordered.map((p, idx) => cardHtml(p, idx * 45)).join("");
+  const rows = ordered.map((p, idx) => rowHtml(p, idx, idx * 50)).join("");
 
   root.innerHTML = `
     <div class="chips" data-reveal role="group" aria-label="Filter plugins by category">${chips}</div>
-    <div class="plugin-grid">${cards}</div>`;
+    <ul class="plugin-index">${rows}</ul>`;
 
   bindCopy(root);
   bindFilters(root);
@@ -225,7 +217,7 @@ function bindCopy(root) {
 
 function bindFilters(root) {
   const chips = [...root.querySelectorAll(".chip")];
-  const cards = [...root.querySelectorAll(".plugin-card")];
+  const rows = [...root.querySelectorAll(".plugin-row")];
   chips.forEach((chip) => {
     chip.addEventListener("click", () => {
       const filter = chip.dataset.filter;
@@ -234,19 +226,8 @@ function bindFilters(root) {
         c.classList.toggle("active", on);
         c.setAttribute("aria-pressed", String(on));
       });
-      cards.forEach((card) => {
-        const match = filter === "all" || card.dataset.category === filter;
-        if (match) {
-          card.style.display = "";
-          requestAnimationFrame(() => {
-            card.style.opacity = "";
-          });
-        } else {
-          card.style.opacity = "0";
-          setTimeout(() => {
-            if (card.style.opacity === "0") card.style.display = "none";
-          }, 200);
-        }
+      rows.forEach((row) => {
+        row.hidden = !(filter === "all" || row.dataset.category === filter);
       });
     });
   });
@@ -278,7 +259,7 @@ function surfaceHtml(p) {
     return `<section class="subpage-section" data-reveal><h2>Commands</h2><ul class="cmd-list">${listHtml(p.commands)}</ul></section>`;
   }
   if (p.skills.length) {
-    return `<section class="subpage-section" data-reveal><h2>Skills</h2><p style="color:var(--text-muted);margin-bottom:var(--space-4)">Activates automatically — no slash commands.</p><ul class="cmd-list">${listHtml(p.skills)}</ul></section>`;
+    return `<section class="subpage-section" data-reveal><h2>Skills — activate automatically</h2><ul class="cmd-list">${listHtml(p.skills)}</ul></section>`;
   }
   return "";
 }
@@ -333,27 +314,25 @@ function renderSubpage(data) {
   const p = byName.get(name);
 
   if (!p) {
-    root.innerHTML = `<h1>Plugin not found</h1><p style="margin-top:var(--space-4)">No plugin named “${escapeHtml(name || "")}”. <a style="color:var(--accent-hover)" href="index.html">Back to all plugins →</a></p>`;
+    root.innerHTML = `<div class="subpage-head"><h1>Not found</h1></div><p class="subpage-tagline">No plugin named “${escapeHtml(name || "")}”. <a href="index.html">Back to all plugins →</a></p>`;
+    revealAll();
     return;
   }
 
   document.title = `${p.name} — 21-breakincode`;
   root.innerHTML = `
-    <div class="subpage-head" data-reveal style="--cat-color:${CAT_COLOR[p.category] || "var(--accent)"}">
-      <div class="plugin-icon">${icon(p.category)}</div>
-      <div><h1>${escapeHtml(p.name)} <span class="version">v${escapeHtml(p.version)}</span></h1></div>
+    <div class="subpage-head" data-reveal>
+      <h1>${escapeHtml(p.name)} <span class="version">v${escapeHtml(p.version)}</span></h1>
     </div>
     <p class="subpage-tagline" data-reveal>${escapeHtml(p.tagline)}</p>
     <p class="subpage-summary" data-reveal>${escapeHtml(p.summary)}</p>
 
     <section class="subpage-section" data-reveal>
       <h2>Install</h2>
-      <div class="terminal-tray">
-        <div class="terminal">
-          <div class="terminal-body">
-            <button class="copy-btn" type="button" id="sub-copy" aria-label="Copy install command">Copy</button>
-            <pre>${highlightCli(p.install)}</pre>
-          </div>
+      <div class="terminal">
+        <div class="terminal-body">
+          <button class="copy-btn" type="button" id="sub-copy" aria-label="Copy install command">Copy</button>
+          <pre>${highlightCli(p.install)}</pre>
         </div>
       </div>
     </section>
@@ -382,7 +361,7 @@ async function main() {
     revealAll();
     const target = document.getElementById("plugin-sections") || document.getElementById("plugin-detail");
     if (target) {
-      target.innerHTML = `<p style="color:var(--color-error)">Could not load plugin data (${escapeHtml(err.message)}). Serve over HTTP — try <code>./scripts/cicd.sh serve</code>.</p>`;
+      target.innerHTML = `<p class="load-error">Could not load plugin data (${escapeHtml(err.message)}). Serve over HTTP — try <code>./scripts/cicd.sh serve</code>.</p>`;
     }
     return;
   }
@@ -390,7 +369,7 @@ async function main() {
   if (isHome) {
     setCounts(data);
     initHero(data);
-    renderGrid(data);
+    renderIndex(data);
   } else {
     renderSubpage(data);
   }

@@ -9,7 +9,7 @@
     <title>21-breakincode — plugins for Claude Code</title>
     <meta
       name="description"
-      content="A marketplace of focused Claude Code plugins — session memory, eval-driven improvement, PR review, UI/UX design, handover docs, and video generation. Install all with one command."
+      content="A marketplace of focused Claude Code plugins — Obsidian vault memory and handover notes, eval-driven improvement, PR review, claim auditing, and writing tools. Install them all with one command."
     />
     <meta property="og:title" content="21-breakincode — plugins for Claude Code" />
     <meta
@@ -17,25 +17,27 @@
       content="Install a marketplace of developer-tooling plugins for Claude Code with a single command."
     />
     <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#100f0d" media="(prefers-color-scheme: dark)" />
     <link
       rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%236872e0'/%3E%3Ctext x='16' y='21' font-family='monospace' font-size='12' fill='white' text-anchor='middle'%3E21%3C/text%3E%3C/svg%3E"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23c2451f'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='16' fill='%23fbfaf7' text-anchor='middle'%3E21%3C/text%3E%3C/svg%3E"
     />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=2.0.0" />
+    <link rel="stylesheet" href="assets/styles.css?v=2.1.0" />
   </head>
   <body data-page="home">
     <header class="site-header">
       <div class="container">
         <a class="brand" href="index.html">
           <span class="brand-mark">21</span>
-          21-breakincode
+          breakincode
         </a>
         <nav class="header-links">
           <a class="hide-sm" href="#plugins">Plugins</a>
@@ -48,17 +50,20 @@
     <main>
       <section class="hero">
         <div class="container">
+          <p class="eyebrow">Marketplace for Claude Code</p>
           <h1>
-            Install <span id="count-head">6</span> developer tools for Claude Code in
+            <span id="count-head">6</span> focused plugins,
             <span class="accent">one command</span>.
           </h1>
+          <p class="hero-sub">
+            Vault memory and handover notes in Obsidian, an eval-driven improvement loop,
+            PR review, claim auditing, and writing tools. Each one does a single job.
+          </p>
 
           <div class="hero-terminal">
-            <p class="install-label">Install all <span id="count-cta">6</span> plugins <span class="dot">·</span> one command</p>
-            <div class="terminal-tray">
+            <p class="install-label">Install all <span id="count-cta">6</span></p>
             <div class="terminal">
               <div class="terminal-chrome">
-                <span class="dots"><i class="dot r"></i><i class="dot y"></i><i class="dot g"></i></span>
                 <div class="tab-bar" role="tablist" aria-label="Install or update method">
                   <button class="tab" role="tab" data-tab="cli" aria-selected="true">CLI</button>
                   <button class="tab" role="tab" data-tab="settings" aria-selected="false">settings.json</button>
@@ -72,7 +77,6 @@
                 <div class="tab-panel" id="panel-update" role="tabpanel" hidden><pre></pre></div>
               </div>
             </div>
-            </div>
           </div>
         </div>
       </section>
@@ -81,7 +85,7 @@
         <div class="container">
           <div class="section-head" data-reveal>
             <h2>The plugins</h2>
-            <p>Filter by what you're reaching for.</p>
+            <p>Filter by what you are reaching for.</p>
           </div>
           <div id="plugin-sections"></div>
         </div>
@@ -99,6 +103,6 @@
       </div>
     </footer>
 
-    <script src="assets/app.js?v=2.0.0"></script>
+    <script src="assets/app.js?v=2.1.0"></script>
   </body>
 </html>
