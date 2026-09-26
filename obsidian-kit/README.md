@@ -16,6 +16,7 @@ Invoke one directly as `/obsidian-kit:<skill>`, or let it activate automatically
 
 - **`create-excali`** — Create a new Obsidian Excalidraw drawing in the vault house style.
 - **`format-note`** — Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting).
+- **`migrate-notes`** — One-time vault migration to set note-type and rename map notes by plan approval.
 - **`obsidian-bases`** — Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries.
 - **`obsidian-markdown`** — Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax.
 - **`update-excali`** — Refine an existing Obsidian Excalidraw drawing into the vault house style.

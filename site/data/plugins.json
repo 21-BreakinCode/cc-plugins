@@ -1166,6 +1166,10 @@
           "description": "Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting)."
         },
         {
+          "name": "migrate-notes",
+          "description": "One-time vault migration to set note-type and rename map notes by plan approval."
+        },
+        {
           "name": "obsidian-bases",
           "description": "Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries."
         },
