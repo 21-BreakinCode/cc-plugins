@@ -1,31 +1,30 @@
 {
-  "description": "obsidian-kit hooks: CLI primer, note-format reminder, Excalidraw lint.",
+  "description": "obsidian-kit hooks. Gate A (cwd is a vault): CLI primer, note-format reminder, Excalidraw lint, Mandarin rules and lint. Gate B (./handover resolves): offer a new handover after a wrap-up.",
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/session-primer.py", "timeout": 5 },
+          { "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/mandarin-rules.sh", "timeout": 5 }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/remind-format.py",
-            "timeout": 5
-          },
-          {
-            "type": "command",
-            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/excali-lint.sh",
-            "timeout": 120
-          }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/remind-format.py", "timeout": 5 },
+          { "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/excali-lint.sh", "timeout": 120 },
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/mandarin-lint.py", "timeout": 10 }
         ]
       }
     ],
-    "SessionStart": [
+    "Stop": [
       {
+        "matcher": "",
         "hooks": [
-          {
-            "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/session-primer.py",
-            "timeout": 5
-          }
+          { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/mandarin-lint.py", "timeout": 10 },
+          { "type": "command", "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/offer-handover.sh", "timeout": 5 }
         ]
       }
     ]
