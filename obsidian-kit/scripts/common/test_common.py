@@ -60,6 +60,14 @@ with tempfile.TemporaryDirectory() as temp:
     except VaultConfigError as incomplete:
         assert "noteFormatFolders" in str(incomplete)
 
+    # M1: invalid JSON raises VaultConfigError instead of json.JSONDecodeError.
+    (vault_root / ".obsidian-kit.json").write_text("{bad")
+    try:
+        load_config(vault_root)
+        raise AssertionError("expected VaultConfigError for invalid JSON")
+    except VaultConfigError as bad_json:
+        assert "not valid JSON" in str(bad_json)
+
 # Obsidian closed or CLI missing: one line, exit 1.
 closed = subprocess.run(
     [sys.executable, "-c", "from common.vault import require_obsidian_running; require_obsidian_running()"],

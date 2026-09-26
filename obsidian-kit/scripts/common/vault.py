@@ -26,7 +26,10 @@ def load_config(vault_root: Path) -> dict:
     config_path = vault_root / CONFIG_NAME
     if not config_path.is_file():
         raise VaultConfigError(f"create {config_path} first (see the spec's Vault config section)")
-    config = json.loads(config_path.read_text(encoding="utf-8"))
+    try:
+        config = json.loads(config_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as decode_error:
+        raise VaultConfigError(f"{config_path} is not valid JSON: {decode_error}") from decode_error
     missing_keys = [key for key in REQUIRED_KEYS if key not in config]
     if missing_keys:
         raise VaultConfigError(f"{config_path} is missing keys: {', '.join(missing_keys)}")

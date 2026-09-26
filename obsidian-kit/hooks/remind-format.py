@@ -5,6 +5,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from common.note_text import read_property, split_frontmatter  # noqa: E402
 from common.vault import VaultConfigError, find_vault_root, is_in_scope, load_config  # noqa: E402
 
 REMINDER = ("This edit touched a note inside noteFormatFolders. Apply /obsidian-kit:format-note: "
@@ -23,4 +24,9 @@ try:
 except VaultConfigError:
     sys.exit(0)
 if is_in_scope(file_path.relative_to(vault_root).as_posix(), config):
-    print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": REMINDER}}))
+    try:
+        frontmatter = split_frontmatter(file_path.read_text(encoding="utf-8"))[0]
+    except OSError:
+        frontmatter = ""
+    if not read_property(frontmatter, "excalidraw-plugin"):
+        print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": REMINDER}}))
