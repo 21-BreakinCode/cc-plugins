@@ -25,7 +25,7 @@ claude plugin install code-reviewer@21-breakincode
 ## Depends on
 
 - `pr-review-toolkit` _(external)_
-- [`hh`](../handover-handler/README.md)
+- `hh` _(external)_
 
 ---
 

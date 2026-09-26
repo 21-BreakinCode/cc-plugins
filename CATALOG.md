@@ -3,22 +3,18 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v1.12.0 · 10 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v1.12.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
 ```bash
 claude plugin marketplace add 21-BreakinCode/cc-plugins && \
-  claude plugin install session-learner@21-breakincode && \
   claude plugin install autoresearch@21-breakincode && \
-  claude plugin install hh@21-breakincode && \
   claude plugin install code-reviewer@21-breakincode && \
-  claude plugin install uiux-optimizer@21-breakincode && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
-  claude plugin install obsidian-kit@21-breakincode && \
-  claude plugin install simple-mandarin@21-breakincode
+  claude plugin install obsidian-kit@21-breakincode
 ```
 
 ## Update everything
@@ -28,29 +24,13 @@ update each installed plugin:
 
 ```bash
 claude plugin marketplace update 21-breakincode && \
-  claude plugin update session-learner@21-breakincode && \
   claude plugin update autoresearch@21-breakincode && \
-  claude plugin update hh@21-breakincode && \
   claude plugin update code-reviewer@21-breakincode && \
-  claude plugin update uiux-optimizer@21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
-  claude plugin update obsidian-kit@21-breakincode && \
-  claude plugin update simple-mandarin@21-breakincode
+  claude plugin update obsidian-kit@21-breakincode
 ```
-
-## Memory & Knowledge
-
-### [session-learner](./session-learner/README.md) · `v2.1.1`
-
-*Turn a session into atomic Zettelkasten knowledge*
-
-A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.
-
-**Install** · `claude plugin install session-learner@21-breakincode`
-
-**Skills** · `pick-up` · `recommend` · `wrap-up`
 
 ## Measure & Improve
 
@@ -76,16 +56,6 @@ Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 pe
 
 **Commands** · `/code-reviewer:review-pr`
 
-### [uiux-optimizer](./uiux-optimizer/README.md) · `v1.3.1`
-
-*Reference-driven UI/UX design advisor*
-
-Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.
-
-**Install** · `claude plugin install uiux-optimizer@21-breakincode`
-
-**Skills** · `uiux-optimizer`
-
 ### [receipts](./receipts/README.md) · `v0.2.2`
 
 *No claim without a receipt*
@@ -97,16 +67,6 @@ A Stop hook that enforces provable claims. When the finished turn asserts a **FA
 **Commands** · `/receipts:receipts`
 
 ## Workflow & Handover
-
-### [hh](./handover-handler/README.md) · `v0.3.3`
-
-*Cross-context handover docs, LifeOS as the source of truth*
-
-Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.
-
-**Install** · `claude plugin install hh@21-breakincode`
-
-**Commands** · `/hh:init-org` · `/hh:init-service` · `/hh:new` · `/hh:wrap-up`
 
 ### [adhd-review](./adhd-review/README.md) · `v0.6.0`
 
@@ -130,22 +90,12 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 
 **Skills** · `distill` · `rewrite`
 
-### [obsidian-kit](./obsidian-kit/README.md) · `v1.0.3`
+### [obsidian-kit](./obsidian-kit/README.md) · `v1.1.0`
 
 *One plugin for the vault: draw, format, tag*
 
-Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
+create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault, absorbed from the retired hh plugin. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault, absorbed from the retired session-learner plugin. The simple-mandarin skill writes and checks controlled Traditional Chinese inside the vault, absorbed from the retired simple-mandarin plugin. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
 
 **Install** · `claude plugin install obsidian-kit@21-breakincode`
 
-**Skills** · `audit-tags` · `create-excali` · `format-note` · `migrate-notes` · `obsidian-bases` · `obsidian-markdown` · `update-excali`
-
-### [simple-mandarin](./simple-mandarin/README.md) · `v0.3.0`
-
-*One term, one meaning, every sentence lands*
-
-Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.
-
-**Install** · `claude plugin install simple-mandarin@21-breakincode`
-
-**Skills** · `simple-mandarin`
+**Commands** · `/obsidian-kit:handover-init-org` · `/obsidian-kit:handover-init-service` · `/obsidian-kit:handover-new` · `/obsidian-kit:handover-wrap-up`

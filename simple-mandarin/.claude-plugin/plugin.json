@@ -1,6 +1,0 @@
-{
-  "name": "simple-mandarin",
-  "description": "Write plain, unambiguous Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language: short sentences by character count, active voice, one term one meaning, condition before command.",
-  "version": "0.3.0",
-  "author": { "name": "William Hung" }
-}
