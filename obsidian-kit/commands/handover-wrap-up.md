@@ -83,11 +83,11 @@ Subagent prompt template (substitute `<file>` and today's date):
 >    - `01Project/BustDice/Services/...` → `bust-dice`
 >    - filename references `CR-1660` → `CR-1660`
 >    - otherwise short topic slug, for example `cs-domain`
-> 4. **Visible state:** explicit `status:` field in frontmatter, plus checkbox completion ratio (`[x]` count / total).
+> 4. **Visible state:** read the note's `tags` list. If it carries a `status/*` tag, report it. Otherwise report `none`. Also report the checkbox completion ratio (`[x]` count / total).
 > 5. **Suggested action:** pick ONE and give a one-phrase reason:
->    - `done`: work is complete. Status reads done, complete, live, or shipped.
+>    - `done`: work is complete. The visible state reads done, complete, live, or shipped.
 >    - `superseded`: a newer handover replaces this one. If you can spot it, name it.
->    - `suspended`: work paused. An explicit `status: suspended` field, or a visible indicator of an indefinite hold, both count.
+>    - `suspended`: work paused. The `status/blocked` tag, or a visible indicator of an indefinite hold, both count.
 >    - `active`: still in progress, no fresh entry needed.
 >    - `active-update`: still in progress, and the visible state suggests a fresh entry today.
 >
@@ -206,9 +206,11 @@ Subagent prompt:
 >
 > Steps:
 > 1. Read the file.
-> 2. In frontmatter, set `status: suspended`. If the field is missing, insert it. Otherwise,
->    overwrite the existing status.
-> 3. Add a `### <YYYY-MM-DD>` subsection. If a `## Suspended` section already exists, append
+> 2. In the frontmatter `tags` list, add `status/blocked`. If it is already present, leave it.
+>    Leave every other tag untouched. Keep `type/handover`. Do NOT add any `archived/` prefix.
+>    Suspended is an active-side state.
+> 3. If a frontmatter `status:` field is present, remove it.
+> 4. Add a `### <YYYY-MM-DD>` subsection. If a `## Suspended` section already exists, append
 >    the subsection under it. Otherwise, create the `## Suspended` heading first, then use this
 >    form:
 >    ```
@@ -216,7 +218,6 @@ Subagent prompt:
 >    ### <YYYY-MM-DD>
 >    <user-reason if non-empty, else "paused — no reason given">
 >    ```
-> 4. Do NOT change tags. The file keeps `handover`, does NOT get `archive`.
 >
 > Report: `{ file, action: "suspended" | "re-suspended" }`.
 
@@ -261,7 +262,7 @@ Print archived paths in copy-pastable form.
 - **Tag rewrite on archive**: prefix every tag with `archived/`, except a tag already so prefixed and except `status/archived`. If `status/archived` is absent, append it. Never drop an existing tag.
 - **No generic aliases**: do not add `aliases:` to the archived file. If genuinely needed, scope it explicitly.
 - **Active updates only append content**: only a dated subsection. Do not add tags. Do not change frontmatter. Do not mark "still active" anywhere.
-- **Suspended state never archives**: `suspended` is an active-side state. The file keeps the `handover` tag, and does NOT get `archive`.
+- **Suspended state never archives**: `suspended` is an active-side state. The note keeps `type/handover` and gets `status/blocked`, and never gets any `archived/` prefix.
 - **Stop and ask** in two cases. The project prefix is ambiguous. A `superseded` action needs the name of the replacing doc.
 - **Phase 5 output must contain the literal phrase `Wrap-up complete`.** The Stop hook keys off it.
 </content>
