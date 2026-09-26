@@ -15,6 +15,8 @@ claude plugin install obsidian-kit@21-breakincode
 Invoke one directly as `/obsidian-kit:<skill>`, or let it activate automatically when relevant.
 
 - **`create-excali`** — Create a new Obsidian Excalidraw drawing in the vault house style.
+- **`obsidian-bases`** — Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries.
+- **`obsidian-markdown`** — Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax.
 - **`update-excali`** — Refine an existing Obsidian Excalidraw drawing into the vault house style.
 - **`visualize`** — Use proactively after creating or editing notes under Zettelkasten/.
 

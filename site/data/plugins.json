@@ -1162,6 +1162,14 @@
           "description": "Create a new Obsidian Excalidraw drawing in the vault house style."
         },
         {
+          "name": "obsidian-bases",
+          "description": "Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries."
+        },
+        {
+          "name": "obsidian-markdown",
+          "description": "Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax."
+        },
+        {
           "name": "update-excali",
           "description": "Refine an existing Obsidian Excalidraw drawing into the vault house style."
         },
