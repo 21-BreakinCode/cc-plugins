@@ -116,14 +116,18 @@ def record_ledger(session_id, claims):
         pass
 
 
-def log_audit(session_id, verdicts):
-    path = os.path.join(_config_dir(), f"{session_id}.log")
+UNPROVEN = "unproven"
+
+
+def log_audit(session_id, records):
+    """Append one JSON object per verdict. records: list of dicts."""
+    path = os.path.join(_config_dir(), f"{session_id}.jsonl")
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         stamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         with open(path, "a", encoding="utf-8") as handle:
-            for claim, verdict in verdicts.items():
-                handle.write(f"{stamp}\t{verdict}\t{claim}\n")
+            for record in records:
+                handle.write(json.dumps({"ts": stamp, **record}, ensure_ascii=False) + "\n")
     except OSError:
         pass
 
@@ -194,20 +198,26 @@ def main():
     if not claims:
         approve()
 
-    verdicts, escalate = {}, []
+    records, escalate = [], []
     for claim in claims:
-        verdict = classify(claim, tools)
+        verdict, evidence = classify(claim, tools)
         if verdict == "escalate":
             escalate.append(claim)
         else:
-            verdicts[claim] = verdict
+            records.append({"claim": claim, "verdict": verdict,
+                            "via": "prefilter", "evidence": evidence})
     if escalate:
-        judged = run_judge(escalate, tools) or {}
+        judged = run_judge(escalate, tools)
         for claim in escalate:
-            verdicts[claim] = judged.get(claim, "backed")  # fail open → backed
+            if judged is None:
+                records.append({"claim": claim, "verdict": UNPROVEN,
+                                "via": "judge-unreachable", "evidence": None})
+            else:
+                records.append({"claim": claim, "verdict": judged.get(claim, UNPROVEN),
+                                "via": "judge", "evidence": None})
 
-    log_audit(session_id, verdicts)
-    cheating = [c for c, v in verdicts.items() if v == "cheating"]
+    log_audit(session_id, records)
+    cheating = [r["claim"] for r in records if r["verdict"] == "cheating"]
     if not cheating:
         approve()
 
