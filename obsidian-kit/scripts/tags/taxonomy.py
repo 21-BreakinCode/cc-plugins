@@ -10,6 +10,11 @@ def is_separator(line: str) -> bool:
     return set(line.strip()) <= set("|-: ")
 
 
+def has_sections(text: str) -> bool:
+    lowered = text.lower()
+    return "## allowed" in lowered and "## merged" in lowered
+
+
 def parse_taxonomy(text: str) -> tuple[dict[str, str], dict[str, str]]:
     allowed, merged, section = {}, {}, ""
     for line in text.splitlines():

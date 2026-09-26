@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from classify import classify  # noqa: E402
 from common.obsidian_eval import ObsidianCliError, run_app_script  # noqa: E402
 from common.vault import VaultConfigError, find_vault_root, load_config, require_obsidian_running  # noqa: E402
-from taxonomy import parse_taxonomy  # noqa: E402
+from taxonomy import has_sections, parse_taxonomy  # noqa: E402
 
 PLAN_COLUMNS = ["old", "kind", "action", "new", "files"]
 SCAN_TAGS_JS = """
@@ -45,11 +45,15 @@ def main() -> int:
         taxonomy_path = vault_root / config["taxonomyPath"]
         if not taxonomy_path.is_file():
             raise VaultConfigError(f"create the taxonomy file {taxonomy_path} first")
-        files_by_tag = run_app_script(SCAN_TAGS_JS, {"excluded": config["excludedPaths"]})
+        taxonomy_text = taxonomy_path.read_text(encoding="utf-8")
+        if not has_sections(taxonomy_text):
+            raise VaultConfigError(f"taxonomy file needs ## Allowed and ## Merged sections: {taxonomy_path}")
+        excluded = [folder.rstrip("/") for folder in config["excludedPaths"]]
+        files_by_tag = run_app_script(SCAN_TAGS_JS, {"excluded": excluded})
     except (VaultConfigError, ObsidianCliError) as setup_error:
         print(setup_error, file=sys.stderr)
         return 1
-    allowed, merged = parse_taxonomy(taxonomy_path.read_text(encoding="utf-8"))
+    allowed, merged = parse_taxonomy(taxonomy_text)
     counts = {tag: len(paths) for tag, paths in files_by_tag.items()}
     findings = classify(counts, set(allowed), merged)
 

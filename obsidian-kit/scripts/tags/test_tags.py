@@ -1,7 +1,7 @@
 """Self-check for tag rules: python3 test_tags.py"""
 from classify import classify, is_allowed, is_false_tag
 from rewrite import rewrite_body
-from taxonomy import add_rows, parse_taxonomy
+from taxonomy import add_rows, has_sections, parse_taxonomy
 
 # False tags from the LifeOS scan: hex color, commit hash, Jira number, list marker.
 for false_tag in ("0c8599", "4f67687", "13，我卻把", "1-", "3：IAInvLev", "124/126"):
@@ -52,6 +52,15 @@ assert rewrite_body(body, {"domain/db": "domain/database"}, {"0c8599", "13，我
 ])
 assert rewrite_body(body, {}, set()) == body
 
+# I2: heading links, anchor links, Obsidian comments, and HTML attribute colors are left alone.
+for unchanged in ("[[#python]]", "[x](#python)", "%% #python %%"):
+    assert rewrite_body(unchanged, {"python": "py"}, set()) == unchanged, unchanged
+for unchanged in ('style="color: #0c8599"', "color:#0c8599"):
+    assert rewrite_body(unchanged, {}, {"0c8599"}) == unchanged, unchanged
+
+# I3: TAG_STOP_CHARS covers "*", "|", "~", "=", and the backtick.
+assert rewrite_body("**#python**", {"python": "py"}, set()) == "**#py**"
+
 TAXONOMY = "# Tag taxonomy\n\n## Allowed\n\n| tag | meaning |\n|---|---|\n| `lc/*` | Leetcode |\n| `domain/llm` | LLMs |\n\n## Merged\n\n| old | new | date |\n|---|---|---|\n| `domain/db` | `domain/database` | 2026-09-26 |\n"
 allowed, merged = parse_taxonomy(TAXONOMY)
 assert allowed == {"lc/*": "Leetcode", "domain/llm": "LLMs"}
@@ -59,5 +68,9 @@ assert merged == {"domain/db": "domain/database"}
 updated = add_rows(TAXONOMY, "Allowed", [["`domain/os`", ""]])
 assert parse_taxonomy(updated)[0]["domain/os"] == ""
 assert updated.index("`domain/os`") < updated.index("## Merged")
+
+# I6: has_sections requires both ## Allowed and ## Merged, case-insensitively.
+assert has_sections(TAXONOMY) is True
+assert has_sections(TAXONOMY[:TAXONOMY.index("## Merged")]) is False
 
 print("test_tags: all passed")

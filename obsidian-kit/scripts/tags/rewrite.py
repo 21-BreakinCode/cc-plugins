@@ -1,17 +1,18 @@
 """Rewrite inline tags in a note body: rename tags and wrap false tags in backticks.
 
-Fenced code blocks and inline code are never changed.
+Fenced code blocks, inline code, and %%...%% comments are never changed.
 """
 import re
 
 FENCE = re.compile(r"^\s*(```|~~~)")
-INLINE_CODE = re.compile(r"(`+[^`]*`+)")
-TAG_STOP_CHARS = r"\s,.;:!?\"'()\[\]{}<>"
+SKIPPED_SPAN = re.compile(r"(`+[^`]*`+|%%[^%]*%%)")
+TAG_STOP_CHARS = r"\s,.;:!?\"'()\[\]{}<>*|~=`"
 
 
 def build_tag_pattern(tags: list[str]) -> re.Pattern:
     alternatives = "|".join(re.escape(tag) for tag in sorted(tags, key=len, reverse=True))
-    return re.compile(rf"(?<![\w/#&])#(?P<tag>{alternatives})(?P<child>/[^{TAG_STOP_CHARS}]*)?(?=$|[{TAG_STOP_CHARS}])")
+    return re.compile(rf"(?<![\w/#&])(?<!\[\[)(?<!\]\()(?<!:)(?<!: )"
+                      rf"#(?P<tag>{alternatives})(?P<child>/[^{TAG_STOP_CHARS}]*)?(?=$|[{TAG_STOP_CHARS}])")
 
 
 def rewrite_body(body: str, renames: dict[str, str], false_tags: set[str]) -> str:
@@ -35,7 +36,7 @@ def rewrite_body(body: str, renames: dict[str, str], false_tags: set[str]) -> st
         if inside_fence:
             rewritten_lines.append(line)
             continue
-        segments = INLINE_CODE.split(line)
+        segments = SKIPPED_SPAN.split(line)
         rewritten_lines.append("".join(segment if index % 2 else tag_pattern.sub(replace_tag, segment)
                                        for index, segment in enumerate(segments)))
     return "\n".join(rewritten_lines)
