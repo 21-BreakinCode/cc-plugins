@@ -206,7 +206,7 @@ If no tag fits, it proposes a new tag and asks. It never adds a tag silently.
 
 - False tag: starts with a digit, is a 6- or 7-character hex string, or contains CJK punctuation.
 - Merged-but-back: the tag appears in the `## Merged` old column.
-- Duplicate: same parent, and one leaf is a prefix or abbreviation of the other (`db`, `database`).
+- Duplicate: same parent, and one leaf is a prefix that covers at least half of the other (`network`, `networking`).
 - Typo: edit distance ≤ 2 from an Allowed tag.
 - Duplicate and typo results are suggestions. Nothing merges without the plan approval.
 

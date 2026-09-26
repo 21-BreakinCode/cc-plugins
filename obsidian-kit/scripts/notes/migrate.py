@@ -45,7 +45,10 @@ def build_rows(note_paths: list[str], existing_paths: set[str], type_folders: di
         folder = PurePosixPath(path).parent
         note_type, rule = infer_type(path, names_by_folder[str(folder)], type_folders)
         new_path = ""
-        if note_type == "map" and not folder.name == "" and not PurePosixPath(path).name.startswith(MAP_PREFIX):
+        is_type_folder = str(folder) in {key.rstrip("/") for key in type_folders}
+        if note_type == "map" and is_type_folder:
+            rule = "map-name (type folder, no rename)"
+        elif note_type == "map" and not folder.name == "" and not PurePosixPath(path).name.startswith(MAP_PREFIX):
             target = str(folder / f"{MAP_PREFIX}{folder.name}.md")
             if target in existing_paths or target in note_paths or target in assigned_targets:
                 rule = "map-name (rename target exists)"

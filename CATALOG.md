@@ -130,7 +130,7 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 
 **Skills** · `distill` · `rewrite`
 
-### [obsidian-kit](./obsidian-kit/README.md) · `v1.0.0`
+### [obsidian-kit](./obsidian-kit/README.md) · `v1.0.1`
 
 *One plugin for the vault: draw, format, tag*
 

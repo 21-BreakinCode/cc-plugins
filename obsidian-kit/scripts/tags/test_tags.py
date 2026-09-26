@@ -18,7 +18,7 @@ findings = {finding["tag"]: finding for finding in classify(
     allowed={"domain/llm", "lc/*", "domain/os"}, merged={"old/tag": "new/tag"})}
 assert findings["0c8599"] == {"tag": "0c8599", "kind": "false", "action": "code", "new": ""}
 assert findings["old/tag"] == {"tag": "old/tag", "kind": "merged-back", "action": "rename", "new": "new/tag"}
-assert findings["domain/db"] == {"tag": "domain/db", "kind": "duplicate", "action": "rename", "new": "domain/database"}
+assert findings["domain/db"]["kind"] == "off-taxonomy"
 assert findings["domain/database"]["kind"] == "off-taxonomy"
 assert findings["system-deisgn"] == {"tag": "system-deisgn", "kind": "typo", "action": "rename", "new": "system-design"}
 assert findings["one-off"]["kind"] == "singleton" and findings["one-off"]["action"] == "keep"
@@ -26,13 +26,16 @@ assert "domain/llm" not in findings and "lc/topic/DP" not in findings
 # Short tags are never typo candidates: db vs os is distance 2 but not a typo.
 assert "domain/os" not in findings and findings["domain/db"]["kind"] != "typo"
 
+# Duplicate = same parent and one leaf is a prefix covering at least half of the other.
+# Checked against the real LifeOS inventory: abbreviation matching only produced false merges.
 real_domain = {finding["tag"]: finding for finding in classify(
-    {"domain/db": 30, "domain/database": 32, "domain/docker": 15, "domain/debugging": 17,
-     "domain/devops": 41, "domain/dsa": 16, "domain/llm": 25, "domain/llms": 2}, allowed=set(), merged={})}
-assert real_domain["domain/db"]["new"] == "domain/database"
+    {"domain/network": 10, "domain/networking": 35, "domain/clickhouse": 10, "domain/cli": 12,
+     "domain/sre": 1, "domain/serverless": 3, "ci": 1, "containers": 4, "domain/db": 30,
+     "domain/database": 32, "domain/llm": 25, "domain/llms": 2}, allowed=set(), merged={})}
+assert real_domain["domain/network"]["new"] == "domain/networking"
 assert real_domain["domain/llms"]["new"] == "domain/llm"
-for unrelated in ("domain/docker", "domain/dsa", "domain/debugging"):
-    assert real_domain[unrelated]["kind"] == "off-taxonomy", unrelated
+for unrelated in ("domain/clickhouse", "domain/sre", "ci", "domain/db"):
+    assert real_domain[unrelated]["kind"] != "duplicate", unrelated
 
 body = "\n".join([
     "#domain/db #domain/db/query #domain/dbx",

@@ -1,3 +1,8 @@
+## 1.0.1 — 2026-09-26
+
+- **fix:** audit-tags suggests a duplicate only when one tag is a prefix covering at least half of the other. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli).
+- **fix:** migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/, instead of renaming it after that folder.
+
 ## 1.0.0 — 2026-09-26
 
 - **feat:** rename note-visualizer to obsidian-kit. The visualize skill becomes format-note.

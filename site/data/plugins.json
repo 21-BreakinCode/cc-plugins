@@ -1149,7 +1149,7 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "tagline": "One plugin for the vault: draw, format, tag",
       "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
@@ -1189,6 +1189,20 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "1.0.1",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "audit-tags suggests a duplicate only when one tag is a prefix covering at least half of the other. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli)."
+            },
+            {
+              "type": "fix",
+              "text": "migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/, instead of renaming it after that folder."
+            }
+          ]
+        },
         {
           "version": "1.0.0",
           "date": "2026-09-26",

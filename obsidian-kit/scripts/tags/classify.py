@@ -6,7 +6,7 @@ CJK_PUNCTUATION = re.compile(r"[，。、：；！？（）「」『』]")
 TYPO_MAX_DISTANCE = 2
 TYPO_MIN_LENGTH = 5
 DUPLICATE_MIN_LEAF = 2
-ABBREVIATION_MAX_LENGTH = 4
+PREFIX_MIN_COVERAGE = 0.5
 
 
 def is_false_tag(tag: str) -> bool:
@@ -44,14 +44,10 @@ def find_typo_target(tag: str, candidates: list[str]) -> str | None:
     return None
 
 
-def is_ordered_subsequence(shorter: str, longer: str) -> bool:
-    remaining_chars = iter(longer)
-    return all(char in remaining_chars for char in shorter)
-
-
-def is_abbreviation(shorter: str, longer: str) -> bool:
-    return (len(shorter) < len(longer) and len(shorter) <= ABBREVIATION_MAX_LENGTH
-            and shorter[0] == longer[0] and is_ordered_subsequence(shorter, longer))
+def is_prefix_duplicate(first_leaf: str, second_leaf: str) -> bool:
+    # "cli" is a prefix of "clickhouse" but covers too little of it to mean the same thing.
+    shorter, longer = sorted((first_leaf, second_leaf), key=len)
+    return longer.startswith(shorter) and len(shorter) >= len(longer) * PREFIX_MIN_COVERAGE
 
 
 def find_duplicate_target(tag: str, counts: dict[str, int]) -> str | None:
@@ -60,8 +56,7 @@ def find_duplicate_target(tag: str, counts: dict[str, int]) -> str | None:
         other_parent, _, other_leaf = other.rpartition("/")
         if other == tag or other_parent != parent or min(len(leaf), len(other_leaf)) < DUPLICATE_MIN_LEAF:
             continue
-        is_prefix_pair = other_leaf.startswith(leaf) or leaf.startswith(other_leaf)
-        if (is_prefix_pair or is_abbreviation(leaf, other_leaf)) and counts[other] > counts[tag]:
+        if is_prefix_duplicate(leaf, other_leaf) and counts[other] > counts[tag]:
             return other
     return None
 

@@ -21,6 +21,12 @@ assert rows["Z/Literature/Habits/原子習慣 MOC.md"]["rule"] == "map-name (ren
 assert rows["Z/Literature/Old/00__map__Old.md"]["new_path"] == ""
 assert rows["L/0796.__rotate.md"]["note_type"] == ""
 
+# A map directly in a type folder (not a series folder) keeps its name.
+type_root_rows = build_rows(["Z/Literature/connecting__index.md"], set(), TYPE_FOLDERS)
+assert type_root_rows[0]["note_type"] == "map"
+assert type_root_rows[0]["new_path"] == ""
+assert type_root_rows[0]["rule"] == "map-name (type folder, no rename)"
+
 # I4: two maps in the same folder must not both claim the same rename target.
 same_folder_rows = build_rows(["Z/Series/_index.md", "Z/Series/Series MOC.md"], set(), {})
 assert sum(1 for row in same_folder_rows if row["new_path"] == "Z/Series/00__map__Series.md") == 1
