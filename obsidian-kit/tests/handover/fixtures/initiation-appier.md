@@ -2,7 +2,7 @@
 org: Appier
 workspace_root: $HOME/Projects/Appier
 github_orgs: [plaxieappier, appier, william-hung-appier]
-tags: [handover-handler-init]
+tags: [type/config]
 ---
 
 # Appier — handover_handler initiation

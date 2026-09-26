@@ -2,7 +2,7 @@
 org: Ryocal
 workspace_root: $HOME/Projects/Ryocal
 github_orgs: []
-tags: [handover-handler-init]
+tags: [type/config]
 ---
 
 # Ryocal — handover_handler initiation

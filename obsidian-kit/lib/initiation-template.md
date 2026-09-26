@@ -2,7 +2,7 @@
 org: __ORG__
 workspace_root: $HOME/Projects/__ORG__
 github_orgs: []
-tags: [handover-handler-init]
+tags: [type/config]
 ---
 
 # __ORG__ — handover_handler initiation

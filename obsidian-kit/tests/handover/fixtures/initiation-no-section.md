@@ -2,7 +2,7 @@
 org: Broken
 workspace_root: $HOME/Projects/Broken
 github_orgs: []
-tags: [handover-handler-init]
+tags: [type/config]
 ---
 
 # Broken — initiation
