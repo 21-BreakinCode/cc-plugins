@@ -84,7 +84,9 @@ def apply_plan(work_dir: Path, vault_root: Path, config: dict) -> int:
             continue
         try:
             run_cli("property:set", "name=note-type", f"value={row['note_type']}", f"path={row['path']}")
-            log_lines.append(f"- set note-type={row['note_type']}: {row['path']}")
+            final_path = row["new_path"] or row["path"]
+            log_lines.append(f"- set note-type={row['note_type']}: {row['path']} "
+                             f"(undo: obsidian property:remove name=note-type path=\"{final_path}\")")
             if row["new_path"]:
                 run_cli("move", f"path={row['path']}", f"to={row['new_path']}")
                 log_lines.append(f"  - moved to {row['new_path']} "
