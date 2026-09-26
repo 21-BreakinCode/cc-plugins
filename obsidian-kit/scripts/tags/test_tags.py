@@ -54,6 +54,9 @@ assert rewrite_body(body, {"domain/db": "domain/database"}, {"0c8599", "13，我
     "ticket `#13，我卻把` done",
 ])
 assert rewrite_body(body, {}, set()) == body
+# A false tag glued to the next "#" (PR ranges like "#1/#3") still ends at that "#".
+assert rewrite_body("PR #1/#3 and #100/#101, see #1-#10", {}, {"1/", "100/", "1-"}) == \
+    "PR `#1/`#3 and `#100/`#101, see `#1-`#10"
 
 # I2: heading links, anchor links, Obsidian comments, and HTML attribute colors are left alone.
 for unchanged in ("[[#python]]", "[x](#python)", "%% #python %%"):

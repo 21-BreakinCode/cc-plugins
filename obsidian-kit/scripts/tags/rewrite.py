@@ -6,7 +6,7 @@ import re
 
 FENCE = re.compile(r"^\s*(```|~~~)")
 SKIPPED_SPAN = re.compile(r"(`+[^`]*`+|%%[^%]*%%)")
-TAG_STOP_CHARS = r"\s,.;:!?\"'()\[\]{}<>*|~=`"
+TAG_STOP_CHARS = r"\s,.;:!?\"'()\[\]{}<>*|~=`#"
 
 
 def build_tag_pattern(tags: list[str]) -> re.Pattern:

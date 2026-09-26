@@ -1,3 +1,7 @@
+## 1.0.2 — 2026-09-26
+
+- **fix:** audit-tags ends a tag at the next `#`, so a false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS.
+
 ## 1.0.1 — 2026-09-26
 
 - **fix:** audit-tags suggests a duplicate only when one tag is a prefix covering at least half of the other. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli).

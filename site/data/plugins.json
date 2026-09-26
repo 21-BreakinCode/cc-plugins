@@ -1149,7 +1149,7 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "tagline": "One plugin for the vault: draw, format, tag",
       "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
@@ -1189,6 +1189,16 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "1.0.2",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "fix",
+              "text": "audit-tags ends a tag at the next `#`, so a false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS."
+            }
+          ]
+        },
         {
           "version": "1.0.1",
           "date": "2026-09-26",
