@@ -1162,6 +1162,10 @@
           "description": "Create a new Obsidian Excalidraw drawing in the vault house style."
         },
         {
+          "name": "format-note",
+          "description": "Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting)."
+        },
+        {
           "name": "obsidian-bases",
           "description": "Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries."
         },
@@ -1172,10 +1176,6 @@
         {
           "name": "update-excali",
           "description": "Refine an existing Obsidian Excalidraw drawing into the vault house style."
-        },
-        {
-          "name": "visualize",
-          "description": "Use proactively after creating or editing notes under Zettelkasten/."
         }
       ],
       "dependsOn": [],

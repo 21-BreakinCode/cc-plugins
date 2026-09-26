@@ -138,7 +138,7 @@ Five commands. create-excali and update-excali build Excalidraw drawings through
 
 **Install** · `claude plugin install obsidian-kit@21-breakincode`
 
-**Skills** · `create-excali` · `obsidian-bases` · `obsidian-markdown` · `update-excali` · `visualize`
+**Skills** · `create-excali` · `format-note` · `obsidian-bases` · `obsidian-markdown` · `update-excali`
 
 ### [simple-mandarin](./simple-mandarin/README.md) · `v0.3.0`
 

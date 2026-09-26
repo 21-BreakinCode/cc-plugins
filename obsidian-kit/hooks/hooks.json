@@ -1,5 +1,5 @@
 {
-  "description": "obsidian-kit hooks: Excalidraw lint and the note-visualizer reminder.",
+  "description": "obsidian-kit hooks: CLI primer, note-format reminder, Excalidraw lint.",
   "hooks": {
     "PostToolUse": [
       {
@@ -7,7 +7,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/remind-visualize.py",
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/remind-format.py",
             "timeout": 5
           },
           {
