@@ -1158,6 +1158,14 @@
       "commands": [],
       "skills": [
         {
+          "name": "create-excali",
+          "description": "Create a new Obsidian Excalidraw drawing in the vault house style."
+        },
+        {
+          "name": "update-excali",
+          "description": "Refine an existing Obsidian Excalidraw drawing into the vault house style."
+        },
+        {
           "name": "visualize",
           "description": "Use proactively after creating or editing notes under Zettelkasten/."
         }

@@ -1,5 +1,5 @@
 {
-  "description": "Reminds Claude to apply note-visualizer's diagram and callout principles after markdown edits.",
+  "description": "obsidian-kit hooks: Excalidraw lint and the note-visualizer reminder.",
   "hooks": {
     "PostToolUse": [
       {
@@ -9,6 +9,11 @@
             "type": "command",
             "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/remind-visualize.py",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/excali-lint.sh",
+            "timeout": 120
           }
         ]
       }
