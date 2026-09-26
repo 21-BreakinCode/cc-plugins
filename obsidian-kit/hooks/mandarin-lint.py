@@ -21,6 +21,12 @@ import pathlib
 import re
 import sys
 
+
+def in_vault(cwd="."):
+    """Gate A: the working directory is an Obsidian vault."""
+    return pathlib.Path(cwd, ".obsidian").is_dir()
+
+
 CLAUDE_DIR = ".claude"
 MAX_SENTENCE_CHARS = 25
 MAX_HOOK_HITS = 12
@@ -164,6 +170,8 @@ def stop(event):
 
 
 def main():
+    if os.environ.get("OBSIDIAN_KIT_MANDARIN") == "0" or not in_vault():
+        return 0
     try:
         event = json.load(sys.stdin)
     except Exception:
