@@ -10,17 +10,16 @@
 #   2 — initiation.md missing for org
 #   3 — LifeOS unreachable
 #
-# Required env var: HH_LIFEOS_ROOT — see lib/lifeos-root.sh.
+# Required env var: LIFEOS_ROOT — the vault root. The caller resolves it
+# via common.vault.resolve_via_handover and exports it before calling this.
 
 set -euo pipefail
 
 cwd="${1:?usage: resolve-service.sh <cwd> <org>}"
 org="${2:?usage: resolve-service.sh <cwd> <org>}"
 
+LIFEOS="${LIFEOS_ROOT:?resolve-service.sh: LIFEOS_ROOT not set}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if ! LIFEOS="$(bash "$SCRIPT_DIR/lifeos-root.sh")"; then
-    exit 3
-fi
 PROJECT_ROOT="$LIFEOS/01Project"
 
 init="$PROJECT_ROOT/$org/handover_handler__initiation.md"

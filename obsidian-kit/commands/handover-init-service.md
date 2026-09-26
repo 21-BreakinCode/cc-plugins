@@ -3,17 +3,45 @@ description: "Per-repo setup. Adds the current repo to the service mapping table
 allowed-tools: ["Bash", "Read", "Write", "Edit", "AskUserQuestion"]
 ---
 
-# /hh:init-service
+# /obsidian-kit:handover-init-service
 
 One-time per repo. It resolves the current org, and finds or appends the service mapping row for this repo. If the LifeOS handover folder is missing, it creates one. It symlinks `./handover` to that folder, and checks that `.gitignore` covers it.
 
 ## Vault location
 
-```bash
-LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
-```
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue to the next phase.
+### Phase 0 — Locate the vault
 
+Try the resolver first:
+
+```bash
+VAULT=$(python3 -c "
+import sys
+sys.path.insert(0, '${CLAUDE_PLUGIN_ROOT}/scripts')
+from pathlib import Path
+from common.vault import VaultConfigError, resolve_via_handover
+try:
+    print(resolve_via_handover(Path.cwd()))
+except VaultConfigError as error:
+    print(error, file=sys.stderr); sys.exit(3)
+")
+EXIT=$?
+```
+
+If `$EXIT` is 0, run `export LIFEOS_ROOT="$VAULT"` and skip to Phase 1.
+
+If it fails because `./handover` does not exist yet, ask
+the user once with `AskUserQuestion`:
+
+- `header`: `Vault`
+- `question`: `Where is your Obsidian vault? (the folder containing 01Project/)`
+- `options`: any path already in `.claude/settings.local.json`, plus `Other`
+
+Write the answer to this repo's `.claude/settings.local.json` under
+`env.OBSIDIAN_KIT_VAULT`, so the next run resolves without asking. Check that the
+path holds `.obsidian/` and `01Project/` before writing it. Then set
+`VAULT="$OBSIDIAN_KIT_VAULT"` and `export LIFEOS_ROOT="$VAULT"`, and continue.
+
+If it fails for any other reason, relay the stderr message to the user verbatim and stop.
 
 ## Flow
 
@@ -22,20 +50,20 @@ LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
 ```bash
 ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || {
     rc=$?
-    [ "$rc" -eq 3 ] && { echo "LifeOS not reachable — relay the guard's setup guidance above and stop."; exit 3; }
+    [ "$rc" -eq 3 ] && { echo "Vault not reachable — relay the Phase 0 guidance above and stop."; exit 3; }
     ORG=""
 }
 ```
 
-- If `$ORG` is empty: tell the user "Did not auto-detect an ORG. If this is a new ORG, run /hh:init-org first. Otherwise, use AskUserQuestion to pick from existing ORGs." Then `AskUserQuestion` listing existing ORG dirs under `$LIFEOS/01Project/`. If user picks one with no initiation.md, stop and instruct them to run `/hh:init-org $ORG` first.
+- If `$ORG` is empty: tell the user "Did not auto-detect an ORG. If this is a new ORG, run /obsidian-kit:handover-init-org first. Otherwise, use AskUserQuestion to pick from existing ORGs." Then `AskUserQuestion` listing existing ORG dirs under `$VAULT/01Project/`. If user picks one with no initiation.md, stop and instruct them to run `/obsidian-kit:handover-init-org $ORG` first.
 
 Report: "Org: $ORG".
 
 ### Phase 2 — Verify initiation.md exists
 
 ```bash
-INIT="$LIFEOS/01Project/$ORG/handover_handler__initiation.md"
-[ -f "$INIT" ] || { echo "Run /hh:init-org first — $INIT missing"; exit 1; }
+INIT="$VAULT/01Project/$ORG/handover_handler__initiation.md"
+[ -f "$INIT" ] || { echo "Run /obsidian-kit:handover-init-org first — $INIT missing"; exit 1; }
 ```
 
 ### Phase 3 — Resolve service mapping
@@ -75,7 +103,7 @@ If the table is empty, use `Edit` to append the new row after the separator row.
 ### Phase 5 — Create LifeOS handover folder
 
 ```bash
-mkdir -p "$LIFEOS/01Project/$ORG/$LIFEOS_SUBPATH/handover"
+mkdir -p "$VAULT/01Project/$ORG/$LIFEOS_SUBPATH/handover"
 ```
 
 ### Phase 6 — Symlink ./handover
@@ -83,7 +111,7 @@ mkdir -p "$LIFEOS/01Project/$ORG/$LIFEOS_SUBPATH/handover"
 ```bash
 bash "${CLAUDE_PLUGIN_ROOT}/lib/ensure-symlink.sh" \
     "$PWD/handover" \
-    "$LIFEOS/01Project/$ORG/$LIFEOS_SUBPATH/handover"
+    "$VAULT/01Project/$ORG/$LIFEOS_SUBPATH/handover"
 EXIT=$?
 ```
 
@@ -104,11 +132,11 @@ Else, check whether `handover/` is already present (any of: `^handover/?$`, with
 ✓ Service initialized:
     ORG:            $ORG
     APP_NAME:       $APP_NAME
-    LIFEOS path:    $LIFEOS/01Project/$ORG/$LIFEOS_SUBPATH/handover/
+    LIFEOS path:    $VAULT/01Project/$ORG/$LIFEOS_SUBPATH/handover/
     Symlink:        $PWD/handover -> (above)
     .gitignore:     handover/ (added | already present)
 
-Next: /hh:new <topic>
+Next: /obsidian-kit:handover-new <topic>
 ```
 
 ## Non-negotiable rules

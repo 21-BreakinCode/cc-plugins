@@ -3,39 +3,43 @@ description: "Vault-wide daily wrap-up. Discovers active handovers, batches user
 allowed-tools: ["Bash", "Read", "Write", "Edit", "Glob", "Grep", "Agent", "AskUserQuestion"]
 ---
 
-# /hh:wrap-up
+# /obsidian-kit:handover-wrap-up
 
 Daily wrap-up routine for renewing handover docs in the Obsidian vault. Vault-wide, not repo-scoped.
 
 ## Vault location
 
 ```bash
-VAULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
+VAULT=$(python3 -c "
+import sys
+sys.path.insert(0, '${CLAUDE_PLUGIN_ROOT}/scripts')
+from pathlib import Path
+from common.vault import VaultConfigError, resolve_via_handover
+try:
+    print(resolve_via_handover(Path.cwd()))
+except VaultConfigError as error:
+    print(error, file=sys.stderr); sys.exit(3)
+") || exit 3
 ```
 
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue.
-
-The vault location is machine-specific and comes from `HH_LIFEOS_ROOT`. Never hardcode it.
+**If this exits 3**, relay the stderr message to the user verbatim and stop. Do not guess a vault path.
 
 ## Archive destination
 
-```bash
-ARCHIVE_ROOT="${HH_ARCHIVE_ROOT:-$VAULT/04Archive}"
-```
+Resolved per handover by `plan_archive` (`${CLAUDE_PLUGIN_ROOT}/scripts/handover/archive.py`):
+`<destination> = <vault>/<handoverArchiveRoot, default 04Archive>/<ORG>`. The filename never changes.
 
-- Defaults to `04Archive/` inside the resolved vault. Override by setting `HH_ARCHIVE_ROOT` in `~/.zshrc`. Keep the value double-quoted. Vault paths can contain spaces.
-- Each handover archives under `"$ARCHIVE_ROOT/<ORG>/<new-filename>"`. Group-by-org is mandatory. Never write directly under `$ARCHIVE_ROOT`.
-- `<ORG>` is derived from the source path: the segment immediately after `01Project/` (for example, `…/LifeOS/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
-- If a handover is **not** under `…/LifeOS/01Project/<ORG>/…`, stop and ask the user which ORG subfolder to archive it under before proceeding. Do not invent one.
+- `<ORG>` comes from `derive_org`: the path segment immediately after `01Project/` (for example, `…/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
+- If the handover is not under `01Project/<ORG>/…`, `derive_org` raises `OrgUnresolved`. Stop and ask the user which ORG to file it under. Do not invent one.
+- Group-by-org is mandatory. Never write directly under the archive root.
 
 ## What this command does
 
-1. Discover active handovers (tagged `handover`, not `archive`).
+1. Discover live handovers (`type/handover`, not yet `status/archived`).
 2. Dispatch one subagent per handover **in parallel** to analyze state and suggest a default action.
 3. Present a single batched table to the user. Collect all decisions in one pass.
 4. Execute archives, updates, and suspensions **in parallel** via subagents.
-5. Update wikilinks in **living** docs only. Leave historical records alone.
-6. Print a `Wrap-up complete (<date>):` report. (The literal phrase `Wrap-up complete` is required. The Stop hook keys off it.)
+5. Print a `Wrap-up complete (<date>):` report. (The literal phrase `Wrap-up complete` is required. The Stop hook keys off it.)
 
 If no active handovers are found, print `No active handovers — nothing to wrap up.` and stop.
 
@@ -43,22 +47,17 @@ If no active handovers are found, print `No active handovers — nothing to wrap
 
 ## Phase 1 — Discover
 
-Find files where the frontmatter `tags` list includes `handover` but does not include `archive`. The vault uses YAML list form for tags:
-
-```yaml
-tags:
-  - handover
-  - <other tags>
-```
+Find handovers tagged `type/handover` and not yet `status/archived`. Discovery goes through the Obsidian tag index, not a grep. A grep for the YAML list form misses a note tagged inline in its body.
 
 Run:
 
 ```bash
-VAULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
-grep -rl --include="*.md" -E "^[[:space:]]*-[[:space:]]+handover[[:space:]]*$" "$VAULT" 2>/dev/null \
-| while IFS= read -r f; do
-    grep -qE "^[[:space:]]*-[[:space:]]+archive[[:space:]]*$" "$f" || printf '%s\n' "$f"
-  done
+python3 -c "
+import sys
+sys.path.insert(0, '${CLAUDE_PLUGIN_ROOT}/scripts')
+from handover.discover import live_handovers
+for path in live_handovers(): print(path)
+"
 ```
 
 Expect 0–10 results. If the count is unexpectedly high (>15), warn the user and ask whether to proceed before spawning many subagents.
@@ -91,10 +90,6 @@ Subagent prompt template (substitute `<file>` and today's date):
 >    - `suspended`: work paused. An explicit `status: suspended` field, or a visible indicator of an indefinite hold, both count.
 >    - `active`: still in progress, no fresh entry needed.
 >    - `active-update`: still in progress, and the visible state suggests a fresh entry today.
-> 6. **Suggested archive filename:** `<prefix>__<status>-<date>-<topic>.md`. Use today's date for `done`. Use the original or inferred date for `superseded`.
-> 7. **Cross-references:** incoming wikilinks. Run `grep -rl "\[\[<basename-no-ext>\]\]" "$VAULT"` and classify each result:
->    - `living`: active reference doc (pitfall notes, current handovers, deploy guides).
->    - `historical`: under `02-Area/Journal/`, or the filename matches `^\d{4}-\d{2}-\d{2}` and lives in a folder such as `handover/` or `meeting/`.
 >
 > Format as Markdown with bold field labels.
 
@@ -130,7 +125,7 @@ Then ask via `AskUserQuestion`. Ask one question per handover, all batched in a 
 
 For any answer of `Active — append update`, `Active — suspend`, or `Other`, send a follow-up `AskUserQuestion` to capture the update/suspend text or custom action.
 
-If the suggested filename needs a `superseded by` reference, ask the user which doc supersedes it before naming.
+If the archive action needs a `superseded by` reference, ask the user which doc supersedes it.
 
 ---
 
@@ -145,29 +140,28 @@ Group user answers into:
 
 ### 4a. Archive set — parallel subagents
 
-For each handover, send one Agent call. Issue all calls in a single message.
+For each handover, resolve `<destination>` first via `plan_archive` (see Archive destination, above). Do not let the subagent re-derive it. Then send one Agent call per handover. Issue all calls in a single message.
 
 Subagent prompt:
 
-> Archive an Obsidian handover.
+> Archive one Obsidian handover.
 >
-> Source: `<source-path>`
-> Destination: `<archive-root>/<ORG>/<new-filename>`. Both `<archive-root>` and `<ORG>` are resolved by the caller and passed in verbatim. Do NOT re-resolve them. Create the `<ORG>` subdirectory with `mkdir -p` before writing.
-> Filename to use (precomputed from Phase 2 analysis): `<new-filename>`. Do NOT re-derive a slug or date.
-> Living wikilink references: `<list-of-paths>`
-> Historical wikilink references: `<list-of-paths>` (will be left broken intentionally)
+> Source (vault-relative): `<source>`
+> Destination folder: `<destination>`  (already resolved, do NOT re-derive)
+> Filename: unchanged.
 >
 > Steps:
 > 1. Read the source file.
-> 2. In the frontmatter `tags` list, append `- archive` (preserve other tags, no duplicates, preserve order).
-> 3. Set the frontmatter `status:` field to the archive status (`done` or `superseded`).
-> 4. If the destination directory is missing, create it first (`mkdir -p "<archive-root>/<ORG>"`). Then write the modified content to the destination path.
-> 5. Delete the source file (`rm <source>`).
-> 6. For each living-reference doc, update wikilinks: `[[<old-basename>]]` → `[[<new-basename>]]`. Preserve display text after `|`. Use Edit with `replace_all: true`. Skip historical references entirely.
-> 7. Do NOT add aliases to the archived file.
-> 8. Do NOT touch any file under `02-Area/Journal/` or any file whose basename matches `^\d{4}-\d{2}-\d{2}` inside `handover/` or `meeting/` directories.
+> 2. Rewrite the frontmatter `tags` list: prefix every tag with `archived/`,
+>    except a tag that already starts with `archived/`, and except
+>    `status/archived`. If `status/archived` is absent, append it.
+> 3. If a frontmatter `status:` field is present, remove it.
+> 4. `mkdir -p "<destination>"`.
+> 5. Move the file: `obsidian move file="<name>" to="<destination>"`.
+>    Read the output for `Error:`. The CLI exits 0 even on failure.
+> 6. Do NOT rename the file. Do NOT touch any other file.
 >
-> Report JSON-style: `{ source, destination, wikilinks_updated: { <file>: <count>, ... }, wikilinks_skipped_historical: [<file>, ...] }`.
+> Report: `{ source, destination, tags_before, tags_after }`.
 
 ### 4b. Update set — parallel subagents
 
@@ -240,7 +234,7 @@ After all subagents return, print exactly the phrase `Wrap-up complete` on the f
 Wrap-up complete (<YYYY-MM-DD>):
 
 Archived (<N>):
-- <old-basename> → <archive-root>/<ORG>/<new-basename>
+- <basename> → <destination>
 - ...
 
 Updates appended (<M>):
@@ -251,9 +245,6 @@ Suspended (<S>):
 
 Untouched (<K>):
 - <basename>
-
-Wikilinks rewritten in <Q> living docs (<P> total references)
-Wikilinks deliberately left broken in historical records: <R>
 ```
 
 Print archived paths in copy-pastable form.
@@ -262,14 +253,15 @@ Print archived paths in copy-pastable form.
 
 ## Non-negotiable rules
 
-- **Archive destination**: `"$ARCHIVE_ROOT/<ORG>/<filename>"`. Honor the `HH_ARCHIVE_ROOT` env var. The default is `"$VAULT/04Archive"`. Always quote the path. A vault path can contain spaces. Never write directly under `$ARCHIVE_ROOT` without an `<ORG>` subfolder.
+- **Archive destination**: `<destination>/<filename>`, where `<destination>` already includes the `<ORG>` subfolder (see `plan_archive`, above). Default archive root is `04Archive/` inside the vault. Override it via `handoverArchiveRoot` in `.obsidian-kit.json`. Never write directly under the archive root without an `<ORG>` subfolder.
 - **ORG resolution**: derive from the source path segment after `01Project/`. If the file is not under `01Project/<ORG>/`, stop and ask the user to pick an ORG. Never guess.
-- **Naming convention**: `<prefix>__<status>-[date-]<topic>.md`, status ∈ {`done`, `superseded`}. Date is `YYYY-MM-DD`.
-- **Add `archive` tag**: append to existing tags list. Never replace, never reorder other tags.
-- **Do not edit historical records**: journals (`02-Area/Journal/**`), dated handovers (`^\d{4}-\d{2}-\d{2}-*.md` inside a folder such as `handover/` or `meeting/`). Broken wikilinks in these files are an honest signal of a rename.
-- **No generic aliases**: do not add `aliases:` to the archived file as a workaround for broken wikilinks. If genuinely needed, scope it explicitly.
-- **Update wikilinks in living docs only**: pitfall notes, current handovers, active references, deploy guides.
+- **Never rename on archive.** The filename is the wikilink target. Status lives
+  in tags and the `04Archive/<ORG>/` folder says the rest.
+- **Move, never copy then delete.** The vault has no version control.
+- **Tag rewrite on archive**: prefix every tag with `archived/`, except a tag already so prefixed and except `status/archived`. If `status/archived` is absent, append it. Never drop an existing tag.
+- **No generic aliases**: do not add `aliases:` to the archived file. If genuinely needed, scope it explicitly.
 - **Active updates only append content**: only a dated subsection. Do not add tags. Do not change frontmatter. Do not mark "still active" anywhere.
 - **Suspended state never archives**: `suspended` is an active-side state. The file keeps the `handover` tag, and does NOT get `archive`.
-- **Stop and ask** in three cases. The project prefix is ambiguous. A `superseded` action needs the name of the replacing doc. A cross-reference scan finds a file that is hard to classify.
+- **Stop and ask** in two cases. The project prefix is ambiguous. A `superseded` action needs the name of the replacing doc.
 - **Phase 5 output must contain the literal phrase `Wrap-up complete`.** The Stop hook keys off it.
+</content>

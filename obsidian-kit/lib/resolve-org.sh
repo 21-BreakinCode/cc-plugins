@@ -3,14 +3,12 @@
 # under $LifeOS/01Project/. Tries git remote first, then workspace_root prefix.
 # Prints the org name to stdout on success, exits 1 if nothing matches.
 #
-# Required env var: HH_LIFEOS_ROOT — see lib/lifeos-root.sh.
+# Required env var: LIFEOS_ROOT — the vault root. The caller resolves it
+# via common.vault.resolve_via_handover and exports it before calling this.
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-if ! LIFEOS="$(bash "$SCRIPT_DIR/lifeos-root.sh")"; then
-    exit 3
-fi
+LIFEOS="${LIFEOS_ROOT:?resolve-org.sh: LIFEOS_ROOT not set}"
 PROJECT_ROOT="$LIFEOS/01Project"
 
 cwd="$(pwd)"

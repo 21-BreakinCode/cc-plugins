@@ -4,30 +4,30 @@ allowed-tools: ["Bash", "Read", "Write", "AskUserQuestion"]
 argument-hint: "<topic>"
 ---
 
-# /hh:new
+# /obsidian-kit:handover-new
 
 Create a new handover document. The topic argument becomes the slug. Frontmatter, filename, and a seed body are filled in automatically. The new file lands under the canonical LifeOS path via the `./handover` symlink.
 
 ## Vault location
 
 ```bash
-LIFEOS=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/lifeos-root.sh") || exit 3
+VAULT=$(python3 -c "
+import sys
+sys.path.insert(0, '${CLAUDE_PLUGIN_ROOT}/scripts')
+from pathlib import Path
+from common.vault import VaultConfigError, resolve_via_handover
+try:
+    print(resolve_via_handover(Path.cwd()))
+except VaultConfigError as error:
+    print(error, file=sys.stderr); sys.exit(3)
+") || exit 3
+export LIFEOS_ROOT="$VAULT"
 ```
-**If this exits 3**, the guard has already written setup guidance to stderr. Relay that output to the user verbatim, and stop. Do not guess a vault path, and do not continue to the next phase.
-
+**If this exits 3**, relay the stderr message to the user verbatim and stop. Do not guess a vault path.
 
 ## Flow
 
-### Phase 1 — Verify the symlink
-
-```bash
-[ -L "./handover" ] || { echo "Run /hh:init-service first — ./handover is not a symlink."; exit 1; }
-readlink -e "./handover" >/dev/null || { echo "./handover is a dangling symlink — its LifeOS target is gone. Re-run /hh:init-service to relink."; exit 3; }
-```
-
-If either check fails, stop and report.
-
-### Phase 2 — Resolve ORG + APP_NAME
+### Phase 1 — Resolve ORG + APP_NAME
 
 ```bash
 ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || { echo "Could not resolve ORG"; exit 1; }
@@ -35,17 +35,17 @@ RESULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-service.sh" "$PWD" "$ORG") || {
 APP_NAME="${RESULT%%|*}"
 ```
 
-### Phase 3 — Build filename
+### Phase 2 — Build filename
 
 - `TOPIC` = the slash-command argument (`$ARGUMENTS`). If missing, `AskUserQuestion` for a free-form topic.
-- `PREFIX` = `$APP_NAME` in kebab-case. Since /hh:init-service now stores app_names as kebab-case, this is usually a passthrough. The conversion below only applies to legacy PascalCase rows.
+- `PREFIX` = `$APP_NAME` in kebab-case. Since /obsidian-kit:handover-init-service now stores app_names as kebab-case, this is usually a passthrough. The conversion below only applies to legacy PascalCase rows.
   - Examples: `creative-studio` → `creative-studio` (passthrough), `CreativeStudio` → `creative-studio`, `CrPerf2` → `cr-perf-2`, `bustBackend` → `bust-backend`.
   - Algorithm: insert `-` before each uppercase letter (except position 0), lowercase the result, collapse repeated `-`.
 - `SLUG` = topic kebab-cased, lowercased, non-alphanumerics → `-`, collapsed repeats, trimmed to 60 chars.
 - `DATE` = `$(date +%Y-%m-%d)`.
 - `FILENAME` = `${PREFIX}__${DATE}-${SLUG}.md`.
 
-### Phase 3.5 — Acceptance Criteria confirmation
+### Phase 2.5 — Acceptance Criteria confirmation
 
 Before writing the body, check the AC items with the user.
 
@@ -58,11 +58,11 @@ Before writing the body, check the AC items with the user.
    - `header`: `AC`
    - `question`: `"Here are the acceptance criteria I extracted — edit or add items:\n\n<drafted-items>\n\nAccept these, or type your own?"`
    - `options`: `["Accept as-is"]` (user can pick Other to type custom AC)
-4. Store the checked AC items for Phase 4.
+4. Store the checked AC items for Phase 3.
 
 Sometimes the conversation has no testable outcomes, for example pure exploration or open-ended investigation. When that happens, ask the user whether to skip the Acceptance Criteria section or provide items instead. If they skip it, omit `## Acceptance Criteria` from the doc entirely.
 
-### Phase 4 — Seed body
+### Phase 3 — Seed body
 
 Read the current conversation context, then fill the template below. The whole document must read in **≤ 2 min** (target ≤ 400 words total). Keep each section to its budget. If you run long, cut.
 
@@ -84,10 +84,9 @@ When a section describes something with shape (nesting, layers, flow, branching,
 ---
 created: $DATE
 project: $APP_NAME
-status: open
 tags:
-  - handover
-  - <PREFIX-as-tag>
+  - type/handover
+  - project/<org-kebab>/<service-kebab>
 ---
 
 # $APP_NAME — $TOPIC
@@ -116,9 +115,9 @@ tags:
 
 ## Acceptance Criteria
 
-<!-- ≤ 60 words. Use the confirmed items from Phase 3.5 verbatim.
+<!-- ≤ 60 words. Use the confirmed items from Phase 2.5 verbatim.
      Checkbox list for pass/fail items. Given/When/Then for behavior scenarios.
-     Omit this section entirely if the user skipped AC in Phase 3.5. -->
+     Omit this section entirely if the user skipped AC in Phase 2.5. -->
 
 - [ ] 
 
@@ -136,7 +135,7 @@ I'm continuing work on **$APP_NAME — $TOPIC**.
 Read the files above, confirm you understand the state, then proceed with the next action. Ask before you change anything outside the listed files.
 ```
 
-### Phase 5 — Write
+### Phase 4 — Write
 
 ```bash
 TARGET="./handover/$FILENAME"
@@ -145,7 +144,7 @@ TARGET="./handover/$FILENAME"
 
 Use `Write` to create the file at `$TARGET`.
 
-### Phase 6 — Report
+### Phase 5 — Report
 
 Print:
 ```
@@ -159,5 +158,8 @@ Open it in Obsidian to refine TL;DR / To-Be.
 
 - Never overwrite an existing file. If filename collides, stop and report.
 - Filename pattern is fixed: `<prefix>__<YYYY-MM-DD>-<slug>.md`. Do not invent variations.
-- `tags` always includes `handover`. Never include `archive` here.
-- `status: open` is the only initial status. Wrap-up changes it later.
+- `tags` always includes `type/handover` and one `project/<org>/<service>` tag.
+  Never `handover`, never `archive`, never a bare service name. The vault
+  taxonomy at `03Resource/About/tag-taxonomy.md` is the authority.
+- No `status:` frontmatter field. State lives in tags.
+- Do not add a tag that repeats the filename or the folder. Taxonomy rule 3.
