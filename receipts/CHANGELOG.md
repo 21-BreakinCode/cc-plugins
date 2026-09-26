@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- **test:** baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.424
+- **test:** baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.424, dropped_at_extraction 3
 
 ## 0.2.2 — 2026-09-24
 
