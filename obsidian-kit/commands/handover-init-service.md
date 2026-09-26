@@ -76,7 +76,7 @@ RESULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-service.sh" "$PWD" "$ORG") && E
 - **Exit 1:** not mapped yet. Continue to Phase 4.
 - **Exit 2 or 3:** report the error and stop.
 
-### Phase 4 — Append new mapping row
+### Phase 4 — Collect new mapping row values
 
 Compute defaults:
 - `DEFAULT_APP_NAME` = current directory name, used verbatim in kebab-case (for example, `creative-studio` → `creative-studio`, `bust-backend` → `bust-backend`). If the directory name is not already kebab-case, lowercase it and replace `_`, spaces, and camelCase boundaries with `-`.
@@ -89,7 +89,7 @@ Compute defaults:
 
 For "Other..." answers, follow up with a free-form `AskUserQuestion`. If the user picked a non-default `app_name` in Q1 but accepted the default Q2 (`Services/$DEFAULT_APP_NAME`), prompt one more time: "Use `Services/<app_name>` instead?" → adjust accordingly.
 
-Append a new row to the `## Service Mapping` table in `$INIT`:
+A new row for the `## Service Mapping` table in `$INIT` looks like:
 
 ```bash
 # Compute a row like:
@@ -97,8 +97,6 @@ Append a new row to the `## Service Mapping` table in `$INIT`:
 # Use a Python heredoc to align columns to existing widths if reliable;
 # otherwise just append with single-space padding (Obsidian tables tolerate it).
 ```
-
-If the table is empty, use `Edit` to append the new row after the separator row. Otherwise, append it after the last existing data row. Preserve all other content.
 
 ### Phase 4a — Confirm with user
 
@@ -110,7 +108,11 @@ If the table is empty, use `Edit` to append the new row after the separator row.
 
 If the user picks "No, abort", stop. Do not write the row and do not run Phase 5.
 
-### Phase 5 — Create LifeOS handover folder
+### Phase 5 — Write the row and create the LifeOS handover folder
+
+If the user said yes:
+
+Use `Edit` to append the new row computed in Phase 4 to `$INIT`. If the table is empty, append it after the separator row. Otherwise, append it after the last existing data row. Preserve all other content.
 
 ```bash
 mkdir -p "$VAULT/01Project/$ORG/$LIFEOS_SUBPATH/handover"
