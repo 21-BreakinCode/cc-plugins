@@ -1,23 +1,32 @@
 {
   "_comment": "Authored prose source of truth for plugin docs. Keys under `plugins` MUST match the published plugin name in .claude-plugin/marketplace.json. Commands/skills are harvested automatically from each plugin folder — do not list them here. Site icons are derived from `category` (see CAT_ICON in site/assets/app.js). Run `./scripts/cicd.sh GEN` after editing.",
   "categories": [
-    { "id": "memory", "label": "Memory & Knowledge" },
-    { "id": "improve", "label": "Measure & Improve" },
-    { "id": "review", "label": "Review & Design" },
-    { "id": "workflow", "label": "Workflow & Handover" },
-    { "id": "media", "label": "Media" },
-    { "id": "content", "label": "Writing & Content" }
+    {
+      "id": "memory",
+      "label": "Memory & Knowledge"
+    },
+    {
+      "id": "improve",
+      "label": "Measure & Improve"
+    },
+    {
+      "id": "review",
+      "label": "Review & Design"
+    },
+    {
+      "id": "workflow",
+      "label": "Workflow & Handover"
+    },
+    {
+      "id": "media",
+      "label": "Media"
+    },
+    {
+      "id": "content",
+      "label": "Writing & Content"
+    }
   ],
   "plugins": {
-    "session-learner": {
-      "tagline": "Turn a session into atomic Zettelkasten knowledge",
-      "summary": "A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.",
-      "category": "memory",
-      "dependsOn": [],
-      "config": [
-        { "name": "CLAUDE_SESSION_LEARNER_ZK_PATH", "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent", "description": "Vault `Permanent/` dir used to ground `pick-up` card links and tags." }
-      ]
-    },
     "autoresearch": {
       "tagline": "Eval-driven improvement, plus the harness to drive it",
       "summary": "Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.",
@@ -29,29 +38,25 @@
       "tagline": "Principle-aware PR review",
       "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists. Includes `refresh-principles`, which learns the repo's own principle files from merged git + PR history.",
       "category": "review",
-      "dependsOn": ["pr-review-toolkit", "hh"],
+      "dependsOn": [
+        "pr-review-toolkit"
+      ],
       "config": [
-        { "name": "CODE_REVIEWER_PRINCIPLE_DIR", "default": "—", "description": "Hard override; skip the resolution chain and use this principle directory." },
-        { "name": "CODE_REVIEWER_CONFIG_FILE", "default": "~/.claude/code-reviewer/config.json", "description": "Override the config file that lists principle-directory roots." },
-        { "name": "CODE_REVIEWER_CACHE_FILE", "default": "~/.claude/code-reviewer/principle-map.json", "description": "Override the per-repo principle-path cache." }
-      ]
-    },
-    "uiux-optimizer": {
-      "tagline": "Reference-driven UI/UX design advisor",
-      "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
-      "category": "review",
-      "dependsOn": [],
-      "config": []
-    },
-    "hh": {
-      "tagline": "Cross-context handover docs, LifeOS as the source of truth",
-      "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.",
-      "category": "workflow",
-      "dependsOn": [],
-      "config": [
-        { "name": "HH_LIFEOS_ROOT", "default": "(required — no default)", "description": "Absolute path to your LifeOS vault: the folder containing `01Project/`. **Required** — every command stops with setup guidance if it is unset or wrong, rather than falling back to a path that may not exist. Set it once in `~/.zshrc`: `export HH_LIFEOS_ROOT=\"$HOME/Projects/LifeOS\"`. Find yours with `find \"$HOME\" -maxdepth 4 -type d -name '01Project'`. Quote the value if the path contains spaces." },
-        { "name": "CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP", "default": "0", "description": "When `1`, the Stop hook offers `/hh:new` after a wrap-up session (requires a working `./handover` symlink)." },
-        { "name": "HH_ARCHIVE_ROOT", "default": "$HH_LIFEOS_ROOT/04Archive", "description": "Where `/hh:wrap-up` writes archived handovers. Defaults to `04Archive/` inside the resolved vault. Quote the value if the path contains spaces." }
+        {
+          "name": "CODE_REVIEWER_PRINCIPLE_DIR",
+          "default": "—",
+          "description": "Hard override; skip the resolution chain and use this principle directory."
+        },
+        {
+          "name": "CODE_REVIEWER_CONFIG_FILE",
+          "default": "~/.claude/code-reviewer/config.json",
+          "description": "Override the config file that lists principle-directory roots."
+        },
+        {
+          "name": "CODE_REVIEWER_CACHE_FILE",
+          "default": "~/.claude/code-reviewer/principle-map.json",
+          "description": "Override the per-repo principle-path cache."
+        }
       ]
     },
     "humanize": {
@@ -60,7 +65,11 @@
       "category": "content",
       "dependsOn": [],
       "config": [
-        { "name": "HUMANIZE_TONE_DIR", "default": "—", "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets." }
+        {
+          "name": "HUMANIZE_TONE_DIR",
+          "default": "—",
+          "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets."
+        }
       ]
     },
     "adhd-review": {
@@ -69,7 +78,11 @@
       "category": "workflow",
       "dependsOn": [],
       "config": [
-        { "name": "CLAUDE_ADHD_REVIEW", "default": "unset → on", "description": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to `0` to disable it for that session; unset (or `1`) re-enables. The style targets the main thread only; subagents never inherit it." }
+        {
+          "name": "CLAUDE_ADHD_REVIEW",
+          "default": "unset → on",
+          "description": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to `0` to disable it for that session; unset (or `1`) re-enables. The style targets the main thread only; subagents never inherit it."
+        }
       ]
     },
     "receipts": {
@@ -79,21 +92,26 @@
       "category": "review",
       "dependsOn": [],
       "config": [
-        { "name": "CLAUDE_RECEIPTS", "default": "unset → on", "description": "Master switch. On by default — installing the plugin activates the auditor. Set to `0` to disable it for a session (`1` also works, redundantly)." },
-        { "name": "CLAUDE_RECEIPTS_MODE", "default": "warn", "description": "`warn` (default) = allow the turn but inject a ⚠ note listing unbacked claims; `block` = hard-gate them until proven/downgraded; `report` = silent audit log only. Change per session with `/receipts block|warn|report` (persists until `/receipts default`); the /receipts override file takes precedence over this env var." },
-        { "name": "CLAUDE_RECEIPTS_MODEL", "default": "claude-haiku-4-5", "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle." }
+        {
+          "name": "CLAUDE_RECEIPTS",
+          "default": "unset → on",
+          "description": "Master switch. On by default — installing the plugin activates the auditor. Set to `0` to disable it for a session (`1` also works, redundantly)."
+        },
+        {
+          "name": "CLAUDE_RECEIPTS_MODE",
+          "default": "warn",
+          "description": "`warn` (default) = allow the turn but inject a ⚠ note listing unbacked claims; `block` = hard-gate them until proven/downgraded; `report` = silent audit log only. Change per session with `/receipts block|warn|report` (persists until `/receipts default`); the /receipts override file takes precedence over this env var."
+        },
+        {
+          "name": "CLAUDE_RECEIPTS_MODEL",
+          "default": "claude-haiku-4-5",
+          "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle."
+        }
       ]
     },
     "obsidian-kit": {
       "tagline": "One plugin for the vault: draw, format, tag",
-      "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
-      "category": "content",
-      "dependsOn": [],
-      "config": []
-    },
-    "simple-mandarin": {
-      "tagline": "One term, one meaning, every sentence lands",
-      "summary": "Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.",
+      "summary": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
       "dependsOn": [],
       "config": []

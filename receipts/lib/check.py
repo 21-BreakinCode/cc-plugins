@@ -29,16 +29,38 @@ _VERB = re.compile(
 )
 
 
-def extract_claims(turn_text):
-    """Triggering claims: the **FACT:** tag plus work-completion phrasings."""
+_ASSUME_TAG = re.compile(r"\*\*ASSUME:\*\*")
+_TABLE_ROW = re.compile(r"^\|")
+_HEADING = re.compile(r"^#{1,6}\s")
+
+
+def _is_claimable(line):
+    """Structural filter: a table cell or a heading is not an assertion."""
+    if not line:
+        return False
+    if _TABLE_ROW.match(line) or _HEADING.match(line):
+        return False
+    return not _ASSUME_TAG.search(line)
+
+
+def extract_claims(turn_text, final_text):
+    """Triggering claims.
+
+    A completion phrasing counts only in the FINAL assistant message, because
+    mid-turn narration is superseded by the time the turn ends. A **FACT:** tag
+    counts anywhere in the turn, because it is an explicit assertion.
+    """
     claims = []
     for line in turn_text.splitlines():
         stripped = line.strip()
-        if not stripped:
+        if not _is_claimable(stripped):
             continue
         tag = _FACT_TAG.search(stripped)
         if tag:
             claims.append(tag.group(1).strip())
+    for line in final_text.splitlines():
+        stripped = line.strip()
+        if not _is_claimable(stripped) or _FACT_TAG.search(stripped):
             continue
         if _VERB.search(stripped):
             claims.append(stripped)
@@ -94,14 +116,18 @@ def record_ledger(session_id, claims):
         pass
 
 
-def log_audit(session_id, verdicts):
-    path = os.path.join(_config_dir(), f"{session_id}.log")
+UNPROVEN = "unproven"
+
+
+def log_audit(session_id, records):
+    """Append one JSON object per verdict. records: list of dicts."""
+    path = os.path.join(_config_dir(), f"{session_id}.jsonl")
     try:
         os.makedirs(os.path.dirname(path), exist_ok=True)
         stamp = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
         with open(path, "a", encoding="utf-8") as handle:
-            for claim, verdict in verdicts.items():
-                handle.write(f"{stamp}\t{verdict}\t{claim}\n")
+            for record in records:
+                handle.write(json.dumps({"ts": stamp, **record}, ensure_ascii=False) + "\n")
     except OSError:
         pass
 
@@ -164,28 +190,34 @@ def main():
     if not transcript or not os.path.exists(transcript):
         approve()
     try:
-        turn_text, tools = extract(transcript)
+        turn_text, final_text, tools = extract(transcript)
     except OSError:
         approve()
 
-    claims = extract_claims(turn_text)
+    claims = extract_claims(turn_text, final_text)
     if not claims:
         approve()
 
-    verdicts, escalate = {}, []
+    records, escalate = [], []
     for claim in claims:
-        verdict = classify(claim, tools)
+        verdict, evidence = classify(claim, tools)
         if verdict == "escalate":
             escalate.append(claim)
         else:
-            verdicts[claim] = verdict
+            records.append({"claim": claim, "verdict": verdict,
+                            "via": "prefilter", "evidence": evidence})
     if escalate:
-        judged = run_judge(escalate, tools) or {}
+        judged = run_judge(escalate, tools)
         for claim in escalate:
-            verdicts[claim] = judged.get(claim, "backed")  # fail open → backed
+            if judged is None:
+                records.append({"claim": claim, "verdict": UNPROVEN,
+                                "via": "judge-unreachable", "evidence": None})
+            else:
+                records.append({"claim": claim, "verdict": judged.get(claim, UNPROVEN),
+                                "via": "judge", "evidence": None})
 
-    log_audit(session_id, verdicts)
-    cheating = [c for c, v in verdicts.items() if v == "cheating"]
+    log_audit(session_id, records)
+    cheating = [r["claim"] for r in records if r["verdict"] == "cheating"]
     if not cheating:
         approve()
 

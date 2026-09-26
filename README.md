@@ -57,8 +57,8 @@ cc-plugins/
 ├── scripts/                          # cicd.sh + generate-docs.mjs (+ tests)
 ├── site/                             # GitHub Pages site (generated data in site/data/)
 ├── CATALOG.md                        # Generated plugin catalog
-├── session-learner/  autoresearch/  harness/  remotion-maker/
-├── handover-handler/ code-reviewer/ uiux-optimizer/
+├── obsidian-kit/     autoresearch/   code-reviewer/
+├── receipts/         humanize/       adhd-review/
 └── docs/                             # Design specs and plans
 ```
 

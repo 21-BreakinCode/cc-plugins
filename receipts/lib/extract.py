@@ -58,7 +58,7 @@ def _result_text(content):
 
 
 def extract(path):
-    """Return (turn_text, tools) for the current main-session turn.
+    """Return (turn_text, final_text, tools) for the current main-session turn.
 
     tools is a list of {"name", "input", "output"} — one per tool call the
     assistant made this turn, output resolved from the matching tool_result.
@@ -88,8 +88,20 @@ def extract(path):
             elif btype == "tool_result":
                 results[block.get("tool_use_id")] = _result_text(block.get("content"))
 
+    final_texts = []
+    for row in turn:
+        if row.get("type") != "assistant":
+            continue
+        row_texts = [
+            block.get("text", "")
+            for block in _blocks(row)
+            if isinstance(block, dict) and block.get("type") == "text"
+        ]
+        if row_texts:
+            final_texts = row_texts
+
     tools = [
         {"name": name, "input": inp, "output": results.get(tid, "")}
         for (tid, name, inp) in tool_uses
     ]
-    return "\n".join(texts), tools
+    return "\n".join(texts), "\n".join(final_texts), tools

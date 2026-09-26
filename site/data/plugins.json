@@ -2,10 +2,10 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "1.12.0"
+    "version": "2.0.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install session-learner@21-breakincode && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install hh@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install uiux-optimizer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode && \\\n  claude plugin install simple-mandarin@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -16,27 +16,21 @@
         }
       },
       "enabledPlugins": {
-        "session-learner@21-breakincode": true,
         "autoresearch@21-breakincode": true,
-        "hh@21-breakincode": true,
         "code-reviewer@21-breakincode": true,
-        "uiux-optimizer@21-breakincode": true,
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
-        "obsidian-kit@21-breakincode": true,
-        "simple-mandarin@21-breakincode": true
+        "obsidian-kit@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update session-learner@21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update hh@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update uiux-optimizer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode && \\\n  claude plugin update simple-mandarin@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode"
   },
   "categories": [
     {
       "id": "memory",
       "label": "Memory & Knowledge",
-      "plugins": [
-        "session-learner"
-      ]
+      "plugins": []
     },
     {
       "id": "improve",
@@ -50,7 +44,6 @@
       "label": "Review & Design",
       "plugins": [
         "code-reviewer",
-        "uiux-optimizer",
         "receipts"
       ]
     },
@@ -58,7 +51,6 @@
       "id": "workflow",
       "label": "Workflow & Handover",
       "plugins": [
-        "hh",
         "adhd-review"
       ]
     },
@@ -72,126 +64,11 @@
       "label": "Writing & Content",
       "plugins": [
         "humanize",
-        "obsidian-kit",
-        "simple-mandarin"
+        "obsidian-kit"
       ]
     }
   ],
   "plugins": [
-    {
-      "name": "session-learner",
-      "version": "2.1.1",
-      "tagline": "Turn a session into atomic Zettelkasten knowledge",
-      "summary": "A wrap-up → pick-up → recommend reflection funnel: wrap-up surfaces session pitfalls and candidate take-away topics, pick-up turns chosen topics into atomic Zettelkasten cards grounded in the real case and up to 3 web sources, and recommend picks the single topic most worth keeping.",
-      "category": "memory",
-      "install": "claude plugin install session-learner@21-breakincode",
-      "oneLiner": "Turn a working session into atomic Zettelkasten knowledge via a wrap-up → pick-up → recommend reflection funnel",
-      "commands": [],
-      "skills": [
-        {
-          "name": "pick-up",
-          "description": "Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources."
-        },
-        {
-          "name": "recommend",
-          "description": "When several take-away topics compete, use this after wrap-up."
-        },
-        {
-          "name": "wrap-up",
-          "description": "Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep."
-        }
-      ],
-      "dependsOn": [],
-      "config": [
-        {
-          "name": "CLAUDE_SESSION_LEARNER_ZK_PATH",
-          "default": "~/…/LifeOS/03-Resource/Zettelkasten/Permanent",
-          "description": "Vault `Permanent/` dir used to ground `pick-up` card links and tags."
-        }
-      ],
-      "changelog": [
-        {
-          "version": "2.1.1",
-          "date": "2026-09-19",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "rewrite prose across all 4 skill files and this changelog to clear the simple-english linter. No content or meaning changed, only sentence shape. \"harness\" stays: standard term used throughout this repo, not AI-slop."
-            }
-          ]
-        },
-        {
-          "version": "2.1.0",
-          "date": "2026-08-04",
-          "changes": [
-            {
-              "type": "refactor",
-              "text": "collapse Constraints recaps into body"
-            }
-          ]
-        },
-        {
-          "version": "2.0.0",
-          "date": "2026-06-28",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "clean slate, skills-only reflection funnel"
-            },
-            {
-              "type": "feat",
-              "text": "add wrap-up skill"
-            },
-            {
-              "type": "feat",
-              "text": "add pick-up skill + card-format reference"
-            },
-            {
-              "type": "feat",
-              "text": "add recommend skill"
-            },
-            {
-              "type": "test",
-              "text": "add per-card conformance regression harness"
-            },
-            {
-              "type": "fix",
-              "text": "README skills copy, skills are slash-invocable, not 'no slash commands'"
-            }
-          ]
-        },
-        {
-          "version": "1.1.2",
-          "date": "2026-05-31",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "remove broken suggest-compact PreToolUse hook"
-            }
-          ]
-        },
-        {
-          "version": "1.1.1",
-          "date": "2026-05-31",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "remove broken stop-remind Stop hook"
-            }
-          ]
-        },
-        {
-          "version": "1.0.0",
-          "date": "2026-05-28",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "initial release, session-learner plugin"
-            }
-          ]
-        }
-      ]
-    },
     {
       "name": "autoresearch",
       "version": "2.2.3",
@@ -364,200 +241,6 @@
       ]
     },
     {
-      "name": "hh",
-      "version": "0.3.3",
-      "tagline": "Cross-context handover docs, LifeOS as the source of truth",
-      "summary": "Bridges your Obsidian LifeOS vault and each repo through a ./handover symlink, so handover documents survive context switches and stay visible to editors, grep, Obsidian, and Claude alike. Includes a daily vault-wide wrap-up state machine. Requires `HH_LIFEOS_ROOT` to point at your vault — the plugin never guesses a path.",
-      "category": "workflow",
-      "install": "claude plugin install hh@21-breakincode",
-      "oneLiner": "LifeOS-as-SSOT handover document management via folder symlinks. Subsumes /op:wrap-up-today.",
-      "commands": [
-        {
-          "name": "/hh:init-org",
-          "description": "Scaffold handover_handler__initiation.md for the current ORG in $LifeOS/01Project/$ORG/. One-time per ORG."
-        },
-        {
-          "name": "/hh:init-service",
-          "description": "Per-repo setup. Adds the current repo to the service mapping table and creates the ./handover symlink into LifeOS."
-        },
-        {
-          "name": "/hh:new",
-          "description": "Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context."
-        },
-        {
-          "name": "/hh:wrap-up",
-          "description": "Vault-wide daily wrap-up. Discovers active handovers, batches user decisions, executes archives/updates/suspensions in parallel. Replaces /op:wrap-up-today."
-        }
-      ],
-      "skills": [],
-      "dependsOn": [],
-      "config": [
-        {
-          "name": "HH_LIFEOS_ROOT",
-          "default": "(required — no default)",
-          "description": "Absolute path to your LifeOS vault: the folder containing `01Project/`. **Required** — every command stops with setup guidance if it is unset or wrong, rather than falling back to a path that may not exist. Set it once in `~/.zshrc`: `export HH_LIFEOS_ROOT=\"$HOME/Projects/LifeOS\"`. Find yours with `find \"$HOME\" -maxdepth 4 -type d -name '01Project'`. Quote the value if the path contains spaces."
-        },
-        {
-          "name": "CLAUDE_HH_OFFER_NEW_AFTER_WRAPUP",
-          "default": "0",
-          "description": "When `1`, the Stop hook offers `/hh:new` after a wrap-up session (requires a working `./handover` symlink)."
-        },
-        {
-          "name": "HH_ARCHIVE_ROOT",
-          "default": "$HH_LIFEOS_ROOT/04Archive",
-          "description": "Where `/hh:wrap-up` writes archived handovers. Defaults to `04Archive/` inside the resolved vault. Quote the value if the path contains spaces."
-        }
-      ],
-      "changelog": [
-        {
-          "version": "0.3.3",
-          "date": "2026-09-24",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "replace the word caps in `/hh:wrap-up` Phase 2 with the shape of the Phase 3 table. Each subagent report fills one table row."
-            }
-          ]
-        },
-        {
-          "version": "0.3.2",
-          "date": "2026-09-19",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "rewrite `commands/wrap-up.md`, `init-service.md`, `init-org.md`, and this"
-            }
-          ]
-        },
-        {
-          "version": "0.3.1",
-          "date": "2026-09-19",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "remove the inline STE writing rules from `/hh:new` Phase 4. This command now"
-            },
-            {
-              "type": "fix",
-              "text": "rewrite the rest of `/hh:new` to clear the simple-english linter. No content or"
-            }
-          ]
-        },
-        {
-          "version": "0.3.0",
-          "date": "2026-09-09",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "add Acceptance Criteria section to `/hh:new` template between To-Be"
-            },
-            {
-              "type": "feat",
-              "text": "inline STE writing rules in Phase 4: sentence limits, active voice,"
-            },
-            {
-              "type": "feat",
-              "text": "inline ASCII diagram guidance in Phase 4: add a compact diagram when"
-            },
-            {
-              "type": "chore",
-              "text": "expand word budget from 330 to 400 words (~2 min read) to"
-            }
-          ]
-        },
-        {
-          "version": "0.2.0",
-          "date": "2026-08-11",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "add `lib/lifeos-root.sh`, a single resolver + guard for the vault root,"
-            },
-            {
-              "type": "feat",
-              "text": "`/hh:init-service` now defaults `app_name` to the repo's kebab-case"
-            },
-            {
-              "type": "fix",
-              "text": "`HH_ARCHIVE_ROOT` defaults to `$VAULT/04Archive` instead of a second"
-            },
-            {
-              "type": "fix",
-              "text": "`/hh:new` reports a dangling `./handover` symlink with a real remedy"
-            }
-          ]
-        },
-        {
-          "version": "0.1.5",
-          "date": "2026-06-05",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "accept dynamic destination path via ARCHIVE_ROOT env var"
-            }
-          ]
-        },
-        {
-          "version": "0.1.4",
-          "date": "2026-06-04",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "quote CLAUDE_PLUGIN_ROOT so bash expands it"
-            }
-          ]
-        },
-        {
-          "version": "0.1.3",
-          "date": "2026-06-01",
-          "changes": [
-            {
-              "type": "chore",
-              "text": "bump to trigger reload-plugins refresh"
-            }
-          ]
-        },
-        {
-          "version": "0.1.2",
-          "date": "2026-06-01",
-          "changes": [
-            {
-              "type": "chore",
-              "text": "align plugin manifest version with marketplace entry"
-            }
-          ]
-        },
-        {
-          "version": "0.1.1",
-          "date": "2026-06-01",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "gate stop-offer-new on ./handover symlink"
-            }
-          ]
-        },
-        {
-          "version": "0.1.0",
-          "date": "2026-05-31",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "initial release, LifeOS handover document management"
-            },
-            {
-              "type": "feat",
-              "text": "add /hh:init-org, /hh:init-service, /hh:new, /hh:wrap-up commands"
-            },
-            {
-              "type": "feat",
-              "text": "`TL;DR`/Context/As-Is/To-Be/Implementation-Note seed body framework"
-            }
-          ]
-        }
-      ]
-    },
-    {
       "name": "code-reviewer",
       "version": "1.1.1",
       "tagline": "Principle-aware PR review",
@@ -578,8 +261,7 @@
         }
       ],
       "dependsOn": [
-        "pr-review-toolkit",
-        "hh"
+        "pr-review-toolkit"
       ],
       "config": [
         {
@@ -728,104 +410,6 @@
             {
               "type": "feat",
               "text": "initial release. Principle-aware PR review plugin."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "uiux-optimizer",
-      "version": "1.3.1",
-      "tagline": "Reference-driven UI/UX design advisor",
-      "summary": "Orchestrates live design references (refero.design + the getdesign.md catalogue), anti-slop taste discipline, and motion choreography across audit / build / explore modes and a gated ship pipeline. Degrades gracefully when the optional taste and motion skills aren't installed.",
-      "category": "review",
-      "install": "claude plugin install uiux-optimizer@21-breakincode",
-      "oneLiner": "UI/UX design advisor — orchestrates reference-driven patterns (refero.design + awesome-design-md catalogue), anti-slop taste discipline, and motion choreography across audit/build/explore modes and a gated ship pipeline (direction → static → motion). Degrades gracefully when the optional taste-skill / motion-design-skill are not installed.",
-      "commands": [],
-      "skills": [
-        {
-          "name": "uiux-optimizer",
-          "description": "UI/UX design advisor for improving visual design, layout, and component patterns."
-        }
-      ],
-      "dependsOn": [],
-      "config": [],
-      "changelog": [
-        {
-          "version": "1.3.1",
-          "date": "2026-09-19",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape."
-            }
-          ]
-        },
-        {
-          "version": "1.3.0",
-          "date": "2026-08-04",
-          "changes": [
-            {
-              "type": "refactor",
-              "text": "collapse description synonyms, dedupe triggers"
-            }
-          ]
-        },
-        {
-          "version": "1.2.2",
-          "date": "2026-06-27",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "use real installed skill names (design-taste-frontend, motion-design)"
-            }
-          ]
-        },
-        {
-          "version": "1.2.1",
-          "date": "2026-06-27",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "surface install hint for missing taste/motion skills"
-            }
-          ]
-        },
-        {
-          "version": "1.2.0",
-          "date": "2026-06-27",
-          "changes": [
-            {
-              "type": "chore",
-              "text": "bump version. Update manifest description"
-            }
-          ]
-        },
-        {
-          "version": "1.1.0",
-          "date": "2026-06-01",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "add awesome-design source for reference"
-            },
-            {
-              "type": "feat",
-              "text": "add orchestration reference (pipeline, gates, degradation)"
-            },
-            {
-              "type": "feat",
-              "text": "make SKILL.md the conductor. Add ship pipeline mode"
-            }
-          ]
-        },
-        {
-          "version": "1.0.0",
-          "date": "2026-06-01",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "initial release: UI/UX design advisor plugin"
             }
           ]
         }
@@ -1069,7 +653,7 @@
     },
     {
       "name": "receipts",
-      "version": "0.2.2",
+      "version": "0.3.0",
       "tagline": "No claim without a receipt",
       "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
       "category": "review",
@@ -1101,6 +685,32 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.3.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "test",
+              "text": "baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.406, dropped_at_extraction 64"
+            },
+            {
+              "type": "fix",
+              "text": "audit the final assistant message, not every line of the turn. Table rows, headings, and `**ASSUME:**` lines are no longer claims."
+            },
+            {
+              "type": "fix",
+              "text": "a claim is backed only when a tool's OUTPUT shows it. A file name in a tool input no longer counts."
+            },
+            {
+              "type": "feat",
+              "text": "every verdict carries evidence, and the ledger is JSONL."
+            },
+            {
+              "type": "feat",
+              "text": "`unproven` records a claim the judge could not reach, which used to be logged as `backed`."
+            }
+          ]
+        },
         {
           "version": "0.2.2",
           "date": "2026-09-24",
@@ -1149,13 +759,30 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "1.0.3",
+      "version": "2.0.0",
       "tagline": "One plugin for the vault: draw, format, tag",
-      "summary": "Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
+      "summary": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
       "category": "content",
       "install": "claude plugin install obsidian-kit@21-breakincode",
       "oneLiner": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
-      "commands": [],
+      "commands": [
+        {
+          "name": "/obsidian-kit:handover-init-org",
+          "description": "Scaffold handover_handler__initiation.md for the current ORG in $LifeOS/01Project/$ORG/. One-time per ORG."
+        },
+        {
+          "name": "/obsidian-kit:handover-init-service",
+          "description": "Per-repo setup. Adds the current repo to the service mapping table and creates the ./handover symlink into LifeOS."
+        },
+        {
+          "name": "/obsidian-kit:handover-new",
+          "description": "Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context."
+        },
+        {
+          "name": "/obsidian-kit:handover-wrap-up",
+          "description": "Vault-wide daily wrap-up. Discovers active handovers, batches user decisions, executes archives/updates/suspensions in parallel. Replaces /op:wrap-up-today."
+        }
+      ],
       "skills": [
         {
           "name": "audit-tags",
@@ -1182,6 +809,22 @@
           "description": "Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax."
         },
         {
+          "name": "session-pick-up",
+          "description": "Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources."
+        },
+        {
+          "name": "session-recommend",
+          "description": "When several take-away topics compete, use this after wrap-up."
+        },
+        {
+          "name": "session-wrap-up",
+          "description": "Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep."
+        },
+        {
+          "name": "simple-mandarin",
+          "description": "|"
+        },
+        {
           "name": "update-excali",
           "description": "Refine an existing Obsidian Excalidraw drawing into the vault house style."
         }
@@ -1189,6 +832,50 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.0.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "absorb `session-learner` as `session-wrap-up`, `session-pick-up`, and `session-recommend`. `session-pick-up` now writes cards into the vault after one approval."
+            },
+            {
+              "type": "feat",
+              "text": "absorb `hh` as `handover-new`, `handover-wrap-up`, `handover-init-org`, and `handover-init-service`."
+            },
+            {
+              "type": "feat",
+              "text": "absorb `simple-mandarin`. Its rules and lint now run only inside a vault."
+            },
+            {
+              "type": "fix",
+              "text": "handover discovery uses the Obsidian tag index and the current taxonomy. The old grep for the retired `handover` tag matched nothing."
+            },
+            {
+              "type": "fix",
+              "text": "archiving moves the file and never renames it, so wikilinks keep resolving. The living and historical reference classifier is gone."
+            },
+            {
+              "type": "refactor",
+              "text": "one vault resolver. `HH_LIFEOS_ROOT`, `HH_ARCHIVE_ROOT`, and `CLAUDE_SIMPLE_MANDARIN` are deleted. `OBSIDIAN_KIT_MANDARIN` and `OBSIDIAN_KIT_OFFER_HANDOVER` replace the two behavior toggles."
+            }
+          ]
+        },
+        {
+          "version": "1.1.0",
+          "date": "2026-09-26",
+          "changes": [
+            {
+              "type": "feat",
+              "text": "absorb the three session reflection skills as `session-wrap-up`, `session-pick-up`, and `session-recommend`."
+            },
+            {
+              "type": "feat",
+              "text": "`session-pick-up` gains a Phase 3 write step. It can save cards into the vault through `format-note`, gated by one `AskUserQuestion` approval."
+            }
+          ]
+        },
         {
           "version": "1.0.3",
           "date": "2026-09-26",
@@ -1207,7 +894,7 @@
             },
             {
               "type": "feat",
-              "text": "a literature note may name its source with `> Link: <url>`, `> Source: <name>`, or a `Sources:` line. A literature note beside a `00__map__` note needs none, because the map names the series source."
+              "text": "a literature note can name its source with `> Link: <url>`, `> Source: <name>`, or a `Sources:` line. A literature note beside a `00__map__` note needs none, because the map names the series source."
             }
           ]
         },
@@ -1217,7 +904,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "audit-tags ends a tag at the next `#`, so a false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS."
+              "text": "audit-tags ends a tag at the next `#`. A false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS."
             }
           ]
         },
@@ -1227,11 +914,11 @@
           "changes": [
             {
               "type": "fix",
-              "text": "audit-tags suggests a duplicate only when one tag is a prefix covering at least half of the other. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli)."
+              "text": "one tag must be a prefix covering at least half of the other for audit-tags to suggest a duplicate. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli)."
             },
             {
               "type": "fix",
-              "text": "migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/, instead of renaming it after that folder."
+              "text": "migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/. It no longer renames the note after that folder."
             }
           ]
         },
@@ -1314,70 +1001,6 @@
             {
               "type": "feat",
               "text": "model-invoked proactive triggering on Zettelkasten/ note writes"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "simple-mandarin",
-      "version": "0.3.0",
-      "tagline": "One term, one meaning, every sentence lands",
-      "summary": "Write and check Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language. A SessionStart hook loads the ruleset every session. A skill covers rewriting on request and rule-catalog citation for checks. An advisory PostToolUse/Stop hook flags long sentences by character count, banned filler words, passive-voice markers, and em-dashes. This plugin is self-contained, with no cross-plugin dependency.",
-      "category": "content",
-      "install": "claude plugin install simple-mandarin@21-breakincode",
-      "oneLiner": "Write plain, unambiguous Traditional Chinese (Taiwan) technical documentation with the discipline of ASD-STE100-style controlled language: short sentences by character count, active voice, one term one meaning, condition before command.",
-      "commands": [],
-      "skills": [
-        {
-          "name": "simple-mandarin",
-          "description": "|"
-        }
-      ],
-      "dependsOn": [],
-      "config": [],
-      "changelog": [
-        {
-          "version": "0.3.0",
-          "date": "2026-09-24",
-          "changes": [
-            {
-              "type": "refactor",
-              "text": "ship the rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set `outputStyle` for it. The rules moved from `output-styles/simple-mandarin.md` to `hooks/session-rules.md`. If your settings select the simple-mandarin output style, delete that line."
-            }
-          ]
-        },
-        {
-          "version": "0.2.1",
-          "date": "2026-09-24",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "the Stop hook no longer flags headers, bold, or bullets, and its message states the current reply rule (no em-dashes, no opener or closer). Commit 743265a removed the old formatting rule from the style and the skill, but the hook still printed it."
-            },
-            {
-              "type": "fix",
-              "text": "both lint hooks skip text with no Han characters. Before, English files and English replies got em-dash reports."
-            }
-          ]
-        },
-        {
-          "version": "0.2.0",
-          "date": "2026-09-20",
-          "changes": [
-            {
-              "type": "fix",
-              "text": "remove formatting-shape restrictions (no bold, no bullets, no headers, no tables) from reply rules to avoid conflict with adhd-review output style"
-            }
-          ]
-        },
-        {
-          "version": "0.1.0",
-          "date": "2026-09-20",
-          "changes": [
-            {
-              "type": "feat",
-              "text": "initial release. A `simple-mandarin` skill covers rewriting"
             }
           ]
         }

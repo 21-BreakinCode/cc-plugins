@@ -2,7 +2,7 @@
 
 > One plugin for the vault: draw, format, tag
 
-Five commands. create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
+create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
 
 ## Install
 
@@ -10,17 +10,12 @@ Five commands. create-excali and update-excali build Excalidraw drawings through
 claude plugin install obsidian-kit@21-breakincode
 ```
 
-## Skills
+## Commands
 
-Invoke one directly as `/obsidian-kit:<skill>`, or let it activate automatically when relevant.
-
-- **`audit-tags`** — Audit the vault's tags against the approved taxonomy and apply one approved refactor plan.
-- **`create-excali`** — Create a new Obsidian Excalidraw drawing in the vault house style.
-- **`format-note`** — Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting).
-- **`migrate-notes`** — One-time vault migration to set note-type and rename map notes by plan approval.
-- **`obsidian-bases`** — Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries.
-- **`obsidian-markdown`** — Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax.
-- **`update-excali`** — Refine an existing Obsidian Excalidraw drawing into the vault house style.
+- **`/obsidian-kit:handover-init-org`** — Scaffold handover_handler__initiation.md for the current ORG in $LifeOS/01Project/$ORG/. One-time per ORG.
+- **`/obsidian-kit:handover-init-service`** — Per-repo setup. Adds the current repo to the service mapping table and creates the ./handover symlink into LifeOS.
+- **`/obsidian-kit:handover-new`** — Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context.
+- **`/obsidian-kit:handover-wrap-up`** — Vault-wide daily wrap-up. Discovers active handovers, batches user decisions, executes archives/updates/suspensions in parallel. Replaces /op:wrap-up-today.
 
 ---
 

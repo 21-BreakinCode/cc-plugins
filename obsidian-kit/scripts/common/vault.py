@@ -54,3 +54,30 @@ def require_obsidian_running() -> None:
     except ObsidianCliError:
         print(OBSIDIAN_CLOSED_MESSAGE, file=sys.stderr)
         sys.exit(1)
+
+
+HANDOVER_LINK = "handover"
+DEFAULT_ARCHIVE_ROOT = "04Archive"
+
+
+def resolve_via_handover(start: Path) -> Path:
+    """Find the vault from a code repo that carries a ./handover symlink."""
+    link = start / HANDOVER_LINK
+    if not link.is_symlink():
+        raise VaultConfigError(
+            f"{link} is not a symlink. Run /obsidian-kit:handover-init-service "
+            "in this repo first."
+        )
+    target = link.resolve()
+    if not target.exists():
+        raise VaultConfigError(
+            f"{link} points at {target}, which does not exist. The vault moved or "
+            "has not finished syncing. Re-run /obsidian-kit:handover-init-service "
+            "to relink."
+        )
+    return find_vault_root(target)
+
+
+def archive_root(vault_root: Path, config: dict) -> Path:
+    """Where archived handovers live. Optional key, so a note-only vault works."""
+    return vault_root / config.get("handoverArchiveRoot", DEFAULT_ARCHIVE_ROOT)

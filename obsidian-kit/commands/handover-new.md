@@ -1,0 +1,165 @@
+---
+description: "Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context."
+allowed-tools: ["Bash", "Read", "Write", "AskUserQuestion"]
+argument-hint: "<topic>"
+---
+
+# /obsidian-kit:handover-new
+
+Create a new handover document. The topic argument becomes the slug. Frontmatter, filename, and a seed body are filled in automatically. The new file lands under the canonical LifeOS path via the `./handover` symlink.
+
+## Vault location
+
+```bash
+VAULT=$(python3 -c "
+import sys
+sys.path.insert(0, '${CLAUDE_PLUGIN_ROOT}/scripts')
+from pathlib import Path
+from common.vault import VaultConfigError, resolve_via_handover
+try:
+    print(resolve_via_handover(Path.cwd()))
+except VaultConfigError as error:
+    print(error, file=sys.stderr); sys.exit(3)
+") || exit 3
+export LIFEOS_ROOT="$VAULT"
+```
+**If this exits 3**, relay the stderr message to the user verbatim and stop. Do not guess a vault path.
+
+## Flow
+
+### Phase 1 — Resolve ORG + APP_NAME
+
+```bash
+ORG=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-org.sh") || { echo "Could not resolve ORG"; exit 1; }
+RESULT=$(bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-service.sh" "$PWD" "$ORG") || { echo "Could not resolve service"; exit 1; }
+APP_NAME="${RESULT%%|*}"
+```
+
+### Phase 2 — Build filename
+
+- `TOPIC` = the slash-command argument (`$ARGUMENTS`). If missing, `AskUserQuestion` for a free-form topic.
+- `PREFIX` = `$APP_NAME` in kebab-case. Since /obsidian-kit:handover-init-service now stores app_names as kebab-case, this is usually a passthrough. The conversion below only applies to legacy PascalCase rows.
+  - Examples: `creative-studio` → `creative-studio` (passthrough), `CreativeStudio` → `creative-studio`, `CrPerf2` → `cr-perf-2`, `bustBackend` → `bust-backend`.
+  - Algorithm: insert `-` before each uppercase letter (except position 0), lowercase the result, collapse repeated `-`.
+- `SLUG` = topic kebab-cased, lowercased, non-alphanumerics → `-`, collapsed repeats, trimmed to 60 chars.
+- `DATE` = `$(date +%Y-%m-%d)`.
+- `FILENAME` = `${PREFIX}__${DATE}-${SLUG}.md`.
+
+### Phase 2.5 — Acceptance Criteria confirmation
+
+Before writing the body, check the AC items with the user.
+
+1. Scan the conversation for testable outcomes: return values, error conditions, performance targets, user-visible behavior.
+2. Draft AC items. Pick the format that fits the task:
+   - **Checkbox list** for concrete pass/fail items: `- [ ] API returns 200 for valid input`
+   - **Given/When/Then** for behavior scenarios: `Given expired token, When user calls /api, Then return 401`
+   - Default to checkbox. When the criterion describes a multi-step interaction, use Given/When/Then instead.
+3. Present via `AskUserQuestion`:
+   - `header`: `AC`
+   - `question`: `"Here are the acceptance criteria I extracted — edit or add items:\n\n<drafted-items>\n\nAccept these, or type your own?"`
+   - `options`: `["Accept as-is"]` (user can pick Other to type custom AC)
+4. Store the checked AC items for Phase 3.
+
+Sometimes the conversation has no testable outcomes, for example pure exploration or open-ended investigation. When that happens, ask the user whether to skip the Acceptance Criteria section or provide items instead. If they skip it, omit `## Acceptance Criteria` from the doc entirely.
+
+### Phase 3 — Seed body
+
+Read the current conversation context, then fill the template below. The whole document must read in **≤ 2 min** (target ≤ 400 words total). Keep each section to its budget. If you run long, cut.
+
+#### Diagram judgment (apply while drafting)
+
+When a section describes something with shape (nesting, layers, flow, branching, fan-in/out, state transitions), add a compact ASCII diagram. Keep it to 15 lines or fewer, 60 characters wide or less, in a fenced code block, using real names from the doc. Do not diagram flat lists or linear definitions. A numbered list is already the visual. Add one diagram per concept. Place the diagram before the prose it replaces, then tighten the prose to remove the words the diagram now conveys.
+
+#### Capture from the conversation
+
+- Working directory (the value of `$PWD` at the time of the handover).
+- Key file paths touched or referenced.
+- The last concrete action that was taken.
+- The intended next action.
+- Any open decisions or blockers.
+
+#### Build the file content
+
+```markdown
+---
+created: $DATE
+project: $APP_NAME
+tags:
+  - type/handover
+  - project/<org-kebab>/<service-kebab>
+---
+
+# $APP_NAME — $TOPIC
+
+<!-- Total target: ≤ 400 words / ≤ 2 min read. Trim aggressively. -->
+
+## TL;DR
+
+<!-- ≤ 1 line. One sentence: what this handover is about + current state. -->
+
+## Context/Background
+
+<!-- ≤ 60 words / 3–5 lines. Why this work exists, who/what it touches, why now. No history dump — just enough so a fresh reader understands the stakes. -->
+
+## As-Is
+
+<!-- ≤ 60 words / 3–6 bullets. The current state of the world right now: what exists, what works, what's broken. Concrete, observable. No opinions. -->
+
+- 
+
+## To-Be
+
+<!-- ≤ 60 words / 3–6 bullets. The target state: what "done" looks like. Outcomes, not tasks. -->
+
+- 
+
+## Acceptance Criteria
+
+<!-- ≤ 60 words. Use the confirmed items from Phase 2.5 verbatim.
+     Checkbox list for pass/fail items. Given/When/Then for behavior scenarios.
+     Omit this section entirely if the user skipped AC in Phase 2.5. -->
+
+- [ ] 
+
+## Implementation Note
+
+<!-- ≤ 120 words. Paste-ready prompt for a *new* Claude session. Present-tense, addresses Claude directly. Must name: cwd, key file paths, last action, next action. Self-contained — a fresh session with zero prior context must be able to continue from this block alone. -->
+
+I'm continuing work on **$APP_NAME — $TOPIC**.
+
+- Working directory: `{cwd}`
+- Key files: `{path/one}`, `{path/two}`
+- Last action: `{what was just done}`
+- Next action: `{what to do next}`
+
+Read the files above, confirm you understand the state, then proceed with the next action. Ask before you change anything outside the listed files.
+```
+
+### Phase 4 — Write
+
+```bash
+TARGET="./handover/$FILENAME"
+[ -e "$TARGET" ] && { echo "File already exists: $TARGET"; exit 1; }
+```
+
+Use `Write` to create the file at `$TARGET`.
+
+### Phase 5 — Report
+
+Print:
+```
+Created: $TARGET
+  Resolved to LifeOS: $(readlink -f "$TARGET")
+
+Open it in Obsidian to refine TL;DR / To-Be.
+```
+
+## Non-negotiable rules
+
+- Never overwrite an existing file. If filename collides, stop and report.
+- Filename pattern is fixed: `<prefix>__<YYYY-MM-DD>-<slug>.md`. Do not invent variations.
+- `tags` always includes `type/handover` and one `project/<org>/<service>` tag.
+  Never `handover`, never `archive`, never a bare service name. The vault
+  taxonomy at `03Resource/About/tag-taxonomy.md` is the authority.
+- No `status:` frontmatter field. State lives in tags.
+- Do not add a tag that repeats the filename or the folder. Taxonomy rule 3.

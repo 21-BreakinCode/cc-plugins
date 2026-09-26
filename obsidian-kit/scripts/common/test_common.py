@@ -76,4 +76,42 @@ closed = subprocess.run(
 assert closed.returncode == 1
 assert closed.stderr.strip() == "Open Obsidian, then run again."
 
+from common.vault import archive_root, resolve_via_handover  # noqa: E402
+
+with tempfile.TemporaryDirectory() as tmp:
+    root = Path(tmp).resolve()
+    vault = root / "LifeOS"
+    (vault / ".obsidian").mkdir(parents=True)
+    service = vault / "01Project" / "Appier" / "Services" / "cs-domain" / "handover"
+    service.mkdir(parents=True)
+    repo = root / "repo"
+    repo.mkdir()
+
+    # no symlink at all
+    try:
+        resolve_via_handover(repo)
+        raise AssertionError("expected VaultConfigError for a missing symlink")
+    except VaultConfigError as error:
+        assert "handover-init-service" in str(error), str(error)
+
+    # a symlink that resolves
+    (repo / "handover").symlink_to(service)
+    assert resolve_via_handover(repo) == vault
+
+    # a symlink whose target is gone
+    dead_repo = root / "dead"
+    dead_repo.mkdir()
+    (dead_repo / "handover").symlink_to(root / "gone" / "handover")
+    try:
+        resolve_via_handover(dead_repo)
+        raise AssertionError("expected VaultConfigError for a dangling symlink")
+    except VaultConfigError as error:
+        assert "gone" in str(error), str(error)
+
+    # archive root falls back when the key is absent
+    assert archive_root(vault, CONFIG) == vault / "04Archive"
+    assert archive_root(vault, {**CONFIG, "handoverArchiveRoot": "09Old"}) == vault / "09Old"
+
+print("vault gate B: ok")
+
 print("test_common: all passed")

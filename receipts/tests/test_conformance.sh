@@ -66,6 +66,15 @@ printf 'block\n' > "${CLAUDE_CONFIG_DIR}/receipts/mode"
 run_case "mode-file beats env -> block" block "${tmp}/cheat.jsonl" s6 false "CLAUDE_RECEIPTS_MODE=warn"
 rm -f "${CLAUDE_CONFIG_DIR}/receipts/mode"
 
+# 7. A backed claim writes a JSONL ledger row carrying its evidence.
+run_case "jsonl-evidence" approve "${tmp}/backed.jsonl" "sess-jsonl"
+ledger="${CLAUDE_CONFIG_DIR}/receipts/sess-jsonl.jsonl"
+if [ -f "${ledger}" ] && grep -q '"evidence"' "${ledger}"; then
+  echo "ok   - jsonl ledger carries evidence"; pass=$((pass+1))
+else
+  echo "FAIL - jsonl ledger missing or has no evidence"; fail=$((fail+1))
+fi
+
 echo "---"
 echo "pass=${pass} fail=${fail}"
 [ "${fail}" -eq 0 ]
