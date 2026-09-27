@@ -2,7 +2,7 @@
 set -euo pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$DIR/_assert.sh"
-SUT="$DIR/../lib/load-principle.sh"
+SUT="$DIR/../lib/load-policy.sh"
 
 # Build a tiny bundle: one red-flag (stale, verified), one pitfall (fresh,
 # machine-confirmed), one deprecated pitfall that must be skipped.
@@ -89,6 +89,16 @@ assert "footer notes deprecated" 'printf "%s" "$OUT" | grep -qi "deprecated"'
 echo "Test: no-sources entry skipped and labeled distinctly"
 assert "no-src body not emitted" '! printf "%s" "$OUT" | grep -q "skipped for missing sources"'
 assert "footer notes skipped-no-sources, not deprecated" 'printf "%s" "$OUT" | grep -q "Skipped (no sources)" && ! printf "%s" "$OUT" | grep "Skipped deprecated" | grep -q "no-src.md"'
+
+echo "Test: footer uses the policy name"
+assert "footer header renamed" 'printf "%s" "$OUT" | grep -q "^=== Policy Coverage ===$"'
+
+echo "Test: bundle with no concepts (Review Focus 4)"
+E="$(mktemp -d)"
+printf -- '---\nokf_version: "0.2"\n---\n# Overview — empty\n' > "$E/index.md"
+EOUT="$(bash "$SUT" "$E")"
+assert "empty bundle includes only index.md" 'printf "%s" "$EOUT" | grep -q "^Included (1): index.md$"'
+rm -rf "$E"
 
 rm -rf "$B"
 finish

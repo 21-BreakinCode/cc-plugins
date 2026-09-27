@@ -1,8 +1,8 @@
 # code-reviewer
 
-> Principle-aware PR review
+> Multi-agent PR review with a per-repo policy layer
 
-Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists. Includes `refresh-principles`, which learns the repo's own principle files from merged git + PR history.
+Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history.
 
 ## Install
 
@@ -12,19 +12,13 @@ claude plugin install code-reviewer@21-breakincode
 
 ## Commands
 
-- **`/code-reviewer:review-pr`** — Principle-aware PR review: layers a repo-specific review mindset on top of the standard 4+6 multi-agent review
+- **`/code-reviewer:review-pr`** — Multi-agent PR review: five common reviewers plus an optional repo-specific policy layer
 
 ## Configuration
 
 | Variable | Default | Description |
 |---|---|---|
-| `CODE_REVIEWER_PRINCIPLE_DIR` | `—` | Hard override; skip the resolution chain and use this principle directory. |
-| `CODE_REVIEWER_CONFIG_FILE` | `~/.claude/code-reviewer/config.json` | Override the config file that lists principle-directory roots. |
-| `CODE_REVIEWER_CACHE_FILE` | `~/.claude/code-reviewer/principle-map.json` | Override the per-repo principle-path cache. |
-
-## Depends on
-
-- `pr-review-toolkit` _(external)_
+| `CODE_REVIEWER_POLICY_DIR` | `—` | Repo review-policy dir. A relative value resolves against the main clone root. Unset means the policy layer is off. |
 
 ---
 

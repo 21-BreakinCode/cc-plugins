@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# learn-state.sh — per-principle-dir learn watermark.
-#   learn-state.sh read  <principle-dir>                 → JSON (empty if none)
-#   learn-state.sh write <principle-dir> <merged_at> <sha> <counts-json> → path
+# learn-state.sh — per-policy-dir learn watermark.
+#   learn-state.sh read  <policy-dir>                 → JSON (empty if none)
+#   learn-state.sh write <policy-dir> <merged_at> <sha> <counts-json> → path
 set -euo pipefail
 cmd="${1:-}"; dir="${2:-}"
 die() { echo "$1" >&2; exit "${2:-1}"; }
-[[ -n "$cmd" && -n "$dir" ]] || die "usage: learn-state.sh <read|write> <principle-dir> [...]" 64
+[[ -n "$cmd" && -n "$dir" ]] || die "usage: learn-state.sh <read|write> <policy-dir> [...]" 64
 command -v jq &>/dev/null || die "jq required: brew install jq" 2
 state_file="$dir/.learn-state.json"
 
@@ -14,7 +14,7 @@ case "$cmd" in
     [[ -f "$state_file" ]] && cat "$state_file" || true
     ;;
   write)
-    [[ -d "$dir" ]] || die "principle dir not found: $dir" 2
+    [[ -d "$dir" ]] || die "policy dir not found: $dir" 2
     merged_at="${3:-}"; sha="${4:-}"; counts="${5-}"
     [[ -n "$counts" ]] || counts="{}"
     tmp="$(mktemp)"

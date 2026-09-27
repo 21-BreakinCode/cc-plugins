@@ -1,10 +1,10 @@
 ---
-description: "Principle-aware PR review: layers a repo-specific review mindset on top of the standard 4+6 multi-agent review"
+description: "Multi-agent PR review: five common reviewers plus an optional repo-specific policy layer"
 argument-hint: "<pr-number>"
-allowed-tools: ["Bash", "Read", "Glob", "Grep", "Task", "AskUserQuestion"]
+allowed-tools: ["Bash", "Read", "Agent", "AskUserQuestion"]
 ---
 
-# Principle-aware PR Review
+# Multi-agent PR Review
 
 **PR Number**: $ARGUMENTS
 
@@ -35,20 +35,19 @@ Use `AskUserQuestion`:
 
 Free-text. Wait for the response.
 
-## Step 4: Dispatch orchestrator
+## Step 4: Dispatch the orchestrator
 
-Launch `code-reviewer:pr-review-orchestrator` via the `Task` tool with:
+Launch `code-reviewer:pr-review-orchestrator` with the Agent tool and this prompt:
 
 ```
 Review PR #<number>
 
 PR metadata:
-<paste gh pr view output>
+<paste the gh pr view output>
 
 User context: "<user description>"
 
-Resolve the principle directory (Phase 2), run all reviews in parallel
-(Phase 3), and produce the full report (Phase 4).
+Run Phase 1 to Phase 6 and emit the report.
 ```
 
-The orchestrator handles principle resolution, the guard prompt on miss, the parallel review dispatch, and the final aggregated report.
+The orchestrator prepares the shared input, resolves the policy dir, dispatches the reviewers in parallel, and writes the report. It asks no questions. When the orchestrator returns, print its report to the user verbatim.

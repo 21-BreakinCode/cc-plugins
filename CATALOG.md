@@ -46,11 +46,11 @@ Two parts form one loop. An edit → eval → keep/discard engine improves code,
 
 ## Review & Design
 
-### [code-reviewer](./code-reviewer/README.md) · `v1.1.1`
+### [code-reviewer](./code-reviewer/README.md) · `v2.0.0`
 
-*Principle-aware PR review*
+*Multi-agent PR review with a per-repo policy layer*
 
-Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists. Includes `refresh-principles`, which learns the repo's own principle files from merged git + PR history.
+Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history.
 
 **Install** · `claude plugin install code-reviewer@21-breakincode`
 

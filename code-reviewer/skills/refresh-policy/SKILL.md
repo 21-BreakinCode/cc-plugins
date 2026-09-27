@@ -1,11 +1,11 @@
 ---
-name: refresh-principles
-description: Refresh a repo's CodeReviewPrinciple files by learning from merged git + PR history (including reviewer↔author threads). Incremental via a watermark. Precision-first. Proposes a diff for approval before writing.
+name: refresh-policy
+description: Refresh a repo's local review policy (.review-policy/) by learning from merged git + PR history, including reviewer↔author threads. Keeps only repo-specific traps. Incremental via a watermark. Proposes a diff for approval before writing.
 disable-model-invocation: true
 allowed-tools: ["Bash", "Read", "Edit", "Write", "AskUserQuestion"]
 ---
 
-# Refresh principles
+# Refresh policy
 
 Mine this repo's **merged** history since the last watermark. Distill
 evidence-anchored entries into OKF concept files, one concept per entry.
@@ -13,15 +13,15 @@ Write each into its role subdir (`red-flags/`, `pitfalls/`, `hotspots/`,
 `domain-traps/`, `review-patterns/`, `conventions/`). Never invent. A
 finding without a citation is dropped. Never write without approval.
 
-## Step 1 — Resolve (and if needed bootstrap) the principle dir
+## Step 1 — Resolve (and if needed bootstrap) the policy dir
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-principle-dir.sh"
+bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-policy-dir.sh"; echo "exit=$?"
 ```
-- Exit 0 → `PRINCIPLE_DIR=<stdout>`.
-- Exit 1/2 → tell the user no principle dir resolved. Ask (AskUserQuestion) for an
-  absolute path to create. Create it and seed the OKF skeleton: an `index.md`
-  with
+
+- Exit 0 → `POLICY_DIR=<stdout>`.
+- Exit 3 → stop. Show the stderr line. The user must set `CODE_REVIEWER_POLICY_DIR` (for example `.review-policy`) in the `env` of the settings file that this repo loads, then restart the session.
+- Exit 1 → the stderr line names the missing dir. Ask (AskUserQuestion) before you create it. On yes, create it with an `index.md`:
 
   ```
   ---
@@ -30,14 +30,15 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-principle-dir.sh"
   # Overview — <repo>
   ```
 
-  Role subdirs (`red-flags/`, `pitfalls/`, `hotspots/`, `domain-traps/`,
-  `review-patterns/`, `conventions/`) are not pre-created. They are created
-  lazily as concepts are written (Step 6).
+  Role subdirs are created lazily as concepts are written (Step 6).
+- Exit 2 → stop. This is not a git repo.
+
+Run `git check-ignore -q <POLICY_DIR>/index.md`. If it fails, the policy dir is not gitignored. Warn the user and ask (AskUserQuestion) before you continue.
 
 ## Step 2 — Determine the range
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/lib/learn-state.sh" read "$PRINCIPLE_DIR"
+bash "${CLAUDE_PLUGIN_ROOT}/lib/learn-state.sh" read "$POLICY_DIR"
 ```
 - Non-empty → `SINCE=<last_merged_at>`.
 - Empty (first run) → `SINCE` = a bounded window (default 6 months ago).
@@ -55,13 +56,20 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/mine-pr-signals.sh" "$BASE" "$SINCE"
 
 ## Step 4 — Distill (precision-first)
 
-Read `references/principle-file-format.md`. Turn ONLY high-signal, corroborated
+Read `references/policy-file-format.md`. Turn ONLY high-signal, corroborated
 items into concepts. Prefer comments that went **outdated** after being posted
 (`caused_change:true`), plus reverts, hotfixes, and clusters recurring across
 ≥N PRs (N default 2). Each item becomes ONE concept `.md` in its role subdir
 (role→type→dir map in the reference). Use a kebab-slug of the title as the
 filename. Include a `sources:` list built from the cited PR#/SHA/comment URLs.
 Drop anything you cannot cite.
+
+**Repo-specific gate:** the common reviewers already cover generic lessons
+("add tests", "handle errors", "no hardcoded secrets"). If its **What** line
+names no repo path, repo module, repo domain term, or repo constant, drop
+the candidate. A PR number or SHA in `sources` does not count, because
+every concept has one. A Hotspot always passes, because its anchor is a file
+path.
 
 **Misdiagnosis sequences:** look specifically for `revert_chains` in git
 signals (a revert whose target was itself reverted) and for revert→different-fix
@@ -76,7 +84,7 @@ optimization as a regression").
 
 Show a unified diff of the proposed concept files. Use AskUserQuestion:
 Approve / Edit / Skip. On **Approve**, stamp each written concept with
-`generated: { by: refresh-principles/<model>, at: <now> }` and
+`generated: { by: refresh-policy/<model>, at: <now> }` and
 `verified: [ { by: human:<id>, at: <today> } ]`. Approval doubles as human
 sign-off (→ trust tier human-reviewed). Do not proceed without approval.
 
@@ -86,12 +94,12 @@ On approval, write each concept `.md` into its role subdir. **Dedupe by
 `sources[].resource`** (never write a concept whose resource already appears in
 the bundle). Regenerate `index.md` (okf_version + grouped listing, preserving
 any curated prose). Prepend a dated entry to `log.md`. Writes are plain file
-writes. Do NOT `git commit` the principle dir.
+writes. Do NOT `git commit` the policy dir.
 
 ## Step 7 — Advance the watermark (only after a successful write)
 
 ```bash
-bash "${CLAUDE_PLUGIN_ROOT}/lib/learn-state.sh" write "$PRINCIPLE_DIR" \
+bash "${CLAUDE_PLUGIN_ROOT}/lib/learn-state.sh" write "$POLICY_DIR" \
   "<newest mergedAt processed>" "<newest merge sha>" '<counts-json>'
 ```
 If the user skipped/declined in Step 5, do NOT advance. The next run retries the
