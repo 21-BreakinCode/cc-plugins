@@ -598,6 +598,33 @@ a {
   color: var(--muted);
 }
 
+.subpage-summary > * {
+  margin: 0 0 0.75em;
+}
+
+.subpage-summary > :last-child {
+  margin-bottom: 0;
+}
+
+.subpage-summary li + li {
+  margin-top: 0.3em;
+}
+
+/* Inline Markdown rendered by scripts/lib/markdown.mjs. */
+:is(.row-tagline, .subpage-tagline, .subpage-summary, .cmd-desc, .cfg-table td, .cl-version li) code {
+  font-family: var(--mono);
+  font-size: 0.86em;
+  color: var(--ink);
+  background: var(--hairline);
+  border-radius: 3px;
+  padding: 0.1em 0.35em;
+}
+
+:is(.row-tagline, .subpage-tagline, .subpage-summary, .cmd-desc, .cfg-table td, .cl-version li) strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
 .subpage-section {
   margin-top: clamp(44px, 6vw, 72px);
   padding-top: clamp(28px, 4vw, 40px);

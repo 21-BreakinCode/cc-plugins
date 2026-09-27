@@ -8,6 +8,7 @@ import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
 import { stampAssets, stampCounts } from './lib/stamp.mjs';
 import { buildSiteData } from './lib/site-data.mjs';
+import { renderInline, renderBlocks } from './lib/markdown.mjs';
 
 const marketplace = {
   name: 'cc-plugins',
@@ -195,6 +196,9 @@ test('stampCounts injects the live plugin count into both hero spans', () => {
 });
 
 // --- site data ---
+const siteDataFor = (overrides) =>
+  buildSiteData({ plugins: [{ name: 'alpha', tagline: '', summary: '', commands: [], skills: [], config: [], changelog: '', ...overrides }] });
+
 test('buildSiteData parses changelog headings with an em-dash or a hyphen before the date', () => {
   const changelog = [
     '## 0.3.0 - 2026-09-25',
@@ -204,10 +208,54 @@ test('buildSiteData parses changelog headings with an em-dash or a hyphen before
     '## 0.1.0 - 2026-09-20',
     '- **feat:** oldest, hyphen heading',
   ].join('\n');
-  const [plugin] = buildSiteData({ plugins: [{ name: 'alpha', changelog }] }).plugins;
+  const [plugin] = siteDataFor({ changelog }).plugins;
   assert.deepEqual(plugin.changelog, [
-    { version: '0.3.0', date: '2026-09-25', changes: [{ type: 'feat', text: 'newest, hyphen heading' }] },
-    { version: '0.2.0', date: '2026-09-24', changes: [{ type: 'fix', text: 'middle, em-dash heading' }] },
-    { version: '0.1.0', date: '2026-09-20', changes: [{ type: 'feat', text: 'oldest, hyphen heading' }] },
+    { version: '0.3.0', date: '2026-09-25', changes: [{ type: 'feat', html: 'newest, hyphen heading' }] },
+    { version: '0.2.0', date: '2026-09-24', changes: [{ type: 'fix', html: 'middle, em-dash heading' }] },
+    { version: '0.1.0', date: '2026-09-20', changes: [{ type: 'feat', html: 'oldest, hyphen heading' }] },
   ]);
+});
+
+test('buildSiteData joins wrapped changelog lines into their bullet and renders inline Markdown', () => {
+  const changelog = [
+    '## 2.2.0 — 2026-08-10',
+    '- **feat:** snapshots into `.autoresearch/snapshot/` instead',
+    '  of committing, not just a git repo.',
+    '- **test:** a discard reverts to the last *kept* state.',
+  ].join('\n');
+  const [plugin] = siteDataFor({ changelog }).plugins;
+  assert.deepEqual(plugin.changelog[0].changes, [
+    { type: 'feat', html: 'snapshots into <code>.autoresearch/snapshot/</code> instead of committing, not just a git repo.' },
+    { type: 'test', html: 'a discard reverts to the last <em>kept</em> state.' },
+  ]);
+});
+
+test('buildSiteData renders prose fields to HTML', () => {
+  const [plugin] = siteDataFor({
+    tagline: 'Flags **FACT:** claims',
+    summary: 'Runs `refresh-policy`.',
+    commands: [{ name: '/x:run', description: 'Set to `0`' }],
+    config: [{ name: 'X_DIR', default: '—', description: 'Where `distill` writes' }],
+  }).plugins;
+  assert.equal(plugin.taglineHtml, 'Flags <strong>FACT:</strong> claims');
+  assert.equal(plugin.summaryHtml, '<p>Runs <code>refresh-policy</code>.</p>');
+  assert.deepEqual(plugin.commands, [{ name: '/x:run', descriptionHtml: 'Set to <code>0</code>' }]);
+  assert.deepEqual(plugin.config, [{ name: 'X_DIR', default: '—', descriptionHtml: 'Where <code>distill</code> writes' }]);
+});
+
+// --- markdown ---
+test('renderInline escapes HTML and never formats inside code spans', () => {
+  assert.equal(renderInline('a <b> & `x < **y**`'), 'a &lt;b&gt; &amp; <code>x &lt; **y**</code>');
+  assert.equal(renderInline('**FACT:** and *kept*'), '<strong>FACT:</strong> and <em>kept</em>');
+  // Stray stars and an unclosed backtick stay literal text.
+  assert.equal(renderInline('*.md and *.json, 2 * 3, `open'), '*.md and *.json, 2 * 3, `open');
+});
+
+test('renderBlocks builds paragraphs and bullet / numbered lists', () => {
+  const md = ['Intro line', 'continues here.', '', '- one', '- two', '  wrapped', '', '1. first', '2. second'].join('\n');
+  assert.equal(
+    renderBlocks(md),
+    '<p>Intro line continues here.</p><ul><li>one</li><li>two wrapped</li></ul><ol><li>first</li><li>second</li></ol>',
+  );
+  assert.equal(renderBlocks(''), '');
 });

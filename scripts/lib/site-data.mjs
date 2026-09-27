@@ -1,5 +1,8 @@
 // Shapes the model into the JSON the static site consumes (site/data/plugins.json).
-// Same content as CATALOG.md, in machine-readable form.
+// Same content as CATALOG.md, in machine-readable form. Prose fields arrive as
+// Markdown and leave as `*Html` fields, so app.js inserts them without re-escaping.
+
+import { renderInline, renderBlocks } from './markdown.mjs';
 
 function parseChangelog(md) {
   if (!md) return [];
@@ -12,13 +15,19 @@ function parseChangelog(md) {
       versions.push(current);
       continue;
     }
-    if (current) {
-      const bullet = line.match(/^- \*\*(\w+):\*\* (.+)$/);
-      if (bullet) current.changes.push({ type: bullet[1], text: bullet[2] });
-    }
+    if (!current) continue;
+    const bullet = line.match(/^- \*\*(\w+):\*\* (.+)$/);
+    const lastChange = current.changes[current.changes.length - 1];
+    if (bullet) current.changes.push({ type: bullet[1], text: bullet[2] });
+    else if (/^\s+\S/.test(line) && lastChange) lastChange.text += ` ${line.trim()}`;
   }
-  return versions;
+  return versions.map((v) => ({
+    ...v,
+    changes: v.changes.map((c) => ({ type: c.type, html: renderInline(c.text) })),
+  }));
 }
+
+const withDescriptionHtml = ({ description, ...rest }) => ({ ...rest, descriptionHtml: renderInline(description) });
 
 export function buildSiteData(model) {
   return {
@@ -28,15 +37,15 @@ export function buildSiteData(model) {
     plugins: model.plugins.map((p) => ({
       name: p.name,
       version: p.version,
-      tagline: p.tagline,
-      summary: p.summary,
+      taglineHtml: renderInline(p.tagline),
+      summaryHtml: renderBlocks(p.summary),
       category: p.category,
       install: p.install,
       oneLiner: p.oneLiner,
-      commands: p.commands,
-      skills: p.skills,
+      commands: p.commands.map(withDescriptionHtml),
+      skills: p.skills.map(withDescriptionHtml),
       dependsOn: p.dependsOn,
-      config: p.config,
+      config: p.config.map(withDescriptionHtml),
       changelog: parseChangelog(p.changelog),
     })),
   };

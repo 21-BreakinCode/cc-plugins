@@ -1,5 +1,6 @@
 // cc-plugins site — fetches generated plugins.json and renders the landing index
-// + per-plugin subpage. No framework, no build step.
+// + per-plugin subpage. No framework, no build step. `*Html` fields are pre-rendered
+// and escaped by scripts/lib/markdown.mjs, so they are inserted as-is.
 
 const CATEGORY_LABEL = {
   memory: "Memory",
@@ -166,7 +167,7 @@ function rowHtml(p, index, delay) {
           ${escapeHtml(p.name)}
           <span class="row-cat">${escapeHtml(categoryLabel(p.category))}</span>
         </span>
-        <span class="row-tagline">${escapeHtml(p.tagline)}</span>
+        <span class="row-tagline">${p.taglineHtml}</span>
       </span>
       <span class="row-meta">
         <span>v${escapeHtml(p.version)}</span>
@@ -248,7 +249,7 @@ function listHtml(list) {
       (x) => `
       <li class="cmd-item">
         <span class="cmd-name">${escapeHtml(x.name)}</span>
-        <span class="cmd-desc">${escapeHtml(x.description)}</span>
+        <span class="cmd-desc">${x.descriptionHtml}</span>
       </li>`,
     )
     .join("");
@@ -268,7 +269,7 @@ function configHtml(p) {
   if (!p.config.length) return "";
   const rows = p.config
     .map(
-      (c) => `<tr><td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.default)}</td><td>${escapeHtml(c.description)}</td></tr>`,
+      (c) => `<tr><td>${escapeHtml(c.name)}</td><td>${escapeHtml(c.default)}</td><td>${c.descriptionHtml}</td></tr>`,
     )
     .join("");
   return `
@@ -286,7 +287,7 @@ function changelogHtml(p) {
   const entries = p.changelog
     .map((v) => {
       const items = v.changes
-        .map((c) => `<li><span class="cl-type cl-type--${escapeHtml(c.type)}">${escapeHtml(c.type)}</span> ${escapeHtml(c.text)}</li>`)
+        .map((c) => `<li><span class="cl-type cl-type--${escapeHtml(c.type)}">${escapeHtml(c.type)}</span> ${c.html}</li>`)
         .join("");
       return `<div class="cl-version"><h3>${escapeHtml(v.version)} <span class="cl-date">${escapeHtml(v.date)}</span></h3><ul>${items}</ul></div>`;
     })
@@ -324,8 +325,8 @@ function renderSubpage(data) {
     <div class="subpage-head" data-reveal>
       <h1>${escapeHtml(p.name)} <span class="version">v${escapeHtml(p.version)}</span></h1>
     </div>
-    <p class="subpage-tagline" data-reveal>${escapeHtml(p.tagline)}</p>
-    <p class="subpage-summary" data-reveal>${escapeHtml(p.summary)}</p>
+    <p class="subpage-tagline" data-reveal>${p.taglineHtml}</p>
+    <div class="subpage-summary" data-reveal>${p.summaryHtml}</div>
 
     <section class="subpage-section" data-reveal>
       <h2>Install</h2>

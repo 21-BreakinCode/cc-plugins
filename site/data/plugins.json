@@ -2,7 +2,7 @@
   "marketplace": {
     "name": "21-breakincode",
     "repo": "21-BreakinCode/cc-plugins",
-    "version": "2.1.0"
+    "version": "2.1.1"
   },
   "installAll": {
     "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode",
@@ -72,37 +72,37 @@
     {
       "name": "autoresearch",
       "version": "2.2.3",
-      "tagline": "Eval-driven improvement, plus the harness to drive it",
-      "summary": "Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.",
+      "taglineHtml": "Eval-driven improvement, plus the harness to drive it",
+      "summaryHtml": "<p>Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.</p>",
       "category": "improve",
       "install": "claude plugin install autoresearch@21-breakincode",
       "oneLiner": "Eval-driven improvement loop (keep/discard with a live Artifact dashboard) plus a dev-lifecycle harness builder that measures project health and creates feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
       "commands": [
         {
           "name": "/autoresearch:harness-build",
-          "description": "Menu-driven scaffolder for harness components: feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
+          "descriptionHtml": "Menu-driven scaffolder for harness components: feedback loop, eval loop, sensor, or context-mgmt advisory. Writes Tier-1 artifacts into your project's .claude/."
         },
         {
           "name": "/autoresearch:harness-check",
-          "description": "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness. Produces a scored harness report with impact-ranked improvements"
+          "descriptionHtml": "Scan project health across code quality, tests, runtime, architecture, scriptability, and harness completeness. Produces a scored harness report with impact-ranked improvements"
         },
         {
           "name": "/autoresearch:harness-improvement",
-          "description": "Execute improvement loop on the top-ranked harness issue: auto-generates eval from probes and spawns the autoresearch:experimenter agent"
+          "descriptionHtml": "Execute improvement loop on the top-ranked harness issue: auto-generates eval from probes and spawns the autoresearch:experimenter agent"
         },
         {
           "name": "/autoresearch:improve",
-          "description": "Iteratively improve any artifact using an edit-eval-keep/discard loop with live dashboard"
+          "descriptionHtml": "Iteratively improve any artifact using an edit-eval-keep/discard loop with live dashboard"
         }
       ],
       "skills": [
         {
           "name": "experiment-loop",
-          "description": "Core iteration logic for autoresearch: edit target, run eval, keep or discard, update dashboard, repeat."
+          "descriptionHtml": "Core iteration logic for autoresearch: edit target, run eval, keep or discard, update dashboard, repeat."
         },
         {
           "name": "harness-probes",
-          "description": "Guide for adding custom probes to the harness check system."
+          "descriptionHtml": "Guide for adding custom probes to the harness check system."
         }
       ],
       "dependsOn": [],
@@ -114,7 +114,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "state the eval-metrics guard in `/autoresearch:improve` once, with its reason, instead of five times with rising emphasis."
+              "html": "state the eval-metrics guard in <code>/autoresearch:improve</code> once, with its reason, instead of five times with rising emphasis."
             }
           ]
         },
@@ -124,7 +124,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "publish the live improvement dashboard as a private Claude Artifact. The dashboard now uses inline SVG and no external assets."
+              "html": "publish the live improvement dashboard as a private Claude Artifact. The dashboard now uses inline SVG and no external assets."
             }
           ]
         },
@@ -134,7 +134,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape. \"harness\" stays: standard term for this plugin."
+              "html": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape. &quot;harness&quot; stays: standard term for this plugin."
             }
           ]
         },
@@ -144,19 +144,19 @@
           "changes": [
             {
               "type": "feat",
-              "text": "keep/discard no longer requires git. The experiment loop now"
+              "html": "keep/discard no longer requires git. The experiment loop now snapshots target files into <code>.autoresearch/snapshot/</code> instead of committing and checking out, so <code>/autoresearch:improve</code> runs against any directory, not just a git repo."
             },
             {
               "type": "fix",
-              "text": "stops polluting real repos with per-iteration commits. Nothing read"
+              "html": "stops polluting real repos with per-iteration commits. Nothing read that history. The dashboard sources <code>reasoning</code> and <code>diff_summary</code> from <code>experiments.json</code>."
             },
             {
               "type": "breaking",
-              "text": "iterations no longer record a commit SHA in `experiments.json`"
+              "html": "iterations no longer record a commit SHA in <code>experiments.json</code> (iteration number already identifies them)."
             },
             {
               "type": "test",
-              "text": "`tests/test_snapshot.sh`: 12 assertions, including that a discard"
+              "html": "<code>tests/test_snapshot.sh</code>: 12 assertions, including that a discard reverts to the last <em>kept</em> state rather than the baseline."
             }
           ]
         },
@@ -166,11 +166,11 @@
           "changes": [
             {
               "type": "refactor",
-              "text": "collapse experiment-loop Rules into steps"
+              "html": "collapse experiment-loop Rules into steps"
             },
             {
               "type": "refactor",
-              "text": "source improve.md libs via ${CLAUDE_PLUGIN_ROOT}"
+              "html": "source improve.md libs via ${CLAUDE_PLUGIN_ROOT}"
             }
           ]
         },
@@ -180,7 +180,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "merge harness plugin into autoresearch (single plugin)"
+              "html": "merge harness plugin into autoresearch (single plugin)"
             }
           ]
         },
@@ -190,7 +190,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "glass + depth dashboard redesign"
+              "html": "glass + depth dashboard redesign"
             }
           ]
         },
@@ -200,7 +200,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "redesign eval dashboard (Linear/Vercel-grade visuals + motion)"
+              "html": "redesign eval dashboard (Linear/Vercel-grade visuals + motion)"
             }
           ]
         },
@@ -210,11 +210,11 @@
           "changes": [
             {
               "type": "refactor",
-              "text": "move harness commands and probes to standalone harness plugin"
+              "html": "move harness commands and probes to standalone harness plugin"
             },
             {
               "type": "refactor",
-              "text": "convert harness-check and harness-improvement to deprecation shims"
+              "html": "convert harness-check and harness-improvement to deprecation shims"
             }
           ]
         },
@@ -224,7 +224,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "infer metric direction, fix improvement %"
+              "html": "infer metric direction, fix improvement %"
             }
           ]
         },
@@ -234,7 +234,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release of autoresearch plugin"
+              "html": "initial release of autoresearch plugin"
             }
           ]
         }
@@ -243,21 +243,21 @@
     {
       "name": "code-reviewer",
       "version": "2.0.0",
-      "tagline": "Multi-agent PR review with a per-repo policy layer",
-      "summary": "Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history.",
+      "taglineHtml": "Multi-agent PR review with a per-repo policy layer",
+      "summaryHtml": "<p>Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes <code>refresh-policy</code>, which learns that policy from merged git and PR history.</p>",
       "category": "review",
       "install": "claude plugin install code-reviewer@21-breakincode",
       "oneLiner": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir.",
       "commands": [
         {
           "name": "/code-reviewer:review-pr",
-          "description": "Multi-agent PR review: five common reviewers plus an optional repo-specific policy layer"
+          "descriptionHtml": "Multi-agent PR review: five common reviewers plus an optional repo-specific policy layer"
         }
       ],
       "skills": [
         {
           "name": "refresh-policy",
-          "description": "Refresh a repo's local review policy (.review-policy/) by learning from merged git + PR history, including reviewer↔author threads."
+          "descriptionHtml": "Refresh a repo's local review policy (.review-policy/) by learning from merged git + PR history, including reviewer↔author threads."
         }
       ],
       "dependsOn": [],
@@ -265,7 +265,7 @@
         {
           "name": "CODE_REVIEWER_POLICY_DIR",
           "default": "—",
-          "description": "Repo review-policy dir. A relative value resolves against the main clone root. Unset means the policy layer is off."
+          "descriptionHtml": "Repo review-policy dir. A relative value resolves against the main clone root. Unset means the policy layer is off."
         }
       ],
       "changelog": [
@@ -275,31 +275,31 @@
           "changes": [
             {
               "type": "feat",
-              "text": "Breaking: five owned reviewer agents (correctness, test, security, ops, simplicity) replace the pr-review-toolkit agents and the orchestrator's inline perspectives. The pr-review-toolkit dependency is removed."
+              "html": "Breaking: five owned reviewer agents (correctness, test, security, ops, simplicity) replace the pr-review-toolkit agents and the orchestrator's inline perspectives. The pr-review-toolkit dependency is removed."
             },
             {
               "type": "feat",
-              "text": "Breaking: the repo policy is found only through `CODE_REVIEWER_POLICY_DIR`. The env vars `CODE_REVIEWER_PRINCIPLE_DIR`, `CODE_REVIEWER_CONFIG_FILE`, and `CODE_REVIEWER_CACHE_FILE` are removed. The plugin no longer reads the files in `~/.claude/code-reviewer/`."
+              "html": "Breaking: the repo policy is found only through <code>CODE_REVIEWER_POLICY_DIR</code>. The env vars <code>CODE_REVIEWER_PRINCIPLE_DIR</code>, <code>CODE_REVIEWER_CONFIG_FILE</code>, and <code>CODE_REVIEWER_CACHE_FILE</code> are removed. The plugin no longer reads the files in <code>~/.claude/code-reviewer/</code>."
             },
             {
               "type": "feat",
-              "text": "Breaking: the skill `refresh-principles` is renamed to `refresh-policy`. It keeps only repo-specific concepts."
+              "html": "Breaking: the skill <code>refresh-principles</code> is renamed to <code>refresh-policy</code>. It keeps only repo-specific concepts."
             },
             {
               "type": "feat",
-              "text": "the orchestrator passes the diff by file path, and reviewers read code at the PR head SHA."
+              "html": "the orchestrator passes the diff by file path, and reviewers read code at the PR head SHA."
             },
             {
               "type": "feat",
-              "text": "policy severity is set by rule. The report adds Scrutiny, agent counts, and policy coverage lines."
+              "html": "policy severity is set by rule. The report adds Scrutiny, agent counts, and policy coverage lines."
             },
             {
               "type": "refactor",
-              "text": "\"principle\" is renamed to \"policy\" in libs, agents, skill, and tests."
+              "html": "&quot;principle&quot; is renamed to &quot;policy&quot; in libs, agents, skill, and tests."
             },
             {
               "type": "chore",
-              "text": "remove the one-time `migrate-to-okf.py` script and its test."
+              "html": "remove the one-time <code>migrate-to-okf.py</code> script and its test."
             }
           ]
         },
@@ -309,7 +309,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape."
+              "html": "rewrite prose across plugin files to clear the simple-english linter. No content or meaning changed, only sentence shape."
             }
           ]
         },
@@ -319,19 +319,19 @@
           "changes": [
             {
               "type": "feat",
-              "text": "QA fixture representativeness check. Flags synthetic test inputs asserting on diversity-sensitive behavior."
+              "html": "QA fixture representativeness check. Flags synthetic test inputs asserting on diversity-sensitive behavior."
             },
             {
               "type": "feat",
-              "text": "QA verdict → blast radius gate. Flags structural decisions lacking production-shaped test evidence."
+              "html": "QA verdict → blast radius gate. Flags structural decisions lacking production-shaped test evidence."
             },
             {
               "type": "feat",
-              "text": "mine-git-signals revert chain detection (misdiagnosis signal)"
+              "html": "mine-git-signals revert chain detection (misdiagnosis signal)"
             },
             {
               "type": "feat",
-              "text": "refresh-principles misdiagnosis sequence mining (Pitfall capture)"
+              "html": "refresh-principles misdiagnosis sequence mining (Pitfall capture)"
             }
           ]
         },
@@ -341,43 +341,43 @@
           "changes": [
             {
               "type": "feat",
-              "text": "migrate to OKF v0.2 concept format"
+              "html": "migrate to OKF v0.2 concept format"
             },
             {
               "type": "feat",
-              "text": "reader walks OKF concept bundle, skips deprecated, flags stale"
+              "html": "reader walks OKF concept bundle, skips deprecated, flags stale"
             },
             {
               "type": "feat",
-              "text": "principle-reviewer cites OKF concept paths + trust/stale weighting"
+              "html": "principle-reviewer cites OKF concept paths + trust/stale weighting"
             },
             {
               "type": "feat",
-              "text": "deterministic old→OKF bundle migration transform"
+              "html": "deterministic old→OKF bundle migration transform"
             },
             {
               "type": "docs",
-              "text": "refresh-principles writes OKF concepts, stamps verified on approval"
+              "html": "refresh-principles writes OKF concepts, stamps verified on approval"
             },
             {
               "type": "fix",
-              "text": "seed OKF skeleton on bootstrap. Emit concept path in reader header."
+              "html": "seed OKF skeleton on bootstrap. Emit concept path in reader header."
             },
             {
               "type": "fix",
-              "text": "compute caused_change from comment outdated-ness"
+              "html": "compute caused_change from comment outdated-ness"
             },
             {
               "type": "fix",
-              "text": "exclude generated/vendored files from churn hotspots"
+              "html": "exclude generated/vendored files from churn hotspots"
             },
             {
               "type": "fix",
-              "text": "quote YAML-hostile concept titles, capture wrapped What/Why lines"
+              "html": "quote YAML-hostile concept titles, capture wrapped What/Why lines"
             },
             {
               "type": "test",
-              "text": "OKF concept conformance check replaces evidence-line check"
+              "html": "OKF concept conformance check replaces evidence-line check"
             }
           ]
         },
@@ -387,31 +387,31 @@
           "changes": [
             {
               "type": "feat",
-              "text": "add learn-state watermark lib + test harness"
+              "html": "add learn-state watermark lib + test harness"
             },
             {
               "type": "feat",
-              "text": "add git-signal miner (reverts/hotfixes/churn)"
+              "html": "add git-signal miner (reverts/hotfixes/churn)"
             },
             {
               "type": "feat",
-              "text": "add PR-signal miner with comment→change correlation"
+              "html": "add PR-signal miner with comment→change correlation"
             },
             {
               "type": "feat",
-              "text": "add diff-coverage guard (coverage + finding validation)"
+              "html": "add diff-coverage guard (coverage + finding validation)"
             },
             {
               "type": "feat",
-              "text": "add refresh-principles producer skill + format reference"
+              "html": "add refresh-principles producer skill + format reference"
             },
             {
               "type": "feat",
-              "text": "wire deterministic coverage guards into orchestrator"
+              "html": "wire deterministic coverage guards into orchestrator"
             },
             {
               "type": "fix",
-              "text": "handle omitted counts in learn-state write"
+              "html": "handle omitted counts in learn-state write"
             }
           ]
         },
@@ -421,7 +421,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "configurable principle-directory roots"
+              "html": "configurable principle-directory roots"
             }
           ]
         },
@@ -431,7 +431,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release. Principle-aware PR review plugin."
+              "html": "initial release. Principle-aware PR review plugin."
             }
           ]
         }
@@ -440,8 +440,8 @@
     {
       "name": "humanize",
       "version": "0.1.1",
-      "tagline": "Sound like a person, in zh-TW or English",
-      "summary": "Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.",
+      "taglineHtml": "Sound like a person, in zh-TW or English",
+      "summaryHtml": "<p>Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.</p>",
       "category": "content",
       "install": "claude plugin install humanize@21-breakincode",
       "oneLiner": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
@@ -449,11 +449,11 @@
       "skills": [
         {
           "name": "distill",
-          "description": "Use to capture a writing voice into a reusable tone preset from samples or referenced materials."
+          "descriptionHtml": "Use to capture a writing voice into a reusable tone preset from samples or referenced materials."
         },
         {
           "name": "rewrite",
-          "description": "Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning."
+          "descriptionHtml": "Use to humanize / de-AI existing text (PR comments, posts, emails, docs) in Traditional Chinese (zh-TW) or English, preserving meaning."
         }
       ],
       "dependsOn": [],
@@ -461,7 +461,7 @@
         {
           "name": "HUMANIZE_TONE_DIR",
           "default": "—",
-          "description": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where `distill` writes new presets."
+          "descriptionHtml": "Folder of your own tone preset .md files. Overrides the built-in presets by name, and is where <code>distill</code> writes new presets."
         }
       ],
       "changelog": [
@@ -471,7 +471,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite prose in both skills to clear the simple-english linter. No content or meaning changed, only sentence shape. Also align the \"Do / Do Not\" field label between distill's steps and its template."
+              "html": "rewrite prose in both skills to clear the simple-english linter. No content or meaning changed, only sentence shape. Also align the &quot;Do / Do Not&quot; field label between distill's steps and its template."
             }
           ]
         },
@@ -481,31 +481,31 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release, a voice distillation and human rewrite plugin"
+              "html": "initial release, a voice distillation and human rewrite plugin"
             },
             {
               "type": "feat",
-              "text": "add rewrite and distill skills"
+              "html": "add rewrite and distill skills"
             },
             {
               "type": "feat",
-              "text": "add built-in tone presets"
+              "html": "add built-in tone presets"
             },
             {
               "type": "feat",
-              "text": "add English and zh-TW AI-tells references"
+              "html": "add English and zh-TW AI-tells references"
             },
             {
               "type": "feat",
-              "text": "add safety-rails reference"
+              "html": "add safety-rails reference"
             },
             {
               "type": "test",
-              "text": "add conformance fixtures and check"
+              "html": "add conformance fixtures and check"
             },
             {
               "type": "fix",
-              "text": "resolve no-preset fallback and de-dash user-facing prose"
+              "html": "resolve no-preset fallback and de-dash user-facing prose"
             }
           ]
         }
@@ -514,8 +514,8 @@
     {
       "name": "adhd-review",
       "version": "0.6.0",
-      "tagline": "Action-first replies, blockers before FYI",
-      "summary": "One ruleset, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: a default-on SessionStart hook injects the rules into the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode.",
+      "taglineHtml": "Action-first replies, blockers before FYI",
+      "summaryHtml": "<p>One ruleset, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: a default-on SessionStart hook injects the rules into the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode.</p>",
       "category": "workflow",
       "install": "claude plugin install adhd-review@21-breakincode",
       "oneLiner": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
@@ -523,7 +523,7 @@
       "skills": [
         {
           "name": "adhd-review-mode",
-          "description": "Use to toggle the adhd-review reply style for the current session."
+          "descriptionHtml": "Use to toggle the adhd-review reply style for the current session."
         }
       ],
       "dependsOn": [],
@@ -531,7 +531,7 @@
         {
           "name": "CLAUDE_ADHD_REVIEW",
           "default": "unset → on",
-          "description": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to `0` to disable it for that session; unset (or `1`) re-enables. The style targets the main thread only; subagents never inherit it."
+          "descriptionHtml": "Per-session kill switch. On by default — installing the plugin auto-applies the style to every new main session. Set to <code>0</code> to disable it for that session; unset (or <code>1</code>) re-enables. The style targets the main thread only; subagents never inherit it."
         }
       ],
       "changelog": [
@@ -541,11 +541,11 @@
           "changes": [
             {
               "type": "refactor",
-              "text": "ship the reply rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set `outputStyle` for it. The rules moved from `output-styles/adhd-review.md` to `scripts/session-rules.md`. If your settings set `outputStyle` to `adhd-review:ADHD Review`, delete that line."
+              "html": "ship the reply rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set <code>outputStyle</code> for it. The rules moved from <code>output-styles/adhd-review.md</code> to <code>scripts/session-rules.md</code>. If your settings set <code>outputStyle</code> to <code>adhd-review:ADHD Review</code>, delete that line."
             },
             {
               "type": "refactor",
-              "text": "remove the `outputStyle` check and the frontmatter strip from `scripts/session-start.sh`. With one delivery path, the rules cannot load twice."
+              "html": "remove the <code>outputStyle</code> check and the frontmatter strip from <code>scripts/session-start.sh</code>. With one delivery path, the rules cannot load twice."
             }
           ]
         },
@@ -555,11 +555,11 @@
           "changes": [
             {
               "type": "fix",
-              "text": "skip the SessionStart injection when `outputStyle` already selects ADHD Review. Claude Code loads that body natively, so the hook added a second copy (about 1,374 tokens) at every start, resume, clear, and compact."
+              "html": "skip the SessionStart injection when <code>outputStyle</code> already selects ADHD Review. Claude Code loads that body natively, so the hook added a second copy (about 1,374 tokens) at every start, resume, clear, and compact."
             },
             {
               "type": "fix",
-              "text": "set `keep-coding-instructions: true` on the output style. Without it, Claude Code removes its built-in software engineering instructions while the style is active."
+              "html": "set <code>keep-coding-instructions: true</code> on the output style. Without it, Claude Code removes its built-in software engineering instructions while the style is active."
             }
           ]
         },
@@ -569,7 +569,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite `skills/adhd-review-mode/SKILL.md` to clear the simple-english linter. No content or meaning changed, only sentence shape."
+              "html": "rewrite <code>skills/adhd-review-mode/SKILL.md</code> to clear the simple-english linter. No content or meaning changed, only sentence shape."
             }
           ]
         },
@@ -579,11 +579,11 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite the remaining prose (Scope guard, Layer 1, Visual Layer, Layer 2) to clear the simple-english linter. No content or meaning changed, only sentence shape."
+              "html": "rewrite the remaining prose (Scope guard, Layer 1, Visual Layer, Layer 2) to clear the simple-english linter. No content or meaning changed, only sentence shape."
             },
             {
               "type": "feat",
-              "text": "add a hard rule to the Visual Layer. Diagrams in a reply are always ASCII. Never use mermaid, since a plain chat reply cannot render it as a picture."
+              "html": "add a hard rule to the Visual Layer. Diagrams in a reply are always ASCII. Never use mermaid, since a plain chat reply cannot render it as a picture."
             }
           ]
         },
@@ -593,7 +593,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "remove the Language Layer (the embedded ASD-STE100 Simple English rules). This plugin now covers reply shaping only. Install the simple-english plugin for language rules. That plugin already covers this job."
+              "html": "remove the Language Layer (the embedded ASD-STE100 Simple English rules). This plugin now covers reply shaping only. Install the simple-english plugin for language rules. That plugin already covers this job."
             }
           ]
         },
@@ -603,7 +603,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "strengthen diff instruction with anti-pattern catalog, positive example, and defense-in-depth reinforcement"
+              "html": "strengthen diff instruction with anti-pattern catalog, positive example, and defense-in-depth reinforcement"
             }
           ]
         },
@@ -613,7 +613,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "code-diff format picker rule now demands verbatim code lines, not intent summaries"
+              "html": "code-diff format picker rule now demands verbatim code lines, not intent summaries"
             }
           ]
         },
@@ -623,7 +623,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "add Language Layer that enforces ASD-STE100 Simplified Technical English as mandatory on every reply (all 53 rules + 8 general recommendations)"
+              "html": "add Language Layer that enforces ASD-STE100 Simplified Technical English as mandatory on every reply (all 53 rules + 8 general recommendations)"
             }
           ]
         },
@@ -633,11 +633,11 @@
           "changes": [
             {
               "type": "feat",
-              "text": "expand Visual Layer with technique vocabulary (pseudocode, call trees, component/file trees, mermaid, diffs, HTML artifacts)"
+              "html": "expand Visual Layer with technique vocabulary (pseudocode, call trees, component/file trees, mermaid, diffs, HTML artifacts)"
             },
             {
               "type": "feat",
-              "text": "add format picker for content-type to view mapping (sequence diagrams, diff view, flow diagrams, done/action view)"
+              "html": "add format picker for content-type to view mapping (sequence diagrams, diff view, flow diagrams, done/action view)"
             }
           ]
         },
@@ -647,7 +647,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "add Visual Layer with fenced ASCII diagrams for flow-shaped concepts"
+              "html": "add Visual Layer with fenced ASCII diagrams for flow-shaped concepts"
             }
           ]
         },
@@ -657,7 +657,7 @@
           "changes": [
             {
               "type": "refactor",
-              "text": "default-on with per-session opt-out"
+              "html": "default-on with per-session opt-out"
             }
           ]
         },
@@ -667,7 +667,7 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release of ADHD-friendly per-reply shaping + Review-Ready handoff summaries"
+              "html": "initial release of ADHD-friendly per-reply shaping + Review-Ready handoff summaries"
             }
           ]
         }
@@ -676,15 +676,15 @@
     {
       "name": "receipts",
       "version": "0.6.0",
-      "tagline": "No claim without a receipt",
-      "summary": "A Stop hook that enforces provable claims. When the finished turn asserts a **FACT:** or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default `warn` mode) — or hard-gate the turn in `block` mode, where Claude must prove each with a real tool call or downgrade it to **ASSUME:** — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.",
+      "taglineHtml": "No claim without a receipt",
+      "summaryHtml": "<p>A Stop hook that enforces provable claims. When the finished turn asserts a <strong>FACT:</strong> or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default <code>warn</code> mode) — or hard-gate the turn in <code>block</code> mode, where Claude must prove each with a real tool call or downgrade it to <strong>ASSUME:</strong> — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.</p>",
       "category": "review",
       "install": "claude plugin install receipts@21-breakincode",
       "oneLiner": "Stop-hook claim auditor — every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
       "commands": [
         {
           "name": "/receipts:receipts",
-          "description": "Show this session's receipts audit ledger, or set the audit mode: /receipts [block|warn|report|default]."
+          "descriptionHtml": "Show this session's receipts audit ledger, or set the audit mode: /receipts [block|warn|report|default]."
         }
       ],
       "skills": [],
@@ -693,17 +693,17 @@
         {
           "name": "CLAUDE_RECEIPTS",
           "default": "unset → on",
-          "description": "Master switch. On by default — installing the plugin activates the auditor. Set to `0` to disable it for a session (`1` also works, redundantly)."
+          "descriptionHtml": "Master switch. On by default — installing the plugin activates the auditor. Set to <code>0</code> to disable it for a session (<code>1</code> also works, redundantly)."
         },
         {
           "name": "CLAUDE_RECEIPTS_MODE",
           "default": "warn",
-          "description": "`warn` (default) = allow the turn but inject a ⚠ note listing unbacked claims; `block` = hard-gate them until proven/downgraded; `report` = silent audit log only. Change per session with `/receipts block|warn|report` (persists until `/receipts default`); the /receipts override file takes precedence over this env var."
+          "descriptionHtml": "<code>warn</code> (default) = allow the turn but inject a ⚠ note listing unbacked claims; <code>block</code> = hard-gate them until proven/downgraded; <code>report</code> = silent audit log only. Change per session with <code>/receipts block|warn|report</code> (persists until <code>/receipts default</code>); the /receipts override file takes precedence over this env var."
         },
         {
           "name": "CLAUDE_RECEIPTS_MODEL",
           "default": "claude-haiku-4-5",
-          "description": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle."
+          "descriptionHtml": "Model for the fresh-context judge that resolves the ambiguous claims the deterministic prefilter can't settle."
         }
       ],
       "changelog": [
@@ -713,19 +713,19 @@
           "changes": [
             {
               "type": "test",
-              "text": "the labeled fixture now stores each claim's real turn (`turn_text`, `final_text`) for the 53 rows whose transcript still exists, so the eval scores extraction the way production sees it instead of feeding it the lone claim as if it were the whole turn."
+              "html": "the labeled fixture now stores each claim's real turn (<code>turn_text</code>, <code>final_text</code>) for the 53 rows whose transcript still exists, so the eval scores extraction the way production sees it instead of feeding it the lone claim as if it were the whole turn."
             },
             {
               "type": "test",
-              "text": "recall goes 0.200 to 0.600 on the same labels. Two mid-turn narrations stop being scored as claims, because a completion verb only counts in the final message, and two real bluffs start being caught."
+              "html": "recall goes 0.200 to 0.600 on the same labels. Two mid-turn narrations stop being scored as claims, because a completion verb only counts in the final message, and two real bluffs start being caught."
             },
             {
               "type": "test",
-              "text": "tool evidence is stored only on the adjudicated rows, which are the ones labeled for what `classify` decides. Storing it everywhere put a single 249 KB turn in the fixture."
+              "html": "tool evidence is stored only on the adjudicated rows, which are the ones labeled for what <code>classify</code> decides. Storing it everywhere put a single 249 KB turn in the fixture."
             },
             {
               "type": "feat",
-              "text": "`attach_turn_context.py` rebuilds the fixture from the transcripts, so labels added later can pick up their turn context while it is still on disk."
+              "html": "<code>attach_turn_context.py</code> rebuilds the fixture from the transcripts, so labels added later can pick up their turn context while it is still on disk."
             }
           ]
         },
@@ -735,19 +735,19 @@
           "changes": [
             {
               "type": "fix",
-              "text": "a lone slug or file name no longer backs a claim. The verbatim span must contain at least two words, because an `ls` line carrying a handover's name was backing the table cell that claimed it had been archived."
+              "html": "a lone slug or file name no longer backs a claim. The verbatim span must contain at least two words, because an <code>ls</code> line carrying a handover's name was backing the table cell that claimed it had been archived."
             },
             {
               "type": "fix",
-              "text": "contradict a success claim only when exactly one command in the turn looks like a test, build or lint run. With several runs there is no cheap way to attribute the failure, and picking the failing one called true claims bluffs: \"Test 1 passes\" was contradicted by an unrelated command reporting \"1 error\"."
+              "html": "contradict a success claim only when exactly one command in the turn looks like a test, build or lint run. With several runs there is no cheap way to attribute the failure, and picking the failing one called true claims bluffs: &quot;Test 1 passes&quot; was contradicted by an unrelated command reporting &quot;1 error&quot;."
             },
             {
               "type": "fix",
-              "text": "drop \"works\" from the completion verbs. It reads as an observation in \"the fix works\" and as an opinion in \"it works best as a secondary cross-check\", and the second sense had a real analysis paragraph logged as a bluff."
+              "html": "drop &quot;works&quot; from the completion verbs. It reads as an observation in &quot;the fix works&quot; and as an opinion in &quot;it works best as a secondary cross-check&quot;, and the second sense had a real analysis paragraph logged as a bluff."
             },
             {
               "type": "test",
-              "text": "on the labeled set: precision 1.000 (was 0.250), recall 0.200, escalation_rate 0.419, dropped_at_extraction 69. All three fixes trade flagging for deferral, so precision rises while recall holds."
+              "html": "on the labeled set: precision 1.000 (was 0.250), recall 0.200, escalation_rate 0.419, dropped_at_extraction 69. All three fixes trade flagging for deferral, so precision rises while recall holds."
             }
           ]
         },
@@ -757,23 +757,23 @@
           "changes": [
             {
               "type": "fix",
-              "text": "a claim is backed only when tool output repeats a run of it word for word (24 characters or more). Shared vocabulary proved nothing: replaying 71 real ledger turns showed 47 of 52 `backed` verdicts resting on one shared word against a median claim of 8, so \"W2a is done: 55 tests pass\" came back backed by an agent's boilerplate line containing \"files\"."
+              "html": "a claim is backed only when tool output repeats a run of it word for word (24 characters or more). Shared vocabulary proved nothing: replaying 71 real ledger turns showed 47 of 52 <code>backed</code> verdicts resting on one shared word against a median claim of 8, so &quot;W2a is done: 55 tests pass&quot; came back backed by an agent's boilerplate line containing &quot;files&quot;."
             },
             {
               "type": "fix",
-              "text": "scope the failure signal to the tool that ran the work. An unrelated `gh` call exiting 1 in the same turn used to mark a true \"All 15 tests pass\" as a bluff."
+              "html": "scope the failure signal to the tool that ran the work. An unrelated <code>gh</code> call exiting 1 in the same turn used to mark a true &quot;All 15 tests pass&quot; as a bluff."
             },
             {
               "type": "feat",
-              "text": "`replay_ledger.py` rejoins a ledger claim to the transcript turn that produced it, so an old `.log` row can be re-judged against its real evidence."
+              "html": "<code>replay_ledger.py</code> rejoins a ledger claim to the transcript turn that produced it, so an old <code>.log</code> row can be re-judged against its real evidence."
             },
             {
               "type": "test",
-              "text": "10 ledger claims adjudicated against their full turn evidence by a fresh-context subagent, each row carrying that evidence so the eval exercises the evidence rules."
+              "html": "10 ledger claims adjudicated against their full turn evidence by a fresh-context subagent, each row carrying that evidence so the eval exercises the evidence rules."
             },
             {
               "type": "test",
-              "text": "on the labeled set: precision 0.250, recall 0.200, escalation_rate 0.351, dropped_at_extraction 69. The first two were 0.000 before, because the label set held no positive class."
+              "html": "on the labeled set: precision 0.250, recall 0.200, escalation_rate 0.351, dropped_at_extraction 69. The first two were 0.000 before, because the label set held no positive class."
             }
           ]
         },
@@ -783,23 +783,23 @@
           "changes": [
             {
               "type": "test",
-              "text": "baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.406, dropped_at_extraction 64"
+              "html": "baseline (provisional labels, structural non-claims only) on the labeled set: precision 0.000, recall 0.000, escalation_rate 0.406, dropped_at_extraction 64"
             },
             {
               "type": "fix",
-              "text": "audit the final assistant message, not every line of the turn. Table rows, headings, and `**ASSUME:**` lines are no longer claims."
+              "html": "audit the final assistant message, not every line of the turn. Table rows, headings, and <code>**ASSUME:**</code> lines are no longer claims."
             },
             {
               "type": "fix",
-              "text": "a claim is backed only when a tool's OUTPUT shows it. A file name in a tool input no longer counts."
+              "html": "a claim is backed only when a tool's OUTPUT shows it. A file name in a tool input no longer counts."
             },
             {
               "type": "feat",
-              "text": "every verdict carries evidence, and the ledger is JSONL."
+              "html": "every verdict carries evidence, and the ledger is JSONL."
             },
             {
               "type": "feat",
-              "text": "`unproven` records a claim the judge could not reach, which used to be logged as `backed`."
+              "html": "<code>unproven</code> records a claim the judge could not reach, which used to be logged as <code>backed</code>."
             }
           ]
         },
@@ -809,7 +809,7 @@
           "changes": [
             {
               "type": "perf",
-              "text": "run the Haiku judge from a neutral folder with `--safe-mode` and no tools. A judge call no longer loads plugins, hooks, skills, agents, MCP servers, or CLAUDE.md. A test call used about 3,600 input tokens, down from about 44,000 in 0.2.1."
+              "html": "run the Haiku judge from a neutral folder with <code>--safe-mode</code> and no tools. A judge call no longer loads plugins, hooks, skills, agents, MCP servers, or CLAUDE.md. A test call used about 3,600 input tokens, down from about 44,000 in 0.2.1."
             }
           ]
         },
@@ -819,7 +819,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite prose in `commands/receipts.md` and this changelog to clear the simple-english linter. No content or meaning changed, only sentence shape."
+              "html": "rewrite prose in <code>commands/receipts.md</code> and this changelog to clear the simple-english linter. No content or meaning changed, only sentence shape."
             }
           ]
         },
@@ -829,7 +829,7 @@
           "changes": [
             {
               "type": "refactor",
-              "text": "default-on with per-session opt-out"
+              "html": "default-on with per-session opt-out"
             }
           ]
         },
@@ -839,11 +839,11 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release, a claim-verification Stop hook"
+              "html": "initial release, a claim-verification Stop hook"
             },
             {
               "type": "feat",
-              "text": "tuned prefilter (autoresearch iterations: 75→100 score)"
+              "html": "tuned prefilter (autoresearch iterations: 75→100 score)"
             }
           ]
         }
@@ -852,73 +852,73 @@
     {
       "name": "obsidian-kit",
       "version": "2.1.0",
-      "tagline": "One plugin for the vault: draw, format, tag",
-      "summary": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.",
+      "taglineHtml": "One plugin for the vault: draw, format, tag",
+      "summaryHtml": "<p>create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.</p>",
       "category": "content",
       "install": "claude plugin install obsidian-kit@21-breakincode",
       "oneLiner": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
       "commands": [
         {
           "name": "/obsidian-kit:handover-init-org",
-          "description": "Scaffold handover_handler__initiation.md for the current ORG in $LifeOS/01Project/$ORG/. One-time per ORG."
+          "descriptionHtml": "Scaffold handover_handler__initiation.md for the current ORG in $LifeOS/01Project/$ORG/. One-time per ORG."
         },
         {
           "name": "/obsidian-kit:handover-init-service",
-          "description": "Per-repo setup. Adds the current repo to the service mapping table and creates the ./handover symlink into LifeOS."
+          "descriptionHtml": "Per-repo setup. Adds the current repo to the service mapping table and creates the ./handover symlink into LifeOS."
         },
         {
           "name": "/obsidian-kit:handover-new",
-          "description": "Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context."
+          "descriptionHtml": "Create a well-formed handover document under ./handover/ (= LifeOS via symlink) seeded from the current conversation context."
         },
         {
           "name": "/obsidian-kit:handover-wrap-up",
-          "description": "Vault-wide daily wrap-up. Discovers active handovers, batches user decisions, executes archives/updates/suspensions in parallel. Replaces /op:wrap-up-today."
+          "descriptionHtml": "Vault-wide daily wrap-up. Discovers active handovers, batches user decisions, executes archives/updates/suspensions in parallel. Replaces /op:wrap-up-today."
         }
       ],
       "skills": [
         {
           "name": "audit-tags",
-          "description": "Audit the vault's tags against the approved taxonomy and apply one approved refactor plan."
+          "descriptionHtml": "Audit the vault's tags against the approved taxonomy and apply one approved refactor plan."
         },
         {
           "name": "create-excali",
-          "description": "Create a new Obsidian Excalidraw drawing in the vault house style."
+          "descriptionHtml": "Create a new Obsidian Excalidraw drawing in the vault house style."
         },
         {
           "name": "format-note",
-          "description": "Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting)."
+          "descriptionHtml": "Write or check Obsidian notes by note-type (map, concept, takeaway, literature, fleeting)."
         },
         {
           "name": "migrate-notes",
-          "description": "One-time vault migration to set note-type and rename map notes by plan approval."
+          "descriptionHtml": "One-time vault migration to set note-type and rename map notes by plan approval."
         },
         {
           "name": "obsidian-bases",
-          "description": "Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries."
+          "descriptionHtml": "Create and edit Obsidian Bases (.base files) with views, filters, formulas, and summaries."
         },
         {
           "name": "obsidian-markdown",
-          "description": "Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax."
+          "descriptionHtml": "Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax."
         },
         {
           "name": "session-pick-up",
-          "description": "Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources."
+          "descriptionHtml": "Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources."
         },
         {
           "name": "session-recommend",
-          "description": "When several take-away topics compete, use this after wrap-up."
+          "descriptionHtml": "When several take-away topics compete, use this after wrap-up."
         },
         {
           "name": "session-wrap-up",
-          "description": "Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep."
+          "descriptionHtml": "Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep."
         },
         {
           "name": "simple-mandarin",
-          "description": "|"
+          "descriptionHtml": "|"
         },
         {
           "name": "update-excali",
-          "description": "Refine an existing Obsidian Excalidraw drawing into the vault house style."
+          "descriptionHtml": "Refine an existing Obsidian Excalidraw drawing into the vault house style."
         }
       ],
       "dependsOn": [],
@@ -930,7 +930,7 @@
           "changes": [
             {
               "type": "refactor",
-              "text": "stop linting Markdown files. The PostToolUse `.md` lint is removed, with `SIMPLE_MANDARIN_LINT_EXCLUDE`. The Stop check on Mandarin chat replies stays, renamed from `mandarin-lint.py` to `mandarin-reply-check.py`. The Mandarin rules still load at session start inside a vault."
+              "html": "stop linting Markdown files. The PostToolUse <code>.md</code> lint is removed, with <code>SIMPLE_MANDARIN_LINT_EXCLUDE</code>. The Stop check on Mandarin chat replies stays, renamed from <code>mandarin-lint.py</code> to <code>mandarin-reply-check.py</code>. The Mandarin rules still load at session start inside a vault."
             }
           ]
         },
@@ -940,27 +940,27 @@
           "changes": [
             {
               "type": "feat",
-              "text": "absorb `session-learner` as `session-wrap-up`, `session-pick-up`, and `session-recommend`. `session-pick-up` now writes cards into the vault after one approval."
+              "html": "absorb <code>session-learner</code> as <code>session-wrap-up</code>, <code>session-pick-up</code>, and <code>session-recommend</code>. <code>session-pick-up</code> now writes cards into the vault after one approval."
             },
             {
               "type": "feat",
-              "text": "absorb `hh` as `handover-new`, `handover-wrap-up`, `handover-init-org`, and `handover-init-service`."
+              "html": "absorb <code>hh</code> as <code>handover-new</code>, <code>handover-wrap-up</code>, <code>handover-init-org</code>, and <code>handover-init-service</code>."
             },
             {
               "type": "feat",
-              "text": "absorb `simple-mandarin`. Its rules and lint now run only inside a vault."
+              "html": "absorb <code>simple-mandarin</code>. Its rules and lint now run only inside a vault."
             },
             {
               "type": "fix",
-              "text": "handover discovery uses the Obsidian tag index and the current taxonomy. The old grep for the retired `handover` tag matched nothing."
+              "html": "handover discovery uses the Obsidian tag index and the current taxonomy. The old grep for the retired <code>handover</code> tag matched nothing."
             },
             {
               "type": "fix",
-              "text": "archiving moves the file and never renames it, so wikilinks keep resolving. The living and historical reference classifier is gone."
+              "html": "archiving moves the file and never renames it, so wikilinks keep resolving. The living and historical reference classifier is gone."
             },
             {
               "type": "refactor",
-              "text": "one vault resolver. `HH_LIFEOS_ROOT`, `HH_ARCHIVE_ROOT`, and `CLAUDE_SIMPLE_MANDARIN` are deleted. `OBSIDIAN_KIT_MANDARIN` and `OBSIDIAN_KIT_OFFER_HANDOVER` replace the two behavior toggles."
+              "html": "one vault resolver. <code>HH_LIFEOS_ROOT</code>, <code>HH_ARCHIVE_ROOT</code>, and <code>CLAUDE_SIMPLE_MANDARIN</code> are deleted. <code>OBSIDIAN_KIT_MANDARIN</code> and <code>OBSIDIAN_KIT_OFFER_HANDOVER</code> replace the two behavior toggles."
             }
           ]
         },
@@ -970,11 +970,11 @@
           "changes": [
             {
               "type": "feat",
-              "text": "absorb the three session reflection skills as `session-wrap-up`, `session-pick-up`, and `session-recommend`."
+              "html": "absorb the three session reflection skills as <code>session-wrap-up</code>, <code>session-pick-up</code>, and <code>session-recommend</code>."
             },
             {
               "type": "feat",
-              "text": "`session-pick-up` gains a Phase 3 write step. It can save cards into the vault through `format-note`, gated by one `AskUserQuestion` approval."
+              "html": "<code>session-pick-up</code> gains a Phase 3 write step. It can save cards into the vault through <code>format-note</code>, gated by one <code>AskUserQuestion</code> approval."
             }
           ]
         },
@@ -984,19 +984,19 @@
           "changes": [
             {
               "type": "fix",
-              "text": "format-note accepts a bold claim inside a quote or callout (`> **claim**`, `> [!danger] **claim**`)."
+              "html": "format-note accepts a bold claim inside a quote or callout (<code>&gt; **claim**</code>, <code>&gt; [!danger] **claim**</code>)."
             },
             {
               "type": "fix",
-              "text": "format-note no longer asks a map directly in a type folder to be renamed, matching migrate-notes 1.0.1."
+              "html": "format-note no longer asks a map directly in a type folder to be renamed, matching migrate-notes 1.0.1."
             },
             {
               "type": "feat",
-              "text": "`Sources:` is optional for concept and takeaway notes. `Related:` stays required."
+              "html": "<code>Sources:</code> is optional for concept and takeaway notes. <code>Related:</code> stays required."
             },
             {
               "type": "feat",
-              "text": "a literature note can name its source with `> Link: <url>`, `> Source: <name>`, or a `Sources:` line. A literature note beside a `00__map__` note needs none, because the map names the series source."
+              "html": "a literature note can name its source with <code>&gt; Link: &lt;url&gt;</code>, <code>&gt; Source: &lt;name&gt;</code>, or a <code>Sources:</code> line. A literature note beside a <code>00__map__</code> note needs none, because the map names the series source."
             }
           ]
         },
@@ -1006,7 +1006,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "audit-tags ends a tag at the next `#`. A false tag glued to another one (`PR #1/#3`, `#1-#10`) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS."
+              "html": "audit-tags ends a tag at the next <code>#</code>. A false tag glued to another one (<code>PR #1/#3</code>, <code>#1-#10</code>) is wrapped in backticks. 1.0.1 skipped 19 such tags in LifeOS."
             }
           ]
         },
@@ -1016,11 +1016,11 @@
           "changes": [
             {
               "type": "fix",
-              "text": "one tag must be a prefix covering at least half of the other for audit-tags to suggest a duplicate. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli)."
+              "html": "one tag must be a prefix covering at least half of the other for audit-tags to suggest a duplicate. The abbreviation rule is gone, because on real tags it only produced false merges (ci→containers, sre→serverless, clickhouse→cli)."
             },
             {
               "type": "fix",
-              "text": "migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/. It no longer renames the note after that folder."
+              "html": "migrate-notes keeps the name of a map note that sits directly in a type folder such as Permanent/. It no longer renames the note after that folder."
             }
           ]
         },
@@ -1030,23 +1030,23 @@
           "changes": [
             {
               "type": "feat",
-              "text": "rename note-visualizer to obsidian-kit. The visualize skill becomes format-note."
+              "html": "rename note-visualizer to obsidian-kit. The visualize skill becomes format-note."
             },
             {
               "type": "feat",
-              "text": "add create-excali and update-excali, moved from the LifeOS vault skill excalidraw-refine."
+              "html": "add create-excali and update-excali, moved from the LifeOS vault skill excalidraw-refine."
             },
             {
               "type": "feat",
-              "text": "add migrate-notes and audit-tags."
+              "html": "add migrate-notes and audit-tags."
             },
             {
               "type": "feat",
-              "text": "absorb obsidian-markdown and obsidian-bases from kepano/obsidian-skills (MIT)."
+              "html": "absorb obsidian-markdown and obsidian-bases from kepano/obsidian-skills (MIT)."
             },
             {
               "type": "feat",
-              "text": "add a SessionStart primer for the obsidian CLI and defuddle."
+              "html": "add a SessionStart primer for the obsidian CLI and defuddle."
             }
           ]
         },
@@ -1056,11 +1056,11 @@
           "changes": [
             {
               "type": "fix",
-              "text": "the PostToolUse reminder returns `additionalContext`, so it reaches Claude. It used `systemMessage`, which only the user sees, so the reminder never steered the model."
+              "html": "the PostToolUse reminder returns <code>additionalContext</code>, so it reaches Claude. It used <code>systemMessage</code>, which only the user sees, so the reminder never steered the model."
             },
             {
               "type": "fix",
-              "text": "the reminder fires only for Markdown files under a `Zettelkasten/` folder. Before, it fired on every Markdown edit in every project, including READMEs and CHANGELOGs."
+              "html": "the reminder fires only for Markdown files under a <code>Zettelkasten/</code> folder. Before, it fired on every Markdown edit in every project, including READMEs and CHANGELOGs."
             }
           ]
         },
@@ -1070,11 +1070,11 @@
           "changes": [
             {
               "type": "feat",
-              "text": "add a `PostToolUse` hook (`hooks/hooks.json` + `hooks/remind-visualize.py`) that reminds Claude to apply the visualize principle on any markdown edit, in any project. Replaces the plugin's earlier \"no hooks\" design."
+              "html": "add a <code>PostToolUse</code> hook (<code>hooks/hooks.json</code> + <code>hooks/remind-visualize.py</code>) that reminds Claude to apply the visualize principle on any markdown edit, in any project. Replaces the plugin's earlier &quot;no hooks&quot; design."
             },
             {
               "type": "feat",
-              "text": "add a sequence-diagram style to the visual-patterns reference, for flows with 3+ participants trading ordered messages. Includes its own line and width budget."
+              "html": "add a sequence-diagram style to the visual-patterns reference, for flows with 3+ participants trading ordered messages. Includes its own line and width budget."
             }
           ]
         },
@@ -1084,7 +1084,7 @@
           "changes": [
             {
               "type": "fix",
-              "text": "rewrite the visualize skill's prose to clear the simple-english linter. No content or meaning changed, only sentence shape."
+              "html": "rewrite the visualize skill's prose to clear the simple-english linter. No content or meaning changed, only sentence shape."
             }
           ]
         },
@@ -1094,15 +1094,15 @@
           "changes": [
             {
               "type": "feat",
-              "text": "initial release, a `visualize` skill with inline and batch modes"
+              "html": "initial release, a <code>visualize</code> skill with inline and batch modes"
             },
             {
               "type": "feat",
-              "text": "visual-patterns reference codifying concept-shape → diagram-type mapping, callout rules, and one-screen budget constraints"
+              "html": "visual-patterns reference codifying concept-shape → diagram-type mapping, callout rules, and one-screen budget constraints"
             },
             {
               "type": "feat",
-              "text": "model-invoked proactive triggering on Zettelkasten/ note writes"
+              "html": "model-invoked proactive triggering on Zettelkasten/ note writes"
             }
           ]
         }
