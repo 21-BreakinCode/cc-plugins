@@ -2,9 +2,9 @@
 
 ## 2.0.0 — 2026-09-27
 
-- **feat!:** five owned reviewer agents (correctness, test, security, ops, simplicity) replace the pr-review-toolkit agents and the orchestrator's inline perspectives. The pr-review-toolkit dependency is removed.
-- **feat!:** the repo policy is found only through `CODE_REVIEWER_POLICY_DIR`. The env vars `CODE_REVIEWER_PRINCIPLE_DIR`, `CODE_REVIEWER_CONFIG_FILE`, and `CODE_REVIEWER_CACHE_FILE` are removed. The plugin no longer reads the files in `~/.claude/code-reviewer/`.
-- **feat!:** the skill `refresh-principles` is renamed to `refresh-policy`. It keeps only repo-specific concepts.
+- **feat:** Breaking: five owned reviewer agents (correctness, test, security, ops, simplicity) replace the pr-review-toolkit agents and the orchestrator's inline perspectives. The pr-review-toolkit dependency is removed.
+- **feat:** Breaking: the repo policy is found only through `CODE_REVIEWER_POLICY_DIR`. The env vars `CODE_REVIEWER_PRINCIPLE_DIR`, `CODE_REVIEWER_CONFIG_FILE`, and `CODE_REVIEWER_CACHE_FILE` are removed. The plugin no longer reads the files in `~/.claude/code-reviewer/`.
+- **feat:** Breaking: the skill `refresh-principles` is renamed to `refresh-policy`. It keeps only repo-specific concepts.
 - **feat:** the orchestrator passes the diff by file path, and reviewers read code at the PR head SHA.
 - **feat:** policy severity is set by rule. The report adds Scrutiny, agent counts, and policy coverage lines.
 - **refactor:** "principle" is renamed to "policy" in libs, agents, skill, and tests.

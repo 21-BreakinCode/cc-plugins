@@ -275,6 +275,18 @@
           "changes": [
             {
               "type": "feat",
+              "text": "Breaking: five owned reviewer agents (correctness, test, security, ops, simplicity) replace the pr-review-toolkit agents and the orchestrator's inline perspectives. The pr-review-toolkit dependency is removed."
+            },
+            {
+              "type": "feat",
+              "text": "Breaking: the repo policy is found only through `CODE_REVIEWER_POLICY_DIR`. The env vars `CODE_REVIEWER_PRINCIPLE_DIR`, `CODE_REVIEWER_CONFIG_FILE`, and `CODE_REVIEWER_CACHE_FILE` are removed. The plugin no longer reads the files in `~/.claude/code-reviewer/`."
+            },
+            {
+              "type": "feat",
+              "text": "Breaking: the skill `refresh-principles` is renamed to `refresh-policy`. It keeps only repo-specific concepts."
+            },
+            {
+              "type": "feat",
               "text": "the orchestrator passes the diff by file path, and reviewers read code at the PR head SHA."
             },
             {
