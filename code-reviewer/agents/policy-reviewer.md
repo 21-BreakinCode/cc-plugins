@@ -1,10 +1,10 @@
 ---
 name: policy-reviewer
 description: |
-  Reviews a PR against the repo's local review policy.
-  The policy is a bundle of red-flags, pitfalls, hotspots, domain traps,
-  review patterns, and conventions from the repo's history.
-  Cites the policy file for each finding.
+  Reviews a PR against the repo's local review policy, kept in
+  `.review-policy/`. The policy is an OKF bundle of red-flags, pitfalls,
+  hotspots, domain traps, review patterns, and conventions distilled from
+  the repo's own history. Cites the policy file for each finding.
 
   Dispatched by code-reviewer's pr-review-orchestrator. Do not invoke directly.
 tools: ["Read", "Bash"]
