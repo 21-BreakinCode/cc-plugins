@@ -54,6 +54,10 @@ them by hand.
 - Commands and skills are harvested automatically from each plugin folder — do
   NOT list them in `content/plugins.content.json`. Commands whose description is
   marked `[DEPRECATED]` are excluded from the catalog automatically.
+- If you change a `tagline` or `summary` in `content/plugins.content.json`, update
+  its `text` and `translatedFrom` in `content/plugins.content.zh-TW.json` (keep each
+  `text` on one line). Otherwise `./scripts/cicd.sh CHECK` fails and the site shows
+  English for that field.
 
 ## 4. Version every shipped change
 

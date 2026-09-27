@@ -29,7 +29,19 @@ function parseChangelog(md) {
 
 const withDescriptionHtml = ({ description, ...rest }) => ({ ...rest, descriptionHtml: renderInline(description) });
 
-export function buildSiteData(model) {
+// Fresh zh-TW fields only (see zh-tw.mjs). A plugin with none gets no `zhTW` key,
+// so the site falls back to English per field.
+function zhTWFields(fresh) {
+  if (!fresh) return {};
+  return {
+    zhTW: {
+      ...(fresh.tagline !== undefined && { taglineHtml: renderInline(fresh.tagline) }),
+      ...(fresh.summary !== undefined && { summaryHtml: renderBlocks(fresh.summary) }),
+    },
+  };
+}
+
+export function buildSiteData(model, zhTranslations = {}) {
   return {
     marketplace: model.marketplace,
     installAll: model.installAll,
@@ -39,6 +51,7 @@ export function buildSiteData(model) {
       version: p.version,
       taglineHtml: renderInline(p.tagline),
       summaryHtml: renderBlocks(p.summary),
+      ...zhTWFields(zhTranslations[p.name]),
       category: p.category,
       install: p.install,
       oneLiner: p.oneLiner,

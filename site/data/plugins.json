@@ -74,6 +74,10 @@
       "version": "2.2.3",
       "taglineHtml": "Eval-driven improvement, plus the harness to drive it",
       "summaryHtml": "<p>Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.</p>",
+      "zhTW": {
+        "taglineHtml": "以評測驅動改進，並提供驅動它的 harness",
+        "summaryHtml": "<p>外掛由兩個部分組成一個循環。核心是「編輯 → 評測 → 保留或捨棄」引擎。引擎可以改進程式碼、提示詞或文件。引擎用 shell 指令、LLM 評審或兩者，為每次修改評分。進度顯示在即時的 Artifact 儀表板上。Harness 建構器從六個類別衡量專案健康度。建構器會建立回饋循環、評測、感測器與脈絡管理建議。然後，建構器用同一個循環修正排名最高的問題。</p>"
+      },
       "category": "improve",
       "install": "claude plugin install autoresearch@21-breakincode",
       "oneLiner": "Eval-driven improvement loop (keep/discard with a live Artifact dashboard) plus a dev-lifecycle harness builder that measures project health and creates feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
@@ -245,6 +249,10 @@
       "version": "2.0.0",
       "taglineHtml": "Multi-agent PR review with a per-repo policy layer",
       "summaryHtml": "<p>Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes <code>refresh-policy</code>, which learns that policy from merged git and PR history.</p>",
+      "zhTW": {
+        "taglineHtml": "多代理 PR 審查，加上各 repo 自己的審查政策",
+        "summaryHtml": "<p>外掛在 PR 上平行執行五個審查員。五個審查員負責正確性、測試、安全、維運與簡潔度。簡潔度審查採用 ponytail 與 /simplify 規則。如果 repo 有本地審查政策，第六個審查員會引用它。政策記錄該 repo 自己的警訊、陷阱與熱點。<code>refresh-policy</code> 從已合併的 git 與 PR 歷史學習這份政策。</p>"
+      },
       "category": "review",
       "install": "claude plugin install code-reviewer@21-breakincode",
       "oneLiner": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir.",
@@ -442,6 +450,10 @@
       "version": "0.1.1",
       "taglineHtml": "Sound like a person, in zh-TW or English",
       "summaryHtml": "<p>Two skills. distill captures your voice from writing samples into a reusable tone preset; rewrite strips AI-tells from existing text (PR comments, posts, emails) and matches a tone, preserving meaning and never inventing facts. Separate Traditional-Chinese and English rulesets, auto-detected, plus a flag-only audit mode.</p>",
+      "zhTW": {
+        "taglineHtml": "讓文字像真人寫的，支援 zh-TW 與英文",
+        "summaryHtml": "<p>外掛包含兩個 skill。distill 從寫作範例擷取你的語氣。distill 把語氣存成可重複使用的預設。rewrite 移除既有文字中的 AI 痕跡。適用的文字包括 PR 留言、貼文與電子郵件。rewrite 會配合指定語氣，保留原意，並且絕不捏造事實。繁體中文與英文各有一套規則，外掛會自動偵測語言。另有一個只標記、不修改的稽核模式。</p>"
+      },
       "category": "content",
       "install": "claude plugin install humanize@21-breakincode",
       "oneLiner": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
@@ -516,6 +528,10 @@
       "version": "0.6.0",
       "taglineHtml": "Action-first replies, blockers before FYI",
       "summaryHtml": "<p>One ruleset, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: a default-on SessionStart hook injects the rules into the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode.</p>",
+      "zhTW": {
+        "taglineHtml": "回覆先講行動，阻礙排在參考資訊之前",
+        "summaryHtml": "<p>一套規則，分成三層。第 1 層調整每一則回覆。回覆先寫行動，多步驟工作加上編號與時間估計。回覆刪除開場白、重述與結尾，錯誤只陳述事實。第 2 層管理大型多步驟工作的最後一則回覆。這則回覆使用 Review-Ready 分類：✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do。阻礙排在參考資訊之前，每個請求都說明為何由你決定。視覺層把非線性的流程概念畫成 ASCII 圖，放在程式碼區塊中。這類概念包括分支、迴圈、狀態變化與階層。線性步驟仍然用編號清單。規則只套用在面向使用者的主對話。預設開啟的 SessionStart hook 會把規則注入主工作階段。因此，子代理的回傳仍然保留完整細節。外掛預設開啟，安裝後主對話立即套用規則。如果要關閉某個工作階段，請設定 CLAUDE_ADHD_REVIEW=0。用 /adhd-review-mode 可以切換單一工作階段。</p>"
+      },
       "category": "workflow",
       "install": "claude plugin install adhd-review@21-breakincode",
       "oneLiner": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
@@ -678,6 +694,10 @@
       "version": "0.6.0",
       "taglineHtml": "No claim without a receipt",
       "summaryHtml": "<p>A Stop hook that enforces provable claims. When the finished turn asserts a <strong>FACT:</strong> or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default <code>warn</code> mode) — or hard-gate the turn in <code>block</code> mode, where Claude must prove each with a real tool call or downgrade it to <strong>ASSUME:</strong> — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.</p>",
+      "zhTW": {
+        "taglineHtml": "每個主張都要有收據",
+        "summaryHtml": "<p>receipts 是一個 Stop hook，要求每個主張都能證明。回合結束時，如果回覆宣稱 <strong>FACT:</strong> 或完成，receipts 會檢查它。完成的說法包括 'verified'、'tests pass'、'fixed'、'done'。免費的確定性預篩先用該回合真實的工具呼叫比對主張。只有真正模糊的主張，才交給全新脈絡的 Haiku 評審。沒有證據的主張會加上 ⚠ 註記，這是預設的 <code>warn</code> 模式。<code>block</code> 模式會擋下該回合。Claude 必須用真實的工具呼叫證明每個主張，或把它降級為 <strong>ASSUME:</strong>。每個主張在每個工作階段只挑戰一次，由 ledger 與 stop_hook_active 做後援。外掛落實 fact-assume 原則：FACT 必須在受到質疑時可以證明。RLHF 帶來的自信「done」會悄悄侵蝕這個原則。外掛預設開啟，出錯時放行（fail-open）。設定 CLAUDE_RECEIPTS=0 可以停用。/receipts 會列出工作階段的稽核 ledger，並設定模式。</p>"
+      },
       "category": "review",
       "install": "claude plugin install receipts@21-breakincode",
       "oneLiner": "Stop-hook claim auditor — every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
@@ -854,6 +874,10 @@
       "version": "2.1.0",
       "taglineHtml": "One plugin for the vault: draw, format, tag",
       "summaryHtml": "<p>create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.</p>",
+      "zhTW": {
+        "taglineHtml": "一個外掛管好筆記庫：繪圖、格式、標籤",
+        "summaryHtml": "<p>create-excali 與 update-excali 用 ExcalidrawAutomate 建立 Excalidraw 圖。這兩個 skill 會檢查幾何，並審查實際輸出的 PNG。format-note 依筆記類型撰寫與檢查筆記。筆記類型包括 map、concept、takeaway、literature 與 fleeting。format-note 保留舊 visualize skill 的 ASCII 圖與 callout 規則。migrate-notes 為整個筆記庫設定筆記類型，並重新命名 map 筆記。這些變更合成一份計畫，核准後才執行。audit-tags 找出錯誤、重複、錯字與不在分類表中的標籤。它套用一份核准過的重新命名計畫，並先建立備份。handover-new、handover-wrap-up、handover-init-org 與 handover-init-service 建立並收尾交接文件。交接文件存放在筆記庫中。session-wrap-up、session-pick-up 與 session-recommend 把工作階段整理成反思重點。核准一次後，它們會在筆記庫中建立 Zettelkasten 卡片。一個專用 skill 在筆記庫中撰寫與檢查受控繁體中文。SessionStart hook 引導 Claude 以 obsidian CLI 為準。筆記庫的偏好設定存放在筆記庫檔案 .obsidian-kit.json 中。外掛不依賴其他外掛。</p>"
+      },
       "category": "content",
       "install": "claude plugin install obsidian-kit@21-breakincode",
       "oneLiner": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",

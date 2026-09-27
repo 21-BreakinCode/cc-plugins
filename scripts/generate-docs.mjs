@@ -16,11 +16,18 @@ import { renderCatalog } from './lib/render-catalog.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { buildSiteData } from './lib/site-data.mjs';
 import { stampAssets, stampCounts } from './lib/stamp.mjs';
+import { pickFreshTranslations } from './lib/zh-tw.mjs';
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 function readJSON(rel) {
   return JSON.parse(readFileSync(join(REPO_ROOT, rel), 'utf8'));
+}
+
+const ZH_TW_CONTENT = 'content/plugins.content.zh-TW.json';
+
+function readOptionalJSON(rel, fallback) {
+  return existsSync(join(REPO_ROOT, rel)) ? readJSON(rel) : fallback;
 }
 
 function listMarkdown(dir) {
@@ -66,10 +73,11 @@ function buildOutputs() {
   const marketplace = readJSON('.claude-plugin/marketplace.json');
   const content = readJSON('content/plugins.content.json');
   const model = buildModel({ marketplace, content, readPlugin: makeReadPlugin() });
+  const zhTW = pickFreshTranslations(model.plugins, readOptionalJSON(ZH_TW_CONTENT, { plugins: {} }));
 
   const outputs = [
     { path: 'CATALOG.md', body: renderCatalog(model) },
-    { path: 'site/data/plugins.json', body: `${JSON.stringify(buildSiteData(model), null, 2)}\n` },
+    { path: 'site/data/plugins.json', body: `${JSON.stringify(buildSiteData(model, zhTW.byPlugin), null, 2)}\n` },
   ];
   for (const plugin of model.plugins) {
     outputs.push({ path: join(plugin.source, 'README.md'), body: renderReadme(plugin, model) });
@@ -82,7 +90,7 @@ function buildOutputs() {
     const stamped = stampCounts(stampAssets(current, model.marketplace.version), model.plugins.length);
     outputs.push({ path: page, body: stamped });
   }
-  return outputs;
+  return { outputs, translationWarnings: zhTW.warnings };
 }
 
 function writeOutput({ path, body }) {
@@ -98,15 +106,19 @@ function isStale({ path, body }) {
 
 function main() {
   const check = process.argv.includes('--check');
-  const outputs = buildOutputs();
+  const { outputs, translationWarnings } = buildOutputs();
+  translationWarnings.forEach((warning) => console.error(`⚠ ${warning}`));
 
   if (check) {
     const stale = outputs.filter(isStale).map((o) => o.path);
     if (stale.length) {
       console.error('✖ Out of sync — run `./scripts/cicd.sh GEN`:');
       for (const p of stale) console.error(`  - ${p}`);
-      process.exit(1);
     }
+    if (translationWarnings.length) {
+      console.error(`✖ zh-TW translations out of date — update text + translatedFrom in ${ZH_TW_CONTENT}`);
+    }
+    if (stale.length || translationWarnings.length) process.exit(1);
     console.log(`✓ ${outputs.length} generated files in sync`);
     return;
   }

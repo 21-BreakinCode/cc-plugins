@@ -8,6 +8,7 @@ import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
 import { stampAssets, stampCounts } from './lib/stamp.mjs';
 import { buildSiteData } from './lib/site-data.mjs';
+import { pickFreshTranslations } from './lib/zh-tw.mjs';
 import { renderInline, renderBlocks } from './lib/markdown.mjs';
 
 const marketplace = {
@@ -258,4 +259,88 @@ test('renderBlocks builds paragraphs and bullet / numbered lists', () => {
     '<p>Intro line continues here.</p><ul><li>one</li><li>two wrapped</li></ul><ol><li>first</li><li>second</li></ol>',
   );
   assert.equal(renderBlocks(''), '');
+});
+
+// --- zh-TW translations ---
+const englishPlugin = (overrides = {}) => ({ name: 'alpha', tagline: 'A tag', summary: 'A summary', ...overrides });
+const freshAlpha = {
+  tagline: { text: '標語', translatedFrom: 'A tag' },
+  summary: { text: '摘要', translatedFrom: 'A summary' },
+};
+
+test('pickFreshTranslations keeps a translation whose source still matches the English', () => {
+  assert.deepEqual(pickFreshTranslations([englishPlugin()], { plugins: { alpha: freshAlpha } }), {
+    byPlugin: { alpha: { tagline: '標語', summary: '摘要' } },
+    warnings: [],
+  });
+});
+
+test('pickFreshTranslations drops and reports a translation whose English changed', () => {
+  const zhContent = { plugins: { alpha: { ...freshAlpha, summary: { text: '舊摘要', translatedFrom: 'An old summary' } } } };
+  assert.deepEqual(pickFreshTranslations([englishPlugin()], zhContent), {
+    byPlugin: { alpha: { tagline: '標語' } },
+    warnings: ['zh-TW stale: alpha.summary'],
+  });
+});
+
+test('pickFreshTranslations reports every field of a plugin with no entry', () => {
+  assert.deepEqual(pickFreshTranslations([englishPlugin()], { plugins: {} }), {
+    byPlugin: {},
+    warnings: ['zh-TW missing: alpha.tagline', 'zh-TW missing: alpha.summary'],
+  });
+});
+
+test('pickFreshTranslations treats a blank or non-string text as missing', () => {
+  const zhContent = {
+    plugins: {
+      alpha: {
+        tagline: { text: '   ', translatedFrom: 'A tag' },
+        summary: { text: 42, translatedFrom: 'A summary' },
+      },
+    },
+  };
+  assert.deepEqual(pickFreshTranslations([englishPlugin()], zhContent).warnings, [
+    'zh-TW missing: alpha.tagline',
+    'zh-TW missing: alpha.summary',
+  ]);
+});
+
+test('pickFreshTranslations reports an entry for a plugin not in the marketplace', () => {
+  const zhContent = { plugins: { alpha: freshAlpha, ghost: { tagline: { text: '幽靈', translatedFrom: 'Ghost' } } } };
+  assert.deepEqual(pickFreshTranslations([englishPlugin()], zhContent).warnings, ['zh-TW unknown plugin: ghost']);
+});
+
+test('pickFreshTranslations expects no entry for an empty English field', () => {
+  const zhContent = { plugins: { alpha: { tagline: freshAlpha.tagline } } };
+  assert.deepEqual(pickFreshTranslations([englishPlugin({ summary: '' })], zhContent), {
+    byPlugin: { alpha: { tagline: '標語' } },
+    warnings: [],
+  });
+});
+
+test('pickFreshTranslations treats a file with no plugins map as empty', () => {
+  assert.deepEqual(pickFreshTranslations([englishPlugin()], {}).warnings, [
+    'zh-TW missing: alpha.tagline',
+    'zh-TW missing: alpha.summary',
+  ]);
+});
+
+const sitePlugin = (name) => ({ name, tagline: 'T', summary: 'S', commands: [], skills: [], config: [], changelog: '' });
+
+test('buildSiteData renders zhTW fields with the same Markdown escaping as English', () => {
+  const siteData = buildSiteData(
+    { plugins: [sitePlugin('alpha'), sitePlugin('beta')] },
+    { alpha: { tagline: '執行 `run` <b>', summary: '**重點**摘要' } },
+  );
+  const [alpha, beta] = siteData.plugins;
+  assert.deepEqual(alpha.zhTW, {
+    taglineHtml: '執行 <code>run</code> &lt;b&gt;',
+    summaryHtml: '<p><strong>重點</strong>摘要</p>',
+  });
+  assert.equal('zhTW' in beta, false);
+});
+
+test('buildSiteData leaves a stale field out of zhTW', () => {
+  const siteData = buildSiteData({ plugins: [sitePlugin('alpha')] }, { alpha: { tagline: '標語' } });
+  assert.deepEqual(siteData.plugins[0].zhTW, { taglineHtml: '標語' });
 });
