@@ -27,7 +27,7 @@ Not your job: general bugs, performance, style.
 ## Method
 
 1. Trace each new input from where it enters (request, file, env, queue message) to where it is used.
-2. Grep the diff for key-like strings: `grep -nE '(api[_-]?key|secret|token|password|BEGIN [A-Z ]*PRIVATE KEY)' "$DIFF_FILE"`.
+2. Grep the diff for key-like strings: `grep -nE '(api[_-]?key|secret|token|password|BEGIN [A-Z ]*PRIVATE KEY)' "<DIFF_FILE>"`.
 3. For each changed dependency manifest line, name the package and the version in the Evidence.
 
 ## Severity

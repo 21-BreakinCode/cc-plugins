@@ -33,6 +33,8 @@ bash "${CLAUDE_PLUGIN_ROOT}/lib/resolve-policy-dir.sh"; echo "exit=$?"
   Role subdirs are created lazily as concepts are written (Step 6).
 - Exit 2 → stop. This is not a git repo.
 
+Run `git check-ignore -q <POLICY_DIR>/index.md`. If it fails, the policy dir is not gitignored. Warn the user and ask (AskUserQuestion) before you continue.
+
 ## Step 2 — Determine the range
 
 ```bash
@@ -64,8 +66,8 @@ Drop anything you cannot cite.
 
 **Repo-specific gate:** the common reviewers already cover generic lessons
 ("add tests", "handle errors", "no hardcoded secrets"). If its **What** line
-names a repo path, a repo module, a repo domain term, or a repo constant,
-keep the candidate. A PR number or SHA in `sources` does not count, because
+names no repo path, repo module, repo domain term, or repo constant, drop
+the candidate. A PR number or SHA in `sources` does not count, because
 every concept has one. A Hotspot always passes, because its anchor is a file
 path.
 

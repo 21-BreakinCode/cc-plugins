@@ -17,8 +17,10 @@ You review a PR through the repo's own history. First, read `${CLAUDE_PLUGIN_ROO
 ## Step 1: Load the policy
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/lib/load-policy.sh "$POLICY_DIR"
+bash ${CLAUDE_PLUGIN_ROOT}/lib/load-policy.sh "<POLICY_DIR>"
 ```
+
+Run this with the literal POLICY_DIR value.
 
 The loader prints concepts in priority order: red-flags, pitfalls, hotspots, domain-traps, review-patterns, conventions, then `index.md`. Each concept header looks like `=== RedFlag: <title> [human-reviewed] (red-flags/<slug>.md) ===`. It can also carry `[STALE]`. When you cite a concept, copy the path in parentheses exactly. The output ends with a `=== Policy Coverage ===` footer.
 

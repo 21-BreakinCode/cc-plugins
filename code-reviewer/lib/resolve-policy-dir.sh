@@ -10,7 +10,7 @@ set -euo pipefail
 
 policy_value="${CODE_REVIEWER_POLICY_DIR:-}"
 if [[ -z "$policy_value" ]]; then
-  echo "policy: off (CODE_REVIEWER_POLICY_DIR not set). Start the session in the main clone, or symlink .claude/settings.local.json to ~/.claude/settings.appier-cs.json." >&2
+  echo "policy: off (CODE_REVIEWER_POLICY_DIR not set). Set it in the env of a settings file that this repo loads, or start the session in the main clone." >&2
   exit 3
 fi
 
@@ -26,7 +26,7 @@ else
 fi
 
 case "$policy_value" in
-  "~/"*) policy_dir="$HOME/${policy_value#\~/}" ;;
+  "~/"*) : "${HOME:?HOME not set}"; policy_dir="$HOME/${policy_value#\~/}" ;;
   /*)    policy_dir="$policy_value" ;;
   *)     policy_dir="$main_root/$policy_value" ;;
 esac

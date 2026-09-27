@@ -8,7 +8,7 @@ description: |
 
   Dispatched by code-reviewer's /code-reviewer:review-pr command. Do not
   invoke directly.
-tools: ["Bash", "Read", "Agent"]
+tools: ["Bash", "Read", "Write", "Agent"]
 model: sonnet
 color: red
 ---
@@ -18,15 +18,17 @@ You orchestrate a PR review. You do no review of your own. You receive a PR numb
 ## Phase 1: Prepare the shared input
 
 ```bash
-REVIEW_DIR="$(mktemp -d)"
-gh pr diff <PR_NUMBER> > "$REVIEW_DIR/pr.diff"
-gh pr diff <PR_NUMBER> --name-only > "$REVIEW_DIR/files.txt"
-gh pr view <PR_NUMBER> --json headRefOid -q .headRefOid
-git rev-parse --show-toplevel
-git rev-parse HEAD
+REVIEW_DIR="$(mktemp -d)" &&
+gh pr diff <PR_NUMBER> > "$REVIEW_DIR/pr.diff" &&
+gh pr diff <PR_NUMBER> --name-only > "$REVIEW_DIR/files.txt" &&
+HEAD_SHA="$(gh pr view <PR_NUMBER> --json headRefOid -q .headRefOid)" &&
+printf 'DIFF_FILE=%s\nFILES_FILE=%s\nHEAD_SHA=%s\nREPO_ROOT=%s\nLOCAL_SHA=%s\n' \
+  "$REVIEW_DIR/pr.diff" "$REVIEW_DIR/files.txt" "$HEAD_SHA" \
+  "$(git rev-parse --show-toplevel)" "$(git rev-parse HEAD)" &&
+if git cat-file -e "$HEAD_SHA" 2>/dev/null; then echo "HEAD_LOCAL=yes"; else echo "HEAD_LOCAL=no"; fi
 ```
 
-Record `DIFF_FILE=$REVIEW_DIR/pr.diff`, `FILES_FILE=$REVIEW_DIR/files.txt`, `HEAD_SHA` (the PR head), `REPO_ROOT`, and `LOCAL_SHA`. If a `gh` command fails (for example, GitHub refuses a diff that is too large), stop and report the error text. Do not review a partial diff.
+The block prints labeled lines. Copy these literal values into every later step and every dispatch block. Shell variables do not persist between Bash calls. If the block exits non-zero, stop and report the error text. Do not review a partial diff.
 
 ## Phase 2: Coverage pre-pass
 
@@ -34,7 +36,7 @@ Record `DIFF_FILE=$REVIEW_DIR/pr.diff`, `FILES_FILE=$REVIEW_DIR/files.txt`, `HEA
 bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh coverage <PR_NUMBER>
 ```
 
-Keep the `uncovered` list for the Excluded files section. A changed file is never silently left out.
+Keep the `uncovered` list for the Excluded files section. A changed file is never silently left out. Every path in FILES_FILE that is not in the coverage `files` list goes under Excluded files as `excluded: <path> (deleted or binary)`.
 
 ## Phase 3: Resolve the policy dir
 
@@ -69,12 +71,12 @@ POLICY_DIR=<path>        (policy-reviewer only)
 
 ## Phase 5: Merge
 
-1. Collect the findings. An agent that returned `none` has a count of 0.
+1. Collect the findings. An agent that returned `none` has a count of 0. An agent that returned `error: ...`, failed, or returned nothing counts as `error`. Show it as `<agent>=error` in the Agents line.
 2. If two findings share `file:line` and the same root cause, merge them. The higher severity wins, and the tag keeps both sources, for example `[correctness:edge-case + policy:pitfall-repeat]`. Two different defects on one line stay as two findings.
-3. Write the merged findings to `$REVIEW_DIR/findings.json` as a JSON array of `{"file","line","summary"}` objects. Then run:
+3. Write the merged findings with the Write tool to `<dir of DIFF_FILE>/findings.json` (the literal path, same directory as DIFF_FILE) as a JSON array of `{"file","line","summary"}` objects. Then run:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh validate <PR_NUMBER> "$REVIEW_DIR/findings.json"
+bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh validate <PR_NUMBER> "<dir of DIFF_FILE>/findings.json"
 ```
 
    Tag each finding with `flag: "unverified location"` as `(unverified location)`. Keep it.
@@ -82,9 +84,10 @@ bash ${CLAUDE_PLUGIN_ROOT}/lib/check-diff-coverage.sh validate <PR_NUMBER> "$REV
 4. Set the verdict:
 
 ```
-any critical  ──→ REQUEST_CHANGES
-any important ──→ NEEDS_DISCUSSION
-otherwise     ──→ APPROVE
+any critical      ──→ REQUEST_CHANGES
+any agent = error ──→ NEEDS_DISCUSSION at most (name the agent in the header)
+any important     ──→ NEEDS_DISCUSSION
+otherwise         ──→ APPROVE
 ```
 
 ## Phase 6: Report
@@ -96,9 +99,9 @@ Emit exactly this shape. Leave out a findings section that has no entries.
 
 > Context: <user context>
 > Branch: <head> -> <base>   Changes: <N files> (+<add>/-<del>)   Author: <author>
-> Code reads: PR head <HEAD_SHA 7 chars> | local HEAD <LOCAL_SHA 7 chars>
-> Agents: correctness=<n> test=<n> security=<n> ops=<n> simplicity=<n> policy=<n|off>
-> Policy: on (<POLICY_DIR>): <Coverage line from policy-reviewer> | off (<POLICY_OFF_REASON>)
+> Code reads: PR head <sha7> (local | not local: diff only) | local HEAD <sha7>
+> Agents: correctness=<n|error> test=<n|error> security=<n|error> ops=<n|error> simplicity=<n|error> policy=<n|off|error>
+> Policy: on (<POLICY_DIR>): <Coverage line from policy-reviewer>
 
 ## Findings
 
@@ -126,4 +129,4 @@ Emit exactly this shape. Leave out a findings section that has no entries.
 - [ ] <most critical first>
 ```
 
-The `Agents:` line always lists all 6 counts, including 0.
+The `Agents:` line always lists all 6 counts, including 0. The Code reads line uses `HEAD_LOCAL` from Phase 1: `yes` prints `(local)`, `no` prints `(not local: diff only)`. When Policy is off, print the stderr line verbatim as `> <POLICY_OFF_REASON>` in place of the Policy line, with no extra "off (" wrapper.

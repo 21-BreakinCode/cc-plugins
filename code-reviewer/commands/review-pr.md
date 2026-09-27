@@ -50,4 +50,4 @@ User context: "<user description>"
 Run Phase 1 to Phase 6 and emit the report.
 ```
 
-The orchestrator prepares the shared input, resolves the policy dir, dispatches the reviewers in parallel, and writes the report. It asks no questions.
+The orchestrator prepares the shared input, resolves the policy dir, dispatches the reviewers in parallel, and writes the report. It asks no questions. When the orchestrator returns, print its report to the user verbatim.
