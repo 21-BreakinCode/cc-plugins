@@ -15,7 +15,7 @@ stale_after: <YYYY-MM-DD>     # generated date + 6 months
 sources:                      # >=1 REQUIRED. No source -> drop the entry.
   - resource: <PR url | commit sha | comment url>
     title: <optional label>
-generated: { by: refresh-principles/<model>, at: <ISO-8601> }
+generated: { by: refresh-policy/<model>, at: <ISO-8601> }
 verified: [ { by: human:<id>, at: <YYYY-MM-DD> } ]   # stamped on approval
 ---
 **What:** one line.
@@ -36,7 +36,7 @@ verified: [ { by: human:<id>, at: <YYYY-MM-DD> } ]   # stamped on approval
 
 ## Reader priority
 
-`load-principle.sh` emits role dirs in this order (most merge-blocking first):
+`load-policy.sh` emits role dirs in this order (most merge-blocking first):
 red-flags -> pitfalls -> hotspots -> domain-traps -> review-patterns ->
 conventions -> index.md. The index contains `okf_version` (v0.2) and grouped
 listing. It skips `status: deprecated`, flags entries past `stale_after` as

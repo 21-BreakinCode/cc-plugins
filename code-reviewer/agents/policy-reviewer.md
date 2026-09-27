@@ -1,5 +1,5 @@
 ---
-name: principle-reviewer
+name: policy-reviewer
 description: |
   Reviews a PR against a repo-specific Code Review Principle directory.
   Distilled principles cite recurring bug clusters, hotspots, red-flags, and
@@ -27,7 +27,7 @@ You review a PR through the lens of a repo-specific principle directory. The pri
 Run:
 
 ```bash
-bash ${CLAUDE_PLUGIN_ROOT}/lib/load-principle.sh "<principle-dir>"
+bash ${CLAUDE_PLUGIN_ROOT}/lib/load-policy.sh "<principle-dir>"
 ```
 
 This emits concept bundles in priority order (red-flags first, then pitfalls, hotspots, domain-traps, review-patterns, conventions), capped at ~30K chars. Each concept is marked with a trust tier (`[human-reviewed]` or `[machine-confirmed]`). When applicable, it also carries a staleness mark (`[STALE]`). Each concept header also prints its bundle-relative path in parentheses, for example `=== RedFlag: some title [human-reviewed] (red-flags/some-slug.md) ===`. When citing, use that exact path verbatim. Do not reconstruct a slug from the title. The output includes a coverage footer.

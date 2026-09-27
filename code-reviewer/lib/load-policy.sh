@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# load-principle.sh <bundle-dir> [cap-chars]
+# load-policy.sh <bundle-dir> [cap-chars]
 #
 # Walk an OKF v0.2 bundle in review-priority order and emit its concepts,
 # most merge-blocking first, within a character budget. Skips deprecated
@@ -70,7 +70,7 @@ ${body}
   fi
 fi
 
-printf '=== Principle Coverage ===\n'
+printf '=== Policy Coverage ===\n'
 printf 'Source dir: %s\n' "$dir"
 printf 'Included (%d): %s\n' "${#included[@]}" "${included[*]:-none}"
 (( ${#stale_list[@]} > 0 )) && printf 'Stale-flagged (%d): %s\n' "${#stale_list[@]}" "${stale_list[*]}"

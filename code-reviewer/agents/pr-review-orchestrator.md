@@ -4,7 +4,7 @@ description: |
   Principle-aware PR review orchestrator. Combines 4 built-in perspectives
   (Developer, QA, Security, DevOps) with 6 pr-review-toolkit agents. When a
   Code Review Principle directory exists for the repo, adds an optional
-  repo-specific principle-reviewer.
+  repo-specific policy-reviewer.
 
   Dispatched by code-reviewer's /code-reviewer:review-pr command. Do not
   invoke directly.
@@ -42,9 +42,9 @@ Run:
 bash ${CLAUDE_PLUGIN_ROOT}/lib/resolve-principle-dir.sh
 ```
 
-- **Exit 0** (stdout = abs path) → set `PRINCIPLE_DIR=<path>` and `PRINCIPLE_LAYER=on`. Echo to the user: `Using principle: <path>`.
+- **Exit 0** (stdout = abs path) → set `POLICY_DIR=<path>` and `POLICY_LAYER=on`. Echo to the user: `Using principle: <path>`.
 - **Exit 1** (miss with reason on stderr) → run the **Guard prompt** below.
-- **Exit 2** (environment problem, for example not in a git repo) → set `PRINCIPLE_LAYER=off`. Echo: `Principle layer: skipped (<reason>)`.
+- **Exit 2** (environment problem, for example not in a git repo) → set `POLICY_LAYER=off`. Echo: `Principle layer: skipped (<reason>)`.
 
 ### Guard prompt (only on exit 1)
 
@@ -70,13 +70,13 @@ If the path exists and contains ≥1 .md file, persist it:
 bash ${CLAUDE_PLUGIN_ROOT}/lib/persist-principle-path.sh "<owner>/<repo>" "<provided_path>"
 ```
 
-Then set `PRINCIPLE_DIR=<path>` and `PRINCIPLE_LAYER=on`.
+Then set `POLICY_DIR=<path>` and `POLICY_LAYER=on`.
 
 If the path is invalid, re-prompt (max 1 retry), then fall back to Skip.
 
 **If user picks "Set up a global root":** run the wizard below.
 
-**If user picks "Skip":** set `PRINCIPLE_LAYER=off`. Continue.
+**If user picks "Skip":** set `POLICY_LAYER=off`. Continue.
 
 **If user picks "Abort":** stop. Emit `Review cancelled.` and exit.
 
@@ -108,7 +108,7 @@ Then call:
 bash ${CLAUDE_PLUGIN_ROOT}/lib/add-config-root.sh "<base>" "<pattern>" "<resolver_or_empty>"
 ```
 
-- **Exit 0 (stdout = abs path)** → set `PRINCIPLE_DIR=<path>` and `PRINCIPLE_LAYER=on`. Echo: `Saved root to config. Using principle: <path>`.
+- **Exit 0 (stdout = abs path)** → set `POLICY_DIR=<path>` and `POLICY_LAYER=on`. Echo: `Saved root to config. Using principle: <path>`.
 - **Exit 1 (validation failed)** → echo the stderr to the user, then offer a single `AskUserQuestion` with `Retry wizard / Skip principle layer / Abort`. Max 1 retry.
 - **Exit 2 (env problem)** → fall back to Skip with the error echoed.
 
@@ -129,10 +129,10 @@ For each toolkit agent, pass the PR diff, changed file list, and user context.
 
 ### Principle reviewer (NEW — conditional)
 
-7. **code-reviewer:principle-reviewer**: **If `PRINCIPLE_LAYER=on`, dispatch.** Pass:
+7. **code-reviewer:policy-reviewer**: **If `POLICY_LAYER=on`, dispatch.** Pass:
    - PR diff
    - Changed files list
-   - `PRINCIPLE_DIR` absolute path
+   - `POLICY_DIR` absolute path
    - User context
 
 ### Your 4 built-in perspectives
@@ -181,7 +181,7 @@ Emit the final report in exactly this structure:
 > **Branch**: [head] -> [base]
 > **Changes**: [N files] (+[additions]/-[deletions])
 > **Author**: [author]
-> **Principle layer**: [on: using `<PRINCIPLE_DIR>`] OR [off: <reason>]
+> **Principle layer**: [on: using `<POLICY_DIR>`] OR [off: <reason>]
 
 ---
 
@@ -229,9 +229,9 @@ Emit the final report in exactly this structure:
 
 ### Principle-Based Findings
 
-**If `PRINCIPLE_LAYER=on`, include this subsection.** Paste the `Principle Hits` + `Principle Coverage` sections emitted by `principle-reviewer` verbatim.
+**If `POLICY_LAYER=on`, include this subsection.** Paste the `Policy Hits` + `Policy Coverage` sections emitted by `policy-reviewer` verbatim.
 
-If `PRINCIPLE_LAYER=off`, replace this subsection with a single line:
+If `POLICY_LAYER=off`, replace this subsection with a single line:
 `Principle layer skipped — <reason from Phase 2>.`
 
 ---
@@ -262,7 +262,7 @@ Ready-to-use PR comment. Must:
   (write the aggregated findings to a temp JSON of `{file,line,summary}` objects).
   Any finding returned with `flag: "unverified location"` is kept but tagged
   `(unverified location)`. Never silently dropped.
-- When the principle-reviewer emits red-flag-hits, **promote them to Critical**. These represent documented live HEAD bugs or repeated regressions, not generic suggestions.
+- When the policy-reviewer emits red-flag-hits, **promote them to Critical**. These represent documented live HEAD bugs or repeated regressions, not generic suggestions.
 - If ALL code looks good, verdict is APPROVE and the PR comment is a concise LGTM noting what was reviewed.
 - Adjust review depth to the user's context. For a bugfix, focus on regression and edge cases. For a feature, focus on architecture and tests.
 - Always include file:line references.
