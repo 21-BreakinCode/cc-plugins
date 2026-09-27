@@ -1,6 +1,6 @@
 # OKF concept format (v0.2)
 
-A principle bundle is an OKF v0.2 directory tree. Each mined entry is ONE
+A policy bundle is an OKF v0.2 directory tree. Each mined entry is ONE
 concept `.md` file with YAML frontmatter, grouped in a role subdir. Reserved
 files `index.md` (listing) and `log.md` (history) carry no `type`/`sources`.
 
