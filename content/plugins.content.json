@@ -35,27 +35,15 @@
       "config": []
     },
     "code-reviewer": {
-      "tagline": "Principle-aware PR review",
-      "summary": "Layers a repo-specific review-mindset agent on top of pr-review-toolkit's 4+6 perspectives, citing your repo's own distilled principles, hotspots, and red-flags. Degrades gracefully to the standard review when no principle directory exists. Includes `refresh-principles`, which learns the repo's own principle files from merged git + PR history.",
+      "tagline": "Multi-agent PR review with a per-repo policy layer",
+      "summary": "Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history.",
       "category": "review",
-      "dependsOn": [
-        "pr-review-toolkit"
-      ],
+      "dependsOn": [],
       "config": [
         {
-          "name": "CODE_REVIEWER_PRINCIPLE_DIR",
+          "name": "CODE_REVIEWER_POLICY_DIR",
           "default": "—",
-          "description": "Hard override; skip the resolution chain and use this principle directory."
-        },
-        {
-          "name": "CODE_REVIEWER_CONFIG_FILE",
-          "default": "~/.claude/code-reviewer/config.json",
-          "description": "Override the config file that lists principle-directory roots."
-        },
-        {
-          "name": "CODE_REVIEWER_CACHE_FILE",
-          "default": "~/.claude/code-reviewer/principle-map.json",
-          "description": "Override the per-repo principle-path cache."
+          "description": "Repo review-policy dir. A relative value resolves against the main clone root. Unset means the policy layer is off."
         }
       ]
     },
