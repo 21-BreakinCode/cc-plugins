@@ -7,7 +7,7 @@
         "translatedFrom": "Eval-driven improvement, plus the harness to drive it"
       },
       "summary": {
-        "text": "外掛由兩個部分組成一個循環。核心是「編輯 → 評測 → 保留或捨棄」引擎。引擎可以改進程式碼、提示詞或文件。引擎用 shell 指令、LLM 評審或兩者，為每次修改評分。進度顯示在即時的 Artifact 儀表板上。Harness 建構器從六個類別衡量專案健康度。建構器會建立回饋循環、評測、感測器與脈絡管理建議。然後，建構器用同一個循環修正排名最高的問題。",
+        "text": "外掛由兩個部分組成一個循環。核心是「編輯 → 評測 → 保留或捨棄」引擎。引擎可以改進程式碼、提示詞或文件。引擎用 shell 指令、LLM 評審或兩者，為每次修改評分。進度顯示在即時的 Artifact 儀表板上。Harness 建構器從六個類別衡量專案健康度。建構器會建立回饋循環、評測、感測器，以及管理脈絡的建議。然後，建構器用同一個循環修正排名最高的問題。",
         "translatedFrom": "Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop."
       }
     },
@@ -37,7 +37,7 @@
         "translatedFrom": "Action-first replies, blockers before FYI"
       },
       "summary": {
-        "text": "一套規則，分成三層。第 1 層調整每一則回覆。回覆先寫行動，多步驟工作加上編號與時間估計。回覆刪除開場白、重述與結尾，錯誤只陳述事實。第 2 層管理大型多步驟工作的最後一則回覆。這則回覆使用 Review-Ready 分類：✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do。阻礙排在參考資訊之前，每個請求都說明為何由你決定。視覺層把非線性的流程概念畫成 ASCII 圖，放在程式碼區塊中。這類概念包括分支、迴圈、狀態變化與階層。線性步驟仍然用編號清單。規則只套用在面向使用者的主對話。預設開啟的 SessionStart hook 會把規則注入主工作階段。因此，子代理的回傳仍然保留完整細節。外掛預設開啟，安裝後主對話立即套用規則。如果要關閉某個工作階段，請設定 CLAUDE_ADHD_REVIEW=0。用 /adhd-review-mode 可以切換單一工作階段。",
+        "text": "一套規則，分成三層。第 1 層調整每一則回覆。回覆先寫行動，多步驟工作加上編號與時間估計。回覆刪除開場白、重述與結尾，錯誤只陳述事實。第 2 層管理大型多步驟工作的最後一則回覆。這則回覆使用 Review-Ready 分類：✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do。阻礙排在參考資訊之前，每個請求都說明為何由你決定。視覺層把非線性的流程概念畫成 ASCII 圖，取代文字說明。圖放在程式碼區塊中。這類概念包括分支、迴圈、狀態變化與階層。線性步驟仍然用編號清單。規則只套用在面向使用者的主對話。預設開啟的 SessionStart hook 會把規則注入主工作階段。因此，子代理的回傳仍然保留完整細節。外掛預設開啟，安裝後主對話立即套用規則。如果要關閉某個工作階段，請設定 CLAUDE_ADHD_REVIEW=0。用 /adhd-review-mode 可以切換單一工作階段。",
         "translatedFrom": "One ruleset, three layers. Layer 1 shapes every reply — lead with the action, number multi-step work with time estimates, cut preamble/recap/closers, state errors matter-of-factly. Layer 2 governs the final turn of substantial multi-step work with Review-Ready buckets — ✅ Done / ⚠️ Broken / 🙋 What I need from you / 🤖 What I'll do, blockers before FYI, each ask naming why it's yours. A Visual Layer draws non-linear flow-shaped concepts — branches, loops, state changes, hierarchies — as fenced ASCII diagrams instead of prose, while linear steps stay numbered lists. Applies to the human-facing thread only: a default-on SessionStart hook injects the rules into the main session, so subagent returns stay full-detail. On by default — installing the plugin shapes the main thread out of the box; set CLAUDE_ADHD_REVIEW=0 to silence a session. Toggle per session with /adhd-review-mode."
       }
     },
