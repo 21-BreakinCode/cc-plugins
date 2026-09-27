@@ -30,7 +30,7 @@
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=2.1.1" />
+    <link rel="stylesheet" href="assets/styles.css?v=2.2.0" />
   </head>
   <body data-page="home">
     <header class="site-header">
@@ -40,9 +40,11 @@
           breakincode
         </a>
         <nav class="header-links">
-          <a class="hide-sm" href="#plugins">Plugins</a>
-          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md">Catalog</a>
+          <a class="hide-sm" href="#plugins" data-i18n="nav.plugins">Plugins</a>
+          <a class="hide-sm" href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md" data-i18n="nav.catalog">Catalog</a>
           <a href="https://github.com/21-BreakinCode/cc-plugins">GitHub ↗</a>
+          <a href="https://21-breakincode.com/en/" data-i18n="nav.portfolio" data-portfolio-link>Portfolio ↗</a>
+          <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch to Chinese" lang="zh-TW">中文</button>
         </nav>
       </div>
     </header>
@@ -50,28 +52,28 @@
     <main>
       <section class="hero">
         <div class="container">
-          <p class="eyebrow">Marketplace for Claude Code</p>
-          <h1>
+          <p class="eyebrow" data-i18n="hero.eyebrow">Marketplace for Claude Code</p>
+          <h1 data-i18n="hero.title">
             <span id="count-head">6</span> focused plugins,
             <span class="accent">one command</span>.
           </h1>
-          <p class="hero-sub">
+          <p class="hero-sub" data-i18n="hero.sub">
             Vault memory and handover notes in Obsidian, an eval-driven improvement loop,
             PR review, claim auditing, and writing tools. Each one does a single job.
           </p>
 
           <div class="hero-terminal">
-            <p class="install-label">Install all <span id="count-cta">6</span></p>
+            <p class="install-label" data-i18n="hero.installAll">Install all <span id="count-cta">6</span></p>
             <div class="terminal">
               <div class="terminal-chrome">
-                <div class="tab-bar" role="tablist" aria-label="Install or update method">
+                <div class="tab-bar" role="tablist" aria-label="Install or update method" data-i18n-aria="tabs.aria">
                   <button class="tab" role="tab" data-tab="cli" aria-selected="true">CLI</button>
                   <button class="tab" role="tab" data-tab="settings" aria-selected="false">settings.json</button>
-                  <button class="tab" role="tab" data-tab="update" aria-selected="false">Update</button>
+                  <button class="tab" role="tab" data-tab="update" aria-selected="false" data-i18n="tab.update">Update</button>
                 </div>
               </div>
               <div class="terminal-body">
-                <button class="copy-btn" id="hero-copy" type="button" aria-label="Copy command">Copy</button>
+                <button class="copy-btn" id="hero-copy" type="button" aria-label="Copy command" data-i18n="copy" data-i18n-aria="copy.command">Copy</button>
                 <div class="tab-panel" id="panel-cli" role="tabpanel"><pre>loading…</pre></div>
                 <div class="tab-panel" id="panel-settings" role="tabpanel" hidden><pre></pre></div>
                 <div class="tab-panel" id="panel-update" role="tabpanel" hidden><pre></pre></div>
@@ -84,8 +86,8 @@
       <section class="section" id="plugins">
         <div class="container">
           <div class="section-head" data-reveal>
-            <h2>The plugins</h2>
-            <p>Filter by what you are reaching for.</p>
+            <h2 data-i18n="plugins.title">The plugins</h2>
+            <p data-i18n="plugins.sub">Filter by what you are reaching for.</p>
           </div>
           <div id="plugin-sections"></div>
         </div>
@@ -94,15 +96,15 @@
 
     <footer class="site-footer">
       <div class="container">
-        <span>MIT · 21-breakincode marketplace</span>
+        <span data-i18n="footer.note">MIT · 21-breakincode marketplace</span>
         <span>
-          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md">Catalog</a>
+          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md" data-i18n="nav.catalog">Catalog</a>
           &nbsp;·&nbsp;
           <a href="https://github.com/21-BreakinCode/cc-plugins">GitHub</a>
         </span>
       </div>
     </footer>
 
-    <script src="assets/app.js?v=2.1.1"></script>
+    <script src="assets/app.js?v=2.2.0"></script>
   </body>
 </html>

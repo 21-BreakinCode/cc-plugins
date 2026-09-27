@@ -21,7 +21,7 @@
       href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="assets/styles.css?v=2.1.1" />
+    <link rel="stylesheet" href="assets/styles.css?v=2.2.0" />
   </head>
   <body data-page="plugin">
     <header class="site-header">
@@ -31,30 +31,32 @@
           breakincode
         </a>
         <nav class="header-links">
-          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md">Catalog</a>
+          <a class="hide-sm" href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md" data-i18n="nav.catalog">Catalog</a>
           <a href="https://github.com/21-BreakinCode/cc-plugins">GitHub ↗</a>
+          <a href="https://21-breakincode.com/en/" data-i18n="nav.portfolio" data-portfolio-link>Portfolio ↗</a>
+          <button class="lang-toggle" type="button" data-lang-toggle aria-label="Switch to Chinese" lang="zh-TW">中文</button>
         </nav>
       </div>
     </header>
 
     <main class="subpage">
       <div class="container">
-        <a class="back-link" href="index.html">← All plugins</a>
-        <div id="plugin-detail"><p>Loading…</p></div>
+        <a class="back-link" href="index.html" data-i18n="back.all">← All plugins</a>
+        <div id="plugin-detail"><p data-i18n="loading">Loading…</p></div>
       </div>
     </main>
 
     <footer class="site-footer">
       <div class="container">
-        <span>MIT · 21-breakincode marketplace</span>
+        <span data-i18n="footer.note">MIT · 21-breakincode marketplace</span>
         <span>
-          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md">Catalog</a>
+          <a href="https://github.com/21-BreakinCode/cc-plugins/blob/main/CATALOG.md" data-i18n="nav.catalog">Catalog</a>
           &nbsp;·&nbsp;
           <a href="https://github.com/21-BreakinCode/cc-plugins">GitHub</a>
         </span>
       </div>
     </footer>
 
-    <script src="assets/app.js?v=2.1.1"></script>
+    <script src="assets/app.js?v=2.2.0"></script>
   </body>
 </html>

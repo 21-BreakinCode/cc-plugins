@@ -16,8 +16,8 @@
   --code-muted: #7e7a70;
   --error: #b42318;
 
-  --display: "Instrument Serif", Georgia, serif;
-  --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --display: "Instrument Serif", Georgia, "Songti TC", "Noto Serif TC", serif;
+  --sans: "Inter Tight", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --gutter: 24px;
@@ -157,6 +157,32 @@ a {
 
 .header-links a:hover::after {
   transform: scaleX(1);
+}
+
+.lang-toggle {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--hairline-strong);
+  border-radius: 3px;
+  padding: 5px 8px;
+  cursor: pointer;
+  transition:
+    color 160ms var(--ease),
+    border-color 160ms var(--ease);
+}
+
+.lang-toggle:hover {
+  color: var(--ink);
+  border-color: var(--ink-soft);
+}
+
+.lang-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ---------------------------------- Hero ---------------------------------- */
