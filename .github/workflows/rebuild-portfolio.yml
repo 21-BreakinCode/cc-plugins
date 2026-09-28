@@ -1,0 +1,31 @@
+name: Rebuild portfolio plugin pages
+
+# The portfolio renders site/data/plugins.json at build time. When it changes on
+# main, POST the Cloudflare Pages deploy hook so 21-breakincode.com/{lang}/plugins/
+# picks up the new data without a portfolio commit.
+on:
+  push:
+    branches: [main]
+    paths: [site/data/plugins.json]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      # raw.githubusercontent.com serves plugins.json with cache-control:
+      # max-age=300. Building sooner can render the previous release.
+      # ponytail: fixed wait, fetch by commit SHA if releases need to land faster.
+      - name: Wait out the raw.githubusercontent.com cache
+        run: sleep 300
+      - name: POST Cloudflare Pages deploy hook
+        env:
+          CF_DEPLOY_HOOK: ${{ secrets.CF_DEPLOY_HOOK }}
+        run: |
+          if [ -z "$CF_DEPLOY_HOOK" ]; then
+            echo "::error::Secret CF_DEPLOY_HOOK is not set (Cloudflare Pages > portfolio > Settings > Builds > Deploy hooks)."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error -X POST "$CF_DEPLOY_HOOK"

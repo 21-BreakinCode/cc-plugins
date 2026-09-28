@@ -17,6 +17,11 @@ with its own `CLAUDE.md`.
 ## Docs are generated
 
 Edit/Write on `CATALOG.md`, `*/README.md`, and `site/data/plugins.json` is
-mechanically denied (`.claude/settings.json`). `site/*.html` IS hand-editable —
-but GEN owns its `?v=` asset stamps and the plugin count. Repo harness notes:
+mechanically denied (`.claude/settings.json`). `site/*.html` are hand-authored
+redirect shells to 21-breakincode.com/{lang}/plugins/. Repo harness notes:
 `.claude/docs/diagnosis-plugins-2026-07-05.md`.
+
+`site/data/plugins.json` on `main` is a public contract: the portfolio
+(21-breakincode.com/{lang}/plugins/) fetches it by that exact path at build
+time, and `.github/workflows/rebuild-portfolio.yml` triggers that build when it
+changes. Moving or reshaping the file breaks the portfolio build.

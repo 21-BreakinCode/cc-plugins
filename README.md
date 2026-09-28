@@ -2,7 +2,7 @@
 
 Knowledge management and workflow automation plugins for Claude Code, distributed as a single monorepo marketplace.
 
-**[Browse plugins & one-shot install →](https://21-breakincode.github.io/cc-plugins/)** · **[CATALOG.md](./CATALOG.md)**
+**[Browse plugins & one-shot install →](https://21-breakincode.com/en/plugins/)** · **[CATALOG.md](./CATALOG.md)**
 
 ## Install
 
@@ -21,7 +21,7 @@ Then install any plugin:
 ```
 
 To install **all** plugins in one shot, copy the CLI one-liner (or the `settings.json`
-snippet) from the [site](https://21-breakincode.github.io/cc-plugins/) or
+snippet) from the [site](https://21-breakincode.com/en/plugins/) or
 [CATALOG.md](./CATALOG.md).
 
 ## Updating
@@ -43,7 +43,7 @@ auto-update for the marketplace in the `/plugin` → **Marketplaces** tab.
 Seven focused plugins across memory, evals, review, workflow, and media. The full,
 always-up-to-date list — with taglines, commands, configuration, and install commands —
 lives in **[CATALOG.md](./CATALOG.md)** (auto-generated) and on the
-**[live site](https://21-breakincode.github.io/cc-plugins/)**.
+**[live site](https://21-breakincode.com/en/plugins/)**.
 
 Each plugin folder contains its own `.claude-plugin/plugin.json` and a generated
 `README.md`, and is a self-contained Claude Code plugin.

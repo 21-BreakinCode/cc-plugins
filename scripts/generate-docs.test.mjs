@@ -6,7 +6,6 @@ import { buildModel, commandName, isDeprecated, firstSentence } from './lib/coll
 import { cliOneLiner, settingsSnippet, installOne, updateAllCli } from './lib/install.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { renderCatalog } from './lib/render-catalog.mjs';
-import { stampAssets, stampCounts } from './lib/stamp.mjs';
 import { buildSiteData } from './lib/site-data.mjs';
 import { pickFreshTranslations } from './lib/zh-tw.mjs';
 import { renderInline, renderBlocks } from './lib/markdown.mjs';
@@ -170,30 +169,6 @@ test('renderCatalog lists every plugin, version and the install-all block', () =
   assert.match(md, /claude plugin marketplace add 21-BreakinCode\/cc-plugins/);
   assert.match(md, /## Update everything/);
   assert.match(md, /claude plugin marketplace update cc-plugins/);
-});
-
-// --- stamp ---
-test('stampAssets adds, replaces, and is idempotent on the version query', () => {
-  const fresh = '<link href="assets/styles.css" /><script src="assets/app.js"></script>';
-  const once = stampAssets(fresh, '1.7.4');
-  assert.match(once, /href="assets\/styles\.css\?v=1\.7\.4"/);
-  assert.match(once, /src="assets\/app\.js\?v=1\.7\.4"/);
-  // Re-stamping with a new version replaces the old query, not appends.
-  const bumped = stampAssets(once, '1.7.5');
-  assert.match(bumped, /assets\/app\.js\?v=1\.7\.5"/);
-  assert.doesNotMatch(bumped, /1\.7\.4/);
-  // Same version twice is a no-op.
-  assert.equal(stampAssets(once, '1.7.4'), once);
-});
-
-test('stampCounts injects the live plugin count into both hero spans', () => {
-  const html = 'Install <span id="count-head">99</span> tools, <span id="count-cta">99</span> plugins';
-  const out = stampCounts(html, 6);
-  assert.match(out, /<span id="count-head">6<\/span>/);
-  assert.match(out, /<span id="count-cta">6<\/span>/);
-  assert.doesNotMatch(out, /99/);
-  // Spans that aren't the count spans are left untouched.
-  assert.equal(stampCounts('<span id="other">1</span>', 6), '<span id="other">1</span>');
 });
 
 // --- site data ---

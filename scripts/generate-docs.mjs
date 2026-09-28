@@ -15,7 +15,6 @@ import { buildModel, commandName, isDeprecated, firstSentence } from './lib/coll
 import { renderCatalog } from './lib/render-catalog.mjs';
 import { renderReadme } from './lib/render-readme.mjs';
 import { buildSiteData } from './lib/site-data.mjs';
-import { stampAssets, stampCounts } from './lib/stamp.mjs';
 import { pickFreshTranslations } from './lib/zh-tw.mjs';
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
@@ -81,14 +80,6 @@ function buildOutputs() {
   ];
   for (const plugin of model.plugins) {
     outputs.push({ path: join(plugin.source, 'README.md'), body: renderReadme(plugin, model) });
-  }
-  // Re-stamp the static site pages: bust the asset cache with the release version
-  // (`?v=`) and inject the live plugin count into the hero spans. The rest is
-  // hand-authored.
-  for (const page of ['site/index.html', 'site/plugin.html']) {
-    const current = readFileSync(join(REPO_ROOT, page), 'utf8');
-    const stamped = stampCounts(stampAssets(current, model.marketplace.version), model.plugins.length);
-    outputs.push({ path: page, body: stamped });
   }
   return { outputs, translationWarnings: zhTW.warnings };
 }
