@@ -692,9 +692,10 @@
     {
       "name": "receipts",
       "version": "0.6.0",
-      "taglineHtml": "No claim without a receipt (trigger test)",
+      "taglineHtml": "No claim without a receipt",
       "summaryHtml": "<p>A Stop hook that enforces provable claims. When the finished turn asserts a <strong>FACT:</strong> or a completion ('verified', 'tests pass', 'fixed', 'done'), a free deterministic prefilter checks it against that turn's real tool calls; only genuinely ambiguous claims escalate to a fresh-context Haiku judge. Unbacked claims are flagged with a ⚠ note (default <code>warn</code> mode) — or hard-gate the turn in <code>block</code> mode, where Claude must prove each with a real tool call or downgrade it to <strong>ASSUME:</strong> — bounded to one challenge per claim per session (ledger + stop_hook_active backstop). Enforces the fact-assume discipline (FACT = provable if challenged) that RLHF's confident 'done' quietly erodes. On by default and fail-open; set CLAUDE_RECEIPTS=0 to disable. /receipts prints the session's audit ledger and sets the mode.</p>",
       "zhTW": {
+        "taglineHtml": "每個主張都要有收據",
         "summaryHtml": "<p>receipts 是一個 Stop hook，要求每個主張都能證明。回合結束時，如果回覆宣稱 <strong>FACT:</strong> 或完成，receipts 會檢查它。完成的說法包括 'verified'、'tests pass'、'fixed'、'done'。免費的確定性預篩先用該回合真實的工具呼叫比對主張。只有真正模糊的主張，才交給全新脈絡的 Haiku 評審。沒有證據的主張會加上 ⚠ 註記，這是預設的 <code>warn</code> 模式。<code>block</code> 模式會擋下該回合。Claude 必須用真實的工具呼叫證明每個主張，或把它降級為 <strong>ASSUME:</strong>。每個主張在每個工作階段只挑戰一次，由 ledger 與 stop_hook_active 做後援。外掛落實 fact-assume 原則：FACT 必須在受到質疑時可以證明。RLHF 帶來的自信「done」會悄悄侵蝕這個原則。外掛預設開啟，出錯時放行（fail-open）。設定 CLAUDE_RECEIPTS=0 可以停用。/receipts 會列出工作階段的稽核 ledger，並設定模式。</p>"
       },
       "category": "review",

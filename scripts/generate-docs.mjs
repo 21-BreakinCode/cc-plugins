@@ -115,7 +115,7 @@ function main() {
   }
 
   outputs.forEach(writeOutput);
-  console.log(`✓ wrote ${outputs.length} files (CATALOG.md, per-plugin READMEs, site data + stamped HTML)`);
+  console.log(`✓ wrote ${outputs.length} files (CATALOG.md, per-plugin READMEs, site data)`);
 }
 
 main();
