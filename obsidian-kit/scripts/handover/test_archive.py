@@ -31,6 +31,11 @@ plan = plan_archive(
 assert plan["org"] == "Appier", plan
 assert plan["destination"] == Path("/vault/04Archive/Appier"), plan
 assert plan["filename"] == "cs-domain__2026-09-21-x.md", plan
+assert plan["move_to"] == Path("04Archive/Appier/cs-domain__2026-09-21-x.md"), plan
+
+# the command passes the vault as a string, and a real vault path can hold a dot
+dotted = plan_archive("01Project/Appier/x/handover/a.md", "/Users/first.last/vault", CONFIG)
+assert dotted["move_to"] == Path("04Archive/Appier/a.md"), dotted
 
 try:
     plan_archive("02Area/Journal/2026-09-26.md", Path("/vault"), CONFIG)

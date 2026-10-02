@@ -1,3 +1,7 @@
+## 2.1.1 — 2026-10-02
+
+- **fix:** `handover-wrap-up` passes the vault-relative file path to `obsidian move to=`. The CLI reads any `to=` value with a dot as a file path. An absolute vault path such as `/Users/first.last/...` contains a dot, so the CLI read the archive folder as a file name. `plan_archive` now returns the vault-relative path as `move_to`.
+
 ## 2.1.0 — 2026-09-27
 
 - **refactor:** stop linting Markdown files. The PostToolUse `.md` lint is removed, with `SIMPLE_MANDARIN_LINT_EXCLUDE`. The Stop check on Mandarin chat replies stays, renamed from `mandarin-lint.py` to `mandarin-reply-check.py`. The Mandarin rules still load at session start inside a vault.

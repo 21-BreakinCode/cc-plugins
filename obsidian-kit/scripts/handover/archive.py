@@ -31,9 +31,13 @@ def plan_archive(vault_relative_path, vault_root, config):
     """Everything the command needs before it touches a file."""
     org = derive_org(vault_relative_path)
     source = Path(vault_relative_path)
+    destination = archive_root(Path(vault_root), config) / org
     return {
         "source": source,
         "org": org,
-        "destination": archive_root(Path(vault_root), config) / org,
+        "destination": destination,
         "filename": source.name,
+        # `obsidian move to=` reads a value with a dot as a file path, and an
+        # absolute vault path can hold one (/Users/first.last/...).
+        "move_to": (destination / source.name).relative_to(vault_root),
     }

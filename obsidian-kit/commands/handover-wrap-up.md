@@ -32,6 +32,7 @@ Resolved per handover by `plan_archive` (`${CLAUDE_PLUGIN_ROOT}/scripts/handover
 - `<ORG>` comes from `derive_org`: the path segment immediately after `01Project/` (for example, `…/01Project/Appier/Services/CsDomain/handover/foo.md` → `Appier`).
 - If the handover is not under `01Project/<ORG>/…`, `derive_org` raises `OrgUnresolved`. Stop and ask the user which ORG to file it under. Do not invent one.
 - Group-by-org is mandatory. Never write directly under the archive root.
+- The move uses `<move_to>`, the vault-relative path of the archived file, which `plan_archive` also returns. The `obsidian move` CLI reads any `to=` value that contains a dot as a file path, and an absolute vault path can contain one.
 
 ## What this command does
 
@@ -140,7 +141,7 @@ Group user answers into:
 
 ### 4a. Archive set — parallel subagents
 
-For each handover, resolve `<destination>` first via `plan_archive` (see Archive destination, above). Do not let the subagent re-derive it.
+For each handover, resolve `<destination>` and `<move_to>` first via `plan_archive` (see Archive destination, above). Do not let the subagent re-derive them.
 
 ```bash
 python3 -c "
@@ -153,7 +154,7 @@ try:
     config = load_config(Path('$VAULT'))
     for source in ['<source-1>', '<source-2>']:
         plan = plan_archive(source, '$VAULT', config)
-        print(f\"{source} -> {plan['destination']}/{plan['filename']}\")
+        print(f\"{source} -> destination {plan['destination']}, move_to {plan['move_to']}\")
 except VaultConfigError as error:
     print(error, file=sys.stderr); sys.exit(3)
 "
@@ -169,6 +170,7 @@ Subagent prompt:
 >
 > Source (vault-relative): `<source>`
 > Destination folder: `<destination>`  (already resolved, do NOT re-derive)
+> Move target (vault-relative): `<move_to>`  (already resolved, do NOT re-derive)
 > Filename: unchanged.
 >
 > Steps:
@@ -178,7 +180,7 @@ Subagent prompt:
 >    `status/archived`. If `status/archived` is absent, append it.
 > 3. If a frontmatter `status:` field is present, remove it.
 > 4. `mkdir -p "<destination>"`.
-> 5. Move the file: `obsidian move file="<name>" to="<destination>"`.
+> 5. Move the file: `obsidian move file="<name>" to="<move_to>"`.
 >    Read the output for `Error:`. The CLI exits 0 even on failure.
 > 6. Do NOT rename the file. Do NOT touch any other file.
 >
