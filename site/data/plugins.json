@@ -71,7 +71,7 @@
   "plugins": [
     {
       "name": "autoresearch",
-      "version": "2.2.3",
+      "version": "2.3.0",
       "taglineHtml": "Eval-driven improvement, plus the harness to drive it",
       "summaryHtml": "<p>Two parts form one loop. An edit → eval → keep/discard engine improves code, prompts, or docs. It scores each change with a shell command, an LLM judge, or both. It shows progress in a live Artifact dashboard. A harness builder measures project health in six categories. It creates feedback loops, evals, sensors, and context management advisories. It then fixes the top-ranked issue through the same loop.</p>",
       "zhTW": {
@@ -112,6 +112,28 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.3.0",
+          "date": "2026-10-03",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "LLM-judge evals use three blind <code>autoresearch:judge</code> agents. Each judge compares the last kept version with the edit, and a strict majority must prefer the edit to keep it. The experimenter no longer scores its own edit."
+            },
+            {
+              "type": "feat",
+              "html": "add <code>min_delta</code> to the experiment configuration. A shell-metric gain at or below it is discarded and counts toward the stopping limit. The default 0 keeps the old behavior."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/autoresearch:improve</code> adds a default size cap of 150% of baseline for text targets. An edit over the cap is discarded without eval."
+            },
+            {
+              "type": "docs",
+              "html": "<code>/autoresearch:improve</code> offers <code>claude plugin eval</code> as the shell eval for skill and plugin targets."
+            }
+          ]
+        },
         {
           "version": "2.2.3",
           "date": "2026-09-24",

@@ -48,22 +48,26 @@ PYEOF
 }
 
 # Compare two scores given a direction
-# Usage: ar_eval_is_improvement "120" "150" "lower_is_better"
+# A gain at or below min_delta does not count, so run-to-run noise in a metric
+# is discarded instead of kept. The default 0 means any gain counts.
+# Usage: ar_eval_is_improvement "120" "150" "lower_is_better" [min_delta]
 # Exit code: 0 if improved, 1 if not
 ar_eval_is_improvement() {
   local new_score="$1"
   local old_score="$2"
   local direction="$3"
+  local min_delta="${4:-0}"
 
   python3 - <<PYEOF
 new = float("""${new_score}""")
 old = float("""${old_score}""")
 direction = """${direction}"""
+min_delta = float("""${min_delta}""")
 
 if direction == 'lower_is_better':
-    improved = new < old
+    improved = (old - new) > min_delta
 else:
-    improved = new > old
+    improved = (new - old) > min_delta
 
 exit(0 if improved else 1)
 PYEOF

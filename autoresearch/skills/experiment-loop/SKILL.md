@@ -53,6 +53,8 @@ Write a one-line hypothesis: what you plan to change and why you expect it to im
 
 Make the edit to the target file(s). **One hypothesis per iteration.** Keep changes focused and minimal, one idea at a time.
 
+If the Constraints in program.md set a size cap, check each capped file with `wc -c < <file>`. A file over its cap is a discard without eval: run `ar_snapshot_restore <target_files>` and log `status: "discarded"` with "over size cap" in reasoning.
+
 ### 3. Eval
 
 **For shell command evals:**
@@ -70,21 +72,53 @@ If the command crashes (non-zero exit without a score):
 - Log the iteration as `status: "discarded"` with the error in reasoning
 - If 2 consecutive eval errors, STOP and ask the user
 
-**For LLM-as-judge evals:**
+**For LLM-as-judge evals (blind paired judges):**
 
-Read the modified target file. Score it against the criteria specified in program.md on a 1-10 scale. Write a one-line justification for the score.
+Three fresh `autoresearch:judge` agents compare the last kept version with your edit. The editor's own score is biased toward its edit, so the judges decide.
+
+1. Stage one blind copy per judge:
+   ```bash
+   source "${CLAUDE_PLUGIN_ROOT}/lib/judge.sh"
+   for judge_id in 1 2 3; do
+     echo "judge ${judge_id}: edited=$(ar_judge_stage "${judge_id}" <target_files>)"
+   done
+   ```
+   Note each judge's `edited` label from the output.
+2. Spawn the three judges in parallel, in one message, with `subagent_type: "autoresearch:judge"`. Give judge `<id>` exactly two things:
+   - The LLM Judge Criteria from program.md, word for word
+   - Each target path under `.autoresearch/judge/<id>/A/` and under `.autoresearch/judge/<id>/B/`
+
+   Keep the judge blind: the prompt holds only those two things.
+3. Tally the votes:
+   ```bash
+   ar_judge_tally "<edited_1>:<verdict_1>" "<edited_2>:<verdict_2>" "<edited_3>:<verdict_3>"
+   ```
+   Log `{"better_votes": <better>}` as scores and `{"better_votes": <better - worse>}` as delta. Put each judge's reason in `reasoning`.
+
+| Trigger | First fix | Still failing |
+|---|---|---|
+| A judge returns `error` or no valid JSON line | Re-spawn that judge once | Count it as an eval error |
+| The Agent tool is missing or refuses to spawn | None | STOP and report: "Judges cannot spawn. Check `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` (needs 2 or more)." |
+
+A judge failure never falls back to scoring the edit yourself.
 
 **For composite evals:**
 
-Run the shell command first, then do the LLM-as-judge scoring. Log both scores. Use the shell metric as the primary keep/discard signal.
+Run the shell command first, then the blind paired judges. Log both. The shell metric decides keep or discard.
 
 ### 4. Compare
 
-Compare the new score against the previous best score (not baseline, the running best).
+**LLM-as-judge evals:** the tally's `keep` field is the decision. Skip the rest of this step.
+
+**Shell and composite evals:** compare the new score against the previous best score (not baseline, the running best).
 
 Calculate the delta: `new_score - previous_best_score`
 
-Use the metric direction (lower_is_better or higher_is_better) to determine whether this is an improvement.
+Decide with the metric direction and `min_delta` from the experiments.json config:
+```bash
+ar_eval_is_improvement "<new_score>" "<previous_best_score>" "<direction>" "<min_delta>"
+```
+Exit code 0 means improved. A gain at or below `min_delta` is a discard, so it counts toward the stopping limit.
 
 ### 5. Keep or Discard
 

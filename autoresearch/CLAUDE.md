@@ -16,11 +16,11 @@ Claude Code plugin with two halves of one improvement loop: an edit-eval-keep/di
   - `/autoresearch:harness-check`: scan project health, produce a scored scorecard
   - `/autoresearch:harness-build`: scaffold one Tier-1 harness component
   - `/autoresearch:harness-improvement`: auto-target the top-ranked issue and hand off to the experimenter
-- `agents/`: `experimenter` subagent (runs the iteration loop)
+- `agents/`: `experimenter` subagent (runs the iteration loop), `judge` subagent (blind paired verdicts for LLM-judge evals, spawned by the experimenter)
 - `skills/`
   - `experiment-loop`: core iteration logic
   - `harness-probes`: guide for adding new probes
-- `lib/`: shared shell libraries: `common`, `experiment-log`, `eval`, `dashboard` (loop) plus `probes`, `harness`, `build` (harness)
+- `lib/`: shared shell libraries: `common`, `experiment-log`, `eval`, `judge`, `dashboard` (loop) plus `probes`, `harness`, `build` (harness)
 - `templates/`: HTML dashboard template, program.md template, `harness-components/` Tier-1 templates
 - `tests/`: smoke tests for the harness probe + build helpers
 

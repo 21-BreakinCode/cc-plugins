@@ -34,7 +34,7 @@ claude plugin marketplace update 21-breakincode && \
 
 ## Measure & Improve
 
-### [autoresearch](./autoresearch/README.md) · `v2.2.3`
+### [autoresearch](./autoresearch/README.md) · `v2.3.0`
 
 *Eval-driven improvement, plus the harness to drive it*
 

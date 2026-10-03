@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.3.0 — 2026-10-03
+
+- **feat:** LLM-judge evals use three blind `autoresearch:judge` agents. Each judge compares the last kept version with the edit, and a strict majority must prefer the edit to keep it. The experimenter no longer scores its own edit.
+- **feat:** add `min_delta` to the experiment configuration. A shell-metric gain at or below it is discarded and counts toward the stopping limit. The default 0 keeps the old behavior.
+- **feat:** `/autoresearch:improve` adds a default size cap of 150% of baseline for text targets. An edit over the cap is discarded without eval.
+- **docs:** `/autoresearch:improve` offers `claude plugin eval` as the shell eval for skill and plugin targets.
+
 ## 2.2.3 — 2026-09-24
 
 - **fix:** state the eval-metrics guard in `/autoresearch:improve` once, with its reason, instead of five times with rising emphasis.

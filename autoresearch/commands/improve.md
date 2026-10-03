@@ -26,8 +26,8 @@ If no eval method is detected, ask before proceeding:
 >
 > **Objective**: a shell command that outputs a measurable score (for example, `npm test`, `pytest --benchmark`, `lighthouse --output json`)
 >
-> **Subjective**: criteria for me to judge each iteration.
-> For example: "rate code readability 1-10 considering naming, structure, and complexity."
+> **Subjective**: criteria that independent judges use to compare each edit with the last kept version.
+> For example: "code readability: naming, structure, and complexity."
 >
 > Without eval metrics, I cannot tell whether changes are improvements.
 
@@ -45,11 +45,15 @@ If not specified, try to auto-detect from the goal and current project context (
 **Eval method details:**
 
 - Shell command: check the exact command and which metric name to extract from output.
-- LLM-as-judge: check the criteria and scale (default 1-10).
+  - For a skill or plugin target with an `evals/` suite, offer `claude plugin eval <plugin> --json --no-publish --max-cost-usd <budget>`. It runs each case with and without the plugin. Run it once, pick the score field from the JSON, and wrap the command so it prints `<metric>: <value>`, for example `... | jq -r '"score: \(.<field>)"'`.
+- LLM-as-judge: check the criteria. Blind judges compare each edit with the last kept version against these criteria, so write them as concrete checks.
 - Both: check both.
 
 **Metric direction:**
 > For `<metric_name>`, is lower better or higher better?
+
+**Minimum gain (shell metrics only):**
+> What is the smallest gain in `<metric_name>` that counts? A gain at or below it is discarded. The default is 0: any gain counts. For a noisy metric such as a benchmark, use its run-to-run variation.
 
 **Stopping condition:**
 > How does the loop stop?
@@ -60,6 +64,8 @@ If not specified, try to auto-detect from the goal and current project context (
 **Constraints (optional):**
 > Any constraints I must respect? (for example, "do not change the public API", "keep bundle under 50KB")
 > If none, I will focus on the improvement goal.
+
+For a text target (prose, a prompt, or a skill file), add a size cap unless the user declines it. A judge can favor longer text, and the cap stops the loop from growing a file to win votes. Set each cap to 150% of the baseline size from `wc -c < <file>`, and write it in bytes, for example `Size cap: docs/guide.md ≤ 6000 bytes (baseline 4000)`.
 
 ## Step 4: Generate program.md
 
@@ -79,7 +85,7 @@ ar_ensure_gitignore
 
 ```bash
 source "${CLAUDE_PLUGIN_ROOT}/lib/experiment-log.sh"
-ar_log_init "<goal>" "<eval_method>" "<eval_command>" "<llm_criteria>" "<max_iterations>" "<consec_limit>"
+ar_log_init "<goal>" "<eval_method>" "<eval_command>" "<llm_criteria>" "<max_iterations>" "<consec_limit>" "<min_delta>"
 ```
 
 ## Step 5: Run Baseline Eval
@@ -97,7 +103,7 @@ Extract the metric from the output and set the baseline:
 ar_log_set_baseline '{"<metric_name>": <score>}'
 ```
 
-For LLM-as-judge evals: read the target file and score it against the criteria. Record the score as the baseline.
+For LLM-as-judge evals: the judges compare versions, so there is no absolute baseline score. Record `ar_log_set_baseline '{"better_votes": null}'`. For composite evals, add `"better_votes": null` after the shell metric.
 
 ## Step 6: Generate and Publish Initial Dashboard
 

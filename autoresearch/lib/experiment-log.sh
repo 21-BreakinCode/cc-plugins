@@ -4,7 +4,7 @@
 source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 # Initialize experiments.json with goal and config
-# Usage: ar_log_init "goal" "eval_method" "eval_command" "llm_criteria" "max_iter" "consec_limit"
+# Usage: ar_log_init "goal" "eval_method" "eval_command" "llm_criteria" "max_iter" "consec_limit" ["min_delta"]
 ar_log_init() {
   local goal="$1"
   local eval_method="$2"
@@ -12,6 +12,7 @@ ar_log_init() {
   local llm_criteria="${4:-}"
   local max_iterations="${5:-10}"
   local consec_limit="${6:-3}"
+  local min_delta="${7:-0}"
 
   ar_ensure_dir
 
@@ -21,6 +22,10 @@ ar_log_init() {
   cmd_json=$(ar_escape_json "${eval_command}")
   local criteria_json
   criteria_json=$(ar_escape_json "${llm_criteria}")
+  # float() rejects non-numbers and turns ".1" into valid JSON "0.1"
+  local min_delta_json
+  min_delta_json=$(python3 -c 'import sys; print(float(sys.argv[1]))' "${min_delta}") \
+    || { ar_log "ERROR: min_delta must be a number, got '${min_delta}'"; return 1; }
 
   cat > "${AR_EXPERIMENTS_FILE}" <<AREOF
 {
@@ -31,6 +36,7 @@ ar_log_init() {
   "config": {
     "max_iterations": ${max_iterations},
     "consecutive_non_improvements_limit": ${consec_limit},
+    "min_delta": ${min_delta_json},
     "eval_method": "${eval_method}",
     "eval_command": ${cmd_json},
     "llm_judge_criteria": ${criteria_json},
