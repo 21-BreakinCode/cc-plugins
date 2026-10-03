@@ -88,6 +88,7 @@ assert "loop reports the Artifact URL" assert_contains "${EXPERIMENT_LOOP_SKILL}
 assert "loop has no auto-refresh instructions" assert_not_contains "${EXPERIMENT_LOOP_SKILL}" 'auto-refresh'
 assert "experimenter can use Artifact" assert_frontmatter_tool "${EXPERIMENTER_AGENT}" "tools" "Artifact"
 assert "experimenter can spawn judges" assert_frontmatter_tool "${EXPERIMENTER_AGENT}" "tools" "Agent"
+assert "loop runs judges in the foreground" assert_contains "${EXPERIMENT_LOOP_SKILL}" '`run_in_background: false`'
 assert "experimenter uses the passed URL for updates" assert_contains "${EXPERIMENTER_AGENT}" 'url: <dashboard_url>` and `favicon: 📈'
 assert "experimenter reads the fallback dashboard before publishing" assert_contains "${EXPERIMENTER_AGENT}" 'Read the complete `.autoresearch/dashboard.html` with Read before you publish it.'
 assert "experimenter falls back to one publish" assert_contains "${EXPERIMENTER_AGENT}" 'publish `.autoresearch/dashboard.html` once with Artifact using `favicon: 📈`'

@@ -84,7 +84,7 @@ Three fresh `autoresearch:judge` agents compare the last kept version with your 
    done
    ```
    Note each judge's `edited` label from the output.
-2. Spawn the three judges in parallel, in one message, with `subagent_type: "autoresearch:judge"`. Give judge `<id>` exactly two things:
+2. Spawn the three judges in parallel, in one message, with `subagent_type: "autoresearch:judge"` and `run_in_background: false`. A background judge reports to the main session instead of to you, and the tally never happens. Give judge `<id>` exactly two things:
    - The LLM Judge Criteria from program.md, word for word
    - Each target path under `.autoresearch/judge/<id>/A/` and under `.autoresearch/judge/<id>/B/`
 
