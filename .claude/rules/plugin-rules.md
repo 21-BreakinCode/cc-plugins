@@ -23,8 +23,16 @@ inside an already-sourced shell file:
 ```
 # Inside lib/*.sh
 WRONG:   source "$(find ~/.claude/plugins -path '*/myplugin/lib/common.sh' -print -quit)"
-CORRECT: source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+CORRECT: source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
 ```
+
+The `:-$0` fallback matters for a lib that a command or skill sources. Claude
+Code's Bash tool runs the user's login shell, often zsh, which has no
+`BASH_SOURCE`. When zsh sources a file, `$0` holds that file's path. Inside a
+function, zsh sets `$0` to the function name, so resolve the lib dir once at top
+level (for example `AR_PLUGIN_DIR` in `common.sh`) and use that variable in
+functions. A script that is only executed with `bash script.sh` does not need
+the fallback.
 
 Rationale: `find ~/.claude/plugins` is fragile — it breaks when the install path
 changes, when the plugin is symlinked, and (worst) when it points at a *different*
@@ -89,7 +97,7 @@ Rules:
 
 - [ ] No `find ~/.claude/plugins` in any command/agent/skill/lib
 - [ ] No reference to another plugin's files, agents, or skills
-- [ ] `${CLAUDE_PLUGIN_ROOT}` for bundled files; `$(dirname "${BASH_SOURCE[0]}")` for lib→sibling
+- [ ] `${CLAUDE_PLUGIN_ROOT}` for bundled files; `$(dirname "${BASH_SOURCE[0]:-$0}")` for lib→sibling
 - [ ] Version bumped in `marketplace.json` + the plugin's `plugin.json` (if behavior changed)
 - [ ] `CHANGELOG.md` updated with new version entry (if version bumped)
 - [ ] `./scripts/cicd.sh VERIFY` passes (tests + generated docs in sync)

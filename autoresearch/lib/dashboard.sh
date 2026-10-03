@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Dashboard generator for autoresearch
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
 
 # Generate Artifact-ready dashboard HTML from experiments.json and template
 # Returns: 0 on success, 1 on failure

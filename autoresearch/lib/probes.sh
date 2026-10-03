@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
 
 # ---------------------------------------------------------------------------
 # ar_probe_detect_tooling

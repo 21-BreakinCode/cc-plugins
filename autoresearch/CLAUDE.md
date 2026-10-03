@@ -24,7 +24,7 @@ Claude Code plugin with two halves of one improvement loop: an edit-eval-keep/di
 - `templates/`: HTML dashboard template, program.md template, `harness-components/` Tier-1 templates
 - `tests/`: smoke tests for the harness probe + build helpers
 
-Commands source libs via `${CLAUDE_PLUGIN_ROOT}/lib/…`. Libs source siblings via `$(dirname "${BASH_SOURCE[0]}")/…`.
+Commands source libs via `${CLAUDE_PLUGIN_ROOT}/lib/…`. Libs source siblings via `$(dirname "${BASH_SOURCE[0]:-$0}")/…` so they also load from zsh. Functions use `AR_PLUGIN_DIR` / `AR_TEMPLATES_DIR`, because zsh sets `$0` to the function name inside a function.
 
 ## Runtime Artifacts
 

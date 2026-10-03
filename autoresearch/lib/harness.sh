@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
 
 # ---------------------------------------------------------------------------
 # ar_harness_init <probe_results_json>
@@ -275,7 +275,7 @@ ar_harness_to_program() {
   fi
 
   local probes_lib
-  probes_lib="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/probes.sh"
+  probes_lib="${AR_PLUGIN_DIR}/lib/probes.sh"
   if [ -z "${probes_lib}" ]; then
     ar_log "ERROR: harness/lib/probes.sh not found in any installed plugin"
     return 1

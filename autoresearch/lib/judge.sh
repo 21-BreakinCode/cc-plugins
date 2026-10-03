@@ -10,8 +10,8 @@
 # The labels A and B hide which version is new. Odd judges see the edit as A,
 # even judges see it as B, so position bias also cancels across the panel.
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
-source "$(dirname "${BASH_SOURCE[0]}")/snapshot.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/snapshot.sh"
 
 AR_JUDGE_DIR="${AR_AUTORESEARCH_DIR}/judge"
 

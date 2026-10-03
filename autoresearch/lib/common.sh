@@ -11,7 +11,7 @@ AR_PROGRAM_FILE="${AR_AUTORESEARCH_DIR}/program.md"
 AR_HARNESS_FILE="${AR_AUTORESEARCH_DIR}/harness.json"
 
 # Plugin root (where templates live)
-AR_PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+AR_PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")/.." && pwd)"
 AR_TEMPLATES_DIR="${AR_PLUGIN_DIR}/templates"
 
 # Logging

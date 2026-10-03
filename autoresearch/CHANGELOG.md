@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1 — 2026-10-03
+
+- **fix:** libs now load when a command or skill sources them from zsh. They fall back to `$0` when `BASH_SOURCE` is unset, and functions use `AR_PLUGIN_DIR` and `AR_TEMPLATES_DIR` instead. Before this fix, sourcing from zsh outside the plugin failed with `BASH_SOURCE[0]: parameter not set`.
+
 ## 2.3.0 — 2026-10-03
 
 - **feat:** LLM-judge evals use three blind `autoresearch:judge` agents. Each judge compares the last kept version with the edit, and a strict majority must prefer the edit to keep it. The experimenter no longer scores its own edit.

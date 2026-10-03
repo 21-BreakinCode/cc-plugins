@@ -7,11 +7,11 @@ set -euo pipefail
 
 # Resolve the templates dir relative to this lib's own location.
 ar_harness_templates_dir() {
-  ( cd "$(dirname "${BASH_SOURCE[0]}")/../templates/harness-components" 2>/dev/null && pwd )
+  ( cd "${AR_TEMPLATES_DIR}/harness-components" 2>/dev/null && pwd )
 }
 
 # Source common helpers (for ar_log).
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
 
 # ---------------------------------------------------------------------------
 # ar_harness_build_feedback_loop <name> <event> <matcher> <principle>

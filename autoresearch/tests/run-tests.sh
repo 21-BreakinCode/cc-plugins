@@ -111,5 +111,24 @@ ar_dashboard_generate
 assert "injects dashboard data" assert_contains "${AR_DASHBOARD_FILE}" '"goal":"test goal"'
 cd "${ORIGINAL_DIRECTORY}"
 
+# Claude Code's Bash tool runs the user's login shell, often zsh, which has no
+# BASH_SOURCE. Each lib must still find its siblings from outside the plugin.
+printf 'Test: libs load from zsh outside the plugin\n'
+if command -v zsh >/dev/null 2>&1; then
+  for lib_name in common eval experiment-log dashboard judge probes harness build; do
+    assert "${lib_name}.sh resolves the plugin dir under zsh" bash -c \
+      'cd "$1" && zsh -c "source \"\$1\" 2>/dev/null && [ \"\$AR_PLUGIN_DIR\" = \"\$2\" ]" _ "$2" "$3"' \
+      _ "${TEMPORARY_DIRECTORY}" "${PLUGIN_DIR}/lib/${lib_name}.sh" "${PLUGIN_DIR}"
+  done
+  assert "judge.sh loads snapshot.sh under zsh" bash -c \
+    'cd "$1" && zsh -c "source \"\$1\" 2>/dev/null && whence ar_snapshot_save >/dev/null" _ "$2"' \
+    _ "${TEMPORARY_DIRECTORY}" "${PLUGIN_DIR}/lib/judge.sh"
+  assert "build.sh finds its templates under zsh" bash -c \
+    'cd "$1" && [ "$(zsh -c "source \"\$1\" 2>/dev/null && ar_harness_templates_dir" _ "$2")" = "$3" ]' \
+    _ "${TEMPORARY_DIRECTORY}" "${PLUGIN_DIR}/lib/build.sh" "${PLUGIN_DIR}/templates/harness-components"
+else
+  printf '  SKIP  zsh not installed\n'
+fi
+
 printf '\nPassed: %s  Failed: %s\n' "${PASS}" "${FAIL}"
 [ "${FAIL}" -eq 0 ]

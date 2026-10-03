@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Experiment log management for autoresearch
 
-source "$(dirname "${BASH_SOURCE[0]}")/common.sh"
+source "$(dirname "${BASH_SOURCE[0]:-$0}")/common.sh"
 
 # Initialize experiments.json with goal and config
 # Usage: ar_log_init "goal" "eval_method" "eval_command" "llm_criteria" "max_iter" "consec_limit" ["min_delta"]
