@@ -87,6 +87,9 @@ that are empty**:
 3. **🙋 What I need FROM you:** decisions or actions **only the user can take**. Numbered.
    Each states *why the decision is theirs* (permission, judgment call, access you lack).
    Prefer yes/no. Offer to draft or do the follow-up.
+   **Ask each decision with the AskUserQuestion tool (the pop-up picker).** Never ask it
+   as a plain-text question. More than 3 decisions → one picker per decision, "Step N of M".
+   A Stop hook asks you once to re-ask a turn that ends with a plain-text question.
 4. **🤖 What I will do (no input needed):** your autonomous next steps, gated on the
    answers above.
 5. **Closing line:** one sentence that lets them step away. Example: "Everything else is

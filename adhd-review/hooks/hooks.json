@@ -1,5 +1,5 @@
 {
-  "description": "Inject the adhd-review reply rules into the main session. On by default; set CLAUDE_ADHD_REVIEW=0 to disable it for a session.",
+  "description": "Inject the adhd-review reply rules into the main session, and on Stop ask Claude once to re-ask a plain-text question with the AskUserQuestion picker. On by default; set CLAUDE_ADHD_REVIEW=0 to disable both for a session.",
   "hooks": {
     "SessionStart": [
       {
@@ -9,6 +9,18 @@
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/session-start.sh\"",
             "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/scripts/require-ask-picker.py\"",
+            "timeout": 10
           }
         ]
       }

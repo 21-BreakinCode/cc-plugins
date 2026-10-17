@@ -117,6 +117,25 @@ rc_noroot=$?
 t "active but CLAUDE_PLUGIN_ROOT unset: silent + exit 0" \
   "[ ! -s '$TMP/noroot.out' ] && [ '$rc_noroot' = 0 ]"
 
+echo "── picker Stop hook (dynamic) ────────────────────────────────"
+PICKER_PY="$PLUGIN_DIR/scripts/require-ask-picker.py"
+prompt_line='{"type":"user","message":{"content":"hi"}}'
+write_turn() { printf '%s\n%s\n' "$prompt_line" "$2" > "$TMP/$1.jsonl"; }
+write_turn question '{"type":"assistant","message":{"content":[{"type":"text","text":"Do you approve?"}]}}'
+write_turn picker   '{"type":"assistant","message":{"content":[{"type":"tool_use","name":"AskUserQuestion"},{"type":"text","text":"Ok?"}]}}'
+write_turn noask    '{"type":"assistant","message":{"content":[{"type":"text","text":"Done."}]}}'
+run_picker() { # name [extra json fields] [env VAR=val...]
+  local name="$1" extra="${2:-}"; shift 2 2>/dev/null || shift
+  echo "{\"transcript_path\":\"$TMP/$name.jsonl\"$extra}" | env "$@" python3 "$PICKER_PY" 2>/dev/null
+}
+t "picker: Stop hook registered in hooks.json"          "grep -q 'require-ask-picker.py' '$HOOK_JSON'"
+t "picker: plain-text question → block"                  "run_picker question | grep -q '\"decision\": \"block\"'"
+t "picker: AskUserQuestion used → silent"                "[ -z \"\$(run_picker picker)\" ]"
+t "picker: no question → silent"                         "[ -z \"\$(run_picker noask)\" ]"
+t "picker: stop_hook_active → silent (no loop)"          "[ -z \"\$(run_picker question ',\"stop_hook_active\":true')\" ]"
+t "picker: CLAUDE_ADHD_REVIEW=0 → silent"                "[ -z \"\$(run_picker question '' CLAUDE_ADHD_REVIEW=0)\" ]"
+t "picker: missing transcript → fail open, exit 0"       "echo '{\"transcript_path\":\"/nonexistent\"}' | python3 '$PICKER_PY' 2>/dev/null"
+
 echo "── plugin-rules compliance ───────────────────────────────────"
 t "hook command uses \${CLAUDE_PLUGIN_ROOT}"   "grep -q 'CLAUDE_PLUGIN_ROOT' '$HOOK_JSON'"
 # The forbidden needle is split so this harness never contains it contiguously

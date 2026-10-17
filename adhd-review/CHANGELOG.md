@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.7.0 - 2026-10-17
+
+- **feat:** add a Stop hook, `scripts/require-ask-picker.py`. When a turn ends with a plain-text question and did not call `AskUserQuestion`, the hook blocks the turn once and asks Claude to re-ask with the picker. It skips a second stop in a row (`stop_hook_active`), it obeys `CLAUDE_ADHD_REVIEW=0`, and it fails open on errors.
+- **feat:** Layer 2 "What I need FROM you" now says to ask each decision with the `AskUserQuestion` picker, one picker per decision when there are more than 3.
+
 ## 0.6.0 - 2026-09-24
 
 - **refactor:** ship the reply rules through the SessionStart hook only. The plugin no longer ships an output style, so you never set `outputStyle` for it. The rules moved from `output-styles/adhd-review.md` to `scripts/session-rules.md`. If your settings set `outputStyle` to `adhd-review:ADHD Review`, delete that line.
