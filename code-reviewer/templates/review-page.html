@@ -1,0 +1,826 @@
+<title>__PAGE_TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one review column, a sticky decision bar, and code evidence filed under each claim like exhibits in an audit binder. */
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --ink: #18202b;
+  --muted: #566273;
+  --line: #d9dfe7;
+  --accent: #2549b8;
+  --accent-ink: #ffffff;
+  --accent-soft: #e5ebfa;
+  --critical: #a3122a;
+  --critical-soft: #fbe3e6;
+  --important: #b0461c;
+  --important-soft: #fbece4;
+  --suggest: #4f5f7a;
+  --suggest-soft: #e8edf4;
+  --ok: #1e7346;
+  --ok-soft: #e2f2e8;
+  --assume: #835500;
+  --assume-soft: #f8eed6;
+  --insight: #6a3fb0;
+  --insight-soft: #efe8fa;
+  --code-bg: #f3f5f8;
+  --code-hl: #fff1b8;
+  --diff-add: #e1f3e6;
+  --diff-del: #fbe4e4;
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --step--1: 0.8125rem;
+  --step-0: 0.9375rem;
+  --step-1: 1.0625rem;
+  --step-2: 1.3125rem;
+  --step-3: 1.75rem;
+  --step-4: 2.25rem;
+  --radius: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e131a; --surface: #151b24; --surface-2: #1b2330; --ink: #e4e9f0; --muted: #9aa5b5; --line: #2a3340;
+    --accent: #8eaaff; --accent-ink: #0e131a; --accent-soft: #1d2945; --critical: #ff8a9a; --critical-soft: #3d1820;
+    --important: #ff9b70; --important-soft: #3a2017; --suggest: #a8b4c8; --suggest-soft: #222b39; --ok: #74d39f; --ok-soft: #13301f;
+    --assume: #f0c060; --assume-soft: #382a0e; --insight: #c3a6ff; --insight-soft: #2a1f42; --code-bg: #10161e; --code-hl: #3b3412;
+    --diff-add: #13301f; --diff-del: #3a1919;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e131a; --surface: #151b24; --surface-2: #1b2330; --ink: #e4e9f0; --muted: #9aa5b5; --line: #2a3340;
+  --accent: #8eaaff; --accent-ink: #0e131a; --accent-soft: #1d2945; --critical: #ff8a9a; --critical-soft: #3d1820;
+  --important: #ff9b70; --important-soft: #3a2017; --suggest: #a8b4c8; --suggest-soft: #222b39; --ok: #74d39f; --ok-soft: #13301f;
+  --assume: #f0c060; --assume-soft: #382a0e; --insight: #c3a6ff; --insight-soft: #2a1f42; --code-bg: #10161e; --code-hl: #3b3412;
+  --diff-add: #13301f; --diff-del: #3a1919;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: var(--step-0); line-height: 1.55; }
+a { color: var(--accent); text-underline-offset: 2px; }
+code { font-family: var(--font-mono); font-size: 0.86em; background: var(--surface-2); padding: 0.05em 0.3em; border-radius: 3px; overflow-wrap: anywhere; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3, h4 { font-family: var(--font-display); font-stretch: 87.5%; text-wrap: balance; line-height: 1.2; margin: 0; }
+h2 { font-size: var(--step-3); font-weight: 750; }
+h3 { font-size: var(--step-2); font-weight: 700; }
+.wrap { max-width: 1000px; margin-inline: auto; padding-inline: max(16px, 3vw); }
+.eyebrow { font-family: var(--font-display); font-size: var(--step--1); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 600; overflow-wrap: anywhere; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--font-mono); font-size: 0.86em; }
+section { padding-block: 28px; border-top: 1px solid var(--line); }
+section.first { border-top: 0; }
+section > .wrap > h2 + p { margin-top: 6px; }
+
+/* header */
+.masthead { padding-block: 32px 24px; }
+.masthead h1 { font-size: var(--step-4); font-weight: 800; margin-top: 8px; }
+.masthead .sub { margin: 10px 0 0; max-width: 72ch; color: var(--muted); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: var(--step--1); font-weight: 700; border: 1px solid var(--line); background: var(--surface); color: var(--ink); white-space: nowrap; }
+.pill.crit { background: var(--critical-soft); color: var(--critical); border-color: transparent; }
+.pill.imp { background: var(--important-soft); color: var(--important); border-color: transparent; }
+.pill.sug { background: var(--suggest-soft); color: var(--suggest); border-color: transparent; }
+.pill.warn { background: var(--assume-soft); color: var(--assume); border-color: transparent; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+
+/* sticky bar */
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); border-block: 1px solid var(--line); }
+.bar .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding-block: 10px; }
+.progress { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1 1 260px; }
+.meter { flex: 1; height: 6px; background: var(--surface-2); border-radius: 999px; overflow: hidden; min-width: 80px; }
+.meter > span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.25s ease; }
+.progress strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.status { font-size: var(--step--1); color: var(--muted); }
+.status[data-tone="error"] { color: var(--important); font-weight: 700; }
+.status[data-tone="ok"] { color: var(--ok); }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: inherit; font-weight: 700; font-size: var(--step--1); cursor: pointer; border-radius: var(--radius); padding: 7px 12px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+button:hover { border-color: var(--accent); }
+
+/* intro lists */
+.steps { margin: 12px 0 0; padding-left: 1.4em; display: grid; gap: 6px; max-width: 75ch; }
+.legend { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 6px; font-size: var(--step--1); color: var(--muted); }
+.legend li { display: flex; gap: 8px; align-items: baseline; }
+.hl-sample { background: var(--code-hl); color: var(--ink); padding: 0 4px; border-radius: 3px; }
+.banner { margin-top: 14px; padding: 10px 14px; border-radius: var(--radius); background: var(--assume-soft); color: var(--ink); border: 1px solid var(--line); }
+.glossary { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 8px 24px; margin: 14px 0 0; }
+.glossary > div { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 8px; padding-block: 6px; border-bottom: 1px solid var(--line); }
+.glossary dt { font-weight: 700; overflow-wrap: anywhere; }
+.glossary dd { margin: 0; color: var(--muted); }
+
+/* overall decisions */
+.qgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin-top: 14px; }
+fieldset { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px 14px; margin: 0; min-width: 0; background: var(--surface); }
+legend { font-family: var(--font-display); font-weight: 700; padding-inline: 4px; }
+.opt { display: flex; gap: 8px; align-items: flex-start; padding: 6px 4px; border-radius: 4px; cursor: pointer; }
+.opt input { margin-top: 0.3em; accent-color: var(--accent); flex: none; }
+.opt:hover { background: var(--surface-2); }
+textarea { width: 100%; font: inherit; font-size: var(--step--1); padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink); resize: vertical; min-height: 2.6em; }
+.field-label { display: block; font-weight: 700; font-size: var(--step--1); margin: 10px 0 4px; }
+
+/* index */
+.index { list-style: none; margin: 14px 0 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.index li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 9px 12px; border-top: 1px solid var(--line); }
+.index li:first-child { border-top: 0; }
+.index a { color: var(--ink); text-decoration: none; }
+.index a:hover { text-decoration: underline; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--suggest); }
+.dot.important { background: var(--important); }
+.dot.critical { background: var(--critical); }
+.state { font-size: var(--step--1); font-weight: 700; color: var(--muted); white-space: nowrap; }
+.state[data-set] { color: var(--accent); }
+@media (max-width: 560px) { .index li { grid-template-columns: auto minmax(0, 1fr); } .index .state { grid-column: 2; } }
+
+/* finding card */
+.finding { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-top: 18px; scroll-margin-top: 90px; overflow: hidden; }
+.finding > header { padding: 16px 18px 14px; border-left: 4px solid var(--suggest); }
+.finding.important > header { border-left-color: var(--important); }
+.finding.critical > header { border-left-color: var(--critical); }
+.finding .labels { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.where-line { margin: 8px 0 0; font-size: var(--step--1); color: var(--muted); overflow-wrap: anywhere; }
+.points { display: grid; gap: 8px; margin: 12px 0 0; max-width: 82ch; }
+.points > div { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 4px 12px; }
+.points dt { font-family: var(--font-display); font-weight: 700; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-top: 0.2em; }
+.points dd { margin: 0; min-width: 0; }
+.evidence-head { font-family: var(--font-display); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding: 14px 18px 0; border-top: 1px solid var(--line); }
+.claims { list-style: decimal; margin: 0; padding: 0 18px 4px calc(18px + 1.7em); }
+.claim { padding-block: 12px; border-bottom: 1px dashed var(--line); min-width: 0; }
+.claim:last-child { border-bottom: 0; }
+.claim::marker { font-family: var(--font-display); font-weight: 800; color: var(--muted); }
+.claim-head { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
+.claim p { margin: 0; max-width: 80ch; }
+.tag { font-family: var(--font-display); font-weight: 800; font-size: 0.72rem; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 3px; }
+.tag.fact { background: var(--ok-soft); color: var(--ok); }
+.tag.assume { background: var(--assume-soft); color: var(--assume); }
+.tag.insight { background: var(--insight-soft); color: var(--insight); }
+.check { font-size: 0.75rem; color: var(--muted); }
+.refs { display: grid; gap: 10px; margin-top: 10px; min-width: 0; }
+.decide { padding: 14px 18px 18px; background: var(--surface-2); border-top: 1px solid var(--line); display: grid; gap: 12px; }
+.decide fieldset { background: var(--surface); }
+.seg { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 6px; }
+.seg label { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; font-weight: 700; font-size: var(--step--1); }
+.seg input { accent-color: var(--accent); flex: none; }
+.seg label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+.fix-text { min-width: 0; }
+.fix-detail { display: block; color: var(--muted); font-size: var(--step--1); margin-top: 2px; }
+.fix-steps { margin: 4px 0 0; padding-left: 1.3em; color: var(--muted); font-size: var(--step--1); display: grid; gap: 2px; }
+
+/* evidence */
+.snip { margin: 0; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: var(--code-bg); min-width: 0; }
+.snip figcaption { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 6px 10px; border-bottom: 1px solid var(--line); background: var(--surface); font-size: 0.78rem; }
+.snip figcaption .path { font-family: var(--font-mono); font-weight: 600; overflow-wrap: anywhere; }
+.snip figcaption .where { color: var(--muted); font-family: var(--font-mono); overflow-wrap: anywhere; }
+.code { overflow-x: auto; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.6; }
+.lines { display: grid; min-width: max-content; padding-block: 4px; }
+.row { display: grid; grid-template-columns: 5ch minmax(0, 1fr); }
+.row.diffrow { grid-template-columns: 4.5ch 4.5ch 2ch minmax(0, 1fr); }
+.ln { text-align: right; padding-right: 1.2ch; color: var(--muted); user-select: none; }
+.sign { color: var(--muted); user-select: none; }
+.tx { white-space: pre; padding-right: 2ch; }
+.row.hl { background: var(--code-hl); }
+.row.hl .ln { color: var(--ink); font-weight: 600; }
+.row.add { background: var(--diff-add); }
+.row.del { background: var(--diff-del); }
+.row.diffrow.hl { box-shadow: inset 3px 0 0 var(--accent); }
+.cmd { margin: 0; padding: 8px 10px; white-space: pre; overflow-x: auto; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.6; }
+.cmd .prompt, .cmd .out { color: var(--muted); }
+.cmd .prompt { user-select: none; }
+.hide-code .refs { display: none; }
+
+/* done well, method, feedback */
+.plain-list { margin: 12px 0 0; padding-left: 1.2em; display: grid; gap: 10px; max-width: 80ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); margin-top: 14px; }
+#feedback-text { font-family: var(--font-mono); font-size: 0.8rem; min-height: 16em; margin-top: 12px; }
+.feedback-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+footer { padding-block: 24px 40px; color: var(--muted); font-size: var(--step--1); border-top: 1px solid var(--line); }
+
+@media (max-width: 760px) {
+  .masthead h1 { font-size: var(--step-3); }
+}
+@media (max-width: 560px) {
+  .points > div, .glossary > div { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1 id="headline"></h1>
+    <p class="sub" id="pr-sub"></p>
+    <div class="facts" id="pr-facts"></div>
+  </div>
+</header>
+
+<nav class="bar" aria-label="Review progress">
+  <div class="wrap">
+    <div class="progress">
+      <strong id="progress-text">0 decided</strong>
+      <div class="meter" aria-hidden="true"><span id="progress-meter"></span></div>
+    </div>
+    <span class="status" id="save-status" role="status">Connecting…</span>
+    <div class="actions">
+      <button type="button" id="toggle-code">Hide code</button>
+      <button type="button" id="copy-top">Copy feedback</button>
+      <button type="button" class="primary" id="done-top">I am done</button>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="first">
+    <div class="wrap">
+      <h2>How to use this page</h2>
+      <ol class="steps">
+        <li>Read each finding. It starts with a short summary, then numbered evidence with the real code.</li>
+        <li>Choose your call for each finding. If there is more than one fix, choose one. A note is optional.</li>
+        <li>Answer the overall questions.</li>
+        <li>Press <strong>I am done</strong>, then tell Claude in the chat. Your choices save as you go.</li>
+        <li>After the review is on GitHub, Claude deletes this page. Claude Code then shows you a delete prompt.</li>
+      </ol>
+      <ul class="legend">
+        <li><span class="tag fact">FACT</span><span>I saw it in the code or in the PR documents.</span></li>
+        <li><span class="tag assume">ASSUME</span><span>My best guess. It is not proven.</span></li>
+        <li><span class="tag insight">INSIGHT</span><span>A link between facts that is easy to miss.</span></li>
+        <li><span class="mono hl-sample">Yellow lines</span><span>The lines that prove the claim.</span></li>
+      </ul>
+      <div class="banner" id="local-banner" hidden>This view cannot save to the page. Your choices stay in this browser only. Press <strong>Copy feedback</strong> and paste the text into the chat.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Words on this page</h2>
+      <dl class="glossary" id="glossary"></dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Overall decisions</h2>
+      <p class="muted">These answers decide what Claude writes for GitHub. Claude posts nothing until you approve the text in the chat.</p>
+      <div class="qgrid" id="overall"></div>
+      <label class="field-label" for="overall-note">Overall note to Claude (optional)</label>
+      <textarea id="overall-note" rows="2" placeholder="Anything about the whole review"></textarea>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>All findings</h2>
+      <p class="muted">Most serious first. The right column shows your call.</p>
+      <ol class="index" id="index"></ol>
+    </div>
+  </section>
+
+  <div id="finding-sections"></div>
+
+  <section id="done-well-section">
+    <div class="wrap">
+      <h2>Done well</h2>
+      <div class="card"><ol class="claims" id="done-well"></ol></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>How I collected the evidence</h2>
+      <ul class="plain-list" id="method"></ul>
+    </div>
+  </section>
+
+  <section id="feedback">
+    <div class="wrap">
+      <h2>Your feedback as text</h2>
+      <p class="muted">This text updates as you choose. Claude reads your saved choices directly. You only need to copy it if the page cannot save.</p>
+      <label class="field-label" for="feedback-text">Feedback text</label>
+      <textarea id="feedback-text" readonly></textarea>
+      <div class="feedback-actions">
+        <button type="button" id="copy-bottom">Copy feedback</button>
+        <button type="button" class="primary" id="done-bottom">I am done</button>
+        <span class="status" id="done-status" role="status"></span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" id="footer-text"></div>
+</footer>
+
+<script type="application/json" id="data">__DATA_JSON__</script>
+<script>
+(() => {
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const SNIPPETS = DATA.snippets;
+  const FINDINGS = DATA.findings;
+  // The ids below are the contract with /code-reviewer:review-pr, which reads them from the db.
+  const DECISIONS = [
+    { id: 'block', label: 'Ask for a fix before merge' },
+    { id: 'suggest', label: 'Suggest it, not required' },
+    { id: 'skip', label: 'Do not mention it' },
+    { id: 'discuss', label: 'Talk it over with Claude first' },
+  ];
+  const OVERALL = [
+    {
+      id: 'github_action',
+      label: 'What should the GitHub review say?',
+      options: [
+        { id: 'request_changes', label: 'Request changes' },
+        { id: 'comment', label: 'Comment only' },
+        { id: 'approve', label: 'Approve, with comments' },
+        { id: 'hold', label: 'Do not post yet' },
+      ],
+    },
+    {
+      id: 'posting',
+      label: 'Who posts it?',
+      options: [
+        { id: 'claude_after_ok', label: 'Claude writes it, I approve the text in the chat, then Claude posts it' },
+        { id: 'me', label: 'Claude writes it, and I post it myself' },
+      ],
+    },
+  ];
+  const SEVERITIES = [
+    { id: 'critical', label: 'Critical', heading: 'Critical', tone: 'crit', intro: 'The reviewers think these must be fixed before merge.' },
+    { id: 'important', label: 'Important', heading: 'Important', tone: 'imp', intro: 'The reviewers think these need a discussion before merge.' },
+    { id: 'suggestion', label: 'Suggestion', heading: 'Suggestions', tone: 'sug', intro: 'Smaller issues. Some can be choices that the PR made on purpose.' },
+  ];
+  const SEVERITY = Object.fromEntries(SEVERITIES.map((s) => [s.id, s]));
+  const CHECK_LABEL = {
+    code: 'Seen in the code',
+    docs: 'Seen in the PR documents',
+    reading: 'Read, not run',
+    none: 'Not checked',
+  };
+  const AREA_LABEL = {
+    correctness: 'Correctness',
+    test: 'Tests',
+    security: 'Security',
+    ops: 'Deploy and operations',
+    simplicity: 'Simpler code',
+    policy: 'Team rules',
+    drift: 'Merge with base',
+  };
+  const VERDICT = {
+    REQUEST_CHANGES: { label: 'Review result: request changes', tone: 'crit' },
+    NEEDS_DISCUSSION: { label: 'Review result: needs discussion', tone: 'warn' },
+    APPROVE: { label: 'Review result: approve', tone: 'ok' },
+  };
+  const PAGE_TERMS = [
+    { term: 'PR head', meaning: 'The newest commit on the PR branch. The code blocks come from it.' },
+    { term: 'Diff', meaning: 'The lines that the PR adds and removes.' },
+  ];
+  const MERGE_TERM = { term: 'Test merge', meaning: 'A merge done in memory with `git merge-tree`. No branch changes.' };
+  const DECISION_LABEL = Object.fromEntries(DECISIONS.map((d) => [d.id, d.label]));
+  const LOCAL_KEY = `code-review-draft:${DATA.review_id}`;
+  const HIDE_CODE_KEY = 'code-review-hide-code';
+  const NOTE_DEBOUNCE_MS = 700;
+  const RETRY_BASE_MS = 800;
+  const OVERALL_NOTE_KEY = '__overall';
+
+  const state = { decisions: {}, overall: {}, readyAt: null };
+  const store = { db: null, mode: 'pending' };
+
+  const $ = (sel) => document.querySelector(sel);
+  const esc = (text) => String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const fmt = (text) => esc(text).replace(/`([^`]+)`/g, '<code>$1</code>');
+  const shortSha = (sha) => String(sha).slice(0, 7);
+  const plural = (count, one, many) => `${count} ${count === 1 ? one : many}`;
+
+  /* ---------- rendering ---------- */
+
+  function renderSnippet(ref) {
+    const s = SNIPPETS[ref];
+    if (!s) return '';
+    const link = s.url ? `<a class="path" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a>` : `<span class="path">${esc(s.title)}</span>`;
+    const meta = [s.lines, s.where].filter(Boolean).map(esc).join(' · ');
+    const caption = `<figcaption>${link}<span class="where">${meta}</span></figcaption>`;
+    if (s.kind === 'command') {
+      return `<figure class="snip">${caption}<pre class="cmd" tabindex="0"><span class="prompt">$ </span>${esc(s.command)}\n<span class="out">${esc(s.output.join('\n'))}</span></pre></figure>`;
+    }
+    const isDiff = s.kind === 'diff';
+    const rows = s.rows.map((r) => {
+      const cls = ['row', isDiff ? `diffrow ${r.d}` : '', r.hl ? 'hl' : ''].filter(Boolean).join(' ');
+      if (isDiff) {
+        const sign = r.d === 'add' ? '+' : r.d === 'del' ? '-' : ' ';
+        return `<div class="${cls}"><span class="ln">${r.o ?? ''}</span><span class="ln">${r.n ?? ''}</span><span class="sign">${sign}</span><span class="tx">${esc(r.t)}</span></div>`;
+      }
+      return `<div class="${cls}"><span class="ln">${r.n}</span><span class="tx">${esc(r.t)}</span></div>`;
+    }).join('');
+    return `<figure class="snip">${caption}<div class="code" tabindex="0" aria-label="${esc(s.title)}"><div class="lines">${rows}</div></div></figure>`;
+  }
+
+  function renderPoints(points) {
+    return `<dl class="points">${points.map((p) => `<div><dt>${esc(p.label)}</dt><dd>${fmt(p.text)}</dd></div>`).join('')}</dl>`;
+  }
+
+  function renderClaim(claim) {
+    const tagText = { fact: 'FACT', assume: 'ASSUME', insight: 'INSIGHT' }[claim.kind];
+    const refs = claim.refs.length ? `<div class="refs">${claim.refs.map(renderSnippet).join('')}</div>` : '';
+    return `<li class="claim"><div class="claim-head"><span class="tag ${claim.kind}">${tagText}</span><span class="check">${CHECK_LABEL[claim.check]}</span></div><p>${fmt(claim.text)}</p>${refs}</li>`;
+  }
+
+  function renderFix(f, x) {
+    const detail = x.detail ? `<span class="fix-detail">${fmt(x.detail)}</span>` : '';
+    const steps = (x.steps || []).length ? `<ol class="fix-steps">${x.steps.map((s) => `<li>${fmt(s)}</li>`).join('')}</ol>` : '';
+    return `
+      <label class="opt" for="x-${f.id}-${x.id}">
+        <input type="radio" id="x-${f.id}-${x.id}" name="x-${f.id}" value="${x.id}" data-finding="${f.id}" data-field="fix">
+        <span class="fix-text"><strong>${fmt(x.label)}</strong>${detail}${steps}</span>
+      </label>`;
+  }
+
+  function renderDecisionControls(f) {
+    const seg = DECISIONS.map((d) => `
+      <label for="d-${f.id}-${d.id}"><input type="radio" id="d-${f.id}-${d.id}" name="d-${f.id}" value="${d.id}" data-finding="${f.id}" data-field="decision">${esc(d.label)}</label>`).join('');
+    return `
+      <div class="decide">
+        <fieldset><legend>Your call</legend><div class="seg">${seg}</div></fieldset>
+        <fieldset><legend>Which fix do you prefer?</legend>${f.fixes.map((x) => renderFix(f, x)).join('')}</fieldset>
+        <div><label class="field-label" for="n-${f.id}">Note to Claude (optional)</label>
+        <textarea id="n-${f.id}" rows="2" data-finding="${f.id}" data-field="note" placeholder="Why, or what to change in the comment"></textarea></div>
+      </div>`;
+  }
+
+  function renderFinding(f) {
+    const severity = SEVERITY[f.severity];
+    const labels = `<div class="labels"><span class="pill ${severity.tone}">${esc(severity.label)}</span>${f.areas.map((a) => `<span class="pill">${esc(AREA_LABEL[a] || a)}</span>`).join('')}</div>`;
+    return `
+      <article class="finding ${f.severity}" id="f-${f.id}">
+        <header>${labels}<h3>${fmt(f.title)}</h3><p class="where-line mono">${esc(f.file)}:${f.line}</p>${renderPoints(f.points)}</header>
+        <h4 class="evidence-head">Evidence</h4>
+        <ol class="claims">${f.claims.map(renderClaim).join('')}</ol>
+        ${renderDecisionControls(f)}
+      </article>`;
+  }
+
+  function renderFindingSections() {
+    $('#finding-sections').innerHTML = SEVERITIES.map((s) => {
+      const list = FINDINGS.filter((f) => f.severity === s.id);
+      if (!list.length) return '';
+      return `
+        <section>
+          <div class="wrap">
+            <h2>${esc(s.heading)}</h2>
+            <p class="muted">${esc(s.intro)}</p>
+            ${list.map(renderFinding).join('')}
+          </div>
+        </section>`;
+    }).join('');
+  }
+
+  function renderOverall() {
+    $('#overall').innerHTML = OVERALL.map((q) => `
+      <fieldset><legend>${esc(q.label)}</legend>${q.options.map((o) => `
+        <label class="opt" for="o-${q.id}-${o.id}"><input type="radio" id="o-${q.id}-${o.id}" name="o-${q.id}" value="${o.id}" data-overall="${q.id}"><span>${esc(o.label)}</span></label>`).join('')}
+      </fieldset>`).join('');
+  }
+
+  function driftPill() {
+    const drift = DATA.drift;
+    if (drift.status !== 'checked') return `<span class="pill">Merge with ${esc(drift.base_ref)} not checked</span>`;
+    if (drift.conflicts.length) return `<span class="pill imp">Conflicts with ${esc(drift.base_ref)}: ${plural(drift.conflicts.length, 'file', 'files')}</span>`;
+    return `<span class="pill ok">No conflicts with ${esc(drift.base_ref)}</span>`;
+  }
+
+  function renderHeader() {
+    const pr = DATA.pr;
+    const verdict = VERDICT[DATA.verdict];
+    $('#eyebrow').textContent = `${DATA.repo} · pull request ${pr.number} · code review`;
+    $('#headline').innerHTML = fmt(DATA.headline);
+    $('#pr-sub').innerHTML = `${fmt(pr.title)}. Author <span class="mono">${esc(pr.author)}</span>. Branch <span class="mono">${esc(pr.branch)}</span> into <span class="mono">${esc(pr.target)}</span>. ${plural(pr.files, 'file', 'files')}, +${pr.additions} / −${pr.deletions} lines.`;
+    const counts = SEVERITIES.map((s) => [s, FINDINGS.filter((f) => f.severity === s.id).length]).filter(([, count]) => count);
+    $('#pr-facts').innerHTML = [
+      `<span class="pill ${verdict.tone}">${esc(verdict.label)}</span>`,
+      ...counts.map(([s, count]) => `<span class="pill ${s.tone}">${s.id === 'suggestion' ? plural(count, 'suggestion', 'suggestions') : `${count} ${s.id}`}</span>`),
+      driftPill(),
+      `<a class="pill" href="${esc(pr.url)}" target="_blank" rel="noopener">Open PR ${pr.number}</a>`,
+      `<span class="pill mono">PR ${shortSha(pr.head)}</span>`,
+    ].join('');
+  }
+
+  function renderStatic() {
+    const pr = DATA.pr;
+    renderHeader();
+    const terms = [...PAGE_TERMS, ...(DATA.drift.status === 'checked' ? [MERGE_TERM] : []), ...DATA.glossary];
+    $('#glossary').innerHTML = terms.map((g) => `<div><dt>${fmt(g.term)}</dt><dd>${fmt(g.meaning)}</dd></div>`).join('');
+    renderOverall();
+    $('#index').innerHTML = FINDINGS.length
+      ? FINDINGS.map((f) => `
+        <li><span class="dot ${f.severity}" aria-label="${f.severity}"></span><a href="#f-${f.id}">${fmt(f.title)}</a><span class="state" id="s-${f.id}">Not decided</span></li>`).join('')
+      : '<li><span class="dot"></span><span>No findings. The reviewers found nothing to change.</span></li>';
+    renderFindingSections();
+    $('#done-well').innerHTML = DATA.done_well.map(renderClaim).join('');
+    $('#done-well-section').hidden = !DATA.done_well.length;
+    $('#method').innerHTML = DATA.notes.map((note) => `<li>${fmt(note)}</li>`).join('');
+    $('#footer-text').innerHTML = `Review of <a href="${esc(pr.url)}" target="_blank" rel="noopener">PR ${pr.number}</a> at commit <span class="mono">${shortSha(pr.head)}</span>. Made on ${esc(DATA.reviewed_on)}.`;
+  }
+
+  /* ---------- state to controls ---------- */
+
+  function setRadio(name, value) {
+    for (const input of document.getElementsByName(name)) input.checked = input.value === value;
+  }
+
+  function applyStateToControls() {
+    for (const f of FINDINGS) {
+      const rec = state.decisions[f.id] || {};
+      setRadio(`d-${f.id}`, rec.decision);
+      setRadio(`x-${f.id}`, rec.fix);
+      const note = document.getElementById(`n-${f.id}`);
+      if (note && document.activeElement !== note && !pendingNotes.has(f.id)) note.value = rec.note || '';
+    }
+    for (const q of OVERALL) setRadio(`o-${q.id}`, state.overall[q.id]);
+    const overallNote = $('#overall-note');
+    if (document.activeElement !== overallNote && !pendingNotes.has(OVERALL_NOTE_KEY)) overallNote.value = state.overall.note || '';
+    refreshSummary();
+  }
+
+  function refreshSummary() {
+    const decided = FINDINGS.filter((f) => state.decisions[f.id]?.decision).length;
+    $('#progress-text').textContent = `${decided} of ${FINDINGS.length} decided`;
+    $('#progress-meter').style.width = `${FINDINGS.length ? (decided / FINDINGS.length) * 100 : 100}%`;
+    for (const f of FINDINGS) {
+      const cell = document.getElementById(`s-${f.id}`);
+      const decision = state.decisions[f.id]?.decision;
+      cell.textContent = decision ? DECISION_LABEL[decision] : 'Not decided';
+      decision ? cell.setAttribute('data-set', '') : cell.removeAttribute('data-set');
+    }
+    $('#feedback-text').value = buildFeedbackText();
+  }
+
+  /* ---------- feedback text ---------- */
+
+  function optionLabel(list, id) {
+    return list.find((o) => o.id === id)?.label;
+  }
+
+  function buildFeedbackText() {
+    const lines = [`PR ${DATA.pr.number} review choices (commit ${shortSha(DATA.pr.head)})`, ''];
+    for (const q of OVERALL) lines.push(`${q.label} ${optionLabel(q.options, state.overall[q.id]) || '(not chosen)'}`);
+    if (state.overall.note) lines.push(`Overall note: ${state.overall.note}`);
+    for (const s of SEVERITIES) {
+      const list = FINDINGS.filter((f) => f.severity === s.id);
+      if (!list.length) continue;
+      lines.push('', s.heading.toUpperCase());
+      for (const f of list) {
+        const rec = state.decisions[f.id] || {};
+        lines.push(`- ${f.title} [${f.id}]`);
+        lines.push(`  Call: ${rec.decision ? DECISION_LABEL[rec.decision] : '(not decided)'}`);
+        if (rec.fix) lines.push(`  Fix: ${optionLabel(f.fixes, rec.fix)}`);
+        if (rec.note) lines.push(`  Note: ${rec.note}`);
+      }
+    }
+    const undecided = FINDINGS.filter((f) => !state.decisions[f.id]?.decision);
+    if (undecided.length) lines.push('', `Not decided (${undecided.length}): ${undecided.map((f) => f.title).join('; ')}`);
+    return lines.join('\n');
+  }
+
+  /* ---------- persistence ---------- */
+
+  const writeChains = new Map();
+  const lastWritten = new Map();
+  const queuedBeforeConnect = new Map();
+  const pendingNotes = new Set();
+  const noteTimers = new Map();
+  let retriedOnce = false;
+
+  function setStatus(text, tone) {
+    const el = $('#save-status');
+    el.textContent = text;
+    tone ? el.setAttribute('data-tone', tone) : el.removeAttribute('data-tone');
+  }
+
+  function saveLocal() {
+    try { localStorage.setItem(LOCAL_KEY, JSON.stringify(state)); } catch { /* storage blocked: Copy feedback still works */ }
+  }
+
+  function loadLocal() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(LOCAL_KEY) || 'null');
+      if (saved) Object.assign(state, saved);
+    } catch { /* ignore an unreadable draft */ }
+  }
+
+  function mergeDrafts(saved, recent) {
+    return {
+      decisions: { ...saved.decisions, ...recent.decisions },
+      overall: { ...saved.overall, ...recent.overall },
+      readyAt: recent.readyAt || saved.readyAt,
+    };
+  }
+
+  function decisionBody(f) {
+    const rec = state.decisions[f.id] || {};
+    return {
+      title: f.title,
+      severity: f.severity,
+      decision: rec.decision || null,
+      decisionLabel: rec.decision ? DECISION_LABEL[rec.decision] : null,
+      fix: rec.fix || null,
+      fixLabel: rec.fix ? optionLabel(f.fixes, rec.fix) : null,
+      note: rec.note || '',
+    };
+  }
+
+  function overallBody() {
+    const answers = Object.fromEntries(OVERALL.map((q) => [q.id, state.overall[q.id] || null]));
+    const labels = Object.fromEntries(OVERALL.map((q) => [`${q.id}Label`, optionLabel(q.options, state.overall[q.id]) || null]));
+    return { ...answers, ...labels, note: state.overall.note || '', readyAt: state.readyAt };
+  }
+
+  function persist(path, body) {
+    if (store.mode === 'pending') {
+      queuedBeforeConnect.set(path, body);
+      return;
+    }
+    if (store.mode === 'local') {
+      saveLocal();
+      setStatus('Saved in this browser only');
+      return;
+    }
+    const comparable = JSON.stringify(body);
+    if (lastWritten.get(path) === comparable) return;
+    const previous = writeChains.get(path) || Promise.resolve();
+    const next = previous.then(async () => {
+      if (lastWritten.get(path) === comparable) return;
+      setStatus('Saving…');
+      await store.db.doc(path).set({ ...body, updatedAt: new Date().toISOString() });
+      lastWritten.set(path, comparable);
+      setStatus('All choices saved', 'ok');
+    }).catch((err) => handleWriteError(err, path, body));
+    writeChains.set(path, next);
+  }
+
+  function handleWriteError(err, path, body) {
+    const code = err?.code || 'unavailable';
+    if (code === 'unavailable' && !retriedOnce) {
+      retriedOnce = true;
+      setTimeout(() => persist(path, body), RETRY_BASE_MS + Math.random() * RETRY_BASE_MS);
+      return;
+    }
+    setStatus(`Not saved (${code}). Use Copy feedback.`, 'error');
+    $('#local-banner').hidden = false;
+  }
+
+  function persistFinding(id) {
+    const f = FINDINGS.find((x) => x.id === id);
+    persist(`decisions/${id}`, decisionBody(f));
+  }
+
+  function persistOverall() {
+    persist('review/overall', overallBody());
+  }
+
+  function applyDecisionsSnapshot(snap) {
+    for (const doc of snap.docs) {
+      if (!doc.exists) continue;
+      const body = doc.data();
+      const local = state.decisions[doc.id] || {};
+      const noteInFlight = pendingNotes.has(doc.id);
+      state.decisions = {
+        ...state.decisions,
+        [doc.id]: { decision: body.decision || undefined, fix: body.fix || undefined, note: noteInFlight ? local.note : body.note || '' },
+      };
+      const f = FINDINGS.find((x) => x.id === doc.id);
+      if (f) lastWritten.set(`decisions/${doc.id}`, JSON.stringify(decisionBody(f)));
+    }
+    applyStateToControls();
+  }
+
+  function applyOverallSnapshot(doc) {
+    if (!doc.exists) return;
+    const body = doc.data();
+    const overall = Object.fromEntries(OVERALL.map((q) => [q.id, body[q.id] || undefined]));
+    overall.note = pendingNotes.has(OVERALL_NOTE_KEY) ? state.overall.note : body.note || '';
+    state.overall = overall;
+    state.readyAt = body.readyAt || null;
+    lastWritten.set('review/overall', JSON.stringify(overallBody()));
+    showReady();
+    applyStateToControls();
+  }
+
+  function onSubscriptionError(err) {
+    setStatus(`Live sync stopped (${err?.code || 'unavailable'}). Reload to retry.`, 'error');
+  }
+
+  async function connect() {
+    let db = null;
+    try { db = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch { db = null; }
+    if (!db) {
+      store.mode = 'local';
+      const choicesMadeWhileConnecting = { ...state };
+      loadLocal();
+      Object.assign(state, mergeDrafts(state, choicesMadeWhileConnecting));
+      $('#local-banner').hidden = false;
+      setStatus('Saved in this browser only');
+      if (queuedBeforeConnect.size) saveLocal();
+      queuedBeforeConnect.clear();
+      showReady();
+      applyStateToControls();
+      return;
+    }
+    store.db = db;
+    store.mode = 'db';
+    setStatus('All choices saved', 'ok');
+    db.collection('decisions').onSnapshot(applyDecisionsSnapshot, onSubscriptionError);
+    db.doc('review/overall').onSnapshot(applyOverallSnapshot, onSubscriptionError);
+    for (const [path, body] of queuedBeforeConnect) persist(path, body);
+    queuedBeforeConnect.clear();
+  }
+
+  /* ---------- events ---------- */
+
+  function onChange(event) {
+    const input = event.target;
+    if (input.dataset.finding && input.dataset.field !== 'note') {
+      const id = input.dataset.finding;
+      state.decisions = { ...state.decisions, [id]: { ...(state.decisions[id] || {}), [input.dataset.field]: input.value } };
+      refreshSummary();
+      persistFinding(id);
+    } else if (input.dataset.overall) {
+      state.overall = { ...state.overall, [input.dataset.overall]: input.value };
+      refreshSummary();
+      persistOverall();
+    }
+  }
+
+  function onNoteInput(event) {
+    const input = event.target;
+    const isOverall = input.id === 'overall-note';
+    const key = isOverall ? OVERALL_NOTE_KEY : input.dataset.finding;
+    if (!key) return;
+    if (isOverall) state.overall = { ...state.overall, note: input.value };
+    else state.decisions = { ...state.decisions, [key]: { ...(state.decisions[key] || {}), note: input.value } };
+    refreshSummary();
+    pendingNotes.add(key);
+    clearTimeout(noteTimers.get(key));
+    noteTimers.set(key, setTimeout(() => {
+      pendingNotes.delete(key);
+      isOverall ? persistOverall() : persistFinding(key);
+    }, NOTE_DEBOUNCE_MS));
+  }
+
+  async function copyFeedback() {
+    const text = buildFeedbackText();
+    const area = $('#feedback-text');
+    area.value = text;
+    try {
+      await navigator.clipboard.writeText(text);
+      setStatus('Feedback copied', 'ok');
+    } catch {
+      area.focus();
+      area.select();
+      setStatus('Press Cmd+C or Ctrl+C to copy the selected text');
+    }
+  }
+
+  function markDone() {
+    state.readyAt = new Date().toISOString();
+    persistOverall();
+    showReady();
+  }
+
+  function showReady() {
+    const el = $('#done-status');
+    if (!state.readyAt) { el.textContent = ''; return; }
+    const time = new Date(state.readyAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const undecided = FINDINGS.filter((f) => !state.decisions[f.id]?.decision).length;
+    const open = undecided ? ` ${plural(undecided, 'finding has', 'findings have')} no call yet. Claude asks about them in the chat.` : '';
+    el.textContent = store.mode === 'db'
+      ? `Marked done at ${time}. Tell Claude in the chat that your choices are in.${open}`
+      : `Marked done at ${time}. This view cannot save to the page, so copy the feedback text into the chat.${open}`;
+  }
+
+  function toggleCode() {
+    const hidden = document.body.classList.toggle('hide-code');
+    $('#toggle-code').textContent = hidden ? 'Show code' : 'Hide code';
+    try { localStorage.setItem(HIDE_CODE_KEY, hidden ? '1' : '0'); } catch { /* per-viewer convenience only */ }
+  }
+
+  function restoreCodeToggle() {
+    let hidden = false;
+    try { hidden = localStorage.getItem(HIDE_CODE_KEY) === '1'; } catch { hidden = false; }
+    if (hidden) toggleCode();
+  }
+
+  renderStatic();
+  refreshSummary();
+  restoreCodeToggle();
+  document.addEventListener('change', onChange);
+  document.addEventListener('input', (event) => {
+    if (event.target.matches('textarea[data-field="note"], #overall-note')) onNoteInput(event);
+  });
+  for (const id of ['#copy-top', '#copy-bottom']) $(id).addEventListener('click', copyFeedback);
+  for (const id of ['#done-top', '#done-bottom']) $(id).addEventListener('click', markDone);
+  $('#toggle-code').addEventListener('click', toggleCode);
+  connect();
+})();
+</script>

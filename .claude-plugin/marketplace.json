@@ -20,8 +20,8 @@
     {
       "name": "code-reviewer",
       "source": "./code-reviewer",
-      "description": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir.",
-      "version": "2.0.0",
+      "description": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir, then an interactive review page that posts your chosen GitHub review.",
+      "version": "2.1.0",
       "strict": true
     },
     {

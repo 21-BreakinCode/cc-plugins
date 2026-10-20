@@ -46,11 +46,11 @@ Two parts form one loop. An edit → eval → keep/discard engine improves code,
 
 ## Review & Design
 
-### [code-reviewer](./code-reviewer/README.md) · `v2.0.0`
+### [code-reviewer](./code-reviewer/README.md) · `v2.1.0`
 
 *Multi-agent PR review with a per-repo policy layer*
 
-Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history.
+Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history. After the report, it publishes an interactive review page with the real code as evidence. You choose a call for each finding. Claude posts the GitHub review after your approval, then deletes the page.
 
 **Install** · `claude plugin install code-reviewer@21-breakincode`
 

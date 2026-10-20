@@ -17,8 +17,8 @@
         "translatedFrom": "Multi-agent PR review with a per-repo policy layer"
       },
       "summary": {
-        "text": "外掛在 PR 上平行執行五個審查員。五個審查員負責正確性、測試、安全、維運與簡潔度。簡潔度審查採用 ponytail 與 /simplify 規則。如果 repo 有本地審查政策，第六個審查員會引用它。政策記錄該 repo 自己的警訊、陷阱與熱點。`refresh-policy` 從已合併的 git 與 PR 歷史學習這份政策。",
-        "translatedFrom": "Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history."
+        "text": "外掛在 PR 上平行執行五個審查員。五個審查員負責正確性、測試、安全、維運與簡潔度。簡潔度審查採用 ponytail 與 /simplify 規則。如果 repo 有本地審查政策，第六個審查員會引用它。政策記錄該 repo 自己的警訊、陷阱與熱點。`refresh-policy` 從已合併的 git 與 PR 歷史學習這份政策。報告之後，外掛會發布一個互動審查頁面，用真實程式碼當證據。你為每個發現選擇處理方式。你核准後，Claude 在 GitHub 發布審查，然後刪除這個頁面。",
+        "translatedFrom": "Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history. After the report, it publishes an interactive review page with the real code as evidence. You choose a call for each finding. Claude posts the GitHub review after your approval, then deletes the page."
       }
     },
     "humanize": {

@@ -1,0 +1,42 @@
+{
+  "headline": "The PR renames the doubling helper to `double`.",
+  "glossary": [
+    {"term": "Helper", "meaning": "A small function that other code calls."}
+  ],
+  "findings": {
+    "caller-uses-removed-helper": {
+      "title": "New code on main still calls the old helper",
+      "points": [
+        {"label": "What happens", "text": "`caller.py` on `main` calls `old_helper`. The PR removes it."},
+        {"label": "Why it matters", "text": "Git merges the two without a conflict, but `caller.py` then fails when it starts."}
+      ],
+      "claims": [
+        {"kind": "fact", "check": "code", "text": "The PR removes `old_helper`.", "refs": ["diff app.py \"def old_helper(value):\""]},
+        {"kind": "fact", "check": "code", "text": "The test merge still calls it.", "refs": ["grep -w old_helper @merged", "code caller.py:1-3 @merged"]},
+        {"kind": "fact", "check": "reading", "text": "The import fails at run time. I did not run it.", "refs": ["code app.py:1-2"]},
+        {"kind": "assume", "check": "none", "text": "Other branches probably call it too.", "refs": []}
+      ],
+      "fixes": [
+        {"id": "a", "label": "Fix the caller in the merge", "steps": ["Merge `main` into the branch.", "Change `old_helper` to `double` in `caller.py`."]},
+        {"id": "b", "label": "Keep a short alias", "detail": "Add `old_helper = double` to `app.py` until the callers move."}
+      ]
+    },
+    "total-has-no-test": {
+      "title": "No test covers `total`",
+      "points": [
+        {"label": "What happens", "text": "The PR changes `total`, and no test calls it."}
+      ],
+      "claims": [
+        {"kind": "fact", "check": "code", "text": "`total` calls the renamed helper.", "refs": ["code app.py:5-6"]},
+        {"kind": "insight", "check": "code", "text": "Only `app.py` uses `total`, so one test covers every caller.", "refs": ["grep -w total -- app.py"]}
+      ],
+      "fixes": [
+        {"id": "a", "label": "Add one test", "steps": ["Call `total([1, 2])`.", "Expect `6`."]}
+      ]
+    }
+  },
+  "done_well": [
+    {"kind": "fact", "check": "code", "text": "The new name says what the helper does.", "refs": ["code app.py:1"]}
+  ],
+  "notes": ["All six reviewers returned results. A note with `</script><!--` in it stays text."]
+}

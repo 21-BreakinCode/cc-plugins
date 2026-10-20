@@ -45,6 +45,38 @@ assert "Phase 5 does not reuse \$REVIEW_DIR" '! sed -n "/^## Phase 5/,\$p" "$O" 
 assert "Phase 1 prints labeled DIFF_FILE" 'grep -qF "DIFF_FILE=%s" "$O"'
 assert "contract defines error output" 'grep -qF "error:" "$CONTRACT"'
 assert "orchestrator shows agent errors" 'grep -qF "=error" "$O"'
+assert "orchestrator runs the base drift check" 'grep -q "lib/check-base-drift.sh" "$O"'
+assert "orchestrator gives MERGED_TREE to correctness" 'grep -q "^MERGED_TREE=.*correctness-reviewer only" "$O"'
+assert "orchestrator writes findings with ids and refs" 'grep -q "\"id\": .*\"refs\": \[" "$O"'
+assert "orchestrator writes report.md and pr.json" 'grep -qF "<REVIEW_DIR>/report.md" "$O" && grep -qF "/pr.json" "$O"'
+assert "orchestrator never prints the gh token" 'grep -qF "Never print the token" "$O"'
+
+echo "Test: evidence refs (review page)"
+assert "contract finding format has Ref lines" 'grep -q "^  Ref: <evidence ref>" "$CONTRACT"'
+for form in '`code <path>:<start>-<end>`' '`diff <path> "<text>"`' '`grep [-w]' '`merge-tree`' '@merged'; do
+  assert "contract defines ref form $form" 'grep -qF "$form" "$CONTRACT"'
+done
+assert "correctness searches the test merge" 'grep -q "merge-drift" "$A/correctness-reviewer.md" && grep -q "MERGED_TREE" "$A/correctness-reviewer.md"'
+
+echo "Test: review page builder agent"
+P="$A/review-page-builder.md"
+assert "page builder exists" '[ -f "$P" ]'
+assert "page builder name" '[ "$(fm_value "$P" name)" = "review-page-builder" ]'
+assert "page builder model opus" '[ "$(fm_value "$P" model)" = "opus" ]'
+assert "page builder tools Read,Bash,Write" '[ "$(fm_value "$P" tools)" = "[\"Read\", \"Bash\", \"Write\"]" ]'
+assert "page builder reads contract" 'grep -q "\${CLAUDE_PLUGIN_ROOT}/references/review-contract.md" "$P"'
+assert "page builder runs the builder script" 'grep -q "\${CLAUDE_PLUGIN_ROOT}/lib/build-review-page.py" "$P"'
+assert "template exists with both placeholders" 'grep -q "__PAGE_TITLE__" "$ROOT/templates/review-page.html" && grep -q "__DATA_JSON__" "$ROOT/templates/review-page.html"'
+
+echo "Test: command publishes a new page and deletes it after posting"
+C="$ROOT/commands/review-pr.md"
+assert "command dispatches the page builder" 'grep -q "code-reviewer:review-page-builder" "$C"'
+assert "command declares the db capability" 'grep -qF "capabilities: {\"db\": {}}" "$C"'
+assert "every run is a new review" 'grep -q "Every run is a new review" "$C"'
+assert "command deletes the page once" 'grep -qF "action: \"delete\"" "$C" && grep -q "do not try again" "$C"'
+assert "command gives the manual delete steps" 'grep -qF "/artifacts" "$C"'
+assert "command never switches the gh account" 'grep -qF "Never run \`gh auth switch\`" "$C"'
+assert "command allows the tools it calls" '(for t in Artifact ArtifactData Skill ToolSearch; do fm "$C" | grep -q "\"$t\"" || exit 1; done)'
 
 echo "Test: no cross-plugin references (plugin-rules §2)"
 assert "no pr-review-toolkit outside CHANGELOG" '! grep -rn "pr-review-toolkit" "$ROOT" --include=*.md --include=*.sh --include=*.json | grep -v CHANGELOG.md | grep -q .'

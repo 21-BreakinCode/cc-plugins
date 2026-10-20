@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.1.0 — 2026-10-20
+
+- **feat:** `/code-reviewer:review-pr` publishes an interactive review page after the report. For each finding, you choose a call, a fix, and an optional note. The page saves your choices in its own db.
+- **feat:** you tell Claude that you are done. Claude then reads your choices, drafts the GitHub review, and posts it with `gh` after your approval. Then Claude deletes the page once, and Claude Code shows you a delete prompt. If the delete is refused, Claude gives you the page URL and the manual steps.
+- **feat:** every run is a new review with a new page and empty choices. The command never reuses an older page or its db.
+- **feat:** new `review-page-builder` agent, `lib/build-review-page.py`, and `templates/review-page.html`. The evidence on the page comes from git at the PR head: code lines, diff hunks, and `git grep` output. Nothing is typed by hand.
+- **feat:** new `lib/check-base-drift.sh` test-merges the PR head into the latest base. Conflicts become a finding. The correctness reviewer searches the test merge for new base code that still uses an API that the PR removes.
+- **feat:** each finding carries `Ref:` evidence refs. The orchestrator writes them to `findings.json` with stable ids, and it also writes `pr.json`, `drift.json`, and `report.md`.
+- **feat:** a gh account fallback. If the active account cannot see the repo, each `gh` call gets `GH_TOKEN` for an account that can. The plugin never runs `gh auth switch`.
+- **test:** tests for the base drift check and the page builder.
+
 ## 2.0.0 — 2026-09-27
 
 - **feat:** Breaking: five owned reviewer agents (correctness, test, security, ops, simplicity) replace the pr-review-toolkit agents and the orchestrator's inline perspectives. The pr-review-toolkit dependency is removed.
@@ -36,7 +47,7 @@
 
 ## 0.3.0 — 2026-08-07
 
-- **feat:** add learn-state watermark lib + test harness
+- **feat:** add learn-state watermark lib + test helper
 - **feat:** add git-signal miner (reverts/hotfixes/churn)
 - **feat:** add PR-signal miner with comment→change correlation
 - **feat:** add diff-coverage guard (coverage + finding validation)

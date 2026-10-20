@@ -1,0 +1,4 @@
+[
+  {"id": "total-has-no-test", "severity": "suggestion", "sources": ["test:coverage-gap"], "file": "app.py", "line": 5, "summary": "total() has no test", "evidence": "def total(values):", "refs": ["code app.py:5-6"], "fix": "Add a test for total([1, 2])."},
+  {"id": "caller-uses-removed-helper", "severity": "important", "sources": ["correctness:merge-drift", "policy:pitfall-repeat"], "file": "app.py", "line": 1, "summary": "caller.py on main still calls old_helper, which the PR removes", "evidence": "-def old_helper(value):", "refs": ["diff app.py \"def old_helper(value):\"", "grep -w old_helper @merged"], "fix": "Rename the call in caller.py to double in the merge commit."}
+]

@@ -2,7 +2,7 @@
 
 > Multi-agent PR review with a per-repo policy layer
 
-Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history.
+Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes `refresh-policy`, which learns that policy from merged git and PR history. After the report, it publishes an interactive review page with the real code as evidence. You choose a call for each finding. Claude posts the GitHub review after your approval, then deletes the page.
 
 ## Install
 
@@ -12,7 +12,7 @@ claude plugin install code-reviewer@21-breakincode
 
 ## Commands
 
-- **`/code-reviewer:review-pr`** — Multi-agent PR review: five common reviewers plus an optional repo-specific policy layer
+- **`/code-reviewer:review-pr`** — Multi-agent PR review with an interactive review page: five common reviewers plus an optional repo-specific policy layer
 
 ## Configuration
 

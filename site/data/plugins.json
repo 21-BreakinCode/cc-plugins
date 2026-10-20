@@ -278,20 +278,20 @@
     },
     {
       "name": "code-reviewer",
-      "version": "2.0.0",
+      "version": "2.1.0",
       "taglineHtml": "Multi-agent PR review with a per-repo policy layer",
-      "summaryHtml": "<p>Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes <code>refresh-policy</code>, which learns that policy from merged git and PR history.</p>",
+      "summaryHtml": "<p>Runs five reviewers in parallel on a PR: correctness, tests, security, ops, and simplicity (ponytail and /simplify rules). If the repo has a local review policy, a sixth reviewer cites the repo's own red-flags, pitfalls, and hotspots. Includes <code>refresh-policy</code>, which learns that policy from merged git and PR history. After the report, it publishes an interactive review page with the real code as evidence. You choose a call for each finding. Claude posts the GitHub review after your approval, then deletes the page.</p>",
       "zhTW": {
         "taglineHtml": "多代理 PR 審查，加上各 repo 自己的審查政策",
-        "summaryHtml": "<p>外掛在 PR 上平行執行五個審查員。五個審查員負責正確性、測試、安全、維運與簡潔度。簡潔度審查採用 ponytail 與 /simplify 規則。如果 repo 有本地審查政策，第六個審查員會引用它。政策記錄該 repo 自己的警訊、陷阱與熱點。<code>refresh-policy</code> 從已合併的 git 與 PR 歷史學習這份政策。</p>"
+        "summaryHtml": "<p>外掛在 PR 上平行執行五個審查員。五個審查員負責正確性、測試、安全、維運與簡潔度。簡潔度審查採用 ponytail 與 /simplify 規則。如果 repo 有本地審查政策，第六個審查員會引用它。政策記錄該 repo 自己的警訊、陷阱與熱點。<code>refresh-policy</code> 從已合併的 git 與 PR 歷史學習這份政策。報告之後，外掛會發布一個互動審查頁面，用真實程式碼當證據。你為每個發現選擇處理方式。你核准後，Claude 在 GitHub 發布審查，然後刪除這個頁面。</p>"
       },
       "category": "review",
       "install": "claude plugin install code-reviewer@21-breakincode",
-      "oneLiner": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir.",
+      "oneLiner": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir, then an interactive review page that posts your chosen GitHub review.",
       "commands": [
         {
           "name": "/code-reviewer:review-pr",
-          "descriptionHtml": "Multi-agent PR review: five common reviewers plus an optional repo-specific policy layer"
+          "descriptionHtml": "Multi-agent PR review with an interactive review page: five common reviewers plus an optional repo-specific policy layer"
         }
       ],
       "skills": [
@@ -309,6 +309,44 @@
         }
       ],
       "changelog": [
+        {
+          "version": "2.1.0",
+          "date": "2026-10-20",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>/code-reviewer:review-pr</code> publishes an interactive review page after the report. For each finding, you choose a call, a fix, and an optional note. The page saves your choices in its own db."
+            },
+            {
+              "type": "feat",
+              "html": "you tell Claude that you are done. Claude then reads your choices, drafts the GitHub review, and posts it with <code>gh</code> after your approval. Then Claude deletes the page once, and Claude Code shows you a delete prompt. If the delete is refused, Claude gives you the page URL and the manual steps."
+            },
+            {
+              "type": "feat",
+              "html": "every run is a new review with a new page and empty choices. The command never reuses an older page or its db."
+            },
+            {
+              "type": "feat",
+              "html": "new <code>review-page-builder</code> agent, <code>lib/build-review-page.py</code>, and <code>templates/review-page.html</code>. The evidence on the page comes from git at the PR head: code lines, diff hunks, and <code>git grep</code> output. Nothing is typed by hand."
+            },
+            {
+              "type": "feat",
+              "html": "new <code>lib/check-base-drift.sh</code> test-merges the PR head into the latest base. Conflicts become a finding. The correctness reviewer searches the test merge for new base code that still uses an API that the PR removes."
+            },
+            {
+              "type": "feat",
+              "html": "each finding carries <code>Ref:</code> evidence refs. The orchestrator writes them to <code>findings.json</code> with stable ids, and it also writes <code>pr.json</code>, <code>drift.json</code>, and <code>report.md</code>."
+            },
+            {
+              "type": "feat",
+              "html": "a gh account fallback. If the active account cannot see the repo, each <code>gh</code> call gets <code>GH_TOKEN</code> for an account that can. The plugin never runs <code>gh auth switch</code>."
+            },
+            {
+              "type": "test",
+              "html": "tests for the base drift check and the page builder."
+            }
+          ]
+        },
         {
           "version": "2.0.0",
           "date": "2026-09-27",
@@ -427,7 +465,7 @@
           "changes": [
             {
               "type": "feat",
-              "html": "add learn-state watermark lib + test harness"
+              "html": "add learn-state watermark lib + test helper"
             },
             {
               "type": "feat",
