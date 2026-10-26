@@ -1,3 +1,7 @@
+## 2.2.0 — 2026-10-26
+
+- **feat:** Excalidraw drawings use the Cascadia font (`fontFamily` 3) for all text. `style_kit.js` sets Cascadia for new text. `lint.py` warns `non-Cascadia font` on any other font, so `update-excali` converts old drawings too.
+
 ## 2.1.1 — 2026-10-02
 
 - **fix:** `handover-wrap-up` passes the vault-relative file path to `obsidian move to=`. The CLI reads any `to=` value with a dot as a file path. An absolute vault path such as `/Users/first.last/...` contains a dot, so the CLI read the archive folder as a file name. `plan_archive` now returns the vault-relative path as `move_to`.

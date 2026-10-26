@@ -43,7 +43,7 @@ a study card, a flowchart, an architecture map, a timeline, or a comparison.
    - Dashed lines only for reference levels (thresholds, limits, spec lines).
 6. **Layers are explicit:** panels → highlight bands → shapes → text → arrows.
    A takeaway or summary goes in one full-width amber `kit.panel` below the regions.
-7. **Typography:** Excalifont only (CJK falls back to a handwriting font). Sizes: title 36,
+7. **Typography:** Cascadia only (fontFamily 3) for every text. Sizes: title 36,
    heading 22, body 16, caption 13. Formulas are LaTeX via `kit.formula`, colored by role.
 8. **Page drawings get a header:** optional breadcrumb, title with a highlight band,
    gray subtitle. `kit.title` does all three.

@@ -12,7 +12,7 @@ If any failure example applies, the check fails, even if the rest looks good.
 | 2 | Lines clear of text | lint has no `crosses text` error |
 | 3 | Lines do not tangle | lint has no `arrows cross`, `arrowheads collide`, `arrow too short`, or `caption pointer` error, and every arrow is bound at one end or more |
 | 4 | Layer order | lint has no `layer order` error |
-| 5 | Palette and font | lint has no `off-palette` and no `non-handwritten font` warning |
+| 5 | Palette and font | lint has no `off-palette` and no `non-Cascadia font` warning |
 | 6 | Spacing shows grouping | Regions read as separate islands, and each group reads as one unit |
 | 7 | Text-to-diagram clarity | Every diagram, curve, and box has a label. Every named relation (trigger, condition, probability) is an arrow label. Each label obviously belongs to one thing. A plain sequence arrow needs no label |
 | 8 | Line style | Each line type matches its job (principle 5) and every tip lands on its target with a visible gap |

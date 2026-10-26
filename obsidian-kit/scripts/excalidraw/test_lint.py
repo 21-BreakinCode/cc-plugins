@@ -4,7 +4,7 @@ from lint import lint_elements
 
 def element(element_id, element_type, x, y, width, height, **extra):
     return {"id": element_id, "type": element_type, "x": x, "y": y, "width": width, "height": height,
-            "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fontFamily": 5, **extra}
+            "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fontFamily": 3, **extra}
 
 
 def arrow(element_id, x, y, points, start=None, end=None):
@@ -39,7 +39,7 @@ assert any("straddles" in e for e in lint_elements(straddling_text)["errors"])
 
 off_palette = [element("t", "text", 0, 0, 10, 10, strokeColor="#ff00ff", fontFamily=1)]
 warnings = lint_elements(off_palette)["warnings"]
-assert any("off-palette" in w for w in warnings) and any("non-handwritten" in w for w in warnings)
+assert any("off-palette" in w for w in warnings) and any("non-Cascadia" in w for w in warnings)
 
 colliding_tips = [arrow("a1", 0, 0, [[0, 0], [100, 0]]), arrow("a2", 100, 100, [[0, 0], [0, -100]])]
 assert any("arrowheads collide" in e for e in lint_elements(colliding_tips)["errors"])

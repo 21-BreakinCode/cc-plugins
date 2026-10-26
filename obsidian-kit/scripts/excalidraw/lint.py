@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from ea_bridge import ObsidianBridgeError, run_ea_script  # noqa: E402
 
 PALETTE = {"#1e1e1e", "#0c8599", "#6741d9", "#e03131", "#f08c00", "#868e96", "transparent"}
-HANDWRITTEN_FONT_EXCALIFONT = 5
+CASCADIA_FONT = 3
 MIN_BLOCK_GAP_PX = 10
 ARROWHEAD_COLLISION_PX = 10
 MIN_ARROW_LENGTH_PX = 24
@@ -187,8 +187,8 @@ def lint_elements(elements):
         off_palette = {e.get("strokeColor"), e.get("backgroundColor")} - PALETTE - {None}
         if off_palette and e["type"] != "image":
             warnings.append(f"off-palette color {sorted(off_palette)}: {label(e)}")
-        if e["type"] == "text" and e.get("fontFamily") != HANDWRITTEN_FONT_EXCALIFONT:
-            warnings.append(f"non-handwritten font {e.get('fontFamily')}: {label(e)}")
+        if e["type"] == "text" and e.get("fontFamily") != CASCADIA_FONT:
+            warnings.append(f"non-Cascadia font {e.get('fontFamily')}: {label(e)}")
 
     stats = {"elements": len(elements), "blocks": len(free_blocks), "connectors": len(connectors),
              "bound_arrows": sum(1 for a in arrows if a.get("startBinding") or a.get("endBinding")),
@@ -206,7 +206,7 @@ def rubric_lint_checks(report):
         "2_lines_clear_of_text": clean(errors, "crosses text"),
         "3_lines_do_not_tangle": clean(errors, "arrows cross", "arrowheads collide", "arrow too short", "caption pointer") and clean(warnings, "bound to nothing"),
         "4_layer_order": clean(errors, "layer order"),
-        "5_palette_and_font": clean(warnings, "off-palette", "non-handwritten"),
+        "5_palette_and_font": clean(warnings, "off-palette", "non-Cascadia"),
     }
 
 

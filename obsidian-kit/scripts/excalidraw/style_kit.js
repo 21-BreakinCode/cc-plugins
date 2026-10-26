@@ -17,7 +17,7 @@ const ROLE_COLORS = {
   muted: '#868e96',     // gray: captions, axes, footnotes
 };
 const FONT_SIZES = { title: 36, heading: 22, body: 16, caption: 13 };
-const HANDWRITTEN_FONT = 5; // Excalifont; CJK falls back to Xiaolai handwriting
+const CASCADIA_FONT = 3; // Excalidraw fontFamily id for Cascadia
 const LATEX_SCALE = 2.2;
 const HIGHLIGHT_OPACITY = 25;
 const PANEL_OPACITY = 22;
@@ -43,7 +43,7 @@ const resetStyle = (role) => {
   Object.assign(ea.style, {
     strokeColor: ROLE_COLORS[role] ?? ROLE_COLORS.body, backgroundColor: 'transparent',
     fillStyle: 'solid', strokeWidth: 1.5, strokeStyle: 'solid', roughness: 1, opacity: 100,
-    fontFamily: HANDWRITTEN_FONT, roundness: null, startArrowHead: null, endArrowHead: null,
+    fontFamily: CASCADIA_FONT, roundness: null, startArrowHead: null, endArrowHead: null,
   });
 };
 
