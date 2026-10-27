@@ -49,7 +49,7 @@ const placeLabels = () => {
 // Keep neighboring points 48 px or more apart so each arrow shows its tip.
 const path = (points, { role = 'primary' } = {}) => {
   const dots = points.map(([x, y]) => dot(x, y, { role }));
-  dots.slice(1).forEach((target, index) => arrow(dots[index], target, { role }));
+  dots.slice(1).forEach((target, index) => arrow(dots[index], target, { role, straight: true }));
   return dots;
 };
 

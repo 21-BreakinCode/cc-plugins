@@ -1,3 +1,9 @@
+## 2.3.0 — 2026-10-27
+
+- **feat:** `kit.arrow`, `kit.flow`, and fork and merge arrows are now Excalidraw elbow arrows: an orthogonal path with one jog, bound in orbit mode, muted, 1.5 px, roughness 1. `straight: true` keeps a straight arrow. `kit.path` stays straight. `kit.pointer` stays curved. Arrow labels sit beside the longest run.
+- **feat:** `kit.table` builds a left/right comparison table: muted rules under the header and each row, no vertical lines, optional group titles. `excali-kit.md` and principle 5 document it.
+- **fix:** the `kit.highlight` band uses roughness 1, not 2.
+
 ## 2.2.0 — 2026-10-26
 
 - **feat:** Excalidraw drawings use the Cascadia font (`fontFamily` 3) for all text. `style_kit.js` sets Cascadia for new text. `lint.py` warns `non-Cascadia font` on any other font, so `update-excali` converts old drawings too.

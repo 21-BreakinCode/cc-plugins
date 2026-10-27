@@ -32,15 +32,17 @@ a study card, a flowchart, an architecture map, a timeline, or a comparison.
    - First try to place the related things next to each other. A caption that sits next
      to its subject needs no arrow. A caption pointer stays under 160 px and crosses no
      shape outline.
-   - Same row or column → straight arrow (`kit.arrow`, `kit.flow`). Fork and merge arrows
-     are straight too.
+   - Straight relations → elbow arrow (`kit.arrow`, `kit.flow`): an orthogonal path with one
+     jog, and a plain straight run when the boxes share a row or column. Fork and merge
+     arrows are elbow arrows too.
    - Only a relation that must bend (around content, into a chart) gets a curved
      `kit.pointer`. When the ends align, it falls back to straight.
    - A relation name (trigger, protocol, condition) is the arrow's `label`, never a loose
      text near the arrow.
    - Arrows never cross text, never cross each other, and never share an arrowhead point.
      No arrow travels across a whole region. If one must, move the boxes instead.
-   - Dashed lines only for reference levels (thresholds, limits, spec lines).
+   - Dashed lines only for reference levels (thresholds, limits, spec lines). Table row rules
+     are solid, thin, and muted (`kit.table`).
 6. **Layers are explicit:** panels → highlight bands → shapes → text → arrows.
    A takeaway or summary goes in one full-width amber `kit.panel` below the regions.
 7. **Typography:** Cascadia only (fontFamily 3) for every text. Sizes: title 36,

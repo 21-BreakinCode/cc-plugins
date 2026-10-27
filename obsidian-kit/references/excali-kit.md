@@ -15,11 +15,11 @@ Text content can hold `\n` for a forced line break.
 | `kit.text(x, y, content, {role, size, width, anchor})` | size is `title`, `heading`, `body`, `caption`, or px. `width` wraps the text inside that width. `anchor: 'center'` makes x the center |
 | `await kit.formula(x, y, tex, {role, scale})` | LaTeX image colored by role. Default scale 2.2. Use 1.6–1.8 for long formulas |
 | `kit.box(x, y, content, {role, width, padding})` | rounded rectangle with centered text. (x, y) is the outer corner |
-| `kit.flow(x, y, items, {role, gap, width})` | row of boxes with straight arrows. An item is a string or `{label, role, arrowLabel}`. `arrowLabel` names the arrow INTO that box. Default gap 64. Gaps grow to fit labels |
+| `kit.flow(x, y, items, {role, gap, width})` | row of boxes with elbow arrows. An item is a string or `{label, role, arrowLabel}`. `arrowLabel` names the arrow INTO that box. Default gap 64. Gaps grow to fit labels |
 | `kit.stack(x, y, items, {role, gap, width})` | column of boxes, no arrows. An item is a string or `{label, role}`. Default gap 48. For fork targets and parallel parts |
 | `kit.middleY(first, last, height)` | y that centers a block of `height` on the span from `first` to `last` |
-| `kit.arrow(from, to, {role, label})` | straight bound arrow between the facing sides. Boxes that share a column or row get a perfectly straight arrow, whatever their widths. `label` rides beside it |
-| `kit.pointer(from, to, {role, bend, via, label})` | curved arrow. It bows sideways by min(abs(bend) × length, 80 px). A positive `bend` bows left of the travel direction. `via: [x, y]` sets the bend point. Aligned ends give a straight arrow |
+| `kit.arrow(from, to, {role, label, straight})` | bound ELBOW arrow (orthogonal path, one jog at the midpoint, muted, 1.5 px, roughness 1) between the facing sides. Boxes that share a column or row get a straight run, whatever their widths. `label` rides beside the longest run. `straight: true` gives a 2-point straight arrow |
+| `kit.pointer(from, to, {role, bend, via, label})` | curved arrow. It bows sideways by min(abs(bend) × length, 80 px). A positive `bend` bows left of the travel direction. `via: [x, y]` sets the bend point. Aligned ends give a straight arrow. It is never an elbow arrow |
 | `kit.spot(x, y)` | zero-size target for `pointer` or `arrow` (a curve peak, a data point) |
 | `kit.dot(x, y, {role, size})` | filled dot centered on (x, y) |
 | `kit.ellipse(x, y, w, h, {role})` / `kit.rect(...)` | plain outline shape (contour ring, zone, marker) |
@@ -31,6 +31,7 @@ Text content can hold `\n` for a forced line break.
 | `kit.venn(centerX, centerY, sets, overlaps, {radius})` | 2 or 3 circles. `sets` is `[{label, role}]`. `overlaps` maps `'0+1'`, `'0+2'`, `'1+2'`, `'0+1+2'` to lens labels |
 | `kit.highlight(block, role)` | thin band (14 px or less) behind the bottom of a free text or formula. It throws an error on a box |
 | `kit.panel(x, y, w, h, role)` | translucent filled panel, sent to back. Size it after placing its text |
+| `kit.table(x, y, {attributeHeader, sideHeaders, rows, attributeWidth, columnWidth, columnGap})` | left/right comparison table with muted rules and no vertical lines. See the next section. Returns the block plus `columnXs` |
 | `kit.dashed(x1, y1, x2, y2, role)` | dashed reference line |
 | `kit.chart(x, y, w, h, points, {role, smooth, markers})` | L-axis + first curve. `points` are chart-local px, and y grows down. `markers: true` puts a dot on each point |
 | `kit.curve(chart, points, {role, smooth, markers})` | another curve on an existing chart, no second axis |
@@ -63,20 +64,19 @@ kit.panel(leftX, panelTop, columnWidth, panelBody.bottom + 20 - panelTop, 'callo
 
 ## Comparison (N attributes × 2 sides) is ONE region
 
-Put the attribute names in a narrow left column and one value column per side. Head
-each side once at the top in its role color. Use `blockGap` between rows, not `sectionGap`.
+Use `kit.table`. The attribute column is muted. Each side header takes its role color.
+A solid muted rule sits under the header and under every row, centered in the row gap.
+Values wrap to `columnWidth` (default 460). The default `attributeWidth` is 260 and the `columnGap` is 40.
+A row is `[name, ...cells]`. A cell is a string or `{text, role}`. `{title}` is a muted group title with its own rule.
 
 ```js
-const attributeX = leftX, tcpX = leftX + 180, udpX = tcpX + 360;
-const tcpHead = kit.text(tcpX, top, 'TCP', { role: 'primary', size: 'heading' });
-kit.text(udpX, top, 'UDP', { role: 'secondary', size: 'heading' });
-let rowTop = tcpHead.bottom + kit.TOKENS.blockGap;
-for (const [name, tcp, udp] of rows) {
-  const cells = [kit.text(attributeX, rowTop, name, { role: 'muted' }),
-                 kit.text(tcpX, rowTop, tcp, { role: 'primary', width: 320 }),
-                 kit.text(udpX, rowTop, udp, { role: 'secondary', width: 320 })];
-  rowTop = Math.max(...cells.map((cell) => cell.bottom)) + kit.TOKENS.blockGap;
-}
+const comparison = kit.table(leftX, top, {
+  sideHeaders: [{ label: 'AS-IS', role: 'primary' }, { label: 'TO-BE', role: 'callout' }],
+  rows: [{ title: 'Latency' },
+         ['p99', 'slow', { text: 'fast', role: 'callout' }],
+         ['cost', { text: 'high', role: 'warning' }, 'unchanged']],
+});
+const next = kit.text(leftX, comparison.bottom + kit.TOKENS.sectionGap, 'Next region');
 ```
 
 ## State machine or process with named transitions
@@ -84,8 +84,8 @@ for (const [name, tcp, udp] of rows) {
 ```js
 const states = kit.flow(leftX, top, ['Created', { label: 'Paid', arrowLabel: 'payment ok' }], { width: 130 });
 const cancelled = kit.box(states[0].x, states[0].bottom + 96, 'Cancelled', { role: 'warning', width: 130 });
-kit.arrow(states[0], cancelled, { role: 'warning', label: 'buyer cancels' });   // same column: straight
-kit.arrow(states[1], cancelled, { role: 'warning', label: 'refund' });          // diagonal: still straight
+kit.arrow(states[0], cancelled, { role: 'warning', label: 'buyer cancels' });   // same column: straight run
+kit.arrow(states[1], cancelled, { role: 'warning', label: 'refund' });          // diagonal: one jog
 ```
 
 If possible, place each branch target in the same column or row as its source. The

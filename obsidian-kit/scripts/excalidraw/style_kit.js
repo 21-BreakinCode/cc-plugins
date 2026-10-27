@@ -89,7 +89,6 @@ const highlight = (block, role = 'callout') => {
   ea.style.backgroundColor = ROLE_COLORS[role];
   ea.style.strokeColor = 'transparent';
   ea.style.opacity = HIGHLIGHT_OPACITY;
-  ea.style.roughness = 2;
   const bandHeight = Math.min(Math.max(8, block.h * 0.3), MAX_HIGHLIGHT_PX);
   const id = ea.addRect(block.x - 6, block.bottom - bandHeight, block.w + 12, bandHeight);
   tagDecoration(id, 'highlight');
@@ -192,12 +191,12 @@ const nearestSides = (from, to) => {
   const prefersHorizontal = horizontalGap > 0 && horizontalGap * HORIZONTAL_SIDE_BIAS >= verticalGap;
   if (prefersHorizontal || horizontalGap >= verticalGap) {
     const sharedY = sharedMidpoint(from.y, from.bottom, to.y, to.bottom);
-    return to.x >= from.right ? [attachPoint(from, 'right', sharedY), attachPoint(to, 'left', sharedY)]
-                              : [attachPoint(from, 'left', sharedY), attachPoint(to, 'right', sharedY)];
+    return to.x >= from.right ? [attachPoint(from, 'right', sharedY), attachPoint(to, 'left', sharedY), true]
+                              : [attachPoint(from, 'left', sharedY), attachPoint(to, 'right', sharedY), true];
   }
   const sharedX = sharedMidpoint(from.x, from.right, to.x, to.right);
-  return to.y >= from.bottom ? [attachPoint(from, 'bottom', sharedX), attachPoint(to, 'top', sharedX)]
-                             : [attachPoint(from, 'top', sharedX), attachPoint(to, 'bottom', sharedX)];
+  return to.y >= from.bottom ? [attachPoint(from, 'bottom', sharedX), attachPoint(to, 'top', sharedX), false]
+                             : [attachPoint(from, 'top', sharedX), attachPoint(to, 'bottom', sharedX), false];
 };
 
 // Arrow labels are queued and placed by placeArrowLabels() after the whole layout exists,
@@ -270,12 +269,38 @@ const placeArrowLabels = () => {
   }
 };
 
-// Straight arrow: same-row / same-column flow, fork, or merge between two blocks.
-const arrow = (from, to, { role = 'muted', label } = {}) => {
+// Orthogonal path with one jog at the midpoint. Aligned ends stay a 2-point straight run.
+const elbowPath = (start, end, leavesHorizontally) => {
+  const [dx, dy] = [end[0] - start[0], end[1] - start[1]];
+  if (Math.abs(leavesHorizontally ? dy : dx) < 1) return [start, end];
+  return leavesHorizontally
+    ? [start, [start[0] + dx / 2, start[1]], [start[0] + dx / 2, end[1]], end]
+    : [start, [start[0], start[1] + dy / 2], [end[0], start[1] + dy / 2], end];
+};
+
+// Anchor for the arrow label: the longest run of the path (the last one on a tie).
+const longestSegment = (path) => path.slice(1).map((end, index) => [path[index], end])
+  .reduce((longest, segment) => (Math.hypot(segment[1][0] - segment[0][0], segment[1][1] - segment[0][1])
+    >= Math.hypot(longest[1][0] - longest[0][0], longest[1][1] - longest[0][1]) ? segment : longest));
+
+// addArrow clamps fixed points to 0..1, so a point just outside the side is set on the binding afterwards.
+const bindOutsideSide = (arrowId, bindingKey, block, point) => {
+  if (!block.id || block.w <= 0 || block.h <= 0) return;
+  ea.getElement(arrowId)[bindingKey].fixedPoint = [(point[0] - block.x) / block.w, (point[1] - block.y) / block.h];
+};
+
+// Elbow arrow (orthogonal path, the default look): same-row / same-column flow, fork, or merge.
+// `straight: true` draws a 2-point straight arrow instead (dot chains, trajectories).
+const arrow = (from, to, { role = 'muted', label, straight = false } = {}) => {
   resetStyle(role);
-  const [start, end] = nearestSides(from, to);
-  const id = ea.addArrow([start, end], { startObjectId: from.id, endObjectId: to.id, endArrowHead: 'arrow' });
-  if (label) labelConnector(id, start, end, label, role, from);
+  const [start, end, leavesHorizontally] = nearestSides(from, to);
+  const path = straight ? [start, end] : elbowPath(start, end, leavesHorizontally);
+  const id = ea.addArrow(path, { startObjectId: from.id, endObjectId: to.id, endArrowHead: 'arrow', elbowed: !straight });
+  if (!straight) {
+    bindOutsideSide(id, 'startBinding', from, start);
+    bindOutsideSide(id, 'endBinding', to, end);
+  }
+  if (label) labelConnector(id, ...longestSegment(path), label, role, from);
   return toBlock(id);
 };
 
@@ -385,7 +410,39 @@ const rect = (x, y, w, h, { role = 'muted' } = {}) => {
 // A zero-size target so pointer() can aim at a coordinate (a curve peak, a data point).
 const spot = (x, y) => ({ id: undefined, x, y, w: 0, h: 0, right: x, bottom: y });
 
+// Rule across a table: thin, solid, muted.
+const rule = (x1, x2, y) => {
+  resetStyle('muted');
+  return toBlock(ea.addLine([[x1, y], [x2, y]]));
+};
+
+// Comparison table, no vertical lines: attribute column + one wrapped value column per side,
+// a muted rule under the header and under every row (centered in the row gap).
+// sideHeaders: [{label, role}]. rows: [name, ...cells] where a cell is a string or {text, role},
+// or {title} for a muted group title with its own rule. Returns the table block plus columnXs.
+const table = (x, y, { attributeHeader = 'item', sideHeaders, rows, attributeWidth = 260, columnWidth = 460, columnGap = 40 }) => {
+  const columnXs = sideHeaders.map((_, index) => x + attributeWidth + index * (columnWidth + columnGap));
+  const right = columnXs[columnXs.length - 1] + columnWidth;
+  const header = [text(x, y, attributeHeader, { role: 'muted' }),
+    ...sideHeaders.map((side, index) => text(columnXs[index], y, side.label, { role: side.role ?? 'body' }))];
+  let rowTop = Math.max(...header.map((cell) => cell.bottom));
+  rule(x, right, rowTop + TOKENS.lineGap);
+  rowTop += TOKENS.blockGap;
+  rows.forEach((row) => {
+    const cells = row.title !== undefined ? [text(x, rowTop, row.title, { role: 'muted', size: 'heading' })]
+      : [text(x, rowTop, row[0], { role: 'muted' }), ...row.slice(1).map((cell, index) => {
+        const spec = typeof cell === 'string' ? { text: cell } : cell;
+        return text(columnXs[index], rowTop, spec.text, { role: spec.role ?? 'body', width: columnWidth });
+      })];
+    const rowBottom = Math.max(...cells.map((cell) => cell.bottom));
+    rule(x, right, rowBottom + TOKENS.lineGap);
+    rowTop = rowBottom + TOKENS.blockGap;
+  });
+  const bottom = rowTop - TOKENS.blockGap + TOKENS.lineGap;
+  return { id: undefined, x, y, w: right - x, h: bottom - y, right, bottom, columnXs };
+};
+
 const columnX = (index, columnWidth) => TOKENS.pageMargin + index * (columnWidth + TOKENS.columnGap);
 
 const baseKit = { TOKENS, ROLE_COLORS, FONT_SIZES, text, title, heading, formula, box, panel, highlight,
-  arrow, pointer, flow, stack, middleY, dashed, dot, chart, curve, ellipse, rect, spot, columnX, placeArrowLabels, style: resetStyle, sendToBack, toBlock };
+  arrow, pointer, flow, stack, table, middleY, dashed, dot, chart, curve, ellipse, rect, spot, columnX, placeArrowLabels, style: resetStyle, sendToBack, toBlock };

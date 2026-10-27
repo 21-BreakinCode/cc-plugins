@@ -955,7 +955,7 @@
     },
     {
       "name": "obsidian-kit",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "taglineHtml": "One plugin for the vault: draw, format, tag",
       "summaryHtml": "<p>create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.</p>",
       "zhTW": {
@@ -1032,6 +1032,24 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "2.3.0",
+          "date": "2026-10-27",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>kit.arrow</code>, <code>kit.flow</code>, and fork and merge arrows are now Excalidraw elbow arrows: an orthogonal path with one jog, bound in orbit mode, muted, 1.5 px, roughness 1. <code>straight: true</code> keeps a straight arrow. <code>kit.path</code> stays straight. <code>kit.pointer</code> stays curved. Arrow labels sit beside the longest run."
+            },
+            {
+              "type": "feat",
+              "html": "<code>kit.table</code> builds a left/right comparison table: muted rules under the header and each row, no vertical lines, optional group titles. <code>excali-kit.md</code> and principle 5 document it."
+            },
+            {
+              "type": "fix",
+              "html": "the <code>kit.highlight</code> band uses roughness 1, not 2."
+            }
+          ]
+        },
         {
           "version": "2.2.0",
           "date": "2026-10-26",

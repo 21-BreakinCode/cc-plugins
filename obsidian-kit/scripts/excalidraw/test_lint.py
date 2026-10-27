@@ -72,4 +72,15 @@ assert not any("straddles" in e for e in lint_elements(badge_number)["errors"]),
 sequence_message = [dict(arrow("m", 0, 0, [[0, 0], [200, 0]]), customData={"excalidrawRefine": "message"})]
 assert not any("bound to nothing" in w for w in lint_elements(sequence_message)["warnings"])
 
+elbow_fork = [element("src", "rectangle", 0, 0, 100, 50), element("a", "rectangle", 300, -80, 100, 50), element("b", "rectangle", 300, 80, 100, 50),
+              element("lbl", "text", 140, 100, 40, 16),
+              arrow("e1", 112, 25, [[0, 0], [88, 0], [88, -80], [176, -80]], start="src", end="a"),
+              arrow("e2", 112, 25, [[0, 0], [88, 0], [88, 80], [176, 80]], start="src", end="b")]
+assert lint_elements(elbow_fork)["errors"] == [], "elbow arrows sharing a trunk are a fork, not a tangle"
+
+table_rules = [element("head", "text", 0, 0, 80, 20), element("cell", "text", 0, 44, 80, 20),
+               element("rule1", "line", 0, 32, 600, 0, points=[[0, 0], [600, 0]]),
+               element("rule2", "line", 0, 76, 600, 0, points=[[0, 0], [600, 0]])]
+assert lint_elements(table_rules)["errors"] == [], "table rules sit in the row gaps"
+
 print("lint self-check passed")
