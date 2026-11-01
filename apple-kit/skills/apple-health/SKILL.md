@@ -21,9 +21,12 @@ The vault file `.apple-kit.json` holds both paths.
    - Exit 0 and no output: the body log is current. Report how many rows it
      has for the last 7 days.
    - Exit 0 and a "no new weigh-in" line: relay it once.
-   - Exit 1 "health export not found": the Shortcut has not run, or iCloud
-     has not delivered the file yet. Suggest one tap on the Shortcut, then a
-     retry in a minute.
+   - Exit 1 "health export not readable (FileNotFoundError)": the Shortcut
+     has not run, or iCloud has not delivered the file yet. Suggest one tap on
+     the Shortcut, then a retry in a minute. Another error name (for example
+     `PermissionError`) means macOS blocked the read: relay it as is.
+   - "skipped N export lines": the Health unit is not kg, or a line is broken.
+     Ask the user to set Health weight to kg.
    - `.apple-kit.json` missing: switch to the setup branch.
 
 Done when the command exited 0 and you reported the body log's newest row.
@@ -39,7 +42,7 @@ Done when the command exited 0 and you reported the body log's newest row.
    {
      "health": {
        "export_path": "~/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/apple-kit/health-latest.txt",
-       "body_log": "02Area/Health/Body/body-log.md"
+       "body_log": "Health/body-log.md"
      }
    }
    ```

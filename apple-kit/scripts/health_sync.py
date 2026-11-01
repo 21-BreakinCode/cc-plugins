@@ -89,20 +89,28 @@ def parse_log(text: str) -> tuple[list[str], list[dict]]:
 
 
 def merge(rows: list[dict], new: dict) -> tuple[list[dict], int, int]:
-    """Add new readings and fill empty cells. Returns rows, added, filled."""
-    merged = {(row["date"], row["time"]): dict(row) for row in rows}
+    """Add new readings and fill empty cells. Returns rows, added, filled.
+
+    A key held by more than one row (a hand correction) is left untouched."""
+    merged = [dict(row) for row in rows]
+    rows_by_key: dict[tuple[str, str], list[dict]] = {}
+    for row in merged:
+        rows_by_key.setdefault((row["date"], row["time"]), []).append(row)
     added = filled = 0
     for key, reading in new.items():
-        current = merged.get(key)
-        if current is None:
-            merged[key] = dict(reading)
+        matches = rows_by_key.get(key, [])
+        if not matches:
+            merged.append(dict(reading))
             added += 1
             continue
+        if len(matches) > 1:
+            continue
         for value_key in VALUE_KEYS:
-            if current[value_key] is None and reading[value_key] is not None:
-                current[value_key] = reading[value_key]
+            if matches[0][value_key] is None and reading[value_key] is not None:
+                matches[0][value_key] = reading[value_key]
                 filled += 1
-    return [merged[key] for key in sorted(merged)], added, filled
+    merged.sort(key=lambda row: (row["date"], row["time"]))  # stable: keeps duplicate order
+    return merged, added, filled
 
 
 def _format_value(value: float | None) -> str:
@@ -150,11 +158,13 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         export_text = export_path.read_text(encoding="utf-8")
-    except OSError:  # missing, or an iCloud placeholder not downloaded yet
-        print(f"apple-kit: health export not found: {export_path}")
+    except OSError as error:  # missing, a placeholder, or blocked by macOS privacy
+        print(f"apple-kit: health export not readable ({type(error).__name__}): {export_path}")
         return 1
 
-    readings, _ = parse_export(export_text)
+    readings, skipped = parse_export(export_text)
+    if skipped:
+        print(f"apple-kit: skipped {skipped} export lines (unit not kg or %, or malformed)")
     log_text = log_path.read_text(encoding="utf-8") if log_path.exists() else ""
     kept, rows = parse_log(log_text)
     merged, added, filled = merge(rows, readings)

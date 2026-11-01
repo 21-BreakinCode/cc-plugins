@@ -107,20 +107,23 @@ run `./scripts/cicd.sh GEN` and `VERIFY`.
 
 ## Part 1: apple-notes
 
-The skill wraps the `notes` command of `macnotesapp` (MIT, RhetTbull, 0.8.3).
+The skill wraps the `notes` command of `macnotesapp` (MIT, RhetTbull), pinned
+to GitHub commit `d2b155a`. The PyPI 0.8.3 release selects by name, takes the
+first match, and has no edit guard.
 The user chose this over `memo` (the tool in the Hermes skill), because every
 `memo` write needs an editor or a numbered prompt, and its search flag is
 broken. `macnotesapp` takes all input as flags, prints JSON, selects notes by
 `--id`, and refuses ambiguous names.
 
-Install (one time, needs user approval): `uv tool install macnotesapp==0.8.3`.
+Install (one time, needs user approval):
+`uv tool install "git+https://github.com/RhetTbull/macnotesapp@d2b155a"`.
 
 Operations:
 
 | Intent | Command |
 |---|---|
 | list folders and notes | `notes accounts`, `notes list --json [TEXT]` |
-| read | `notes cat --json --id ID` |
+| read | `notes cat --json -m "TITLE"`, then pick the entry by id |
 | create | `notes add -m -a ACCOUNT -f FOLDER` with Markdown on stdin; first line is the title |
 | update | `notes edit --id ID -m --body …` |
 | move | `notes move --id ID --folder F` |
@@ -170,8 +173,8 @@ creates a folder of one-line files.
 
 Input: `--config PATH` to `.apple-kit.json`. Output: rows appended to the body
 log, and one summary line on stdout (for Telegram). Exit 0 on success, also
-when there is nothing new. Exit 1 with a clear message when the export file is
-missing or older than 8 days.
+when there is nothing new. Exit 1 with one line naming the error when the
+export file cannot be read.
 
 1. Read the export. Skip blank and malformed lines and count them.
 2. Drop duplicates by (type, timestamp).

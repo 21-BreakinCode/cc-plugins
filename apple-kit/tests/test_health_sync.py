@@ -143,6 +143,33 @@ class SyncTest(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("health-latest.txt", out)
 
+    def test_duplicate_key_rows_both_survive_untouched(self):
+        log = (LOG_HEADER
+               + "| 2026-11-01 | 13:10 | 65.0 | 18.2 | Xiaomi Home |\n"
+               + "| 2026-11-01 | 13:10 | 64.8 |  | hand fix |\n")
+        vault = TempVault(read_fixture("export-6.txt"), log)
+        self.addCleanup(vault.cleanup)
+        vault.run()
+        text = vault.log.read_text(encoding="utf-8")
+        self.assertIn("| 2026-11-01 | 13:10 | 65.0 | 18.2 | Xiaomi Home |", text)
+        self.assertIn("| 2026-11-01 | 13:10 | 64.8 |  | hand fix |", text)
+
+    def test_skipped_lines_are_reported(self):
+        vault = TempVault("weight,2026-11-01T08:00:00+08:00,143.3,lb,Xiaomi Home")
+        self.addCleanup(vault.cleanup)
+        code, out = vault.run()
+        self.assertEqual(code, 0)
+        self.assertIn("skipped 1", out)
+
+    def test_unreadable_export_names_the_error(self):
+        vault = TempVault(None)
+        self.addCleanup(vault.cleanup)
+        vault.export.mkdir()
+        code, out = vault.run()
+        self.assertEqual(code, 1)
+        self.assertIn("IsADirectoryError", out)
+        self.assertIn("health-latest.txt", out)
+
     def test_silent_on_success(self):
         vault = TempVault(read_fixture("export-6.txt"))
         self.addCleanup(vault.cleanup)

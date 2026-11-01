@@ -1288,7 +1288,7 @@
           "changes": [
             {
               "type": "feat",
-              "html": "<code>apple-notes</code> skill. It wraps the <code>notes</code> command of macnotesapp, pinned to GitHub commit <code>d2b155a</code> for <code>--id</code> selection and the attachment-safe edit. Every create, edit, move, and delete is a guarded write: find by id, read, show the change, get a yes, write, re-read."
+              "html": "<code>apple-notes</code> skill. It wraps the <code>notes</code> command of macnotesapp, pinned to GitHub commit <code>d2b155a</code> for <code>--id</code> selection and the attachment-safe edit. Every create, edit, move, and delete is a guarded write: find by id, read, check losses with <code>notes_guard.py</code>, show the change, get a yes, write, re-read. Note text goes through a quoted heredoc."
             },
             {
               "type": "feat",
