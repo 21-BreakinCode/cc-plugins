@@ -1258,7 +1258,7 @@
     },
     {
       "name": "apple-kit",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "taglineHtml": "Apple Notes and Apple Health for Claude Code",
       "summaryHtml": "<p>apple-notes creates, reads, edits, moves, and deletes Apple Notes through the notes command of macnotesapp. It selects notes by id, reads a note before it changes it, and asks for approval before every change, in a terminal or over a chat bot. apple-health syncs weight and body fat from an iPhone Shortcut export into a Markdown body log, because macOS cannot read Apple Health. The script uses the Python standard library only, adds rows, fills empty cells, and never changes a value. Vault paths live in the vault file .apple-kit.json. No cross-plugin deps.</p>",
       "zhTW": {
@@ -1282,6 +1282,20 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "0.1.1",
+          "date": "2026-11-01",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "<code>apple-notes</code> works inside Claude Code's Bash sandbox. Note text is one single-quoted argument, not a heredoc or <code>$(…)</code>, and each <code>notes</code> command runs alone, so a host can exclude <code>notes *</code> from the sandbox."
+            },
+            {
+              "type": "feat",
+              "html": "<code>notes_guard.py</code> is now a PreToolUse hook. It blocks a <code>notes edit</code> without <code>--id</code>, with <code>--force</code>, or on a note with lists, tables, images, styling, or tags. Hooks run outside the sandbox, so the check reads the note by id with <code>osascript</code>."
+            }
+          ]
+        },
         {
           "version": "0.1.0",
           "date": "2026-11-01",

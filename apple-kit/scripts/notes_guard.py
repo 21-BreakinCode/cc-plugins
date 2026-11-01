@@ -1,19 +1,20 @@
 #!/usr/bin/env python3
-"""Check whether replacing an Apple Note's body would lose content.
+"""PreToolUse hook: block a `notes edit` that would lose content.
 
 `notes edit --body` rewrites the whole body from Markdown. Without Full Disk
-Access, macnotesapp can only detect attachments, so this guard reads the
-note's HTML from `notes cat --json` and names every rich feature that a
-Markdown round trip can drop.
+Access, macnotesapp can only detect attachments, so this hook reads the
+note's HTML by id and names every rich feature that a Markdown round trip
+can drop. Claude Code runs hooks outside the Bash sandbox, so the hook can
+reach Notes while the edit command itself waits.
 
-Usage: notes cat --json "TITLE" | notes_guard.py --id NOTE_ID
-Exit 0: safe to edit (prints nothing). Exit 2: lossy (prints the features).
-Exit 3: no note with that id in the input.
+Input: the hook event JSON on stdin. Exit 0: allow. Exit 2: block, with the
+reason on stderr.
 """
 
-import argparse
 import json
 import re
+import shlex
+import subprocess
 import sys
 
 # (feature name, pattern in the note's HTML). Lists count because Notes
@@ -33,20 +34,62 @@ def lossy_features(html: str) -> list[str]:
             if re.search(pattern, html, flags=re.IGNORECASE)]
 
 
-def main(argv: list[str] | None = None, stdin_text: str | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Check an Apple Note for content an edit would lose.")
-    parser.add_argument("--id", required=True, dest="note_id")
-    args = parser.parse_args(argv)
-    notes = json.loads(sys.stdin.read() if stdin_text is None else stdin_text)
-    note = next((n for n in notes if n.get("id") == args.note_id), None)
-    if note is None:
-        print(f"notes_guard: note {args.note_id} not found in the input")
-        return 3
-    features = lossy_features(note.get("body", ""))
+NOTES_EDIT = re.compile(r"(?:^|[;&|(\s])notes\s+edit\b")
+READ_BODY_SCRIPT = ('on run argv\n'
+                    'tell application "Notes" to get body of note id (item 1 of argv)\n'
+                    'end run')
+
+
+def fetch_body(note_id: str) -> tuple[str | None, str | None]:
+    """Return (html, None), or (None, error text) when Notes cannot read the note."""
+    try:
+        done = subprocess.run(["osascript", "-e", READ_BODY_SCRIPT, note_id],
+                              capture_output=True, text=True, timeout=20)
+    except (OSError, subprocess.TimeoutExpired) as error:
+        return None, type(error).__name__
+    if done.returncode != 0:
+        return None, done.stderr.strip()
+    return done.stdout, None
+
+
+def edit_note_id(tokens: list[str]) -> str | None:
+    for index, token in enumerate(tokens):
+        if token.startswith("--id="):
+            return token.removeprefix("--id=")
+        if token == "--id" and index + 1 < len(tokens):
+            return tokens[index + 1]
+    return None
+
+
+def block_reason(command: str, fetch=fetch_body) -> str | None:
+    match = NOTES_EDIT.search(command)
+    if match is None:
+        return None
+    try:
+        tokens = shlex.split(command[match.start():])
+    except ValueError as error:
+        return f"cannot parse the notes edit command ({error})"
+    if "--force" in tokens:
+        return "--force is not allowed: it drops content"
+    note_id = edit_note_id(tokens)
+    if note_id is None:
+        return "select the note with --id"
+    html, error = fetch(note_id)
+    if html is None:
+        return f"cannot read note {note_id}: {error}"
+    features = lossy_features(html)
     if features:
-        print("notes_guard: an edit would lose: " + ", ".join(features))
-        return 2
-    return 0
+        return "this edit would lose: " + ", ".join(features) + ". Edit this note in the Notes app"
+    return None
+
+
+def main(event_text: str | None = None, fetch=fetch_body) -> int:
+    event = json.loads(sys.stdin.read() if event_text is None else event_text)
+    reason = block_reason(event.get("tool_input", {}).get("command", ""), fetch)
+    if reason is None:
+        return 0
+    print(f"apple-kit notes guard: {reason}", file=sys.stderr)
+    return 2
 
 
 if __name__ == "__main__":

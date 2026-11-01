@@ -1,0 +1,13 @@
+{
+  "description": "apple-kit hooks: block a `notes edit` that would lose Apple Notes content.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "python3 -B ${CLAUDE_PLUGIN_ROOT}/scripts/notes_guard.py", "timeout": 30 }
+        ]
+      }
+    ]
+  }
+}

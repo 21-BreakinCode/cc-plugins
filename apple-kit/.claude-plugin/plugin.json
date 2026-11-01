@@ -1,7 +1,7 @@
 {
   "name": "apple-kit",
   "description": "Work with Apple apps from Claude Code on a Mac: Apple Notes create, read, update, and delete with approval before every change, and Apple Health weight and body fat synced into a vault body log.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": {
     "name": "William Hung"
   }

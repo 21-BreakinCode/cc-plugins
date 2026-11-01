@@ -74,10 +74,13 @@ These were tested on the North Mac (macOS 26.6.2, MacBook Air M3) on
   - The SDK's bundled Claude Code 2.1.139 lacks the Apple Events entitlement.
     North's `.env` now sets `CLAUDE_CLI_PATH` to the host Claude Code
     (2.1.316, auto-updating).
-  - Claude Code's Bash sandbox blocks Apple Events. North's local patch 7 adds
-    `"allowAppleEvents": True` to the sandbox dict. `excludedCommands` does
-    not lift this block. A `sandbox` block in `.claude/settings.local.json`
-    has no effect, because the SDK's sandbox dict replaces it.
+  - Claude Code's Bash sandbox blocks Apple Events. North's `.env` sets
+    `SANDBOX_EXCLUDED_COMMANDS='["notes *"]'`, and the vault's
+    `.claude/settings.local.json` allows `Bash(notes *)`. An excluded command
+    runs outside the sandbox only when the whole call matches, so a heredoc,
+    `$(…)`, a redirect, or a pipe to `python3` keeps it sandboxed.
+    `allowAppleEvents` is not used: Notes still refuses with -10004, and the
+    setting opens every app to every sandboxed command.
 - After both fixes, `osascript` from a launchd job waits for the macOS prompt
   "… wants to control Notes". Nobody has clicked Allow yet.
 - `nutrition/diet_parse.py` reads Body lines with
@@ -138,7 +141,10 @@ Rules in the skill:
    use the AskUserQuestion tool. In Telegram, where that tool is disabled, send
    the planned change as one message and act only on a "yes" reply.
 4. Never pass `--force`. If `edit` refuses because the note has attachments,
-   checklists, or tags, tell the user and stop.
+   checklists, or tags, tell the user and stop. A PreToolUse hook
+   (`notes_guard.py`) enforces this: it blocks a `notes edit` without `--id`,
+   with `--force`, or on a note whose HTML has lists, tables, images,
+   styling, or tags.
 5. Never run `rmdir` (folder delete). Open upstream issue #89 reports deleted
    folders that come back.
 
