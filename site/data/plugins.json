@@ -5,7 +5,7 @@
     "version": "2.2.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode && \\\n  claude plugin install apple-kit@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
@@ -21,10 +21,11 @@
         "humanize@21-breakincode": true,
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
-        "obsidian-kit@21-breakincode": true
+        "obsidian-kit@21-breakincode": true,
+        "apple-kit@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode && \\\n  claude plugin update apple-kit@21-breakincode"
   },
   "categories": [
     {
@@ -51,7 +52,8 @@
       "id": "workflow",
       "label": "Workflow & Handover",
       "plugins": [
-        "adhd-review"
+        "adhd-review",
+        "apple-kit"
       ]
     },
     {
@@ -1249,6 +1251,40 @@
             {
               "type": "feat",
               "html": "model-invoked proactive triggering on Zettelkasten/ note writes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "apple-kit",
+      "version": "0.1.0",
+      "taglineHtml": "Apple Notes and Apple Health for Claude Code",
+      "summaryHtml": "<p>apple-notes creates, reads, edits, moves, and deletes Apple Notes through the notes command of macnotesapp. It selects notes by id, reads a note before it changes it, and asks for approval before every change, in a terminal or over a chat bot. apple-health syncs weight and body fat from an iPhone Shortcut export into a Markdown body log, because macOS cannot read Apple Health. The script uses the Python standard library only, adds rows, fills empty cells, and never changes a value. Vault paths live in the vault file .apple-kit.json. No cross-plugin deps.</p>",
+      "zhTW": {
+        "taglineHtml": "在 Claude Code 使用 Apple 備忘錄與 Apple 健康",
+        "summaryHtml": "<p>apple-notes 透過 macnotesapp 的 notes 指令，建立、讀取、編輯、移動與刪除 Apple 備忘錄。它用 id 選擇備忘錄，修改前先讀取內容。每次修改前，它都會請你核准，在終端機或聊天機器人都一樣。macOS 無法讀取 Apple 健康，所以 apple-health 從 iPhone 捷徑的匯出檔同步體重與體脂，寫進 Markdown 身體紀錄。腳本只用 Python 標準函式庫。它只新增資料列、填入空白格子，絕不修改已有的數值。vault 路徑放在 vault 的 .apple-kit.json 檔。不依賴其他外掛。</p>"
+      },
+      "category": "workflow",
+      "install": "claude plugin install apple-kit@21-breakincode",
+      "oneLiner": "Work with Apple apps from Claude Code on a Mac: Apple Notes create, read, update, and delete with approval before every change, and Apple Health weight and body fat synced into a vault body log.",
+      "commands": [],
+      "skills": [
+        {
+          "name": "apple-health",
+          "descriptionHtml": "Sync Apple Health weight and body fat into the vault's body log, or set up the iPhone export that feeds it."
+        }
+      ],
+      "dependsOn": [],
+      "config": [],
+      "changelog": [
+        {
+          "version": "0.1.0",
+          "date": "2026-11-01",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>apple-health</code> skill and <code>health_sync.py</code>. The script syncs weight and body fat from the iPhone Health Export Shortcut into a Markdown body log. It adds rows, fills empty cells, never changes a value, and prints nothing on success."
             }
           ]
         }

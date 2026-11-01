@@ -60,6 +60,16 @@
         "text": "create-excali 與 update-excali 用 ExcalidrawAutomate 建立 Excalidraw 圖。這兩個 skill 會檢查幾何，並審查實際輸出的 PNG。format-note 依筆記類型撰寫與檢查筆記。筆記類型包括 map、concept、takeaway、literature 與 fleeting。format-note 保留舊 visualize skill 的 ASCII 圖與 callout 規則。migrate-notes 為整個筆記庫設定筆記類型，並重新命名 map 筆記。這些變更合成一份計畫，核准後才執行。audit-tags 找出錯誤、重複、錯字與不在分類表中的標籤。它套用一份核准過的重新命名計畫，並先建立備份。handover-new、handover-wrap-up、handover-init-org 與 handover-init-service 建立並收尾交接文件。交接文件存放在筆記庫中。session-wrap-up、session-pick-up 與 session-recommend 把工作階段整理成反思重點。核准一次後，它們會在筆記庫中建立 Zettelkasten 卡片。一個專用 skill 在筆記庫中撰寫與檢查受控繁體中文。SessionStart hook 引導 Claude 以 obsidian CLI 為準。筆記庫的偏好設定存放在筆記庫檔案 .obsidian-kit.json 中。外掛不依賴其他外掛。",
         "translatedFrom": "create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps."
       }
+    },
+    "apple-kit": {
+      "tagline": {
+        "text": "在 Claude Code 使用 Apple 備忘錄與 Apple 健康",
+        "translatedFrom": "Apple Notes and Apple Health for Claude Code"
+      },
+      "summary": {
+        "text": "apple-notes 透過 macnotesapp 的 notes 指令，建立、讀取、編輯、移動與刪除 Apple 備忘錄。它用 id 選擇備忘錄，修改前先讀取內容。每次修改前，它都會請你核准，在終端機或聊天機器人都一樣。macOS 無法讀取 Apple 健康，所以 apple-health 從 iPhone 捷徑的匯出檔同步體重與體脂，寫進 Markdown 身體紀錄。腳本只用 Python 標準函式庫。它只新增資料列、填入空白格子，絕不修改已有的數值。vault 路徑放在 vault 的 .apple-kit.json 檔。不依賴其他外掛。",
+        "translatedFrom": "apple-notes creates, reads, edits, moves, and deletes Apple Notes through the notes command of macnotesapp. It selects notes by id, reads a note before it changes it, and asks for approval before every change, in a terminal or over a chat bot. apple-health syncs weight and body fat from an iPhone Shortcut export into a Markdown body log, because macOS cannot read Apple Health. The script uses the Python standard library only, adds rows, fills empty cells, and never changes a value. Vault paths live in the vault file .apple-kit.json. No cross-plugin deps."
+      }
     }
   }
 }

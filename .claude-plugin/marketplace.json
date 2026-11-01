@@ -51,6 +51,13 @@
       "description": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
       "version": "2.3.0",
       "strict": true
+    },
+    {
+      "name": "apple-kit",
+      "source": "./apple-kit",
+      "description": "Work with Apple apps from Claude Code on a Mac: Apple Notes create, read, update, and delete with approval before every change, and Apple Health weight and body fat synced into a vault body log.",
+      "version": "0.1.0",
+      "strict": true
     }
   ]
 }

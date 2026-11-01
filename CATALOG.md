@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v2.2.0 · 6 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v2.2.0 · 7 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -14,7 +14,8 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install humanize@21-breakincode && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
-  claude plugin install obsidian-kit@21-breakincode
+  claude plugin install obsidian-kit@21-breakincode && \
+  claude plugin install apple-kit@21-breakincode
 ```
 
 ## Update everything
@@ -29,7 +30,8 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update humanize@21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
-  claude plugin update obsidian-kit@21-breakincode
+  claude plugin update obsidian-kit@21-breakincode && \
+  claude plugin update apple-kit@21-breakincode
 ```
 
 ## Measure & Improve
@@ -77,6 +79,16 @@ One ruleset, three layers. Layer 1 shapes every reply — lead with the action, 
 **Install** · `claude plugin install adhd-review@21-breakincode`
 
 **Skills** · `adhd-review-mode`
+
+### [apple-kit](./apple-kit/README.md) · `v0.1.0`
+
+*Apple Notes and Apple Health for Claude Code*
+
+apple-notes creates, reads, edits, moves, and deletes Apple Notes through the notes command of macnotesapp. It selects notes by id, reads a note before it changes it, and asks for approval before every change, in a terminal or over a chat bot. apple-health syncs weight and body fat from an iPhone Shortcut export into a Markdown body log, because macOS cannot read Apple Health. The script uses the Python standard library only, adds rows, fills empty cells, and never changes a value. Vault paths live in the vault file .apple-kit.json. No cross-plugin deps.
+
+**Install** · `claude plugin install apple-kit@21-breakincode`
+
+**Skills** · `apple-health`
 
 ## Writing & Content
 
