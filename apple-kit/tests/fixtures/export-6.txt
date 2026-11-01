@@ -1,0 +1,6 @@
+weight,2026-10-30T08:06:50+08:00,66.59999999999999,kg,Xiaomi Home
+weight,2026-10-31T12:53:23+08:00,66.09999999999999,kg,Xiaomi Home
+weight,2026-11-01T13:10:14+08:00,65,kg,Xiaomi Home
+body_fat,2026-10-30T08:06:50+08:00,18.9,%,Xiaomi Home
+body_fat,2026-10-31T12:53:23+08:00,18.8,%,Xiaomi Home
+body_fat,2026-11-01T13:10:14+08:00,18.2,%,Xiaomi Home
