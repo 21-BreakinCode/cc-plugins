@@ -88,7 +88,7 @@ apple-notes creates, reads, edits, moves, and deletes Apple Notes through the no
 
 **Install** · `claude plugin install apple-kit@21-breakincode`
 
-**Skills** · `apple-health`
+**Skills** · `apple-health` · `apple-notes`
 
 ## Writing & Content
 
