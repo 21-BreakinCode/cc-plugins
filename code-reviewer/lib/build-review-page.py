@@ -5,31 +5,28 @@ usage: build-review-page.py <review-dir> <repo-root>
 
 Reads pr.json, pr.diff, findings.json, report.md, drift.json and page.json from
 <review-dir>. Every evidence ref is pulled from git, so no code on the page is
-typed by hand. Writes <review-dir>/pr<N>-review.html and prints PAGE_FILE=<path>.
-On bad input it prints one "error: ..." line per problem and exits 1.
+typed by hand. Writes the answer-me-with-html draft <review-dir>/pr<N>-review.md,
+renders it with the bundled lib/am.mjs to <review-dir>/pr<N>-review.html, and
+prints PAGE_FILE=<path>. On bad input it prints one "error: ..." line per
+problem and exits 1.
 """
 
-import hashlib
-import html
 import itertools
 import json
+import os
 import re
 import shlex
 import subprocess
 import sys
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
 from pathlib import Path
-from urllib.parse import quote
 
-TEMPLATE = Path(__file__).resolve().parent.parent / 'templates' / 'review-page.html'
-DATA_PLACEHOLDER = '__DATA_JSON__'
-TITLE_PLACEHOLDER = '__PAGE_TITLE__'
+AM_CLI = Path(__file__).resolve().parent / 'am.mjs'
 CONTEXT_LINES = 2
 MAX_REF_LINES = 60
 MAX_DIFF_ROWS = 80
 MAX_OUTPUT_LINES = 40
-MAX_INLINE_LIST = 200
+MAX_FIXES = 6  # an am ask block takes 2 to 6 options
 MAX_ID_LENGTH = 64
 ID_PATTERN = re.compile(r'^[a-z0-9]+(?:-[a-z0-9]+)*$')
 FIX_ID_PATTERN = re.compile(r'^[a-z0-9]{1,16}$')
@@ -44,6 +41,35 @@ CONTRACTION = re.compile(
     r"\b(?:\w+n['’]t|(?:i|you|we|they|it|that|there|here|what|who|he|she|let)['’](?:m|re|ve|ll|d|s))\b",
     re.IGNORECASE,
 )
+DIAGRAM_KINDS = ('class', 'flow')
+DIAGRAM_DIRECTIONS = ('LR', 'TB', 'BT', 'RL')
+AM_COMPONENTS = {
+    'callout', 'kv', 'timeline', 'annot', 'tree', 'limits', 'chart', 'sequence',
+    'flow', 'state', 'er', 'class', 'api', 'ask', 'html', 'svg', 'diff',
+}
+SEVERITY_LABELS = {'critical': 'Critical', 'important': 'Important', 'suggestion': 'Suggestion'}
+SUGGESTED_CALL = {'critical': 'Block', 'important': 'Block', 'suggestion': 'Suggest'}
+CALL_OPTIONS = (
+    ('Block', 'must change before merge'),
+    ('Suggest', 'post as a suggestion'),
+    ('Skip', 'do not mention it'),
+    ('Discuss', 'talk it over with Claude first'),
+)
+VERDICT_ACTIONS = {'REQUEST_CHANGES': 'Request changes', 'NEEDS_DISCUSSION': 'Comment', 'APPROVE': 'Approve'}
+VERDICT_CALLOUTS = {'REQUEST_CHANGES': 'err', 'NEEDS_DISCUSSION': 'warn', 'APPROVE': 'ok'}
+GITHUB_ACTION_OPTIONS = (
+    ('Request changes', 'the author must change the PR'),
+    ('Comment', 'feedback without a verdict'),
+    ('Approve', 'the PR can merge'),
+    ('Hold', 'post nothing now'),
+)
+CLAIM_TAGS = {
+    ('fact', 'code'): 'FACT, seen in code',
+    ('fact', 'docs'): 'FACT, from the PR docs',
+    ('fact', 'reading'): 'FACT, read, not run',
+    ('fact', 'none'): 'FACT, not checked',
+}
+REF_PLACES = {'@merged': 'merged', '@base': 'base'}
 DRIFT_NOT_RUN = {'status': 'skipped', 'reason': 'the base drift check did not run'}
 LIST_KEYS = ('glossary', 'done_well', 'notes')
 PR_FIELDS = (
@@ -74,6 +100,7 @@ class Review:
     pr: dict
     drift: dict
     diff_hunks: dict
+    merge_base: str
 
 
 # ---------- inputs ----------
@@ -199,6 +226,33 @@ def page_finding_errors(where, body):
     fix_ids = [fix.get('id') for fix in body['fixes'] if isinstance(fix, dict)]
     if len(fix_ids) != len(set(fix_ids)):
         errors.append(f'{where}.fixes: give each fix its own id')
+    if len(fix_ids) > MAX_FIXES:
+        errors.append(f'{where}.fixes: write at most {MAX_FIXES} fixes')
+    return errors
+
+
+def diagram_errors(where, diagram):
+    if not isinstance(diagram, dict):
+        return [f'{where}: write an object with kind, source and refs']
+    errors = text_errors(f'{where}.source', diagram.get('source'))
+    if diagram.get('kind') not in DIAGRAM_KINDS:
+        errors.append(f'{where}.kind: use one of {", ".join(DIAGRAM_KINDS)}')
+    if diagram.get('direction', 'LR') not in DIAGRAM_DIRECTIONS:
+        errors.append(f'{where}.direction: use one of {", ".join(DIAGRAM_DIRECTIONS)}')
+    if isinstance(diagram.get('source'), str) and re.search(r'(?m)^\s*(```|:::)', diagram['source']):
+        errors.append(f'{where}.source: write only the diagram body, without fence lines')
+    refs = diagram.get('refs')
+    if not isinstance(refs, list) or not refs or not all(isinstance(ref, str) for ref in refs):
+        errors.append(f'{where}.refs: list at least one ref that the diagram is drawn from')
+    return errors
+
+
+def arch_errors(arch):
+    if not isinstance(arch, dict):
+        return ['arch: write an object with "before" and "after" diagrams']
+    errors = diagram_errors('arch.before', arch.get('before')) + diagram_errors('arch.after', arch.get('after'))
+    if not errors and arch['before']['kind'] != arch['after']['kind']:
+        errors.append('arch: use the same kind for "before" and "after"')
     return errors
 
 
@@ -236,6 +290,7 @@ def page_errors(findings, page):
     errors += [f'page.json: finding {fid} is not in findings.json' for fid in page['findings'] if fid not in ids]
     for fid, body in page['findings'].items():
         errors += page_finding_errors(f'findings.{fid}', body)
+    errors += arch_errors(page.get('arch'))
     for i, term in enumerate(page.get('glossary', [])):
         term = term if isinstance(term, dict) else {}
         errors += text_errors(f'glossary[{i}].term', term.get('term'))
@@ -298,9 +353,24 @@ def drift_label(review):
 def tree_for(review, at):
     if at == 'head':
         return review.pr['head']
+    if at == 'base':
+        return review.merge_base
     if review.drift['status'] != 'checked':
         raise PageError(f'there is no test merge: {review.drift["reason"]}')
     return review.drift['merged_tree']
+
+
+def place_label(review, at):
+    if at == 'head':
+        return f'PR head {review.pr["head"][:7]}'
+    if at == 'base':
+        return f'merge base {review.merge_base[:7]}'
+    return drift_label(review)
+
+
+def fence_language(path):
+    extension = Path(path).suffix.lstrip('.').lower()
+    return extension if re.fullmatch(r'[a-z0-9+]{1,12}', extension) and extension not in AM_COMPONENTS else 'text'
 
 
 def code_snippet(review, path, start, end, at):
@@ -311,42 +381,31 @@ def code_snippet(review, path, start, end, at):
     tree = tree_for(review, at)
     shown = git(review.repo, 'show', f'{tree}:{path}', allowed_codes=(0, 128))
     if shown.returncode:
-        place = 'the PR head' if at == 'head' else 'the test merge'
-        raise PageError(f'{path} is not in {place}. For removed code, use a diff ref')
+        raise PageError(f'{path} is not in the {place_label(review, at)}. For removed code, use a diff ref')
     lines = shown.stdout.split('\n')
     lines = lines[:-1] if lines and lines[-1] == '' else lines
     if end > len(lines):
         raise PageError(f'{path} has {len(lines)} lines, so line {end} does not exist')
     first, last = max(1, start - CONTEXT_LINES), min(len(lines), end + CONTEXT_LINES)
-    span = f'L{start}-L{end}' if end > start else f'L{start}'
-    url = f'{review.pr["repo_url"]}/blob/{review.pr["head"]}/{quote(path)}#{span}' if at == 'head' else ''
+    span = f'L{start}-{end}' if end > start else f'L{start}'
     return {
-        'kind': 'code',
-        'title': path,
-        'where': f'{review.pr["slug"]} @ {review.pr["head"][:7]}' if at == 'head' else drift_label(review),
-        'lines': f'L{start}-{end}' if end > start else f'L{start}',
-        'url': url,
-        'rows': [{'n': n, 't': lines[n - 1], 'hl': start <= n <= end} for n in range(first, last + 1)],
+        'info': f'{fence_language(path)} title="{path} {span} at the {place_label(review, at)}" '
+        f'start={first} hl={start}-{end}',
+        'lines': lines[first - 1 : last],
     }
 
 
 def diff_rows(body, marker, old_line, new_line):
+    """Each row keeps the old and new line numbers where it starts, so any window gets a true @@ header."""
     rows = []
     for line in body:
         sign, text = line[:1], line[1:]
         if sign == '\\':  # "\ No newline at end of file"
             continue
-        marked = marker in text
-        if sign == '-':
-            rows.append({'o': old_line, 'n': None, 't': text, 'd': 'del', 'hl': marked})
-            old_line += 1
-        elif sign == '+':
-            rows.append({'o': None, 'n': new_line, 't': text, 'd': 'add', 'hl': marked})
-            new_line += 1
-        else:
-            rows.append({'o': old_line, 'n': new_line, 't': text, 'd': 'ctx', 'hl': marked})
-            old_line += 1
-            new_line += 1
+        sign = sign if sign in '-+' else ' '
+        rows.append({'o': old_line, 'n': new_line, 'sign': sign, 't': text, 'hl': marker in text})
+        old_line += sign != '+'
+        new_line += sign != '-'
     return rows
 
 
@@ -364,22 +423,27 @@ def diff_snippet(review, path, marker):
     rows = diff_rows(body, marker, int(start.group(1)), int(start.group(2)))
     first_marked = next((i for i, row in enumerate(rows) if row['hl']), 0)
     window_start = max(0, min(first_marked - MAX_DIFF_ROWS // 2, len(rows) - MAX_DIFF_ROWS))
-    anchor = hashlib.sha256(path.encode()).hexdigest()
+    window = rows[window_start : window_start + MAX_DIFF_ROWS]
+    old_count = sum(row['sign'] != '+' for row in window)
+    new_count = sum(row['sign'] != '-' for row in window)
+    marked_new_lines = [str(row['n']) for row in window if row['hl'] and row['sign'] != '-']
+    highlight = f' hl={",".join(marked_new_lines)}' if marked_new_lines else ''
     return {
-        'kind': 'diff',
-        'title': path,
-        'where': f'PR {review.pr["number"]} diff',
-        'lines': header.split('@@')[1].strip(),
-        'url': f'{review.pr["url"]}/files#diff-{anchor}',
-        'rows': rows[window_start : window_start + MAX_DIFF_ROWS],
+        'info': f'diff file={path} title="{path} in the PR {review.pr["number"]} diff"{highlight}',
+        'lines': [f'@@ -{window[0]["o"]},{old_count} +{window[0]["n"]},{new_count} @@']
+        + [row['sign'] + row['t'] for row in window],
     }
 
 
 def capped(output):
-    """Command output as a list of lines, so each line of it sits on its own line of the page file."""
     lines = output.rstrip('\n').split('\n') if output.strip() else ['(no matches)']
     hidden = len(lines) - MAX_OUTPUT_LINES
     return lines[:MAX_OUTPUT_LINES] + ([f'... {hidden} more lines'] if hidden > 0 else [])
+
+
+def command_snippet(command, place, output):
+    title = shlex.join(command).replace('"', "'")
+    return {'info': f'text title="{title} ({place})"', 'lines': capped(output)}
 
 
 def grep_snippet(review, tokens, at):
@@ -398,38 +462,26 @@ def grep_snippet(review, tokens, at):
     path_args = ['--', *paths[1:]] if paths else []
     result = git(review.repo, 'grep', *options, tree, *path_args, allowed_codes=(0, 1))
     output = '\n'.join(line.removeprefix(f'{tree}:') for line in result.stdout.splitlines())
-    return {
-        'kind': 'command',
-        'title': 'Search',
-        'where': f'run on the PR commit {review.pr["head"][:7]}'
-        if at == 'head'
-        else f'run on the {drift_label(review)}',
-        'command': shlex.join(['git', 'grep', *options, tree[:7], *path_args]),
-        'output': capped(output),
-    }
+    return command_snippet(['git', 'grep', *options, tree[:7], *path_args], place_label(review, at), output)
 
 
 def merge_tree_snippet(review):
     tree_for(review, 'merged')
     base, head = review.drift['base'], review.pr['head']
     result = git(review.repo, 'merge-tree', '--write-tree', '--name-only', base, head, allowed_codes=(0, 1))
-    return {
-        'kind': 'command',
-        'title': 'Test merge',
-        'where': drift_label(review),
-        'command': shlex.join(['git', 'merge-tree', '--write-tree', '--name-only', base[:7], head[:7]]),
-        'output': capped(result.stdout),
-    }
+    command = ['git', 'merge-tree', '--write-tree', '--name-only', base[:7], head[:7]]
+    return command_snippet(command, drift_label(review), result.stdout)
+
 
 
 def resolve_ref(review, ref):
-    """Turn one ref from the review contract into a snippet pulled from git."""
+    """Turn one ref from the review contract into a fenced block pulled from git."""
     try:
         tokens = shlex.split(ref)
     except ValueError as exc:
         raise PageError(f'cannot split the ref: {exc}') from exc
-    at = 'merged' if tokens[-1:] == ['@merged'] else 'head'
-    tokens = tokens[:-1] if at == 'merged' else tokens
+    at = REF_PLACES.get(tokens[-1] if tokens else '', 'head')
+    tokens = tokens if at == 'head' else tokens[:-1]
     kind = tokens[0] if tokens else ''
     if kind == 'code' and len(tokens) == 2:
         lines = re.match(r'^(.+):(\d+)(?:-(\d+))?$', tokens[1])
@@ -448,34 +500,121 @@ def resolve_ref(review, ref):
 
 def page_refs(page):
     claims = [claim for body in page['findings'].values() for claim in body['claims']] + page.get('done_well', [])
-    return sorted({ref for claim in claims for ref in claim['refs']})
+    arch_refs = [ref for side in ('before', 'after') for ref in page['arch'][side]['refs']]
+    return sorted({ref for claim in claims for ref in claim['refs']} | set(arch_refs))
 
 
-# ---------- page ----------
+def find_merge_base(repo, pr, drift):
+    """The commit that the before diagram and @base refs read: where the PR branch left its target."""
+    candidates = [drift['base']] if drift['status'] == 'checked' else []
+    candidates += [pr['target'], f'origin/{pr["target"]}']
+    for candidate in candidates:
+        result = git(repo, 'merge-base', pr['head'], candidate, allowed_codes=(0, 1, 128))
+        if result.returncode == 0:
+            return result.stdout.strip()
+    raise PageError(f'no merge base for @base refs: fetch {pr["target"]} into the local clone')
 
 
-def to_json_lines(value, depth=0):
-    """JSON with one short item per line, so a line reader can page through the whole file.
+# ---------- draft ----------
 
-    An object without nested containers (a code row, a point) stays on one line. A list stays on
-    one line only while it is short; a long list, such as command output, gets one item per line.
-    """
-    flat = json.dumps(value, ensure_ascii=False)
-    nested = isinstance(value, (dict, list)) and any(
-        isinstance(item, (dict, list)) for item in (value.values() if isinstance(value, dict) else value)
+
+def one_line(text):
+    return ' '.join(text.split())
+
+
+def option_text(text):
+    return one_line(text).replace('|', '/')
+
+
+def fenced(info, lines):
+    """A fence longer than any backtick run inside, so code that holds ``` stays inside the block."""
+    longest_run = max((len(run) for line in lines for run in re.findall(r'`+', line)), default=0)
+    fence = '`' * max(3, longest_run + 1)
+    return [f'{fence}{info}', *lines, fence]
+
+
+def ask_block(question, options, suggested):
+    lines = [question] + [
+        f'{"*" if label == suggested else "-"} {option_text(label)}' + (f' | {note}' if note else '')
+        for label, note in options
+    ]
+    return fenced('ask', lines)
+
+
+def claim_line(claim):
+    tag = CLAIM_TAGS.get((claim['kind'], claim['check']), claim['kind'].upper())
+    return f'- **{tag}:** {one_line(claim["text"])}'
+
+
+def evidence_blocks(claims, snippets):
+    refs = list(dict.fromkeys(ref for claim in claims for ref in claim['refs']))
+    return [line for ref in refs for line in ['', *fenced(snippets[ref]['info'], snippets[ref]['lines'])]]
+
+
+def overview_panel(review, findings, page, verdict):
+    pr, drift = review.pr, review.drift
+    counts = [f'{sum(f["severity"] == s for f in findings)} {s}' for s in SEVERITIES]
+    drift_text = (
+        f'test merge with `{pr["target"]}` has {len(drift.get("conflicts", []))} conflicted files'
+        if drift['status'] == 'checked'
+        else f'not checked: {drift["reason"]}'
     )
-    long_list = isinstance(value, list) and len(flat) > MAX_INLINE_LIST
-    if not nested and not long_list:
-        return flat
-    pad, end_pad = ' ' * (depth + 1), ' ' * depth
-    if isinstance(value, dict):
-        items = [
-            f'{pad}{json.dumps(key, ensure_ascii=False)}: {to_json_lines(item, depth + 1)}'
-            for key, item in value.items()
-        ]
-        return '{\n' + ',\n'.join(items) + f'\n{end_pad}}}'
-    items = [pad + to_json_lines(item, depth + 1) for item in value]
-    return '[\n' + ',\n'.join(items) + f'\n{end_pad}]'
+    lines = ['## Overview', '', *fenced(f'callout {VERDICT_CALLOUTS[verdict]} Verdict: {verdict}', [one_line(page['headline'])]), '']
+    lines += fenced('kv cols=2', [
+        f'* PR: #{pr["number"]} {one_line(pr["title"])}',
+        f'Author: {pr["author"]}',
+        f'Branch: {pr["branch"]} into {pr["target"]}',
+        f'Changed files: {pr["files"]}',
+        f'Changed lines: +{pr["additions"]} -{pr["deletions"]}',
+        f'Findings: {", ".join(counts)}',
+        f'Base drift: {drift_text}',
+    ])
+    glossary = page.get('glossary', [])
+    if glossary:
+        lines += ['', '| Term | Meaning |', '| --- | --- |']
+        lines += [f'| {option_text(term["term"])} | {option_text(term["meaning"])} |' for term in glossary]
+    return lines
+
+
+def arch_panel(review, side, diagram):
+    at = 'merge base' if side == 'before' else 'PR head'
+    sha = review.merge_base if side == 'before' else review.pr['head']
+    refs = ', '.join(f'`{ref}`' for ref in diagram['refs'])
+    return [
+        f'## Architecture {side}',
+        '',
+        f'The code at the {at} `{sha[:7]}`. Drawn from: {refs}.',
+        '',
+        *fenced(f'{diagram["kind"]} {diagram.get("direction", "LR")}', diagram['source'].strip('\n').split('\n')),
+    ]
+
+
+def finding_panel(finding, body, snippets):
+    areas = ', '.join(dict.fromkeys(source.split(':', 1)[0] for source in finding['sources']))
+    lines = [
+        f'## {SEVERITY_LABELS[finding["severity"]]}: {one_line(body["title"])}',
+        '',
+        f'`{finding["file"]}:{finding["line"]}`, found by {areas}.',
+        '',
+        *[f'- **{one_line(point["label"])}:** {one_line(point["text"])}' for point in body['points']],
+        '',
+        '**Claims**',
+        '',
+        *[claim_line(claim) for claim in body['claims']],
+        *evidence_blocks(body['claims'], snippets),
+        '',
+        '**Fixes**',
+        '',
+    ]
+    for fix in body['fixes']:
+        detail = f' {one_line(fix["detail"])}' if fix.get('detail') else ''
+        lines.append(f'- **{fix["id"]}.** {one_line(fix["label"]).rstrip(".")}.{detail}')
+        lines += [f'  {i}. {one_line(step)}' for i, step in enumerate(fix.get('steps', []), 1)]
+    lines += ['', *ask_block(f'[{finding["id"]}] Your call on this finding?', CALL_OPTIONS, SUGGESTED_CALL[finding['severity']])]
+    if len(body['fixes']) > 1:
+        fix_options = [(f'{fix["id"]}. {fix["label"]}', '') for fix in body['fixes']]
+        lines += ['', *ask_block(f'[{finding["id"]}] Which fix?', fix_options, fix_options[0][0])]
+    return lines
 
 
 def method_notes(review):
@@ -487,58 +626,64 @@ def method_notes(review):
         else f'I did not make a test merge with the latest `{pr["target"]}`. Reason: {drift["reason"]}.'
     )
     return [
-        f'Every code block comes from git at the PR commit `{pr["head"][:7]}`. A script copied the lines, '
-        'so nothing was typed by hand.',
+        f'Every code block comes from git at the PR commit `{pr["head"][:7]}`, unless its title names another '
+        'commit. A script copied the lines, so nothing was typed by hand.',
+        f'The before diagram shows the merge base `{review.merge_base[:7]}`, where the PR branch starts.',
         merge_note,
-        'I did not run the PR code. A claim marked "Read, not run" comes from reading the code only.',
+        'I did not run the PR code. A claim marked "read, not run" comes from reading the code only.',
     ]
 
 
-def page_findings(findings, page):
-    by_severity = sorted(findings, key=lambda finding: SEVERITIES.index(finding['severity']))
-    return [
-        {
-            'id': finding['id'],
-            'severity': finding['severity'],
-            'areas': list(dict.fromkeys(source.split(':', 1)[0] for source in finding['sources'])),
-            'file': finding['file'],
-            'line': finding['line'],
-            **{key: page['findings'][finding['id']][key] for key in ('title', 'points', 'claims', 'fixes')},
-        }
-        for finding in by_severity
+def render_draft(review, findings, page, verdict, snippets):
+    pr = review.pr
+    lines = [
+        '---',
+        'template: doc',
+        f'title: {pr["slug"].split("/")[1]} PR {pr["number"]} review',
+        'lang: en',
+        '---',
+        *overview_panel(review, findings, page, verdict),
+        '',
+        *arch_panel(review, 'before', page['arch']['before']),
+        '',
+        *arch_panel(review, 'after', page['arch']['after']),
     ]
+    for finding in sorted(findings, key=lambda finding: SEVERITIES.index(finding['severity'])):
+        lines += ['', *finding_panel(finding, page['findings'][finding['id']], snippets)]
+    done_well = page.get('done_well', [])
+    if done_well:
+        lines += ['', '## Done well', '', *[claim_line(claim) for claim in done_well], *evidence_blocks(done_well, snippets)]
+    notes = method_notes(review) + page.get('notes', [])
+    lines += ['', '## How this review was made', '', *[f'- {one_line(note)}' for note in notes]]
+    lines += [
+        '',
+        '## Verdict',
+        '',
+        'Answer the questions on this page, then press Reply and paste the reply into the chat.',
+        '',
+        *ask_block('[review] GitHub action?', GITHUB_ACTION_OPTIONS, VERDICT_ACTIONS[verdict]),
+        '',
+        *ask_block(
+            '[review] Who posts the review?',
+            (('Claude after my OK', 'Claude posts with gh'), ('Me', 'I post it on GitHub')),
+            'Claude after my OK',
+        ),
+    ]
+    return '\n'.join(lines) + '\n'
 
 
-def render(review, findings, page, verdict, snippets):
-    pr = {
-        key: review.pr[key]
-        for key in ('number', 'url', 'title', 'author', 'branch', 'target', 'head', 'files', 'additions', 'deletions')
-    }
-    drift = {**review.drift, 'base_ref': review.pr['target'], 'conflicts': review.drift.get('conflicts', [])}
-    stamp = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')
-    data = {
-        'review_id': f'{review.pr["slug"]}#{pr["number"]}@{pr["head"][:7]}:{stamp}',
-        'repo': review.pr['slug'],
-        'reviewed_on': date.today().isoformat(),
-        'pr': pr,
-        'verdict': verdict,
-        'headline': page['headline'],
-        'drift': drift,
-        'glossary': page.get('glossary', []),
-        'findings': page_findings(findings, page),
-        'done_well': page.get('done_well', []),
-        'notes': method_notes(review) + page.get('notes', []),
-        'snippets': snippets,
-    }
-    payload = to_json_lines(data).replace('<', '\\u003c')  # keeps </script> and <!-- out of the data block
-    parts = TEMPLATE.read_text(encoding='utf-8').split(DATA_PLACEHOLDER)
-    if len(parts) != 2:
-        raise PageError(f'the template must hold {DATA_PLACEHOLDER} exactly once')
-    title = f'{review.pr["slug"].split("/")[1]} PR {pr["number"]} Review'
-    page_html = parts[0].replace(TITLE_PLACEHOLDER, html.escape(title)) + payload + parts[1]
-    embedded = re.search(r'<script type="application/json" id="data">(.*?)</script>', page_html, re.DOTALL)
-    json.loads(embedded.group(1))  # the data must survive the round trip
-    return page_html
+def render_page(draft_file, page_file):
+    """Run the bundled am CLI. Its own settings and state stay in the review dir, with no update check."""
+    env = {**os.environ, 'AM_HOME': str(draft_file.parent / '.am'), 'AM_NO_UPDATE_CHECK': '1'}
+    command = ['node', str(AM_CLI), 'render', str(draft_file), '-o', str(page_file), '--no-open']
+    try:
+        result = subprocess.run(command, capture_output=True, text=True, errors='replace', env=env)
+    except FileNotFoundError as exc:
+        raise PageError('node is not on PATH. The review page needs Node.js 20 or newer') from exc
+    output = [line for line in (result.stdout + result.stderr).splitlines() if line.strip()]
+    if result.returncode or not page_file.is_file():
+        raise PageError(*[f'am: {line}' for line in output], f'fix page.json, the draft is {draft_file}')
+    return output
 
 
 def build(review_dir, repo):
@@ -559,11 +704,13 @@ def build(review_dir, repo):
     errors = style_errors(page)
     if errors:
         raise PageError(*errors)
+    drift = read_drift(review_dir / 'drift.json')
     review = Review(
         repo=repo,
         pr=pr,
-        drift=read_drift(review_dir / 'drift.json'),
+        drift=drift,
         diff_hunks=split_diff((review_dir / 'pr.diff').read_text(encoding='utf-8', errors='replace')),
+        merge_base=find_merge_base(repo, pr, drift),
     )
     verdict = read_verdict(review_dir / 'report.md')
     snippets, errors = {}, []
@@ -574,12 +721,16 @@ def build(review_dir, repo):
             errors += [f'ref {ref!r}: {message}' for message in exc.messages]
     if errors:
         raise PageError(*errors)
-    page_html = render(review, findings, page, verdict, snippets)
-    out = review_dir / f'pr{pr["number"]}-review.html'
-    out.write_text(page_html, encoding='utf-8')
+    draft_file = review_dir / f'pr{pr["number"]}-review.md'
+    page_file = review_dir / f'pr{pr["number"]}-review.html'
+    draft_file.write_text(render_draft(review, findings, page, verdict, snippets), encoding='utf-8')
+    am_output = render_page(draft_file, page_file)
     claims = sum(len(body['claims']) for body in page['findings'].values())
-    print(f'PAGE_FILE={out}')
-    print(f'findings={len(findings)} claims={claims} snippets={len(snippets)} bytes={len(page_html.encode())}')
+    print(f'PAGE_FILE={page_file}')
+    print(f'DRAFT_FILE={draft_file}')
+    print(f'findings={len(findings)} claims={claims} snippets={len(snippets)}')
+    for line in am_output:
+        print(f'am: {line}')
 
 
 def main(argv):

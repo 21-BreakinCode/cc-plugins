@@ -48,7 +48,7 @@ A script pulls each ref from git and shows the real code on the review page. Wri
 | `grep [-w] [-i] [-F] [-E] <pattern> [-- <pathspec>...]` | `git grep -n` at HEAD_SHA, with its output. Put quotes around a pattern that has spaces. |
 | `merge-tree` | The test merge of the PR head into the latest base, with the conflicted files. |
 
-Add ` @merged` at the end of a `code` or `grep` ref to read MERGED_TREE instead of HEAD_SHA.
+Add ` @merged` at the end of a `code` or `grep` ref to read MERGED_TREE instead of HEAD_SHA. Add ` @base` to read the merge base, the commit where the PR branch starts. The page builder finds the merge base for you.
 
 ## Rules
 

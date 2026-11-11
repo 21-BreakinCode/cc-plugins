@@ -1,5 +1,15 @@
 # Changelog
 
+## 3.0.0 — 2026-11-11
+
+- **feat:** Breaking: the review page is a local file built with answer-me-with-html. `lib/am.mjs` (v0.5.11, MIT) is bundled with its license in `lib/am.LICENSE`. `/code-reviewer:review-pr` now needs Node.js 20 or newer.
+- **feat:** the page reads from top to bottom: an overview, an architecture diagram before the PR and after it, one panel per finding, then the verdict.
+- **feat:** the page builder agent draws the before and after diagrams as `class` or `flow` diagrams. The after diagram marks the changed parts. Each diagram lists the refs that it is drawn from, and the builder checks each ref against git.
+- **feat:** new ref suffix `@base` reads the merge base, the commit where the PR branch starts.
+- **feat:** Breaking: you answer the questions on the page, press Reply, and paste the reply into the chat. The page is no longer published, has no db, and is not deleted.
+- **refactor:** `lib/build-review-page.py` writes an am draft from git evidence and renders it. `templates/review-page.html` is removed.
+- **test:** the page builder test renders the fixture with the real am CLI.
+
 ## 2.1.0 — 2026-10-20
 
 - **feat:** `/code-reviewer:review-pr` publishes an interactive review page after the report. For each finding, you choose a call, a fix, and an optional note. The page saves your choices in its own db.
