@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.0 — 2026-11-11
+
+- **feat:** `sleep_sync.py` turns the Health Export sleep stages into a sleep log, one row per night: bed, wake, asleep, deep, REM, awake, and the UTC offset. Asleep time is the union of stage intervals, so two recording apps do not double count. Naps are left out. The export rewrites the rows of its nights, and a night that the export window can cut only fills a missing row or grows a shorter one. A row with a date that does not parse stays as text.
+- **docs:** `shortcut.md` adds the sleep export, the `Morning Gate` shortcut with a 3-hour lock, the app-opened automation, and the 90-day backfill.
+
 ## 0.1.1 — 2026-11-01
 
 - **fix:** `apple-notes` works inside Claude Code's Bash sandbox. Note text is one single-quoted argument, not a heredoc or `$(…)`, and each `notes` command runs alone, so a host can exclude `notes *` from the sandbox.

@@ -1,13 +1,14 @@
 ---
 name: apple-health
-description: Sync Apple Health weight and body fat into the vault's body log, or set up the iPhone export that feeds it. Use when the user asks to sync health, weight, or body fat data, or to set up the Health export Shortcut.
+description: Sync Apple Health weight, body fat, and sleep into the vault's body log and sleep log, or set up the iPhone export that feeds them. Use when the user asks to sync health, weight, body fat, or sleep data, or to set up the Health export Shortcut.
 ---
 
 # apple-health
 
-macOS cannot read Apple Health. An iPhone Shortcut exports weight and body fat
-to iCloud Drive, and `health_sync.py` adds them to a body log in the vault.
-The vault file `.apple-kit.json` holds both paths.
+macOS cannot read Apple Health. An iPhone Shortcut exports weight, body fat,
+and sleep stages to iCloud Drive. `health_sync.py` adds weight and body fat to
+a body log, and `sleep_sync.py` turns sleep stages into one row per night in a
+sleep log. The vault file `.apple-kit.json` holds the paths.
 
 ## Branch: sync
 
@@ -29,7 +30,16 @@ The vault file `.apple-kit.json` holds both paths.
      Ask the user to set Health weight to kg.
    - `.apple-kit.json` missing: switch to the setup branch.
 
-Done when the command exited 0 and you reported the body log's newest row.
+   If `.apple-kit.json` has a `sleep` key, also run:
+
+   ```bash
+   python3 -B "${CLAUDE_PLUGIN_ROOT}/scripts/sleep_sync.py" --config "$PWD/.apple-kit.json"
+   ```
+
+   Exit 1 "sleep export not readable" has the same causes as the health export.
+
+Done when the command exited 0 and you reported the body log's newest row
+(and the sleep log's newest night, if sleep is set up).
 
 ## Branch: setup
 
@@ -43,11 +53,16 @@ Done when the command exited 0 and you reported the body log's newest row.
      "health": {
        "export_path": "~/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/apple-kit/health-latest.txt",
        "body_log": "Health/body-log.md"
+     },
+     "sleep": {
+       "export_path": "~/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/apple-kit/sleep-latest.txt",
+       "sleep_log": "Health/sleep-log.md"
      }
    }
    ```
 
-   Use the body log path the user picks. It is relative to the vault root.
+   Use the log paths the user picks. They are relative to the vault root.
+   Leave out the `sleep` key if the user does not export sleep.
 4. Run the sync branch.
 
 Done when the sync branch finished with exit 0.
@@ -59,3 +74,15 @@ The log is a Markdown table, one row per reading, oldest first:
 adds rows and fills empty cells, and never changes a value. To correct a
 reading, fix it in the Health app, or write the correct value by hand in the
 note that consumes it.
+
+## The sleep log
+
+One row per night, oldest first:
+`| night | bed | wake | asleep | deep | rem | awake | utc |`. A night is the
+local date of bedtime minus 12 hours, so 03:38 on 11-11 is night 11-10. Asleep
+is the union of `Core`, `Deep`, `REM`, and `Asleep` samples, so two apps that
+record the same night do not double count. A session that starts from 12:00
+to 17:59 is a nap and is left out. Each row keeps the UTC offset of its night,
+so travel needs no setting. The export is the truth for the nights it holds,
+and the script rewrites their rows. The oldest night of an export can be cut
+by the export window, so it only fills a missing row.
