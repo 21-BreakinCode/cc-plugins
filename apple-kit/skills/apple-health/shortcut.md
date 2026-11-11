@@ -49,10 +49,51 @@ signed binary, so rebuild the Shortcut from these steps on any phone.
    as `health-latest.txt`.
 9. Run it once and allow Health access.
 
+## Sleep export
+
+Add these actions to `Health Export`, below the body fat `End Repeat`:
+
+1. "Find Health Samples", Type `Sleep` (some iOS versions say `Sleep
+   Analysis`), `Start Date is in the last 3 days`, sorted by `Start Date`,
+   Oldest First.
+2. "Repeat with Each" over those samples. Inside, a "Text" action:
+   `sleep,[Repeat Item→Start Date],[Repeat Item→End Date],[Repeat Item→Value],[Repeat Item→Source]`.
+   Insert each field from `Repeat Item`, not from `Health Samples`: a chip with
+   a heart icon reads the whole list. Both dates use ISO 8601 with the time.
+3. Inside the loop, "Add to Variable" `SleepRows`.
+4. Below `End Repeat`: "Combine Text" `SleepRows` with New Lines, then "Save
+   File" to Shortcuts, subpath `apple-kit/sleep-latest.csv`, Ask Where to Save
+   off, Overwrite on. Check that the old Save still takes the Combine of `Rows`.
+5. Settings → Apps → Shortcuts → Advanced → turn on "Allow Sharing Large
+   Amounts of Data". Three nights are about 190 samples, and iOS blocks that
+   many Health items without this setting.
+
+Backfill, once: set the sleep Find to the last 90 days, run the Shortcut, run
+`sleep_sync.py`, then set it back to 3 days.
+
+## Morning Gate
+
+A second shortcut, `Morning Gate`, runs the export once after you wake:
+
+1. "Get File" `apple-kit/last-run.txt` from Shortcuts, Error If Not Found off.
+   If it holds a time less than 3 hours ago: "Stop This Shortcut".
+2. "Find Health Samples", Type `Sleep`, `End Date is today`, Limit 1. If
+   there is no sample: stop.
+3. "Run Shortcut" `Health Export`.
+4. "Save File" the current date and time to `apple-kit/last-run.txt`,
+   Overwrite on.
+
+The 3-hour lock (not one day) lets a later open export the rest of a night
+when an early open caught only part of it.
+
 ## Automation
 
 Shortcuts → Automation → New Automation → App → `Xiaomi Home` (or the app of
 your scale) → Is Closed only → Run Immediately → `Health Export`.
+
+For sleep: New Automation → App → the app you open first after you wake (for
+example `Obsidian`) → Is Opened → Run Immediately, Notify When Run off →
+`Morning Gate`.
 
 Health data is readable only while the phone is unlocked, and closing the
 scale app always happens on an unlocked phone. A manual tap also works. The
@@ -75,5 +116,12 @@ weight,2026-10-30T08:06:50+08:00,66.59999999999999,kg,Xiaomi Home
 body_fat,2026-10-30T08:06:50+08:00,18.9,%,Xiaomi Home
 ```
 
-On the Mac the file is at
-`~/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/apple-kit/health-latest.txt`.
+Sleep, one line per stage sample:
+
+```
+sleep,2026-11-11T03:38:04+07:00,2026-11-11T04:10:04+07:00,Core,Apple Watch
+```
+
+On the Mac the files are in
+`~/Library/Mobile Documents/iCloud~is~workflow~my~workflows/Documents/apple-kit/`
+as `health-latest.txt` and `sleep-latest.txt`.

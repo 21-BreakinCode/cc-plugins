@@ -1258,7 +1258,7 @@
     },
     {
       "name": "apple-kit",
-      "version": "0.1.1",
+      "version": "0.2.0",
       "taglineHtml": "Apple Notes and Apple Health for Claude Code",
       "summaryHtml": "<p>apple-notes creates, reads, edits, moves, and deletes Apple Notes through the notes command of macnotesapp. It selects notes by id, reads a note before it changes it, and asks for approval before every change, in a terminal or over a chat bot. apple-health syncs weight and body fat from an iPhone Shortcut export into a Markdown body log, because macOS cannot read Apple Health. The script uses the Python standard library only, adds rows, fills empty cells, and never changes a value. Vault paths live in the vault file .apple-kit.json. No cross-plugin deps.</p>",
       "zhTW": {
@@ -1267,12 +1267,12 @@
       },
       "category": "workflow",
       "install": "claude plugin install apple-kit@21-breakincode",
-      "oneLiner": "Work with Apple apps from Claude Code on a Mac: Apple Notes create, read, update, and delete with approval before every change, and Apple Health weight and body fat synced into a vault body log.",
+      "oneLiner": "Work with Apple apps from Claude Code on a Mac: Apple Notes create, read, update, and delete with approval before every change, and Apple Health weight, body fat, and sleep synced into vault logs.",
       "commands": [],
       "skills": [
         {
           "name": "apple-health",
-          "descriptionHtml": "Sync Apple Health weight and body fat into the vault's body log, or set up the iPhone export that feeds it."
+          "descriptionHtml": "Sync Apple Health weight, body fat, and sleep into the vault's body log and sleep log, or set up the iPhone export that feeds them."
         },
         {
           "name": "apple-notes",
@@ -1282,6 +1282,20 @@
       "dependsOn": [],
       "config": [],
       "changelog": [
+        {
+          "version": "0.2.0",
+          "date": "2026-11-11",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>sleep_sync.py</code> turns the Health Export sleep stages into a sleep log, one row per night: bed, wake, asleep, deep, REM, awake, and the UTC offset. Asleep time is the union of stage intervals, so two recording apps do not double count. Naps are left out. The export rewrites the rows of its nights, and a night that the export window can cut only fills a missing row."
+            },
+            {
+              "type": "docs",
+              "html": "<code>shortcut.md</code> adds the sleep export, the <code>Morning Gate</code> shortcut with a 3-hour lock, the app-opened automation, and the 90-day backfill."
+            }
+          ]
+        },
         {
           "version": "0.1.1",
           "date": "2026-11-01",

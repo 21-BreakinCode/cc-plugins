@@ -80,7 +80,7 @@ One ruleset, three layers. Layer 1 shapes every reply — lead with the action, 
 
 **Skills** · `adhd-review-mode`
 
-### [apple-kit](./apple-kit/README.md) · `v0.1.1`
+### [apple-kit](./apple-kit/README.md) · `v0.2.0`
 
 *Apple Notes and Apple Health for Claude Code*
 

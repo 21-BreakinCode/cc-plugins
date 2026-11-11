@@ -14,7 +14,7 @@ claude plugin install apple-kit@21-breakincode
 
 Invoke one directly as `/apple-kit:<skill>`, or let it activate automatically when relevant.
 
-- **`apple-health`** — Sync Apple Health weight and body fat into the vault's body log, or set up the iPhone export that feeds it.
+- **`apple-health`** — Sync Apple Health weight, body fat, and sleep into the vault's body log and sleep log, or set up the iPhone export that feeds them.
 - **`apple-notes`** — Create, read, edit, move, or delete notes in the Apple Notes app on this Mac.
 
 ---
