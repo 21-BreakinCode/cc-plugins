@@ -159,6 +159,23 @@ class SyncTest(unittest.TestCase):
         self.assertIn("hand note", text)
         self.assertIn("| 2026-11-10 | 01:00 | 08:00 | 7:00 |", text)
 
+    def test_bad_date_row_is_kept_as_text(self):
+        log = LOG_HEADER + "| 2026-11-03 (est) | 23:00 | 07:00 | 8:00 | 1:00 | 1:30 | 0:20 | +08:00 |\n"
+        vault = self.vault(sample("2026-11-10T01:00", "2026-11-10T02:00") + "\n"
+                           + sample("2026-11-11T01:00", "2026-11-11T08:00"), log)
+        vault.run()
+        self.assertNotIn("2026-11-03 (est)", vault.rows())
+        self.assertIn("| 2026-11-03 (est) |", vault.log.read_text(encoding="utf-8"))
+
+    def test_cut_night_grows_when_export_has_more(self):
+        vault = self.vault(sample("2026-11-10T01:00", "2026-11-10T03:00"))
+        vault.run()
+        self.assertEqual(vault.rows()["2026-11-09"]["asleep"], 120)
+        vault.export.write_text(sample("2026-11-10T01:00", "2026-11-10T03:00") + "\n"
+                                + sample("2026-11-10T03:30", "2026-11-10T08:00"), encoding="utf-8")
+        vault.run()
+        self.assertEqual(vault.rows()["2026-11-09"]["asleep"], 390)
+
     def test_unreadable_export_exit_1(self):
         vault = self.vault(None)
         code, out = vault.run()

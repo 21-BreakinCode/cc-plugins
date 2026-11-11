@@ -1288,7 +1288,7 @@
           "changes": [
             {
               "type": "feat",
-              "html": "<code>sleep_sync.py</code> turns the Health Export sleep stages into a sleep log, one row per night: bed, wake, asleep, deep, REM, awake, and the UTC offset. Asleep time is the union of stage intervals, so two recording apps do not double count. Naps are left out. The export rewrites the rows of its nights, and a night that the export window can cut only fills a missing row."
+              "html": "<code>sleep_sync.py</code> turns the Health Export sleep stages into a sleep log, one row per night: bed, wake, asleep, deep, REM, awake, and the UTC offset. Asleep time is the union of stage intervals, so two recording apps do not double count. Naps are left out. The export rewrites the rows of its nights, and a night that the export window can cut only fills a missing row or grows a shorter one. A row with a date that does not parse stays as text."
             },
             {
               "type": "docs",

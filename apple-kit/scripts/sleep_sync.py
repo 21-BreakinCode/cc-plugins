@@ -7,7 +7,7 @@ Input lines (one per Health sleep sample), written by the Shortcut:
 Output: a Markdown table, one row per night, oldest first. The export is the
 truth for the nights it holds: their rows are rewritten. Every other row and
 line is kept as it is. A night that the export window can cut is written only
-when the log has no row for it yet.
+when the log has no row for it yet, or when it holds more sleep than that row.
 
 Usage: sleep_sync.py --config <vault>/.apple-kit.json
 Prints nothing on success. Exit 1 when the export file cannot be read.
@@ -127,6 +127,7 @@ def _parse_row(line: str) -> dict | None:
         return None
     row: dict = dict(zip(LOG_COLUMNS, cells))
     try:
+        datetime.strptime(row["night"], "%Y-%m-%d")  # a hand row like "2026-11-03 (est)" stays text
         for key in DURATION_KEYS:
             row[key] = _minutes(row[key])
     except ValueError:
@@ -149,10 +150,10 @@ def parse_log(text: str) -> tuple[list[str], list[dict]]:
 
 
 def merge(rows: list[dict], nights: dict[str, dict], truncated: str | None) -> list[dict]:
-    """Rows of the export's nights replace old rows. A cut night only fills a gap."""
-    logged = {row["night"] for row in rows}
+    """Rows of the export's nights replace old rows. A cut night only fills a gap or grows."""
+    logged = {row["night"]: row["asleep"] for row in rows}
     fresh = {night: row for night, row in nights.items()
-             if not (night == truncated and night in logged)}
+             if night != truncated or row["asleep"] > logged.get(night, -1)}
     merged = [dict(row) for row in rows if row["night"] not in fresh] + [dict(row) for row in fresh.values()]
     return sorted(merged, key=lambda row: row["night"])
 
