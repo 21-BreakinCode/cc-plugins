@@ -66,17 +66,20 @@ assert "page builder model opus" '[ "$(fm_value "$P" model)" = "opus" ]'
 assert "page builder tools Read,Bash,Write" '[ "$(fm_value "$P" tools)" = "[\"Read\", \"Bash\", \"Write\"]" ]'
 assert "page builder reads contract" 'grep -q "\${CLAUDE_PLUGIN_ROOT}/references/review-contract.md" "$P"'
 assert "page builder runs the builder script" 'grep -q "\${CLAUDE_PLUGIN_ROOT}/lib/build-review-page.py" "$P"'
-assert "template exists with both placeholders" 'grep -q "__PAGE_TITLE__" "$ROOT/templates/review-page.html" && grep -q "__DATA_JSON__" "$ROOT/templates/review-page.html"'
+assert "page builder draws before and after diagrams" 'grep -q "Draw the architecture before and after" "$P" && grep -qF "@base" "$P"'
+assert "am CLI is bundled with its license" '[ -f "$ROOT/lib/am.mjs" ] && grep -q "MIT License" "$ROOT/lib/am.LICENSE"'
+assert "contract defines the @base ref" 'grep -qF "@base" "$CONTRACT"'
 
-echo "Test: command publishes a new page and deletes it after posting"
+echo "Test: command builds a local page and posts from the reply"
 C="$ROOT/commands/review-pr.md"
 assert "command dispatches the page builder" 'grep -q "code-reviewer:review-page-builder" "$C"'
-assert "command declares the db capability" 'grep -qF "capabilities: {\"db\": {}}" "$C"'
+assert "command checks for Node.js 20" 'grep -q "node --version" "$C" && grep -q "Node.js 20 or newer" "$C"'
+assert "command opens the local page" 'grep -qF "open \"<PAGE_FILE>\"" "$C" && grep -q "Nothing is published" "$C"'
+assert "command reads the reply by tag" 'grep -qF "[<finding id>] Your call on this finding?" "$C" && grep -qF "[review] GitHub action?" "$C"'
 assert "every run is a new review" 'grep -q "Every run is a new review" "$C"'
-assert "command deletes the page once" 'grep -qF "action: \"delete\"" "$C" && grep -q "do not try again" "$C"'
-assert "command gives the manual delete steps" 'grep -qF "/artifacts" "$C"'
 assert "command never switches the gh account" 'grep -qF "Never run \`gh auth switch\`" "$C"'
-assert "command allows the tools it calls" '(for t in Artifact ArtifactData Skill ToolSearch; do fm "$C" | grep -q "\"$t\"" || exit 1; done)'
+assert "command never posts without approval" 'grep -q "Never post without approval" "$C"'
+assert "command uses no Artifact tools" '! fm "$C" | grep -q "Artifact"'
 
 echo "Test: no cross-plugin references (plugin-rules §2)"
 assert "no pr-review-toolkit outside CHANGELOG" '! grep -rn "pr-review-toolkit" "$ROOT" --include=*.md --include=*.sh --include=*.json | grep -v CHANGELOG.md | grep -q .'

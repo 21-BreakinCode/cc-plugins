@@ -3,6 +3,10 @@
   "glossary": [
     {"term": "Helper", "meaning": "A small function that other code calls."}
   ],
+  "arch": {
+    "before": {"kind": "flow", "source": "total -> old_helper: calls", "refs": ["code app.py:1-6 @base"]},
+    "after": {"kind": "flow", "source": "total -> *double: calls", "refs": ["code app.py:1-6"]}
+  },
   "findings": {
     "caller-uses-removed-helper": {
       "title": "New code on main still calls the old helper",

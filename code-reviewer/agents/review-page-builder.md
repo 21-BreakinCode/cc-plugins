@@ -39,13 +39,29 @@ For each finding:
 
 Done when: every finding has claims, and you read the output of every ref on a `code` or `reading` claim yourself.
 
-## Step 3: Write page.json
+## Step 3: Draw the architecture before and after
+
+Every page has two diagrams of the code that the PR touches: one at the merge base, one at the PR head. The reader compares them to see how the structure changes.
+
+1. Pick the view. Use `class` when the PR changes classes, interfaces, or their members. Use `flow` when it changes modules, call paths, or data flow. Both diagrams use the same kind.
+2. Read the code at the merge base with `code <path>:<start>-<end> @base` refs. Read the code at the PR head with plain refs. To see the base code, run `git -C "<REPO_ROOT>" merge-base <HEAD_SHA> <base>` and `git show <merge-base>:<path>`. `<base>` is the `base` in `drift.json`, or `baseRefName` in `pr.json`.
+3. Draw only what you read. Each node and edge comes from a ref of its side. Leave out a component that does not exist on that side.
+4. Keep the views alike: the same nodes in the same places, so the change stands out. In the after diagram, put `*` before each new or changed name (`class *PageBuilder`, `A -> *B`).
+5. Keep each diagram to the part that the PR touches, about 3 to 12 nodes. Run `node ${CLAUDE_PLUGIN_ROOT}/lib/am.mjs help class` or `help flow` for the syntax.
+
+Done when: both diagrams name only code that their refs show.
+
+## Step 4: Write page.json
 
 Write `<REVIEW_DIR>/page.json` with the Write tool:
 
 ```json
 {
   "headline": "<what the PR does, in one plain sentence>",
+  "arch": {
+    "before": {"kind": "class", "direction": "LR", "source": "<diagram body>", "refs": ["code app/x.py:1-40 @base"]},
+    "after": {"kind": "class", "direction": "LR", "source": "<diagram body>", "refs": ["code app/x.py:1-52"]}
+  },
   "glossary": [{"term": "<term>", "meaning": "<one short sentence>"}],
   "findings": {
     "<id from findings.json>": {
@@ -67,10 +83,11 @@ Write `<REVIEW_DIR>/page.json` with the Write tool:
 }
 ```
 
-- `findings` has one entry for each id in `findings.json`. Copy each id exactly. The page saves the choices of the user under it.
+- `findings` has one entry for each id in `findings.json`. Copy each id exactly. The page tags the questions of each finding with its id, and the reply of the user names it.
+- `arch.<side>.source` is the diagram body only, without fence lines. Write new lines as `\n`. `direction` is `LR`, `TB`, `BT`, or `RL`, and the default is `LR`. Use `TB` when a long chain gets too wide.
 - `title` names the problem, not the code. For example: "The migration can block the tasks table".
 - `points` start with "What happens" and "Why it matters". When it helps, add "Size of the work" or "Risk today".
-- `fixes` start with the fix of the finding, then the other real options. When a fix has more than one action, give `steps`. Use the ids `a`, `b`, and `c`.
+- `fixes` start with the fix of the finding, then the other real options, at most six. When a fix has more than one action, give `steps`. Use the ids `a`, `b`, and `c`.
 - `glossary` defines each term on the page that a reader outside this code can miss, in one short sentence.
 - `done_well` holds one to three claims from the PR comment of the report. Check them as you check other claims.
 - `notes` hold facts about the review: agent errors, policy coverage, excluded files, and hotspot lines from the report. The builder adds the notes about git and the test merge.
@@ -82,13 +99,13 @@ Write every text in simple English:
 - Code names in backticks.
 - The current state only. Never write what changed or what an earlier run found.
 
-## Step 4: Build the page
+## Step 5: Build the page
 
 ```bash
 python3 ${CLAUDE_PLUGIN_ROOT}/lib/build-review-page.py "<REVIEW_DIR>" "<REPO_ROOT>"
 ```
 
-If it prints `error:` lines, fix `page.json` and run it again.
+The builder writes an answer-me-with-html draft and renders it with the bundled `lib/am.mjs`. If it prints `error:` lines, fix `page.json` and run it again. An `error: am: ✗ L<n>` line names a line of the draft file that the builder printed. Read that line to find the part of `page.json` to fix, often a diagram source. An `am:` line with a warning does not stop the build. Fix it when it is about your text.
 
 Done when: the builder prints `PAGE_FILE=`.
 
@@ -98,7 +115,7 @@ Return exactly:
 
 ```
 PAGE_FILE=<path>
-Findings: <n>  Claims: <n>  Read, not run: <n>  Not checked: <n>
+Findings: <n>  Claims: <n>  Read, not run: <n>  Not checked: <n>  Diagram: <class|flow>
 ```
 
 If you cannot build the page, return `error: <reason>`.
