@@ -134,9 +134,9 @@ Handle exit codes:
 
 ### Phase 7 — Ensure .gitignore
 
-If `.gitignore` does not exist, create it with `handover/\n`.
+If `.gitignore` does not exist, create it with `handover\n`.
 
-Else, check whether `handover/` is already present (any of: `^handover/?$`, with or without leading whitespace). If missing, append `handover/` on a new line (with a separating blank line if file ends mid-content).
+Else, check whether a line matches `^/?handover\s*$`. Only `handover` or `/handover` with optional trailing whitespace counts as present. Git does not match `handover/` or a line with leading whitespace against the symlink. If no line matches, append `handover` on a new line (with a separating blank line if file ends mid-content). If the file holds `handover/`, keep that line and append `handover`.
 
 ### Phase 8 — Report
 
@@ -146,7 +146,7 @@ Else, check whether `handover/` is already present (any of: `^handover/?$`, with
     APP_NAME:       $APP_NAME
     LIFEOS path:    $VAULT/01Project/$ORG/$LIFEOS_SUBPATH/handover/
     Symlink:        $PWD/handover -> (above)
-    .gitignore:     handover/ (added | already present)
+    .gitignore:     handover (added | already present)
 
 Next: /obsidian-kit:handover-new <topic>
 ```
@@ -155,5 +155,5 @@ Next: /obsidian-kit:handover-new <topic>
 
 - Never destroy a non-empty `./handover/` directory. If conflict, stop and ask the user.
 - Service mapping rows are append-only via this command. Never rewrite existing rows.
-- The .gitignore edit only adds `handover/`. It never removes or reorders existing lines.
+- The .gitignore edit only adds `handover`. It never removes or reorders existing lines. Write `handover` without a trailing slash. A pattern that ends in `/` matches only a real directory, and git treats the `./handover` symlink as a file.
 - BustDice currently uses `Devops/` instead of `Services/`. If the user picks a non-`Services/` `lifeos_subpath`, warn but allow.

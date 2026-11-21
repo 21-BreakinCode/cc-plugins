@@ -1,3 +1,7 @@
+## 2.3.1 — 2026-11-21
+
+- **fix:** `handover-init-service` adds `handover` to `.gitignore`, not `handover/`. A pattern that ends in `/` matches only a real directory, so git did not ignore the `./handover` symlink. The present check now accepts only `handover` or `/handover`. If a `.gitignore` holds only `handover/`, the command keeps that line and appends `handover`.
+
 ## 2.3.0 — 2026-10-27
 
 - **feat:** `kit.arrow`, `kit.flow`, and fork and merge arrows are now Excalidraw elbow arrows: an orthogonal path with one jog, bound in orbit mode, muted, 1.5 px, roughness 1. `straight: true` keeps a straight arrow. `kit.path` stays straight. `kit.pointer` stays curved. Arrow labels sit beside the longest run.
