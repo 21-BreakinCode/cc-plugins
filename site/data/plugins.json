@@ -1377,7 +1377,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.3.1",
+      "version": "0.4.0",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
       "zhTW": {
@@ -1402,6 +1402,14 @@
           "descriptionHtml": "Per-repo setup."
         },
         {
+          "name": "pause-work",
+          "descriptionHtml": "Pause the work of this session."
+        },
+        {
+          "name": "resume-work",
+          "descriptionHtml": "Resume paused work from its resume note."
+        },
+        {
           "name": "run-retro",
           "descriptionHtml": "Review the past week of wStack tasks, propose improvements, and apply the ones the user picks."
         },
@@ -1419,6 +1427,80 @@
       ],
       "config": [],
       "changelog": [
+        {
+          "version": "0.4.0",
+          "date": "2026-11-22",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>/wstack:pause-work</code> stops work in the middle, in any session. It writes a resume note first. Then it stops the background agents, shells, and processes that this session started. The note records what it stopped and what still runs. Inside a wStack task, it also sets the task status to <code>paused</code>."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:resume-work</code> finds the newest pause note for the current folder. It compares the git state with the note, shows the note, and goes on from the next step. It never resets or stashes. For a paused task, it prints the command that resumes the task in its own folder."
+            },
+            {
+              "type": "feat",
+              "html": "A new task status, <code>paused</code>, with <code>paused_from</code> in <code>spec.md</code>. <code>/wstack:start-task --task &lt;task_id&gt;</code> resumes a paused task, and the open-task list shows it. Notes for a session outside a task go in <code>~/.wstack/pauses/</code>."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:init-service</code> checks the service contract as its last step. If the contract exists, it reports the status. If there is none, it offers to launch a contract task. Outside herdr, it creates the task and prints the command that starts it."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:run-retro</code> walks contract drift. It resolves pending write-backs, fetches the base branch, and fast-forwards only a clean base branch. It asks which stale sections to update in the same question as the proposals. It writes the contract under the lock and records the undo under <code>## Contract</code>."
+            },
+            {
+              "type": "change",
+              "html": "<code>/wstack:run-retro</code> goes on in a week with no task folders, so the drift walk still runs."
+            },
+            {
+              "type": "change",
+              "html": "Outside herdr, a code task gets a worktree at <code>~/.wstack/tasks/&lt;task_id&gt;</code>, and you start <code>claude</code> there. A leftover <code>wstack/&lt;slug&gt;</code> branch stops the launch with exit 6."
+            },
+            {
+              "type": "change",
+              "html": "A failed launch (exit 4 or 6) sets the task to <code>cancelled</code>."
+            },
+            {
+              "type": "breaking",
+              "html": "The guard always asks. <code>WSTACK_GUARD_MODE=deny</code> and the <code>WSTACK_APPROVED=1</code> prefix are gone."
+            },
+            {
+              "type": "fix",
+              "html": "The guard also catches <code>git</code> and <code>gh</code> called by full path, and it judges each command segment. It sees a switch to the default branch behind a prefix such as <code>env</code>, <code>bash -c</code>, or <code>then</code>."
+            },
+            {
+              "type": "fix",
+              "html": "Web checks run playwright-cli in a scratch folder, pick a free port, and close the browser before they delete the folder. No browser and no <code>.playwright-cli/</code> folder stay behind."
+            },
+            {
+              "type": "fix",
+              "html": "The contract scripts handle CRLF files, accept only a hex <code>verified_commit</code>, keep file modes, and write <code>set-verified</code> in one step. <code>pending-add</code> skips duplicates. <code>apply</code> warns about a new section and takes a repeatable <code>--section</code>. If a write fails, <code>delete-section</code> exits 2."
+            },
+            {
+              "type": "fix",
+              "html": "The contract hook matches compound and full-path git commands, but not an echoed one."
+            },
+            {
+              "type": "fix",
+              "html": "The gate undo deletes the sections it added and restores <code>verified_commit</code>. A closed pull request sets its decision files to <code>withdrawn</code>, and a retried write-back adds no duplicate decisions."
+            },
+            {
+              "type": "fix",
+              "html": "The redactor keeps short counters, such as <code>max_tokens=4096</code>, and redacts every other secret value, including a 6-digit code and non-string JSON values."
+            },
+            {
+              "type": "fix",
+              "html": "The evidence step replaces old evidence lines, videos are never scaled up, and images are checked against <code>pr_media_max_mb</code>."
+            },
+            {
+              "type": "docs",
+              "html": "The README, the spec, and CLAUDE.md describe the new commands, the drift walk, and the <code>paused</code> status."
+            }
+          ]
+        },
         {
           "version": "0.3.1",
           "date": "2026-11-22",

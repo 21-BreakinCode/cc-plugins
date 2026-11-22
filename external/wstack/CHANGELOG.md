@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.4.0 - 2026-11-22
+
+- **feat:** `/wstack:pause-work` stops work in the middle, in any session. It writes a resume note first. Then it stops the background agents, shells, and processes that this session started. The note records what it stopped and what still runs. Inside a wStack task, it also sets the task status to `paused`.
+- **feat:** `/wstack:resume-work` finds the newest pause note for the current folder. It compares the git state with the note, shows the note, and goes on from the next step. It never resets or stashes. For a paused task, it prints the command that resumes the task in its own folder.
+- **feat:** A new task status, `paused`, with `paused_from` in `spec.md`. `/wstack:start-task --task <task_id>` resumes a paused task, and the open-task list shows it. Notes for a session outside a task go in `~/.wstack/pauses/`.
+- **feat:** `/wstack:init-service` checks the service contract as its last step. If the contract exists, it reports the status. If there is none, it offers to launch a contract task. Outside herdr, it creates the task and prints the command that starts it.
+- **feat:** `/wstack:run-retro` walks contract drift. It resolves pending write-backs, fetches the base branch, and fast-forwards only a clean base branch. It asks which stale sections to update in the same question as the proposals. It writes the contract under the lock and records the undo under `## Contract`.
+- **change:** `/wstack:run-retro` goes on in a week with no task folders, so the drift walk still runs.
+- **change:** Outside herdr, a code task gets a worktree at `~/.wstack/tasks/<task_id>`, and you start `claude` there. A leftover `wstack/<slug>` branch stops the launch with exit 6.
+- **change:** A failed launch (exit 4 or 6) sets the task to `cancelled`.
+- **breaking:** The guard always asks. `WSTACK_GUARD_MODE=deny` and the `WSTACK_APPROVED=1` prefix are gone.
+- **fix:** The guard also catches `git` and `gh` called by full path, and it judges each command segment. It sees a switch to the default branch behind a prefix such as `env`, `bash -c`, or `then`.
+- **fix:** Web checks run playwright-cli in a scratch folder, pick a free port, and close the browser before they delete the folder. No browser and no `.playwright-cli/` folder stay behind.
+- **fix:** The contract scripts handle CRLF files, accept only a hex `verified_commit`, keep file modes, and write `set-verified` in one step. `pending-add` skips duplicates. `apply` warns about a new section and takes a repeatable `--section`. If a write fails, `delete-section` exits 2.
+- **fix:** The contract hook matches compound and full-path git commands, but not an echoed one.
+- **fix:** The gate undo deletes the sections it added and restores `verified_commit`. A closed pull request sets its decision files to `withdrawn`, and a retried write-back adds no duplicate decisions.
+- **fix:** The redactor keeps short counters, such as `max_tokens=4096`, and redacts every other secret value, including a 6-digit code and non-string JSON values.
+- **fix:** The evidence step replaces old evidence lines, videos are never scaled up, and images are checked against `pr_media_max_mb`.
+- **docs:** The README, the spec, and CLAUDE.md describe the new commands, the drift walk, and the `paused` status.
+
 ## 0.3.1 - 2026-11-22
 
 - **fix:** The guard asks before a push that follows a switch to the default branch. It also asks for `git push --all`, for a push inside parentheses, and for `pnpm publish`, `yarn publish`, and `cargo publish`.
