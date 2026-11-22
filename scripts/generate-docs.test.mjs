@@ -371,3 +371,9 @@ test('local plugins keep their marketplace install', () => {
   assert.equal(alpha.install, 'claude plugin install alpha@cc-plugins');
   assert.equal(alpha.external, null);
 });
+
+test('catalog links an external plugin to its repo, not a README', () => {
+  const md = renderCatalog(modelWithBeta());
+  assert.ok(md.includes('[beta](https://github.com/Org/beta)'));
+  assert.ok(!md.includes('/beta/README.md'));
+});

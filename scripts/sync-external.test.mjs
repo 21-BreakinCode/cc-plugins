@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -51,4 +51,32 @@ test('sync without a manifest fails', () => {
   const { repoRoot } = setup();
   const empty = mkdtempSync(join(tmpdir(), 'sync-empty-'));
   assert.throws(() => syncExternal(empty, repoRoot), /plugin\.json/);
+});
+
+test('sync rejects an unsafe plugin name and deletes nothing', () => {
+  for (const name of ['..', '../x', '', '.', undefined]) {
+    const { repoRoot, plugin } = setup();
+    mkdirSync(join(repoRoot, 'keep'));
+    writeFileSync(join(repoRoot, 'keep/f'), 'x');
+    mkdirSync(join(repoRoot, 'external/other'), { recursive: true });
+    writeFileSync(join(repoRoot, 'external/other/f'), 'x');
+    writeFileSync(join(plugin, '.claude-plugin/plugin.json'), JSON.stringify({ name, version: '1.0.0' }));
+    assert.throws(() => syncExternal(plugin, repoRoot), /invalid plugin name/, String(name));
+    assert.ok(existsSync(join(repoRoot, 'keep/f')));
+    assert.ok(existsSync(join(repoRoot, 'external/other/f')));
+  }
+});
+
+test('sync skips a skill with no front matter', () => {
+  const { repoRoot, plugin } = setup();
+  mkdirSync(join(plugin, 'skills/bare'));
+  writeFileSync(join(plugin, 'skills/bare/SKILL.md'), 'Intro\n\n---\n\nBODY TEXT\n');
+  syncExternal(plugin, repoRoot);
+  assert.ok(!existsSync(join(repoRoot, 'external/demo/skills/bare')));
+});
+
+test('sync leaves no temp folder behind', () => {
+  const { repoRoot, plugin } = setup();
+  syncExternal(plugin, repoRoot);
+  assert.deepEqual(readdirSync(join(repoRoot, 'external')), ['demo']);
 });

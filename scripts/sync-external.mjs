@@ -1,18 +1,25 @@
 // Copy the catalog-visible parts of a plugin from another repository into external/<name>/.
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { parseFrontmatter } from './lib/frontmatter.mjs';
 
 const CLOSING_FENCE = '\n---';
+const PLUGIN_SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 export function syncExternal(pluginFolder, repoRoot) {
   const manifestPath = join(pluginFolder, '.claude-plugin/plugin.json');
   if (!existsSync(manifestPath)) throw new Error(`missing plugin manifest: ${manifestPath}`);
   const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
 
-  const target = join(repoRoot, 'external', manifest.name);
+  if (typeof manifest.name !== 'string' || !PLUGIN_SLUG.test(manifest.name)) {
+    throw new Error(`invalid plugin name in ${manifestPath}: ${JSON.stringify(manifest.name)}`);
+  }
+
+  const externalRoot = join(repoRoot, 'external');
+  const finalTarget = join(externalRoot, manifest.name);
+  const target = join(externalRoot, `.${manifest.name}.tmp-${process.pid}`);
   rmSync(target, { recursive: true, force: true });
   mkdirSync(join(target, '.claude-plugin'), { recursive: true });
   cpSync(manifestPath, join(target, '.claude-plugin/plugin.json'));
@@ -26,12 +33,18 @@ export function syncExternal(pluginFolder, repoRoot) {
     const skillPath = join(skillsFolder, dir, 'SKILL.md');
     if (!existsSync(skillPath)) continue;
     const text = readFileSync(skillPath, 'utf8');
+    if (!text.startsWith('---')) continue;
     if (parseFrontmatter(text)['user-invocable'] === 'false') continue;
     const frontMatterEnd = text.indexOf(CLOSING_FENCE, 3);
-    if (frontMatterEnd === -1) continue;
+    if (frontMatterEnd === -1) {
+      console.error(`warning: skipped ${skillPath}: front matter has no closing ---`);
+      continue;
+    }
     mkdirSync(join(target, 'skills', dir), { recursive: true });
     writeFileSync(join(target, 'skills', dir, 'SKILL.md'), `${text.slice(0, frontMatterEnd + CLOSING_FENCE.length)}\n`);
   }
+  rmSync(finalTarget, { recursive: true, force: true });
+  renameSync(target, finalTarget);
   return manifest.version;
 }
 
