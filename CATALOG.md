@@ -102,12 +102,12 @@ Two skills. distill captures your voice from writing samples into a reusable ton
 
 **Skills** · `distill` · `rewrite`
 
-### [obsidian-kit](./obsidian-kit/README.md) · `v2.3.1`
+### [obsidian-kit](./obsidian-kit/README.md) · `v3.0.0`
 
 *One plugin for the vault: draw, format, tag*
 
-create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. handover-new, handover-wrap-up, handover-init-org, and handover-init-service create and wrap up handover documents backed by the vault. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
+create-excali and update-excali build Excalidraw drawings through ExcalidrawAutomate, lint the geometry, and review the real PNG render. format-note writes and checks notes by their note-type (map, concept, takeaway, literature, fleeting) and keeps the ASCII-diagram and callout rules of the old visualize skill. migrate-notes sets note-type across a vault and renames map notes, as one approved plan. audit-tags finds false, duplicate, typo, and off-taxonomy tags and applies one approved rename plan with backups. session-wrap-up, session-pick-up, and session-recommend turn a working session into reflection take-aways and, after one approval, Zettelkasten cards in the vault. A dedicated skill writes and checks controlled Traditional Chinese inside the vault. A SessionStart hook primes Claude to treat the obsidian CLI as the source of truth. Vault opinions live in the vault file .obsidian-kit.json. No cross-plugin deps.
 
 **Install** · `claude plugin install obsidian-kit@21-breakincode`
 
-**Commands** · `/obsidian-kit:handover-init-org` · `/obsidian-kit:handover-init-service` · `/obsidian-kit:handover-new` · `/obsidian-kit:handover-wrap-up`
+**Skills** · `audit-tags` · `create-excali` · `format-note` · `migrate-notes` · `obsidian-bases` · `obsidian-markdown` · `session-pick-up` · `session-recommend` · `session-wrap-up` · `simple-mandarin` · `update-excali`

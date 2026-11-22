@@ -1,3 +1,15 @@
+## 3.0.0 — 2026-11-22
+
+- **BREAKING:** the handover commands moved to the wStack plugin. obsidian-kit no longer ships them, their hook, or their scripts. Install wStack 0.2.0 or later and use the new commands.
+- **refactor:** `vault.py` no longer holds the handover helpers. The `handoverArchiveRoot` key in `.obsidian-kit.json` has no effect. `OBSIDIAN_KIT_OFFER_HANDOVER` has no effect.
+
+| Removed from obsidian-kit | Use in wStack 0.2.0 |
+| --- | --- |
+| `/obsidian-kit:handover-init-org` | `/wstack:init-org` |
+| `/obsidian-kit:handover-init-service` | `/wstack:init-service` |
+| `/obsidian-kit:handover-new` | `/wstack:create-handover` |
+| `/obsidian-kit:handover-wrap-up` | `/wstack:wrap-up-handovers` |
+
 ## 2.3.1 — 2026-11-21
 
 - **fix:** `handover-init-service` adds `handover` to `.gitignore`, not `handover/`. A pattern that ends in `/` matches only a real directory, so git did not ignore the `./handover` symlink. The present check now accepts only `handover` or `/handover`. If a `.gitignore` holds only `handover/`, the command keeps that line and appends `handover`.
