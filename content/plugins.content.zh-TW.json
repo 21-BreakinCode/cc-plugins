@@ -70,6 +70,16 @@
         "text": "apple-notes 透過 macnotesapp 的 notes 指令，建立、讀取、編輯、移動與刪除 Apple 備忘錄。它用 id 選擇備忘錄，修改前先讀取內容。每次修改前，它都會請你核准，在終端機或聊天機器人都一樣。macOS 無法讀取 Apple 健康，所以 apple-health 從 iPhone 捷徑的匯出檔同步體重與體脂，寫進 Markdown 身體紀錄。腳本只用 Python 標準函式庫。它只新增資料列、填入空白格子，絕不修改已有的數值。vault 路徑放在 vault 的 .apple-kit.json 檔。不依賴其他外掛。",
         "translatedFrom": "apple-notes creates, reads, edits, moves, and deletes Apple Notes through the notes command of macnotesapp. It selects notes by id, reads a note before it changes it, and asks for approval before every change, in a terminal or over a chat bot. apple-health syncs weight and body fat from an iPhone Shortcut export into a Markdown body log, because macOS cannot read Apple Health. The script uses the Python standard library only, adds rows, fills empty cells, and never changes a value. Vault paths live in the vault file .apple-kit.json. No cross-plugin deps."
       }
+    },
+    "wstack": {
+      "tagline": {
+        "text": "任務工作流程：確認規格、執行、以證據驗證、交付",
+        "translatedFrom": "A task workflow: confirm the spec, execute, verify with evidence, deliver"
+      },
+      "summary": {
+        "text": "wStack 讓每個任務在自己的 herdr session 裡跑成一條流程。任務筆記存放在你的 Obsidian vault，證據則貼在 pull request 上。交接指令讓工作可以在不同 session 之間傳遞。服務合約記錄每個服務的運作方式，漂移檢查會找出與程式碼不再相符的合約。",
+        "translatedFrom": "wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code."
+      }
     }
   }
 }

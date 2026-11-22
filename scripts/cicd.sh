@@ -33,6 +33,7 @@ case "$cmd" in
   VERIFY)               run_test; run_check ;;       # full CI gate
   SERVE)                run_serve "${2:-8000}" ;;
   PREVIEW)              run_preview "${2:-8000}" ;;
+  SYNC)                 node "$ROOT/scripts/sync-external.mjs" "${2:?usage: SYNC <plugin folder>}" ;;
   HOOKS)                git -C "$ROOT" config core.hooksPath .githooks && echo "✓ pre-commit hook enabled (core.hooksPath=.githooks)" ;;
   HELP|-H|--HELP)
     cat <<'EOF'
@@ -44,6 +45,7 @@ usage: ./scripts/cicd.sh <COMMAND>
   VERIFY          TEST + CHECK — the full CI gate
   SERVE [PORT]    Serve the existing site locally (default port 8000)
   PREVIEW [PORT]  Regenerate, open your browser, and serve the site (default port 8000)
+  SYNC <FOLDER>   Snapshot an external plugin folder into external/<name>/
   HOOKS           Enable the repo's pre-commit hook (git config core.hooksPath .githooks)
 
 Commands are case-insensitive — GEN and gen both work.

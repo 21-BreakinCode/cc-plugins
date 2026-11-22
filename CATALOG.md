@@ -3,7 +3,7 @@
 > Auto-generated from `.claude-plugin/marketplace.json` + `content/plugins.content.json`.
 > Do not edit by hand — run `./scripts/cicd.sh GEN`.
 >
-> **21-breakincode** v2.2.0 · 7 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
+> **21-breakincode** v2.2.0 · 8 plugins · [`21-BreakinCode/cc-plugins`](https://github.com/21-BreakinCode/cc-plugins)
 
 ## Install everything
 
@@ -15,7 +15,9 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
   claude plugin install obsidian-kit@21-breakincode && \
-  claude plugin install apple-kit@21-breakincode
+  claude plugin install apple-kit@21-breakincode && \
+  claude plugin marketplace add 21-BreakinCode/wStack && \
+  claude plugin install wstack@wstack
 ```
 
 ## Update everything
@@ -31,7 +33,9 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
   claude plugin update obsidian-kit@21-breakincode && \
-  claude plugin update apple-kit@21-breakincode
+  claude plugin update apple-kit@21-breakincode && \
+  claude plugin marketplace update wstack && \
+  claude plugin update wstack@wstack
 ```
 
 ## Measure & Improve
@@ -89,6 +93,16 @@ apple-notes creates, reads, edits, moves, and deletes Apple Notes through the no
 **Install** · `claude plugin install apple-kit@21-breakincode`
 
 **Skills** · `apple-health` · `apple-notes`
+
+### [wstack](./external/wstack/README.md) · `v0.3.1`
+
+*A task workflow: confirm the spec, execute, verify with evidence, deliver*
+
+wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.
+
+**Install** · `claude plugin marketplace add 21-BreakinCode/wStack && claude plugin install wstack@wstack`
+
+**Skills** · `create-handover` · `init-org` · `init-service` · `run-retro` · `start-task` · `wrap-up-handovers`
 
 ## Writing & Content
 
