@@ -57,7 +57,7 @@
     },
     {
       "id": "workflow",
-      "label": "Workflow",
+      "label": "Workflow & Handover",
       "plugins": [
         "adhd-review",
         "apple-kit",
