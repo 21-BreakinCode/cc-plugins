@@ -1,0 +1,55 @@
+{
+  "name": "wstack",
+  "displayName": "wStack",
+  "version": "0.3.1",
+  "description": "A task workflow for Claude Code: confirm the spec, execute, verify with evidence, and deliver.",
+  "dependencies": ["answer-me-with-html@answer-me-with-html"],
+  "userConfig": {
+    "vault_path": {
+      "type": "directory",
+      "title": "Vault path",
+      "description": "Absolute path of the Obsidian vault.",
+      "required": true
+    },
+    "tasks_dir": {
+      "type": "string",
+      "title": "Tasks folder",
+      "description": "Task folder root, relative to the vault path.",
+      "default": "Workflow/Tasks"
+    },
+    "retry_limit": {
+      "type": "number",
+      "title": "Retry limit",
+      "description": "Maximum fix-and-verify loops before the task waits for you.",
+      "default": 3
+    },
+    "r2_bucket": {
+      "type": "string",
+      "title": "R2 bucket",
+      "description": "R2 bucket name for evidence. Leave empty for local-only evidence."
+    },
+    "evidence_domain": {
+      "type": "string",
+      "title": "Evidence domain",
+      "description": "Custom domain protected by Cloudflare Access, for example evidence.example.com."
+    },
+    "evidence_retention_days": {
+      "type": "number",
+      "title": "Evidence retention days",
+      "description": "Days before the R2 lifecycle rule deletes evidence.",
+      "default": 30
+    },
+    "local_evidence_only_repos": {
+      "type": "string",
+      "title": "Local-only evidence repos",
+      "description": "Repository names (owner/repo) whose evidence never leaves this Mac.",
+      "multiple": true
+    },
+    "pr_media_max_mb": {
+      "type": "number",
+      "title": "PR media size limit (MB)",
+      "description": "Size limit for each pull request attachment.",
+      "default": 10
+    }
+  }
+}

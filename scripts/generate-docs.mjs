@@ -64,7 +64,10 @@ function makeReadPlugin() {
     const changelogPath = join(dir, 'CHANGELOG.md');
     const changelog = existsSync(changelogPath) ? readFileSync(changelogPath, 'utf8') : '';
 
-    return { commands, skills, changelog };
+    const manifestPath = join(dir, '.claude-plugin', 'plugin.json');
+    const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, 'utf8')) : null;
+
+    return { commands, skills, changelog, manifest };
   };
 }
 
@@ -78,7 +81,7 @@ function buildOutputs() {
     { path: 'CATALOG.md', body: renderCatalog(model) },
     { path: 'site/data/plugins.json', body: `${JSON.stringify(buildSiteData(model, zhTW.byPlugin), null, 2)}\n` },
   ];
-  for (const plugin of model.plugins) {
+  for (const plugin of model.plugins.filter((p) => !p.external)) {
     outputs.push({ path: join(plugin.source, 'README.md'), body: renderReadme(plugin, model) });
   }
   return { outputs, translationWarnings: zhTW.warnings };

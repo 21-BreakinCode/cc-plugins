@@ -110,6 +110,20 @@
       "category": "workflow",
       "dependsOn": [],
       "config": []
+    },
+    "wstack": {
+      "tagline": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
+      "summary": "wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.",
+      "category": "workflow",
+      "dependsOn": [
+        "answer-me-with-html@answer-me-with-html"
+      ],
+      "config": [],
+      "external": {
+        "marketplace": "wstack",
+        "repo": "21-BreakinCode/wStack",
+        "source": "external/wstack"
+      }
     }
   }
 }

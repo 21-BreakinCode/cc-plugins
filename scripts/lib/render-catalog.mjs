@@ -17,7 +17,7 @@ function surfaceLine(plugin) {
 
 function pluginBlock(plugin) {
   return [
-    `### [${plugin.name}](./${sourceBasename(plugin.source)}/README.md) · \`v${plugin.version}\``,
+    `### [${plugin.name}](${plugin.external ? `https://github.com/${plugin.external.repo}` : `./${sourceBasename(plugin.source)}/README.md`}) · \`v${plugin.version}\``,
     '',
     `*${plugin.tagline}*`,
     '',

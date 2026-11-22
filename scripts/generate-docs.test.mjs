@@ -319,3 +319,61 @@ test('buildSiteData leaves a stale field out of zhTW', () => {
   const siteData = buildSiteData({ plugins: [sitePlugin('alpha')] }, { alpha: { tagline: '標語' } });
   assert.deepEqual(siteData.plugins[0].zhTW, { taglineHtml: '標語' });
 });
+
+// --- external plugins ---
+const betaExternal = { marketplace: 'beta-mkt', repo: 'Org/beta', source: './ext/beta' };
+const contentWithBeta = {
+  ...content,
+  plugins: {
+    ...content.plugins,
+    beta: { tagline: 'B tag', summary: 'B summary', category: 'cat', external: betaExternal },
+  },
+};
+const betaManifest = { name: 'beta', version: '2.0.0', description: 'Beta one-liner' };
+const readWithBeta = (manifest) => (name, source) =>
+  name === 'beta' ? { commands: [], skills: [], manifest } : fakeRead(name, source);
+const modelWithBeta = (manifest = betaManifest) =>
+  buildModel({ marketplace, content: contentWithBeta, readPlugin: readWithBeta(manifest) });
+const betaOf = (m) => m.plugins.find((p) => p.name === 'beta');
+
+test('external plugin takes version and one-liner from its manifest', () => {
+  assert.equal(betaOf(modelWithBeta()).version, '2.0.0');
+  assert.equal(betaOf(modelWithBeta()).oneLiner, 'Beta one-liner');
+});
+
+test('external plugin install adds its own marketplace', () => {
+  assert.equal(
+    betaOf(modelWithBeta()).install,
+    'claude plugin marketplace add Org/beta && claude plugin install beta@beta-mkt',
+  );
+});
+
+test('install-all and update-all include the external marketplace', () => {
+  const { cli, update } = modelWithBeta().installAll;
+  assert.ok(cli.includes('claude plugin marketplace add Org/beta'));
+  assert.ok(cli.includes('claude plugin install beta@beta-mkt'));
+  assert.ok(update.includes('claude plugin marketplace update beta-mkt'));
+  assert.ok(update.includes('claude plugin update beta@beta-mkt'));
+});
+
+test('settings snippet knows the external marketplace', () => {
+  const { extraKnownMarketplaces, enabledPlugins } = modelWithBeta().installAll.settings;
+  assert.equal(extraKnownMarketplaces['beta-mkt'].source.repo, 'Org/beta');
+  assert.equal(enabledPlugins['beta@beta-mkt'], true);
+});
+
+test('external plugin without a manifest version throws', () => {
+  assert.throws(() => modelWithBeta(null), /beta/);
+});
+
+test('local plugins keep their marketplace install', () => {
+  const alpha = modelWithBeta().plugins.find((p) => p.name === 'alpha');
+  assert.equal(alpha.install, 'claude plugin install alpha@cc-plugins');
+  assert.equal(alpha.external, null);
+});
+
+test('catalog links an external plugin to its repo, not a README', () => {
+  const md = renderCatalog(modelWithBeta());
+  assert.ok(md.includes('[beta](https://github.com/Org/beta)'));
+  assert.ok(!md.includes('/beta/README.md'));
+});
