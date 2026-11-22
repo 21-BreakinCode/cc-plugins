@@ -19,8 +19,8 @@ wStack keeps a service contract for each mapped service, and checks tasks agains
 - **feat:** A write-back in Deliver. The contract changes after the pull request merges. A closed pull request drops its pending item.
 - **feat:** A `contract` work type that sets up or rebuilds a contract. Deliver moves old vault files into `_archive/<task_id>/`.
 - **feat:** Two agents: `contract-reader` and `contract-historian`. The reviewer reports a `contract-mismatch` finding.
-- **feat:** A repository with no service mapping gets no contract. A `contract` task stops and says to run `/wstack:init-service`.
-- **feat:** Every contract write takes the lock folder `<contract>.lock`. A busy lock stops the task.
+- **change:** A repository with no service mapping gets no contract. A `contract` task stops and says to run `/wstack:init-service`.
+- **change:** Every contract write takes the lock folder `<contract>.lock`. A busy lock stops the task.
 
 ## 0.2.0 - 2026-11-21
 
@@ -34,10 +34,10 @@ Four skills have new names. The handover commands of obsidian-kit 2.3.1 now live
 - **feat:** `/wstack:init-service` (was `/obsidian-kit:handover-init-service`).
 - **feat:** `/wstack:create-handover` (was `/obsidian-kit:handover-new`).
 - **feat:** `/wstack:wrap-up-handovers` (was `/obsidian-kit:handover-wrap-up`).
-- **change:** The vault path comes from the wStack `vault_path` setting, not from `OBSIDIAN_KIT_VAULT`.
-- **change:** `init-service` writes `/handover` to the local git exclude file. It never edits `.gitignore`.
-- **change:** The resolvers work inside herdr worktrees and read block-list `github_orgs`.
-- **change:** The archive root is fixed at `04Archive`.
+- **change:** In wStack, the vault path comes from the wStack `vault_path` setting, not from `OBSIDIAN_KIT_VAULT`.
+- **change:** In wStack, `init-service` writes `/handover` to the local git exclude file. It never edits `.gitignore`.
+- **change:** In wStack, the resolvers work inside herdr worktrees and read block-list `github_orgs`.
+- **change:** In wStack, the archive root is fixed at `04Archive`.
 
 ## 0.1.1 - 2026-11-20
 

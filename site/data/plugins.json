@@ -1478,11 +1478,11 @@
               "html": "Two agents: <code>contract-reader</code> and <code>contract-historian</code>. The reviewer reports a <code>contract-mismatch</code> finding."
             },
             {
-              "type": "feat",
+              "type": "change",
               "html": "A repository with no service mapping gets no contract. A <code>contract</code> task stops and says to run <code>/wstack:init-service</code>."
             },
             {
-              "type": "feat",
+              "type": "change",
               "html": "Every contract write takes the lock folder <code>&lt;contract&gt;.lock</code>. A busy lock stops the task."
             }
           ]
@@ -1525,19 +1525,19 @@
             },
             {
               "type": "change",
-              "html": "The vault path comes from the wStack <code>vault_path</code> setting, not from <code>OBSIDIAN_KIT_VAULT</code>."
+              "html": "In wStack, the vault path comes from the wStack <code>vault_path</code> setting, not from <code>OBSIDIAN_KIT_VAULT</code>."
             },
             {
               "type": "change",
-              "html": "<code>init-service</code> writes <code>/handover</code> to the local git exclude file. It never edits <code>.gitignore</code>."
+              "html": "In wStack, <code>init-service</code> writes <code>/handover</code> to the local git exclude file. It never edits <code>.gitignore</code>."
             },
             {
               "type": "change",
-              "html": "The resolvers work inside herdr worktrees and read block-list <code>github_orgs</code>."
+              "html": "In wStack, the resolvers work inside herdr worktrees and read block-list <code>github_orgs</code>."
             },
             {
               "type": "change",
-              "html": "The archive root is fixed at <code>04Archive</code>."
+              "html": "In wStack, the archive root is fixed at <code>04Archive</code>."
             }
           ]
         },
