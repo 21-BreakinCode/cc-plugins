@@ -1377,7 +1377,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
       "zhTW": {
@@ -1427,6 +1427,40 @@
       ],
       "config": [],
       "changelog": [
+        {
+          "version": "0.4.1",
+          "date": "2026-11-23",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "The contract scripts reject a block-style YAML list for <code>ignore</code> or <code>pending</code>. Before, such a list read as empty, and the check reported <code>fresh</code>. Now <code>contract-check.sh</code> and <code>contract-edit.sh</code> exit 2 and name the key. A blank line or a comment line before the first item does not hide the list."
+            },
+            {
+              "type": "fix",
+              "html": "<code>contract-check.sh</code> exits 2 on a missing or empty argument. Before, it exited 1, which means stale."
+            },
+            {
+              "type": "fix",
+              "html": "The guard no longer asks for a command that only reads a file that names a guarded command, such as <code>cat scripts/evidence-delete.sh</code>. Every part of the command must be a read-only tool. The tools are <code>cat</code>, <code>head</code>, <code>tail</code>, <code>grep</code>, <code>wc</code>, <code>ls</code>, <code>file</code>, <code>stat</code>, <code>diff</code>, and <code>nl</code>. The git commands are <code>diff</code>, <code>show</code>, <code>log</code>, <code>blame</code>, and <code>status</code>. The tool must be called by name and not by path. A git option before the subcommand other than <code>-C</code>, <code>--no-pager</code>, <code>-P</code>, or <code>--no-optional-locks</code> gets the normal check. So does a command that runs other commands, for example with <code>bash</code>, <code>eval</code>, <code>xargs</code>, or <code>-exec</code>. A backtick or a <code>$</code> expansion other than a plain <code>$name</code> also gets the normal check. A redirect with <code>&gt;</code> also gets the normal check."
+            },
+            {
+              "type": "fix",
+              "html": "The guard also asks before <code>yarn npm publish</code>."
+            },
+            {
+              "type": "fix",
+              "html": "The Deliver contract undo also removes the empty <code>decisions/</code> and <code>_archive/</code> folders."
+            },
+            {
+              "type": "fix",
+              "html": "The contract tag uses the same kebab rule as <code>create-handover</code>, so the org <code>BreakinCode</code> gives <code>project/breakin-code/&lt;service&gt;</code>."
+            },
+            {
+              "type": "docs",
+              "html": "The text in <code>start-task/references/confirmation.md</code> says where the gate changes the contract (step G4 and step 9). The <code>contract-edit.sh</code> comment no longer claims it is the only writer."
+            }
+          ]
+        },
         {
           "version": "0.4.0",
           "date": "2026-11-22",

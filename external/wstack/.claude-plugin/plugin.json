@@ -1,7 +1,7 @@
 {
   "name": "wstack",
   "displayName": "wStack",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A task workflow for Claude Code: confirm the spec, execute, verify with evidence, and deliver.",
   "dependencies": ["answer-me-with-html@answer-me-with-html"],
   "userConfig": {

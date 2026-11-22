@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.4.1 - 2026-11-23
+
+- **fix:** The contract scripts reject a block-style YAML list for `ignore` or `pending`. Before, such a list read as empty, and the check reported `fresh`. Now `contract-check.sh` and `contract-edit.sh` exit 2 and name the key. A blank line or a comment line before the first item does not hide the list.
+- **fix:** `contract-check.sh` exits 2 on a missing or empty argument. Before, it exited 1, which means stale.
+- **fix:** The guard no longer asks for a command that only reads a file that names a guarded command, such as `cat scripts/evidence-delete.sh`. Every part of the command must be a read-only tool. The tools are `cat`, `head`, `tail`, `grep`, `wc`, `ls`, `file`, `stat`, `diff`, and `nl`. The git commands are `diff`, `show`, `log`, `blame`, and `status`. The tool must be called by name and not by path. A git option before the subcommand other than `-C`, `--no-pager`, `-P`, or `--no-optional-locks` gets the normal check. So does a command that runs other commands, for example with `bash`, `eval`, `xargs`, or `-exec`. A backtick or a `$` expansion other than a plain `$name` also gets the normal check. A redirect with `>` also gets the normal check.
+- **fix:** The guard also asks before `yarn npm publish`.
+- **fix:** The Deliver contract undo also removes the empty `decisions/` and `_archive/` folders.
+- **fix:** The contract tag uses the same kebab rule as `create-handover`, so the org `BreakinCode` gives `project/breakin-code/<service>`.
+- **docs:** The text in `start-task/references/confirmation.md` says where the gate changes the contract (step G4 and step 9). The `contract-edit.sh` comment no longer claims it is the only writer.
+
 ## 0.4.0 - 2026-11-22
 
 - **feat:** `/wstack:pause-work` stops work in the middle, in any session. It writes a resume note first. Then it stops the background agents, shells, and processes that this session started. The note records what it stopped and what still runs. Inside a wStack task, it also sets the task status to `paused`.
