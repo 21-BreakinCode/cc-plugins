@@ -1,4 +1,4 @@
-import { installOne, cliOneLiner, settingsSnippet, updateAllCli } from './install.mjs';
+import { installOne, installExternal, cliOneLiner, settingsSnippet, updateAllCli } from './install.mjs';
 
 export function commandName(pluginName, fileBase) {
   return `/${pluginName}:${fileBase}`;
@@ -51,8 +51,39 @@ export function buildModel({ marketplace, content, readPlugin }) {
       commands: harvested.commands ?? [],
       skills: harvested.skills ?? [],
       changelog: harvested.changelog ?? '',
+      external: null,
     };
   });
+
+  const externalPlugins = Object.entries(content.plugins)
+    .filter(([, c]) => c.external)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([pluginName, c]) => {
+      const { marketplace: externalMarketplace, repo: externalRepo, source } = c.external;
+      const harvested = readPlugin(pluginName, source) ?? {};
+      const manifest = harvested.manifest;
+      if (!manifest?.version) {
+        throw new Error(`External plugin "${pluginName}" has no version in ${source}/.claude-plugin/plugin.json`);
+      }
+      return {
+        name: pluginName,
+        source,
+        version: manifest.version,
+        oneLiner: manifest.description ?? '',
+        tagline: c.tagline ?? '',
+        summary: c.summary ?? '',
+        architecture: c.architecture ?? '',
+        category: c.category ?? '',
+        dependsOn: c.dependsOn ?? [],
+        config: c.config ?? [],
+        install: installExternal(pluginName, externalMarketplace, externalRepo),
+        commands: harvested.commands ?? [],
+        skills: harvested.skills ?? [],
+        changelog: harvested.changelog ?? '',
+        external: c.external,
+      };
+    });
+  plugins.push(...externalPlugins);
 
   const categories = (content.categories ?? []).map((cat) => ({
     id: cat.id,
