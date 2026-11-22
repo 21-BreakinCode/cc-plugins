@@ -17,7 +17,7 @@ export function cliOneLiner(model) {
     if (p.external) lines.push(`claude plugin marketplace add ${p.external.repo}`);
     lines.push(installOne(p.name, p.external?.marketplace ?? name));
   }
-  return lines.join(' && \\\n  ');
+  return [...new Set(lines)].join(' && \\\n  ');
 }
 
 // "Update everything": refresh the catalog (by marketplace name, not repo), then
@@ -29,7 +29,7 @@ export function updateAllCli(model) {
     if (p.external) lines.push(`claude plugin marketplace update ${p.external.marketplace}`);
     lines.push(`claude plugin update ${p.name}@${p.external?.marketplace ?? name}`);
   }
-  return lines.join(' && \\\n  ');
+  return [...new Set(lines)].join(' && \\\n  ');
 }
 
 export function settingsSnippet(model) {
