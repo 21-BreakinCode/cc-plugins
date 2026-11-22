@@ -57,7 +57,7 @@
     },
     {
       "id": "workflow",
-      "label": "Workflow & Handover",
+      "label": "Workflow",
       "plugins": [
         "adhd-review",
         "apple-kit",
@@ -1049,7 +1049,7 @@
         },
         {
           "name": "simple-mandarin",
-          "descriptionHtml": "|"
+          "descriptionHtml": "Write or rewrite technical text in controlled Traditional Chinese (Taiwan) in the spirit of ASD-STE100 Simplified Technical English: short…"
         },
         {
           "name": "update-excali",

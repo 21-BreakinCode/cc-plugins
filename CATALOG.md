@@ -72,7 +72,7 @@ A Stop hook that enforces provable claims. When the finished turn asserts a **FA
 
 **Commands** · `/receipts:receipts`
 
-## Workflow & Handover
+## Workflow
 
 ### [adhd-review](./adhd-review/README.md) · `v0.7.0`
 

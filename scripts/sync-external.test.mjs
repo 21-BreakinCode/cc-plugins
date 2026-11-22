@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, rmSync, writeFileSync, readFileSync, existsSync, readdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -79,4 +79,27 @@ test('sync leaves no temp folder behind', () => {
   const { repoRoot, plugin } = setup();
   syncExternal(plugin, repoRoot);
   assert.deepEqual(readdirSync(join(repoRoot, 'external')), ['demo']);
+});
+
+test('sync removes its temp folder when the copy fails', () => {
+  const { repoRoot, plugin } = setup();
+  rmSync(join(plugin, 'CHANGELOG.md'));
+  mkdirSync(join(plugin, 'CHANGELOG.md'));
+  assert.throws(() => syncExternal(plugin, repoRoot));
+  const leftovers = readdirSync(join(repoRoot, 'external')).filter((name) => name.includes('.tmp-'));
+  assert.deepEqual(leftovers, []);
+});
+
+test('sync warns about a skill with no front matter', () => {
+  const { repoRoot, plugin } = setup();
+  writeFileSync(join(plugin, 'skills/go/SKILL.md'), 'no front matter\n');
+  const original = console.error;
+  const warnings = [];
+  console.error = (message) => warnings.push(message);
+  try {
+    syncExternal(plugin, repoRoot);
+  } finally {
+    console.error = original;
+  }
+  assert.ok(warnings.some((message) => message.includes('no front matter')));
 });

@@ -21,30 +21,37 @@ export function syncExternal(pluginFolder, repoRoot) {
   const finalTarget = join(externalRoot, manifest.name);
   const target = join(externalRoot, `.${manifest.name}.tmp-${process.pid}`);
   rmSync(target, { recursive: true, force: true });
-  mkdirSync(join(target, '.claude-plugin'), { recursive: true });
-  cpSync(manifestPath, join(target, '.claude-plugin/plugin.json'));
-  if (existsSync(join(pluginFolder, 'CHANGELOG.md'))) {
-    cpSync(join(pluginFolder, 'CHANGELOG.md'), join(target, 'CHANGELOG.md'));
-  }
-
-  const skillsFolder = join(pluginFolder, 'skills');
-  const skillDirs = existsSync(skillsFolder) ? readdirSync(skillsFolder, { withFileTypes: true }).filter((d) => d.isDirectory()) : [];
-  for (const { name: dir } of skillDirs) {
-    const skillPath = join(skillsFolder, dir, 'SKILL.md');
-    if (!existsSync(skillPath)) continue;
-    const text = readFileSync(skillPath, 'utf8');
-    if (!text.startsWith('---')) continue;
-    if (parseFrontmatter(text)['user-invocable'] === 'false') continue;
-    const frontMatterEnd = text.indexOf(CLOSING_FENCE, 3);
-    if (frontMatterEnd === -1) {
-      console.error(`warning: skipped ${skillPath}: front matter has no closing ---`);
-      continue;
+  try {
+    mkdirSync(join(target, '.claude-plugin'), { recursive: true });
+    cpSync(manifestPath, join(target, '.claude-plugin/plugin.json'));
+    if (existsSync(join(pluginFolder, 'CHANGELOG.md'))) {
+      cpSync(join(pluginFolder, 'CHANGELOG.md'), join(target, 'CHANGELOG.md'));
     }
-    mkdirSync(join(target, 'skills', dir), { recursive: true });
-    writeFileSync(join(target, 'skills', dir, 'SKILL.md'), `${text.slice(0, frontMatterEnd + CLOSING_FENCE.length)}\n`);
+
+    const skillsFolder = join(pluginFolder, 'skills');
+    const skillDirs = existsSync(skillsFolder) ? readdirSync(skillsFolder, { withFileTypes: true }).filter((d) => d.isDirectory()) : [];
+    for (const { name: dir } of skillDirs) {
+      const skillPath = join(skillsFolder, dir, 'SKILL.md');
+      if (!existsSync(skillPath)) continue;
+      const text = readFileSync(skillPath, 'utf8');
+      if (!text.startsWith('---')) {
+        console.error(`warning: skipped ${skillPath}: no front matter`);
+        continue;
+      }
+      if (parseFrontmatter(text)['user-invocable'] === 'false') continue;
+      const frontMatterEnd = text.indexOf(CLOSING_FENCE, 3);
+      if (frontMatterEnd === -1) {
+        console.error(`warning: skipped ${skillPath}: front matter has no closing ---`);
+        continue;
+      }
+      mkdirSync(join(target, 'skills', dir), { recursive: true });
+      writeFileSync(join(target, 'skills', dir, 'SKILL.md'), `${text.slice(0, frontMatterEnd + CLOSING_FENCE.length)}\n`);
+    }
+    rmSync(finalTarget, { recursive: true, force: true });
+    renameSync(target, finalTarget);
+  } finally {
+    rmSync(target, { recursive: true, force: true });
   }
-  rmSync(finalTarget, { recursive: true, force: true });
-  renameSync(target, finalTarget);
   return manifest.version;
 }
 

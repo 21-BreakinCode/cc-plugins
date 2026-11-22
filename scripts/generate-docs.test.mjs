@@ -377,3 +377,26 @@ test('catalog links an external plugin to its repo, not a README', () => {
   assert.ok(md.includes('[beta](https://github.com/Org/beta)'));
   assert.ok(!md.includes('/beta/README.md'));
 });
+
+test('install-all and update-all name a shared external marketplace once', () => {
+  const external = { marketplace: 'beta-mkt', repo: 'Org/beta' };
+  const model = {
+    marketplace: { name: 'cc-plugins', repo: '21-BreakinCode/cc-plugins' },
+    plugins: [
+      { name: 'beta', external },
+      { name: 'gamma', external },
+    ],
+  };
+  const count = (text, needle) => text.split(needle).length - 1;
+  assert.equal(count(cliOneLiner(model), 'marketplace add Org/beta'), 1);
+  assert.equal(count(updateAllCli(model), 'marketplace update beta-mkt'), 1);
+  assert.ok(cliOneLiner(model).includes('install gamma@beta-mkt'));
+  assert.ok(updateAllCli(model).includes('update gamma@beta-mkt'));
+});
+
+test('parseFrontmatter reads literal and folded block scalars', () => {
+  const fm = parseFrontmatter('---\nname: x\ndescription: |\n  First line.\n  Second line.\nother: >-\n  folded\n  text\nlast: y\n---\nbody');
+  assert.equal(fm.description, 'First line. Second line.');
+  assert.equal(fm.other, 'folded text');
+  assert.equal(fm.last, 'y');
+});

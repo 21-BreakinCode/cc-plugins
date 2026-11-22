@@ -23,7 +23,7 @@ Invoke one directly as `/obsidian-kit:<skill>`, or let it activate automatically
 - **`session-pick-up`** — Use after wrap-up to turn chosen topic numbers into atomic Zettelkasten cards grounded in the session case and up to 3 web sources.
 - **`session-recommend`** — When several take-away topics compete, use this after wrap-up.
 - **`session-wrap-up`** — Use at the end of a working or debugging session to reflect on pitfalls worth noticing and list candidate take-away topics to keep.
-- **`simple-mandarin`** — |
+- **`simple-mandarin`** — Write or rewrite technical text in controlled Traditional Chinese (Taiwan) in the spirit of ASD-STE100 Simplified Technical English: short…
 - **`update-excali`** — Refine an existing Obsidian Excalidraw drawing into the vault house style.
 
 ---
