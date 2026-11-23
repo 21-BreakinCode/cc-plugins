@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.5.0 - 2026-11-23
+
+- **feat:** `/wstack:board` lists every open task session (RD) in groups: needs you, stopped, working, paused, finished, and other. It also writes a Notion-style snapshot page, `Board/board.html`. It offers to close the workspaces of finished tasks, and it skips a worktree that has changes.
+- **feat:** `/wstack:board --watch` opens a live monitor in a herdr pane. Every 3 seconds it shows the stage of each RD, its last tool call, and the subagents that run now with their last tool call. A Bash call shows only its description, never its command text.
+- **feat:** Each task records the id of every Claude session that worked on it, in `session_ids` in `spec.md`. A restart resumes the last session by its id.
+- **feat:** Deliver counts tokens by session id. The new `subagent_tokens` field holds the tokens of the subagents, and `tokens_used` keeps its old meaning.
+- **feat:** At Deliver, and at a cancel after the retry limit, the RD writes `retro-note.md`. The note lists slow steps, steps to turn into scripts, gaps in the spec, tool and guard friction, and surprises.
+- **feat:** `/wstack:run-retro` reads the exit notes and the transcript stats of each task: tool calls, errors, repeated commands, and compactions. A repeated command keeps only its command name and the subcommand of a tool such as git. No quoted text or secret reaches the retro files. If the evidence raises a question about one task, the retro asks a read-only fork of that RD's session. It records the answer under `## RD answers`.
+- **change:** An RD that opens a herdr pane opens it in its own workspace and closes it before Deliver.
+- **change:** `render-page.sh` takes an optional `--theme-file <path>`.
+- **docs:** The README, the spec, and CLAUDE.md describe the board, the monitor, the exit note, and the retro reopen.
+
 ## 0.4.1 - 2026-11-23
 
 - **fix:** The contract scripts reject a block-style YAML list for `ignore` or `pending`. Before, such a list read as empty, and the check reported `fresh`. Now `contract-check.sh` and `contract-edit.sh` exit 2 and name the key. A blank line or a comment line before the first item does not hide the list.
