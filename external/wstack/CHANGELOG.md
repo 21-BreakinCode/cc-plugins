@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.1 - 2026-11-23
+
+- **fix:** `check-page-width.sh` prints only the page width. Under bash 3.2, stopping its local server added a `Terminated: 15` job notice to the output, so a caller that read the width failed.
+
 ## 0.6.0 - 2026-11-23
 
 - **feat:** The retro reads every finished task once, whatever its start date. It marks each task it read with `retro_read` in `spec.md`, so a long task is no longer missed.

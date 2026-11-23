@@ -1384,7 +1384,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.6.0",
+      "version": "0.6.1",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1480,6 +1480,16 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.6.1",
+          "date": "2026-11-23",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "<code>check-page-width.sh</code> prints only the page width. Under bash 3.2, stopping its local server added a <code>Terminated: 15</code> job notice to the output, so a caller that read the width failed."
+            }
+          ]
+        },
         {
           "version": "0.6.0",
           "date": "2026-11-23",
