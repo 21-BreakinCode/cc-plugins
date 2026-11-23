@@ -39,6 +39,7 @@ export function buildModel({ marketplace, content, readPlugin }) {
     return {
       name: entry.name,
       source: entry.source,
+      sourceUrl: `https://github.com/${repo}/tree/main/${String(entry.source).replace(/^\.\//, '')}`,
       version: entry.version ?? version,
       oneLiner: entry.description ?? '',
       tagline: c.tagline ?? '',
@@ -68,6 +69,7 @@ export function buildModel({ marketplace, content, readPlugin }) {
       return {
         name: pluginName,
         source,
+        sourceUrl: `https://github.com/${externalRepo}`,
         version: manifest.version,
         oneLiner: manifest.description ?? '',
         tagline: c.tagline ?? '',
@@ -75,7 +77,12 @@ export function buildModel({ marketplace, content, readPlugin }) {
         architecture: c.architecture ?? '',
         category: c.category ?? '',
         dependsOn: c.dependsOn ?? [],
-        config: c.config ?? [],
+        // With no `config` in the content file, list the userConfig of the plugin's own manifest.
+        config: c.config ?? Object.entries(manifest.userConfig ?? {}).map(([optionName, option]) => ({
+          name: optionName,
+          default: option.default === undefined ? '—' : String(option.default),
+          description: option.description ?? '',
+        })),
         install: installExternal(pluginName, externalMarketplace, externalRepo),
         commands: harvested.commands ?? [],
         skills: harvested.skills ?? [],

@@ -118,7 +118,6 @@
       "dependsOn": [
         "answer-me-with-html@answer-me-with-html"
       ],
-      "config": [],
       "external": {
         "marketplace": "wstack",
         "repo": "21-BreakinCode/wStack",

@@ -372,6 +372,35 @@ test('local plugins keep their marketplace install', () => {
   assert.equal(alpha.external, null);
 });
 
+test('sourceUrl points a local plugin at its folder and an external plugin at its repo', () => {
+  const plugins = modelWithBeta().plugins;
+  assert.equal(plugins.find((p) => p.name === 'hh').sourceUrl, 'https://github.com/21-BreakinCode/cc-plugins/tree/main/handover-handler');
+  assert.equal(betaOf(modelWithBeta()).sourceUrl, 'https://github.com/Org/beta');
+  assert.equal(buildSiteData(modelWithBeta()).plugins.find((p) => p.name === 'beta').sourceUrl, 'https://github.com/Org/beta');
+});
+
+test('external plugin with no content config lists the userConfig of its manifest', () => {
+  const manifest = {
+    ...betaManifest,
+    userConfig: {
+      vault_path: { type: 'directory', title: 'Vault path', description: 'Vault folder.', required: true },
+      retry_limit: { type: 'number', title: 'Retry limit', description: 'Fix loops.', default: 3 },
+    },
+  };
+  assert.deepEqual(betaOf(modelWithBeta(manifest)).config, [
+    { name: 'vault_path', default: '—', description: 'Vault folder.' },
+    { name: 'retry_limit', default: '3', description: 'Fix loops.' },
+  ]);
+});
+
+test('content config wins over the manifest userConfig for an external plugin', () => {
+  const contentConfig = [{ name: 'BETA_DIR', default: '—', description: 'Hand-written.' }];
+  const withConfig = { ...contentWithBeta, plugins: { ...contentWithBeta.plugins, beta: { ...contentWithBeta.plugins.beta, config: contentConfig } } };
+  const manifest = { ...betaManifest, userConfig: { other: { description: 'Ignored.' } } };
+  const beta = buildModel({ marketplace, content: withConfig, readPlugin: readWithBeta(manifest) }).plugins.find((p) => p.name === 'beta');
+  assert.deepEqual(beta.config, contentConfig);
+});
+
 test('catalog links an external plugin to its repo, not a README', () => {
   const md = renderCatalog(modelWithBeta());
   assert.ok(md.includes('[beta](https://github.com/Org/beta)'));

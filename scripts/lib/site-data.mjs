@@ -49,6 +49,7 @@ export function buildSiteData(model, zhTranslations = {}) {
     plugins: model.plugins.map((p) => ({
       name: p.name,
       version: p.version,
+      sourceUrl: p.sourceUrl,
       taglineHtml: renderInline(p.tagline),
       summaryHtml: renderBlocks(p.summary),
       ...zhTWFields(zhTranslations[p.name]),
