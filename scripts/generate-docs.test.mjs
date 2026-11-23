@@ -379,6 +379,12 @@ test('sourceUrl points a local plugin at its folder and an external plugin at it
   assert.equal(buildSiteData(modelWithBeta()).plugins.find((p) => p.name === 'beta').sourceUrl, 'https://github.com/Org/beta');
 });
 
+test('update refreshes the plugin marketplace, then updates the plugin', () => {
+  const plugins = buildSiteData(modelWithBeta()).plugins;
+  assert.equal(plugins.find((p) => p.name === 'alpha').update, 'claude plugin marketplace update cc-plugins && claude plugin update alpha@cc-plugins');
+  assert.equal(plugins.find((p) => p.name === 'beta').update, 'claude plugin marketplace update beta-mkt && claude plugin update beta@beta-mkt');
+});
+
 test('external plugin with no content config lists the userConfig of its manifest', () => {
   const manifest = {
     ...betaManifest,

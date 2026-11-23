@@ -1,4 +1,4 @@
-import { installOne, installExternal, cliOneLiner, settingsSnippet, updateAllCli } from './install.mjs';
+import { installOne, installExternal, updateOne, cliOneLiner, settingsSnippet, updateAllCli } from './install.mjs';
 
 export function commandName(pluginName, fileBase) {
   return `/${pluginName}:${fileBase}`;
@@ -49,6 +49,7 @@ export function buildModel({ marketplace, content, readPlugin }) {
       dependsOn: c.dependsOn ?? [],
       config: c.config ?? [],
       install: installOne(entry.name, name),
+      update: updateOne(entry.name, name),
       commands: harvested.commands ?? [],
       skills: harvested.skills ?? [],
       changelog: harvested.changelog ?? '',
@@ -84,6 +85,7 @@ export function buildModel({ marketplace, content, readPlugin }) {
           description: option.description ?? '',
         })),
         install: installExternal(pluginName, externalMarketplace, externalRepo),
+        update: updateOne(pluginName, externalMarketplace),
         commands: harvested.commands ?? [],
         skills: harvested.skills ?? [],
         changelog: harvested.changelog ?? '',

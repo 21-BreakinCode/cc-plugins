@@ -55,6 +55,7 @@ export function buildSiteData(model, zhTranslations = {}) {
       ...zhTWFields(zhTranslations[p.name]),
       category: p.category,
       install: p.install,
+      update: p.update,
       oneLiner: p.oneLiner,
       commands: p.commands.map(withDescriptionHtml),
       skills: p.skills.map(withDescriptionHtml),

@@ -10,6 +10,11 @@ export function installExternal(pluginName, marketplaceName, repo) {
   return `claude plugin marketplace add ${repo} && ${installOne(pluginName, marketplaceName)}`;
 }
 
+// Refresh the marketplace catalog first, or `plugin update` finds no newer version.
+export function updateOne(pluginName, marketplaceName) {
+  return `claude plugin marketplace update ${marketplaceName} && claude plugin update ${pluginName}@${marketplaceName}`;
+}
+
 export function cliOneLiner(model) {
   const { name, repo } = model.marketplace;
   const lines = [`claude plugin marketplace add ${repo}`];

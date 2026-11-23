@@ -91,6 +91,7 @@
       },
       "category": "improve",
       "install": "claude plugin install autoresearch@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update autoresearch@21-breakincode",
       "oneLiner": "Eval-driven improvement loop (keep/discard with a live Artifact dashboard) plus a dev-lifecycle harness builder that measures project health and creates feedback loops, evals, and sensors. Inspired by karpathy/autoresearch.",
       "commands": [
         {
@@ -299,6 +300,7 @@
       },
       "category": "review",
       "install": "claude plugin install code-reviewer@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update code-reviewer@21-breakincode",
       "oneLiner": "Multi-agent PR review: five common reviewers (correctness, tests, security, ops, simplicity) plus an optional repo-specific policy reviewer that reads a local .review-policy/ dir, then a step-by-step local review page with before/after architecture diagrams that posts your chosen GitHub review.",
       "commands": [
         {
@@ -573,6 +575,7 @@
       },
       "category": "content",
       "install": "claude plugin install humanize@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update humanize@21-breakincode",
       "oneLiner": "Distill your writing voice into reusable tone presets and rewrite existing text to sound human (not AI) in zh-TW or English — meaning always preserved.",
       "commands": [],
       "skills": [
@@ -652,6 +655,7 @@
       },
       "category": "workflow",
       "install": "claude plugin install adhd-review@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update adhd-review@21-breakincode",
       "oneLiner": "ADHD-friendly per-reply shaping merged with Review-Ready blocker/FYI handoff summaries. Shapes the human-facing thread only — subagent returns stay full-detail.",
       "commands": [],
       "skills": [
@@ -833,6 +837,7 @@
       },
       "category": "review",
       "install": "claude plugin install receipts@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update receipts@21-breakincode",
       "oneLiner": "Stop-hook claim auditor — every **FACT:** / 'verified' / 'tests pass' claim must trace to a real tool call in the transcript, or Claude is flagged (or blocked, in block mode) until it proves the claim or downgrades it to **ASSUME:**. Hybrid deterministic prefilter + fresh-context Haiku judge. On by default (mode: warn), fail-open.",
       "commands": [
         {
@@ -1014,6 +1019,7 @@
       },
       "category": "content",
       "install": "claude plugin install obsidian-kit@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update obsidian-kit@21-breakincode",
       "oneLiner": "Work in an Obsidian vault with Claude Code: Excalidraw drawings in a house style, fixed note formats by note-type, a tag audit with one approved plan, and an obsidian CLI primer.",
       "commands": [],
       "skills": [
@@ -1323,6 +1329,7 @@
       },
       "category": "workflow",
       "install": "claude plugin install apple-kit@21-breakincode",
+      "update": "claude plugin marketplace update 21-breakincode && claude plugin update apple-kit@21-breakincode",
       "oneLiner": "Work with Apple apps from Claude Code on a Mac: Apple Notes create, read, update, and delete with approval before every change, and Apple Health weight, body fat, and sleep synced into vault logs.",
       "commands": [],
       "skills": [
@@ -1394,6 +1401,7 @@
       },
       "category": "workflow",
       "install": "claude plugin marketplace add 21-BreakinCode/wStack && claude plugin install wstack@wstack",
+      "update": "claude plugin marketplace update wstack && claude plugin update wstack@wstack",
       "oneLiner": "A task workflow for Claude Code: confirm the spec, execute, verify with evidence, and deliver.",
       "commands": [],
       "skills": [
