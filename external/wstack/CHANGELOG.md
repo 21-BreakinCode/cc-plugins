@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0 - 2026-11-23
+
+- **feat:** `/wstack:init-service <repo-path> ...` sets up each repository you name, in order, from any folder. With no path, it sets up the current folder as before. A path that is not a git work tree is reported, and the other paths still run. The report has one block per repository.
+- **feat:** `/wstack:init-service --check` checks every row of the org's service mapping table and changes nothing. For each row, it reports the repository, the `./handover` link, the ignore rule, the vault folder, and the contract state. It warns about an `app_name` that is not kebab-case, and it offers the setup for the rows that need it. The new script `scripts/handover/check-mapping.sh` does the check.
+- **change:** `/wstack:init-service` asks you to approve each repository before any write, also a repository that is already mapped. The question shows the link path and the exclude file path.
+- **fix:** The retro's `age_days` count is exact. `collect-week.sh` took the time of day from the clock for each date. When the clock passed a second between two dates, a task counted one day younger, and a test failed now and then.
+
 ## 0.6.1 - 2026-11-23
 
 - **fix:** `check-page-width.sh` prints only the page width. Under bash 3.2, stopping its local server added a `Terminated: 15` job notice to the output, so a caller that read the width failed.

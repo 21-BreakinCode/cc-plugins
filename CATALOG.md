@@ -94,7 +94,7 @@ apple-notes creates, reads, edits, moves, and deletes Apple Notes through the no
 
 **Skills** · `apple-health` · `apple-notes`
 
-### [wstack](https://github.com/21-BreakinCode/wStack) · `v0.6.1`
+### [wstack](https://github.com/21-BreakinCode/wStack) · `v0.7.0`
 
 *A task workflow: confirm the spec, execute, verify with evidence, deliver*
 

@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.6.1",
+      "version": "0.7.0",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1488,6 +1488,28 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.7.0",
+          "date": "2026-11-23",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>/wstack:init-service &lt;repo-path&gt; ...</code> sets up each repository you name, in order, from any folder. With no path, it sets up the current folder as before. A path that is not a git work tree is reported, and the other paths still run. The report has one block per repository."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:init-service --check</code> checks every row of the org's service mapping table and changes nothing. For each row, it reports the repository, the <code>./handover</code> link, the ignore rule, the vault folder, and the contract state. It warns about an <code>app_name</code> that is not kebab-case, and it offers the setup for the rows that need it. The new script <code>scripts/handover/check-mapping.sh</code> does the check."
+            },
+            {
+              "type": "change",
+              "html": "<code>/wstack:init-service</code> asks you to approve each repository before any write, also a repository that is already mapped. The question shows the link path and the exclude file path."
+            },
+            {
+              "type": "fix",
+              "html": "The retro's <code>age_days</code> count is exact. <code>collect-week.sh</code> took the time of day from the clock for each date. When the clock passed a second between two dates, a task counted one day younger, and a test failed now and then."
+            }
+          ]
+        },
         {
           "version": "0.6.1",
           "date": "2026-11-23",
