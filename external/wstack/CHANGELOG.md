@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.6.0 - 2026-11-23
+
+- **feat:** The retro reads every finished task once, whatever its start date. It marks each task it read with `retro_read` in `spec.md`, so a long task is no longer missed.
+- **feat:** After the user agrees in the retro, read tasks move to `Tasks/_archive/<week>/<task_id>/`. The move uses `obsidian move`, so Obsidian rewrites the links to the moved notes. A failed move puts the files back, and the retro tries again next week.
+- **feat:** Each project with a contract keeps a facts file, `<app_name>.facts.md`, next to its contract. The retro proposes fact candidates from the exit notes and from repeated corrections. The user accepts or rejects each one, and every later task session of the project reads the accepted facts at `Confirmation`.
+- **feat:** `/wstack:board` shows the size of each task's changes, for example `2 files +4 -1`, and the live monitor shows it too.
+- **feat:** `/wstack:board` shows a `stalled` group: a task session in the `executing` or `verifying` stage while herdr reports it idle or done.
+- **feat:** In `Verify`, a test run that reports skipped cases fails its step. A skip that the spec names with a reason is allowed. `Verify` also lists each place that still names a renamed or moved path, and the reviewer judges each one.
+- **change:** `spec.html` and `review.html` live in `~/.wstack/pages/<task_id>/`, outside the vault. `build-review-page.sh` takes a required `--page <path>`.
+- **change:** A code task started outside herdr puts its worktree under the herdr worktree root, at `<root>/<repo>/<branch-slug>`, not at `~/.wstack/tasks/<task_id>`.
+- **change:** The spec template has a new section, `## Moves and renames`.
+- **docs:** The README, the spec, and the design describe the archive, the facts file, the task pages, the board changes, and the guards.
+
 ## 0.5.0 - 2026-11-23
 
 - **feat:** `/wstack:board` lists every open task session (RD) in groups: needs you, stopped, working, paused, finished, and other. It also writes a Notion-style snapshot page, `Board/board.html`. It offers to close the workspaces of finished tasks, and it skips a worktree that has changes.

@@ -1377,7 +1377,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.5.0",
+      "version": "0.6.0",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
       "zhTW": {
@@ -1415,7 +1415,7 @@
         },
         {
           "name": "run-retro",
-          "descriptionHtml": "Review the past week of wStack tasks, propose improvements, and apply the ones the user picks."
+          "descriptionHtml": "Review the finished wStack tasks that no retro read yet, propose improvements, and apply the ones the user picks."
         },
         {
           "name": "start-task",
@@ -1431,6 +1431,52 @@
       ],
       "config": [],
       "changelog": [
+        {
+          "version": "0.6.0",
+          "date": "2026-11-23",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "The retro reads every finished task once, whatever its start date. It marks each task it read with <code>retro_read</code> in <code>spec.md</code>, so a long task is no longer missed."
+            },
+            {
+              "type": "feat",
+              "html": "After the user agrees in the retro, read tasks move to <code>Tasks/_archive/&lt;week&gt;/&lt;task_id&gt;/</code>. The move uses <code>obsidian move</code>, so Obsidian rewrites the links to the moved notes. A failed move puts the files back, and the retro tries again next week."
+            },
+            {
+              "type": "feat",
+              "html": "Each project with a contract keeps a facts file, <code>&lt;app_name&gt;.facts.md</code>, next to its contract. The retro proposes fact candidates from the exit notes and from repeated corrections. The user accepts or rejects each one, and every later task session of the project reads the accepted facts at <code>Confirmation</code>."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:board</code> shows the size of each task's changes, for example <code>2 files +4 -1</code>, and the live monitor shows it too."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:board</code> shows a <code>stalled</code> group: a task session in the <code>executing</code> or <code>verifying</code> stage while herdr reports it idle or done."
+            },
+            {
+              "type": "feat",
+              "html": "In <code>Verify</code>, a test run that reports skipped cases fails its step. A skip that the spec names with a reason is allowed. <code>Verify</code> also lists each place that still names a renamed or moved path, and the reviewer judges each one."
+            },
+            {
+              "type": "change",
+              "html": "<code>spec.html</code> and <code>review.html</code> live in <code>~/.wstack/pages/&lt;task_id&gt;/</code>, outside the vault. <code>build-review-page.sh</code> takes a required <code>--page &lt;path&gt;</code>."
+            },
+            {
+              "type": "change",
+              "html": "A code task started outside herdr puts its worktree under the herdr worktree root, at <code>&lt;root&gt;/&lt;repo&gt;/&lt;branch-slug&gt;</code>, not at <code>~/.wstack/tasks/&lt;task_id&gt;</code>."
+            },
+            {
+              "type": "change",
+              "html": "The spec template has a new section, <code>## Moves and renames</code>."
+            },
+            {
+              "type": "docs",
+              "html": "The README, the spec, and the design describe the archive, the facts file, the task pages, the board changes, and the guards."
+            }
+          ]
+        },
         {
           "version": "0.5.0",
           "date": "2026-11-23",
