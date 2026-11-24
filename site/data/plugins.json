@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.7.0",
+      "version": "0.8.0",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1488,6 +1488,64 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.8.0",
+          "date": "2026-11-24",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "The service contract is a YAML file, <code>&lt;app_name&gt;.contract.yaml</code>, with seven fixed sections. Scripts generate two views from it: a vault note, <code>&lt;app_name&gt;.md</code>, and an HTML page in <code>~/.wstack/pages/contracts/</code>. Every write through <code>contract-edit.sh</code> renders both views."
+            },
+            {
+              "type": "feat",
+              "html": "New scripts: <code>contract-validate.sh</code> checks the schema. <code>contract-refs.sh</code> proves that every ref exists at its commit. <code>contract-render.sh</code> writes the views. <code>contract-deliver.sh write|undo|rehearse</code> delivers a <code>contract</code> task, undoes it all or nothing, and rehearses both on copies. <code>contract-verify-draft.sh</code> runs the four draft checks."
+            },
+            {
+              "type": "feat",
+              "html": "<code>contract-check.sh --coverage</code> proves that the <code>sources</code> globs claim every tracked file. <code>--mapping-from &lt;path&gt;</code> lets a draft in a task folder find its dependencies."
+            },
+            {
+              "type": "feat",
+              "html": "Verify re-reviews an edit made after the last review. It uses the diff since that review."
+            },
+            {
+              "type": "feat",
+              "html": "Execute fetches another repository before it cites it."
+            },
+            {
+              "type": "feat",
+              "html": "Deliver's Finish gives a file tree, the repositories that did not change, and the open commands."
+            },
+            {
+              "type": "change",
+              "html": "Plan items live in the contract, in <code>planned</code>. The file <code>plan.md</code> is gone."
+            },
+            {
+              "type": "change",
+              "html": "Repository ADRs are a <code>team_docs</code> glob. A <code>contract</code> task no longer copies them into decision files."
+            },
+            {
+              "type": "change",
+              "html": "When a doc and the code disagree, the task writes the case to <code>disagreements.md</code>, and Deliver copies it into the report."
+            },
+            {
+              "type": "change",
+              "html": "The reader's patch is YAML with a <code>sections:</code> map. The task files are <code>contract.draft.yaml</code>, <code>contract.before.yaml</code>, <code>contract.gate-patch.yaml</code>, and <code>contract.patch.yaml</code>."
+            },
+            {
+              "type": "change",
+              "html": "<code>yq</code> version 4.22.1 or later (mikefarah) is a new required tool. <code>scripts/preflight.sh</code> checks it."
+            },
+            {
+              "type": "fix",
+              "html": "A rebuild keeps <code>&lt;app_name&gt;.facts.md</code> in place. Before, the archive step moved it into <code>_archive/</code>."
+            },
+            {
+              "type": "breaking",
+              "html": "Migration: rebuild each existing contract with a <code>contract</code> task. Deliver archives the old Markdown files in <code>_archive/&lt;task_id&gt;/</code>."
+            }
+          ]
+        },
         {
           "version": "0.7.0",
           "date": "2026-11-23",

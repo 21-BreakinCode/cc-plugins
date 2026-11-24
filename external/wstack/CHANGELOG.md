@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.8.0 - 2026-11-24
+
+- **feat:** The service contract is a YAML file, `<app_name>.contract.yaml`, with seven fixed sections. Scripts generate two views from it: a vault note, `<app_name>.md`, and an HTML page in `~/.wstack/pages/contracts/`. Every write through `contract-edit.sh` renders both views.
+- **feat:** New scripts: `contract-validate.sh` checks the schema. `contract-refs.sh` proves that every ref exists at its commit. `contract-render.sh` writes the views. `contract-deliver.sh write|undo|rehearse` delivers a `contract` task, undoes it all or nothing, and rehearses both on copies. `contract-verify-draft.sh` runs the four draft checks.
+- **feat:** `contract-check.sh --coverage` proves that the `sources` globs claim every tracked file. `--mapping-from <path>` lets a draft in a task folder find its dependencies.
+- **feat:** Verify re-reviews an edit made after the last review. It uses the diff since that review.
+- **feat:** Execute fetches another repository before it cites it.
+- **feat:** Deliver's Finish gives a file tree, the repositories that did not change, and the open commands.
+- **change:** Plan items live in the contract, in `planned`. The file `plan.md` is gone.
+- **change:** Repository ADRs are a `team_docs` glob. A `contract` task no longer copies them into decision files.
+- **change:** When a doc and the code disagree, the task writes the case to `disagreements.md`, and Deliver copies it into the report.
+- **change:** The reader's patch is YAML with a `sections:` map. The task files are `contract.draft.yaml`, `contract.before.yaml`, `contract.gate-patch.yaml`, and `contract.patch.yaml`.
+- **change:** `yq` version 4.22.1 or later (mikefarah) is a new required tool. `scripts/preflight.sh` checks it.
+- **fix:** A rebuild keeps `<app_name>.facts.md` in place. Before, the archive step moved it into `_archive/`.
+- **breaking:** Migration: rebuild each existing contract with a `contract` task. Deliver archives the old Markdown files in `_archive/<task_id>/`.
+
 ## 0.7.0 - 2026-11-23
 
 - **feat:** `/wstack:init-service <repo-path> ...` sets up each repository you name, in order, from any folder. With no path, it sets up the current folder as before. A path that is not a git work tree is reported, and the other paths still run. The report has one block per repository.
