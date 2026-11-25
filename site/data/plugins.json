@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.8.0",
+      "version": "0.9.0",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1420,6 +1420,10 @@
         {
           "name": "init-service",
           "descriptionHtml": "Per-repo setup."
+        },
+        {
+          "name": "open-contract",
+          "descriptionHtml": "Open the HTML page of a service contract, or its vault note with --note."
         },
         {
           "name": "pause-work",
@@ -1488,6 +1492,24 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.9.0",
+          "date": "2026-11-25",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>/wstack:open-contract [&lt;service&gt;] [--note]</code> opens the HTML page of a service contract. With no service name, it opens the contract of the current repository. <code>--note</code> opens the vault note in Obsidian. It renders the view again first when the view is missing or older than the contract. If no contract matches, it lists the rendered contracts. A session can run it on its own when you ask to see a contract. The new script <code>scripts/contract-open.sh</code> does the work."
+            },
+            {
+              "type": "fix",
+              "html": "The vault note and the HTML page show no <code>Open questions</code> heading when the section has no items."
+            },
+            {
+              "type": "fix",
+              "html": "Deliver of a <code>contract</code> task makes the <code>decisions/</code> folder only when it copies a decision file. Before, it left an empty folder."
+            }
+          ]
+        },
         {
           "version": "0.8.0",
           "date": "2026-11-24",

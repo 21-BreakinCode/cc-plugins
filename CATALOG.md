@@ -94,7 +94,7 @@ apple-notes creates, reads, edits, moves, and deletes Apple Notes through the no
 
 **Skills** · `apple-health` · `apple-notes`
 
-### [wstack](https://github.com/21-BreakinCode/wStack) · `v0.8.0`
+### [wstack](https://github.com/21-BreakinCode/wStack) · `v0.9.0`
 
 *A task workflow: confirm the spec, execute, verify with evidence, deliver*
 
@@ -102,7 +102,7 @@ wStack runs each task as one pipeline in its own herdr session. It keeps task no
 
 **Install** · `claude plugin marketplace add 21-BreakinCode/wStack && claude plugin install wstack@wstack`
 
-**Skills** · `board` · `create-handover` · `init-org` · `init-service` · `pause-work` · `resume-work` · `run-retro` · `start-task` · `wrap-up-handovers`
+**Skills** · `board` · `create-handover` · `init-org` · `init-service` · `open-contract` · `pause-work` · `resume-work` · `run-retro` · `start-task` · `wrap-up-handovers`
 
 ## Writing & Content
 

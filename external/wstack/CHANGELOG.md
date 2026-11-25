@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.0 - 2026-11-25
+
+- **feat:** `/wstack:open-contract [<service>] [--note]` opens the HTML page of a service contract. With no service name, it opens the contract of the current repository. `--note` opens the vault note in Obsidian. It renders the view again first when the view is missing or older than the contract. If no contract matches, it lists the rendered contracts. A session can run it on its own when you ask to see a contract. The new script `scripts/contract-open.sh` does the work.
+- **fix:** The vault note and the HTML page show no `Open questions` heading when the section has no items.
+- **fix:** Deliver of a `contract` task makes the `decisions/` folder only when it copies a decision file. Before, it left an empty folder.
+
 ## 0.8.0 - 2026-11-24
 
 - **feat:** The service contract is a YAML file, `<app_name>.contract.yaml`, with seven fixed sections. Scripts generate two views from it: a vault note, `<app_name>.md`, and an HTML page in `~/.wstack/pages/contracts/`. Every write through `contract-edit.sh` renders both views.
