@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.3 - 2026-11-27
+
+- **fix:** The contract page shows each `` `code` `` span as inline code, not with raw backticks. This covers item text, the summary, plan titles and reasons, part-card lists, and the keys under the diagrams.
+- **fix:** `contract-refs.sh` and `contract-ref-shift.sh` find the clone of a repo with no Service Mapping row at `<workspace_root>/<owner>/<repo>`, and also at `<workspace_root>/<repo>` as before.
+- **fix:** Both scripts check and print each distinct ref once. The `refs:` line counts distinct refs.
+- **fix:** A card on the contract page has no extra space above its first line or below its last line.
+- **docs:** draw-contract and the Execute step say that the page draws a `sibling: true` layer under the nested layers when side by side is wider than 1100 px.
+
 ## 0.12.2 - 2026-11-27
 
 - **feat:** `contract-ref-shift.sh` checks cross-repo refs in the local clone of each repo. A ref whose file did not change gets a `shift:` line with the new commit to write. A ref whose file changed gets a `changed:` line.

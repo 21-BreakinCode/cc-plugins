@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.12.2",
+      "version": "0.12.3",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,32 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.12.3",
+          "date": "2026-11-27",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "The contract page shows each `<code> </code>code<code> </code>` span as inline code, not with raw backticks. This covers item text, the summary, plan titles and reasons, part-card lists, and the keys under the diagrams."
+            },
+            {
+              "type": "fix",
+              "html": "<code>contract-refs.sh</code> and <code>contract-ref-shift.sh</code> find the clone of a repo with no Service Mapping row at <code>&lt;workspace_root&gt;/&lt;owner&gt;/&lt;repo&gt;</code>, and also at <code>&lt;workspace_root&gt;/&lt;repo&gt;</code> as before."
+            },
+            {
+              "type": "fix",
+              "html": "Both scripts check and print each distinct ref once. The <code>refs:</code> line counts distinct refs."
+            },
+            {
+              "type": "fix",
+              "html": "A card on the contract page has no extra space above its first line or below its last line."
+            },
+            {
+              "type": "docs",
+              "html": "draw-contract and the Execute step say that the page draws a <code>sibling: true</code> layer under the nested layers when side by side is wider than 1100 px."
+            }
+          ]
+        },
         {
           "version": "0.12.2",
           "date": "2026-11-27",
