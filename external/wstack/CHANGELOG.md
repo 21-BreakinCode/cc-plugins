@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.12.2 - 2026-11-27
+
+- **feat:** `contract-ref-shift.sh` checks cross-repo refs in the local clone of each repo. A ref whose file did not change gets a `shift:` line with the new commit to write. A ref whose file changed gets a `changed:` line.
+- **fix:** The contract page keeps one centered column. Each diagram sits on the column's center line at full size, and a wider diagram extends equally on both sides. Part cards use at most two columns.
+- **fix:** In the states picture, the number markers at one box side keep an 8 px gap.
+- **fix:** An implements line between neighbor pill rows runs as an elbow (down, across, down), not as a slanted line.
+
 ## 0.12.1 - 2026-11-27
 
 - **fix:** The architecture picture gives an implements pair its own lane across a wrapped pill row. A straight line no longer crosses a pill.

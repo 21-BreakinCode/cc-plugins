@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.12.1",
+      "version": "0.12.2",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,28 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.12.2",
+          "date": "2026-11-27",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "<code>contract-ref-shift.sh</code> checks cross-repo refs in the local clone of each repo. A ref whose file did not change gets a <code>shift:</code> line with the new commit to write. A ref whose file changed gets a <code>changed:</code> line."
+            },
+            {
+              "type": "fix",
+              "html": "The contract page keeps one centered column. Each diagram sits on the column's center line at full size, and a wider diagram extends equally on both sides. Part cards use at most two columns."
+            },
+            {
+              "type": "fix",
+              "html": "In the states picture, the number markers at one box side keep an 8 px gap."
+            },
+            {
+              "type": "fix",
+              "html": "An implements line between neighbor pill rows runs as an elbow (down, across, down), not as a slanted line."
+            }
+          ]
+        },
         {
           "version": "0.12.1",
           "date": "2026-11-27",
