@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.12.1 - 2026-11-27
+
+- **fix:** The architecture picture gives an implements pair its own lane across a wrapped pill row. A straight line no longer crosses a pill.
+- **fix:** In the states picture, a lane under the boxes uses the bottom edge of a box that is the last row of its column. It no longer crosses the arrows into its source or out of its target.
+- **fix:** Implements lanes from different pills nest. When the adapters and the ports are in mirrored order, no two lanes cross. In the same order, two lanes cross at most once.
+- **fix:** The innermost layer box holds the lane bands under its pills.
+- **fix:** Note headings escape `<` in sequence and state titles, so Obsidian shows the text.
+- **fix:** `find-stale-refs.sh` finds a renamed file with a non-ASCII name.
+
 ## 0.12.0 - 2026-11-26
 
 - **feat:** The vault note fits a phone. No line in a note code block is wider than 40 columns. The flow is an overview drawing plus one "called by" and "calls" list per part. A sequence is a numbered step list. A state lifecycle is a start line plus a key grouped by source state. The architecture is a tree plus an `Implements:` list. A cut text keeps its `…[n]` footnote under `labels:`.

@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.12.0",
+      "version": "0.12.1",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,36 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.12.1",
+          "date": "2026-11-27",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "The architecture picture gives an implements pair its own lane across a wrapped pill row. A straight line no longer crosses a pill."
+            },
+            {
+              "type": "fix",
+              "html": "In the states picture, a lane under the boxes uses the bottom edge of a box that is the last row of its column. It no longer crosses the arrows into its source or out of its target."
+            },
+            {
+              "type": "fix",
+              "html": "Implements lanes from different pills nest. When the adapters and the ports are in mirrored order, no two lanes cross. In the same order, two lanes cross at most once."
+            },
+            {
+              "type": "fix",
+              "html": "The innermost layer box holds the lane bands under its pills."
+            },
+            {
+              "type": "fix",
+              "html": "Note headings escape <code>&lt;</code> in sequence and state titles, so Obsidian shows the text."
+            },
+            {
+              "type": "fix",
+              "html": "<code>find-stale-refs.sh</code> finds a renamed file with a non-ASCII name."
+            }
+          ]
+        },
         {
           "version": "0.12.0",
           "date": "2026-11-26",
