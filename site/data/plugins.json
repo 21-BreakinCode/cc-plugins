@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.10.0",
+      "version": "0.10.1",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,28 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.10.1",
+          "date": "2026-11-26",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "wStack needs mikefarah <code>yq</code> version 4.30.8 or later, not 4.22.1. The scripts use <code>-r</code> (yq 4.25.3) and <code>&quot;\\n&quot;</code> in an expression (yq 4.30.3). 4.30.8 is the oldest yq that the full test suite passed on. On yq 4.22.1, 99 checks failed."
+            },
+            {
+              "type": "change",
+              "html": "A rebuild no longer archives every file of the contract folder. The task asks about each vault doc (a file such as <code>PRD.md</code> or <code>docs/*.md</code>): keep it or archive it. The spec records the answers in <code>## Vault docs</code>. Deliver writes <code>docs-archive.txt</code>, and <code>contract-deliver.sh write</code> archives the old contract files and only the listed docs. A doc that stays prints <code>unchanged:</code>."
+            },
+            {
+              "type": "fix",
+              "html": "<code>contract-deliver.sh undo</code> moves archived files back one by one, so an archived <code>docs/</code> merges into a live <code>docs/</code>. Before, it refused a live <code>docs/</code>. A live file with the same path still stops it with no change. It also reads archives made by 0.8.0 to 0.10.0."
+            },
+            {
+              "type": "fix",
+              "html": "Preflight now reports an old mikefarah <code>yq</code> as <code>OLD yq &lt;version&gt; (need 4.30.8)</code>. Before, a yq older than 4.30.3 was reported as <code>MISSING</code>, because it prints its version with no <code>v</code>."
+            }
+          ]
+        },
         {
           "version": "0.10.0",
           "date": "2026-11-26",
