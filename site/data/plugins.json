@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.9.0",
+      "version": "0.10.0",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1412,6 +1412,10 @@
         {
           "name": "create-handover",
           "descriptionHtml": "Create a well-formed handover document in the vault handover folder of the current service, seeded from the current conversation context."
+        },
+        {
+          "name": "draw-contract",
+          "descriptionHtml": "Draw a diagram of a service contract with the diagram-design skill, from the contract's diagrams block."
         },
         {
           "name": "init-org",
@@ -1492,6 +1496,28 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.10.0",
+          "date": "2026-11-26",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "A service contract can hold a <code>diagrams</code> block with four subjects: the component <code>flow</code>, <code>sequences</code>, <code>states</code>, and the <code>architecture</code> layers. The validator checks its shape. <code>contract-refs.sh</code> proves every ref in it. The vault note draws the block as ASCII, and the HTML page draws it as SVG. A contract with no <code>diagrams</code> block stays valid and renders as before."
+            },
+            {
+              "type": "feat",
+              "html": "<code>/wstack:draw-contract [&lt;service&gt;] [&lt;what to draw&gt;]</code> draws a deep dive with the diagram-design plugin. A deep dive is one HTML file in the <code>diagrams/</code> folder next to the contract. The contract page links it. If the contract changed that part of the block after the drawing, the page marks it <code>stale</code>. A change that only moves cited lines does not make it stale. diagram-design is a soft dependency. Without it, deep dives are skipped with one line in <code>run-log.md</code>."
+            },
+            {
+              "type": "feat",
+              "html": "A contract task draws the <code>flow</code> deep dive at Deliver and redraws each stale one. If a contract update changes the <code>diagrams</code> block, it redraws the stale deep dives. This holds for gate step 9, &quot;Pending items&quot;, and the retro. Undo restores the drawn files. New scripts: <code>scripts/contract-diagram.sh</code>, <code>scripts/contract_diagrams.py</code>, and <code>scripts/contract_diagrams_svg.py</code>."
+            },
+            {
+              "type": "change",
+              "html": "Existing contracts have no <code>diagrams</code> block. They get one through a contract task rerun with a <code>**change:**</code> line. Nothing else breaks."
+            }
+          ]
+        },
         {
           "version": "0.9.0",
           "date": "2026-11-25",

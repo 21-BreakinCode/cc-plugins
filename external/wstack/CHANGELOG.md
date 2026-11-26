@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.10.0 - 2026-11-26
+
+- **feat:** A service contract can hold a `diagrams` block with four subjects: the component `flow`, `sequences`, `states`, and the `architecture` layers. The validator checks its shape. `contract-refs.sh` proves every ref in it. The vault note draws the block as ASCII, and the HTML page draws it as SVG. A contract with no `diagrams` block stays valid and renders as before.
+- **feat:** `/wstack:draw-contract [<service>] [<what to draw>]` draws a deep dive with the diagram-design plugin. A deep dive is one HTML file in the `diagrams/` folder next to the contract. The contract page links it. If the contract changed that part of the block after the drawing, the page marks it `stale`. A change that only moves cited lines does not make it stale. diagram-design is a soft dependency. Without it, deep dives are skipped with one line in `run-log.md`.
+- **feat:** A contract task draws the `flow` deep dive at Deliver and redraws each stale one. If a contract update changes the `diagrams` block, it redraws the stale deep dives. This holds for gate step 9, "Pending items", and the retro. Undo restores the drawn files. New scripts: `scripts/contract-diagram.sh`, `scripts/contract_diagrams.py`, and `scripts/contract_diagrams_svg.py`.
+- **change:** Existing contracts have no `diagrams` block. They get one through a contract task rerun with a `**change:**` line. Nothing else breaks.
+
 ## 0.9.0 - 2026-11-25
 
 - **feat:** `/wstack:open-contract [<service>] [--note]` opens the HTML page of a service contract. With no service name, it opens the contract of the current repository. `--note` opens the vault note in Obsidian. It renders the view again first when the view is missing or older than the contract. If no contract matches, it lists the rendered contracts. A session can run it on its own when you ask to see a contract. The new script `scripts/contract-open.sh` does the work.
