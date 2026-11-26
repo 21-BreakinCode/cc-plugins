@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.10.1",
+      "version": "0.11.0",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,32 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.11.0",
+          "date": "2026-11-26",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "An architecture layer can carry <code>sibling: true</code>. The ASCII view and the SVG view draw it beside the nested layers. The validator rejects a non-boolean value."
+            },
+            {
+              "type": "feat",
+              "html": "A <code>flow</code> deep dive can merge three or more callers of one part into one node. Its label gives the count. A <code>flow</code> deep dive can also merge the arrows from several parts to one dependency into one arrow from the zone around the parts. A sublabel names the merged parts. Every merged item still comes from the JSON."
+            },
+            {
+              "type": "fix",
+              "html": "The ASCII view cuts an arrow label over 32 display columns and ends it with <code>…[n]</code>. An arrow label is a flow edge, a sequence step, or a state transition. The full arrow labels are listed under <code>labels:</code>. A flow node name or an architecture component label ends in <code>…</code> with no footnote. The cut counts display columns. A wide character counts as two. So a wide-character name is cut at about 15 characters."
+            },
+            {
+              "type": "fix",
+              "html": "The states SVG gives each back arrow and each same-column arrow its own lane. No arrow crosses a box. No label overlaps a label, a box, or another arrow."
+            },
+            {
+              "type": "fix",
+              "html": "The <code>implements</code> lines no longer cross other pills."
+            }
+          ]
+        },
         {
           "version": "0.10.1",
           "date": "2026-11-26",

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.0 - 2026-11-26
+
+- **feat:** An architecture layer can carry `sibling: true`. The ASCII view and the SVG view draw it beside the nested layers. The validator rejects a non-boolean value.
+- **feat:** A `flow` deep dive can merge three or more callers of one part into one node. Its label gives the count. A `flow` deep dive can also merge the arrows from several parts to one dependency into one arrow from the zone around the parts. A sublabel names the merged parts. Every merged item still comes from the JSON.
+- **fix:** The ASCII view cuts an arrow label over 32 display columns and ends it with `…[n]`. An arrow label is a flow edge, a sequence step, or a state transition. The full arrow labels are listed under `labels:`. A flow node name or an architecture component label ends in `…` with no footnote. The cut counts display columns. A wide character counts as two. So a wide-character name is cut at about 15 characters.
+- **fix:** The states SVG gives each back arrow and each same-column arrow its own lane. No arrow crosses a box. No label overlaps a label, a box, or another arrow.
+- **fix:** The `implements` lines no longer cross other pills.
+
 ## 0.10.1 - 2026-11-26
 
 - **fix:** wStack needs mikefarah `yq` version 4.30.8 or later, not 4.22.1. The scripts use `-r` (yq 4.25.3) and `"\n"` in an expression (yq 4.30.3). 4.30.8 is the oldest yq that the full test suite passed on. On yq 4.22.1, 99 checks failed.
