@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.11.0",
+      "version": "0.12.0",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,48 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.12.0",
+          "date": "2026-11-26",
+          "changes": [
+            {
+              "type": "feat",
+              "html": "The vault note fits a phone. No line in a note code block is wider than 40 columns. The flow is an overview drawing plus one &quot;called by&quot; and &quot;calls&quot; list per part. A sequence is a numbered step list. A state lifecycle is a start line plus a key grouped by source state. The architecture is a tree plus an <code>Implements:</code> list. A cut text keeps its <code>…[n]</code> footnote under <code>labels:</code>."
+            },
+            {
+              "type": "feat",
+              "html": "The HTML page fits a laptop. A figure can grow to <code>min(1200px, calc(100vw - 32px))</code>. Every picture of the test fixture <code>tests/fixtures/contract/media-shaped-diagrams.yaml</code> is at most 1100 px wide. That fixture has 4 parts, 8 callers, 9 dependencies, and 37 edges. The flow is an overview picture plus one card per part. Sequence and state arrows carry numbers, and a key under the picture gives each number its text."
+            },
+            {
+              "type": "fix",
+              "html": "The states picture uses a ladder layout. No two arrows cross in the 10-transition lifecycle of <code>tests/fixtures/contract/media-shaped-diagrams.yaml</code>. A forward-only lifecycle is no wider than in 0.10.0, and the start arrow has its own slot."
+            },
+            {
+              "type": "fix",
+              "html": "The architecture picture wraps pills inside a wide layer and moves siblings under the nested group. Implements lanes are 8 px apart, and lanes from one pill leave from separate points."
+            },
+            {
+              "type": "fix",
+              "html": "<code>shape_hash</code> treats <code>sibling: false</code> like a missing <code>sibling</code>, so that change no longer marks a deep dive stale. Layout changes never change the hash."
+            },
+            {
+              "type": "fix",
+              "html": "The page counts use real plurals, such as &quot;1 ability&quot; and &quot;67 abilities&quot;."
+            },
+            {
+              "type": "feat",
+              "html": "The new script <code>scripts/contract-ref-shift.sh</code> prints each local ref whose file changed between two commits. A rebuild of a contract can start from the current contract or from the reviewed <code>contract.draft.yaml</code> of an undone task. It reads again only the refs that changed."
+            },
+            {
+              "type": "change",
+              "html": "The reviewer blocks a flow that misses any service, database, queue, or other network peer in <code>depends_on</code>."
+            },
+            {
+              "type": "change",
+              "html": "The draw-contract skill has a note for looking at an HTML file with <code>playwright-cli</code>."
+            }
+          ]
+        },
         {
           "version": "0.11.0",
           "date": "2026-11-26",

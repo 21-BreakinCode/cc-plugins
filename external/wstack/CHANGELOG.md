@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.12.0 - 2026-11-26
+
+- **feat:** The vault note fits a phone. No line in a note code block is wider than 40 columns. The flow is an overview drawing plus one "called by" and "calls" list per part. A sequence is a numbered step list. A state lifecycle is a start line plus a key grouped by source state. The architecture is a tree plus an `Implements:` list. A cut text keeps its `…[n]` footnote under `labels:`.
+- **feat:** The HTML page fits a laptop. A figure can grow to `min(1200px, calc(100vw - 32px))`. Every picture of the test fixture `tests/fixtures/contract/media-shaped-diagrams.yaml` is at most 1100 px wide. That fixture has 4 parts, 8 callers, 9 dependencies, and 37 edges. The flow is an overview picture plus one card per part. Sequence and state arrows carry numbers, and a key under the picture gives each number its text.
+- **fix:** The states picture uses a ladder layout. No two arrows cross in the 10-transition lifecycle of `tests/fixtures/contract/media-shaped-diagrams.yaml`. A forward-only lifecycle is no wider than in 0.10.0, and the start arrow has its own slot.
+- **fix:** The architecture picture wraps pills inside a wide layer and moves siblings under the nested group. Implements lanes are 8 px apart, and lanes from one pill leave from separate points.
+- **fix:** `shape_hash` treats `sibling: false` like a missing `sibling`, so that change no longer marks a deep dive stale. Layout changes never change the hash.
+- **fix:** The page counts use real plurals, such as "1 ability" and "67 abilities".
+- **feat:** The new script `scripts/contract-ref-shift.sh` prints each local ref whose file changed between two commits. A rebuild of a contract can start from the current contract or from the reviewed `contract.draft.yaml` of an undone task. It reads again only the refs that changed.
+- **change:** The reviewer blocks a flow that misses any service, database, queue, or other network peer in `depends_on`.
+- **change:** The draw-contract skill has a note for looking at an HTML file with `playwright-cli`.
+
 ## 0.11.0 - 2026-11-26
 
 - **feat:** An architecture layer can carry `sibling: true`. The ASCII view and the SVG view draw it beside the nested layers. The validator rejects a non-boolean value.
