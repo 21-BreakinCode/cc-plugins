@@ -1391,7 +1391,7 @@
     },
     {
       "name": "wstack",
-      "version": "0.12.3",
+      "version": "0.12.4",
       "sourceUrl": "https://github.com/21-BreakinCode/wStack",
       "taglineHtml": "A task workflow: confirm the spec, execute, verify with evidence, deliver",
       "summaryHtml": "<p>wStack runs each task as one pipeline in its own herdr session. It keeps task notes in your Obsidian vault and posts evidence on the pull request. Handover commands pass work between sessions. Service contracts record how each service works, and a drift check finds contracts that no longer match the code.</p>",
@@ -1496,6 +1496,20 @@
         }
       ],
       "changelog": [
+        {
+          "version": "0.12.4",
+          "date": "2026-11-28",
+          "changes": [
+            {
+              "type": "fix",
+              "html": "Inline code on the contract page has a light background in light and dark mode."
+            },
+            {
+              "type": "fix",
+              "html": "In a part card, each &quot;called by&quot; and &quot;calls&quot; label sits 4 px above its own list and 12 px below the list before it."
+            }
+          ]
+        },
         {
           "version": "0.12.3",
           "date": "2026-11-27",

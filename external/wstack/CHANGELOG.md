@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.12.4 - 2026-11-28
+
+- **fix:** Inline code on the contract page has a light background in light and dark mode.
+- **fix:** In a part card, each "called by" and "calls" label sits 4 px above its own list and 12 px below the list before it.
+
 ## 0.12.3 - 2026-11-27
 
 - **fix:** The contract page shows each `` `code` `` span as inline code, not with raw backticks. This covers item text, the summary, plan titles and reasons, part-card lists, and the keys under the diagrams.
