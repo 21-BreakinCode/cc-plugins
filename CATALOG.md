@@ -15,9 +15,7 @@ claude plugin marketplace add 21-BreakinCode/cc-plugins && \
   claude plugin install adhd-review@21-breakincode && \
   claude plugin install receipts@21-breakincode && \
   claude plugin install obsidian-kit@21-breakincode && \
-  claude plugin install apple-kit@21-breakincode && \
-  claude plugin marketplace add 21-BreakinCode/wStack && \
-  claude plugin install wstack@wstack
+  claude plugin install apple-kit@21-breakincode
 ```
 
 ## Update everything
@@ -33,9 +31,7 @@ claude plugin marketplace update 21-breakincode && \
   claude plugin update adhd-review@21-breakincode && \
   claude plugin update receipts@21-breakincode && \
   claude plugin update obsidian-kit@21-breakincode && \
-  claude plugin update apple-kit@21-breakincode && \
-  claude plugin marketplace update wstack && \
-  claude plugin update wstack@wstack
+  claude plugin update apple-kit@21-breakincode
 ```
 
 ## Measure & Improve

@@ -348,18 +348,19 @@ test('external plugin install adds its own marketplace', () => {
   );
 });
 
-test('install-all and update-all include the external marketplace', () => {
+test('install-all and update-all leave out external plugins', () => {
   const { cli, update } = modelWithBeta().installAll;
-  assert.ok(cli.includes('claude plugin marketplace add Org/beta'));
-  assert.ok(cli.includes('claude plugin install beta@beta-mkt'));
-  assert.ok(update.includes('claude plugin marketplace update beta-mkt'));
-  assert.ok(update.includes('claude plugin update beta@beta-mkt'));
+  assert.ok(!cli.includes('beta'));
+  assert.ok(!update.includes('beta'));
+  assert.ok(cli.includes('claude plugin install alpha@cc-plugins'));
+  assert.ok(update.includes('claude plugin update alpha@cc-plugins'));
 });
 
-test('settings snippet knows the external marketplace', () => {
+test('settings snippet leaves out external plugins', () => {
   const { extraKnownMarketplaces, enabledPlugins } = modelWithBeta().installAll.settings;
-  assert.equal(extraKnownMarketplaces['beta-mkt'].source.repo, 'Org/beta');
-  assert.equal(enabledPlugins['beta@beta-mkt'], true);
+  assert.equal(extraKnownMarketplaces['beta-mkt'], undefined);
+  assert.equal(enabledPlugins['beta@beta-mkt'], undefined);
+  assert.equal(enabledPlugins['alpha@cc-plugins'], true);
 });
 
 test('external plugin without a manifest version throws', () => {
@@ -411,22 +412,6 @@ test('catalog links an external plugin to its repo, not a README', () => {
   const md = renderCatalog(modelWithBeta());
   assert.ok(md.includes('[beta](https://github.com/Org/beta)'));
   assert.ok(!md.includes('/beta/README.md'));
-});
-
-test('install-all and update-all name a shared external marketplace once', () => {
-  const external = { marketplace: 'beta-mkt', repo: 'Org/beta' };
-  const model = {
-    marketplace: { name: 'cc-plugins', repo: '21-BreakinCode/cc-plugins' },
-    plugins: [
-      { name: 'beta', external },
-      { name: 'gamma', external },
-    ],
-  };
-  const count = (text, needle) => text.split(needle).length - 1;
-  assert.equal(count(cliOneLiner(model), 'marketplace add Org/beta'), 1);
-  assert.equal(count(updateAllCli(model), 'marketplace update beta-mkt'), 1);
-  assert.ok(cliOneLiner(model).includes('install gamma@beta-mkt'));
-  assert.ok(updateAllCli(model).includes('update gamma@beta-mkt'));
 });
 
 test('parseFrontmatter reads literal and folded block scalars', () => {

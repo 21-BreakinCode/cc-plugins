@@ -15,14 +15,15 @@ export function updateOne(pluginName, marketplaceName) {
   return `claude plugin marketplace update ${marketplaceName} && claude plugin update ${pluginName}@${marketplaceName}`;
 }
 
+// "Everything" means this marketplace only. An external plugin (wStack) ships
+// from its own marketplace and keeps its own install and update commands.
+const localPlugins = (model) => model.plugins.filter((p) => !p.external);
+
 export function cliOneLiner(model) {
   const { name, repo } = model.marketplace;
   const lines = [`claude plugin marketplace add ${repo}`];
-  for (const p of model.plugins) {
-    if (p.external) lines.push(`claude plugin marketplace add ${p.external.repo}`);
-    lines.push(installOne(p.name, p.external?.marketplace ?? name));
-  }
-  return [...new Set(lines)].join(' && \\\n  ');
+  for (const p of localPlugins(model)) lines.push(installOne(p.name, name));
+  return lines.join(' && \\\n  ');
 }
 
 // "Update everything": refresh the catalog (by marketplace name, not repo), then
@@ -30,22 +31,16 @@ export function cliOneLiner(model) {
 export function updateAllCli(model) {
   const { name } = model.marketplace;
   const lines = [`claude plugin marketplace update ${name}`];
-  for (const p of model.plugins) {
-    if (p.external) lines.push(`claude plugin marketplace update ${p.external.marketplace}`);
-    lines.push(`claude plugin update ${p.name}@${p.external?.marketplace ?? name}`);
-  }
-  return [...new Set(lines)].join(' && \\\n  ');
+  for (const p of localPlugins(model)) lines.push(`claude plugin update ${p.name}@${name}`);
+  return lines.join(' && \\\n  ');
 }
 
 export function settingsSnippet(model) {
   const { name, repo } = model.marketplace;
   const enabledPlugins = {};
-  const extraKnownMarketplaces = { [name]: { source: { source: 'github', repo } } };
-  for (const p of model.plugins) {
-    enabledPlugins[`${p.name}@${p.external?.marketplace ?? name}`] = true;
-    if (p.external) {
-      extraKnownMarketplaces[p.external.marketplace] = { source: { source: 'github', repo: p.external.repo } };
-    }
-  }
-  return { extraKnownMarketplaces, enabledPlugins };
+  for (const p of localPlugins(model)) enabledPlugins[`${p.name}@${name}`] = true;
+  return {
+    extraKnownMarketplaces: { [name]: { source: { source: 'github', repo } } },
+    enabledPlugins,
+  };
 }

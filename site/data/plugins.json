@@ -5,19 +5,13 @@
     "version": "2.2.0"
   },
   "installAll": {
-    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode && \\\n  claude plugin install apple-kit@21-breakincode && \\\n  claude plugin marketplace add 21-BreakinCode/wStack && \\\n  claude plugin install wstack@wstack",
+    "cli": "claude plugin marketplace add 21-BreakinCode/cc-plugins && \\\n  claude plugin install autoresearch@21-breakincode && \\\n  claude plugin install code-reviewer@21-breakincode && \\\n  claude plugin install humanize@21-breakincode && \\\n  claude plugin install adhd-review@21-breakincode && \\\n  claude plugin install receipts@21-breakincode && \\\n  claude plugin install obsidian-kit@21-breakincode && \\\n  claude plugin install apple-kit@21-breakincode",
     "settings": {
       "extraKnownMarketplaces": {
         "21-breakincode": {
           "source": {
             "source": "github",
             "repo": "21-BreakinCode/cc-plugins"
-          }
-        },
-        "wstack": {
-          "source": {
-            "source": "github",
-            "repo": "21-BreakinCode/wStack"
           }
         }
       },
@@ -28,11 +22,10 @@
         "adhd-review@21-breakincode": true,
         "receipts@21-breakincode": true,
         "obsidian-kit@21-breakincode": true,
-        "apple-kit@21-breakincode": true,
-        "wstack@wstack": true
+        "apple-kit@21-breakincode": true
       }
     },
-    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode && \\\n  claude plugin update apple-kit@21-breakincode && \\\n  claude plugin marketplace update wstack && \\\n  claude plugin update wstack@wstack"
+    "update": "claude plugin marketplace update 21-breakincode && \\\n  claude plugin update autoresearch@21-breakincode && \\\n  claude plugin update code-reviewer@21-breakincode && \\\n  claude plugin update humanize@21-breakincode && \\\n  claude plugin update adhd-review@21-breakincode && \\\n  claude plugin update receipts@21-breakincode && \\\n  claude plugin update obsidian-kit@21-breakincode && \\\n  claude plugin update apple-kit@21-breakincode"
   },
   "categories": [
     {
